@@ -1,0 +1,244 @@
+/*
+ * FILE: app/styles/shared.css
+ * PURPOSE:
+ * Styles for site-wide chrome — NavBar and Footer — rendered on
+ * every public page from app/layout.tsx. Responsive breakpoints for
+ * these rules live in mediaQueries.css, not here (Rule 9).
+ */
+
+/* ------------------------------------------------------------
+ * PUBLIC MAIN — grows to push the footer to the bottom on short pages
+ * ------------------------------------------------------------ */
+.siteMain {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* ------------------------------------------------------------
+ * NAVBAR
+ * ------------------------------------------------------------ */
+.siteHeader {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background: rgba(9, 9, 11, 0.72);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.siteNavInner {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-md) var(--space-lg);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+}
+
+.siteLogo {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  text-decoration: none;
+}
+
+.siteNavLinks {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-lg);
+  list-style: none;
+}
+
+.siteNavLink {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  padding: var(--space-xs) 0;
+  border-bottom: 1px solid transparent;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.siteNavLink:hover,
+.siteNavLink:focus-visible {
+  color: var(--color-text-primary);
+}
+
+.siteNavLinkActive {
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--color-accent);
+}
+
+.siteNavCta {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--background);
+  background: var(--color-accent);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 999px;
+  text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+
+.siteNavCta:hover,
+.siteNavCta:focus-visible {
+  background: var(--color-accent-hover);
+}
+
+.siteNavToggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.siteNavToggle:hover,
+.siteNavToggle:focus-visible {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.siteNavMobilePanel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--transition-slow);
+  border-top: 1px solid transparent;
+}
+
+.siteNavMobilePanelOpen {
+  max-height: 480px;
+  border-top: 1px solid var(--color-border);
+}
+
+.siteNavMobilePanel ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
+  gap: var(--space-sm);
+}
+
+.siteNavMobilePanel a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+}
+
+.siteNavMobilePanel a:hover,
+.siteNavMobilePanel a:focus-visible {
+  color: var(--color-text-primary);
+}
+
+.siteNavCtaMobile {
+  justify-content: center;
+  color: var(--background) !important;
+}
+
+/* ------------------------------------------------------------
+ * FOOTER
+ * ------------------------------------------------------------ */
+.siteFooter {
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.siteFooterInner {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-2xl) var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.siteFooterBrand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-width: var(--max-width-narrow);
+}
+
+.siteFooterLogo {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.siteFooterTagline {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  max-width: 60ch;
+}
+
+.siteFooterColumns {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-2xl);
+}
+
+.siteFooterColumn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  min-width: 160px;
+}
+
+.siteFooterColumnHeading {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.siteFooterColumn ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.siteFooterColumn a {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.siteFooterColumn a:hover,
+.siteFooterColumn a:focus-visible {
+  color: var(--color-text-primary);
+}
+
+.siteFooterBottom {
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-md) var(--space-lg);
+  text-align: center;
+}
+
+.siteFooterBottom p {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}

@@ -1,0 +1,237 @@
+/*
+ * FILE: app/styles/home.css
+ * PURPOSE:
+ * Styles for the Home/Landing page only — HeroSection and QuickWins.
+ * Responsive breakpoints live in mediaQueries.css, not here (Rule 9).
+ */
+
+/* ------------------------------------------------------------
+ * HERO
+ * ------------------------------------------------------------ */
+.heroSection {
+  padding: var(--space-2xl) var(--space-lg);
+}
+
+.heroContainer {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2xl);
+}
+
+.heroCopy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-md);
+  max-width: var(--max-width-narrow);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.heroTitle {
+  font-size: 2.75rem;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.heroSubtitle {
+  font-size: 1.125rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  max-width: 60ch;
+}
+
+.heroActions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-top: var(--space-sm);
+}
+
+.buttonPrimary,
+.buttonSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: 999px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.buttonPrimary {
+  background: var(--color-accent);
+  color: var(--background);
+  border: 1px solid var(--color-accent);
+}
+
+.buttonPrimary:hover,
+.buttonPrimary:focus-visible {
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+.buttonSecondary {
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+}
+
+.buttonSecondary:hover,
+.buttonSecondary:focus-visible {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+/* Decorative browser mockup standing in for a real product screenshot */
+.heroVisual {
+  width: 100%;
+  max-width: var(--max-width-content);
+}
+
+.mockBrowser {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  overflow: hidden;
+  will-change: transform;
+}
+
+.mockBrowserBar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.mockBrowserDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--color-border-hover);
+}
+
+.mockScreen {
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.mockScreenHeader {
+  height: 2.5rem;
+  width: 40%;
+  border-radius: 6px;
+  background: var(--color-surface-hover);
+}
+
+.mockScreenGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--space-md);
+}
+
+.mockScreenCard {
+  aspect-ratio: 4 / 3;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-hover);
+}
+
+/* ------------------------------------------------------------
+ * QUICK WINS
+ * ------------------------------------------------------------ */
+.quickWinsSection {
+  padding: var(--space-2xl) var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.quickWinsContainer {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.quickWinsLabel {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.wordmarkRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+}
+
+.wordmarkChip {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-lg);
+}
+
+.statCard {
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  text-align: center;
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+
+.statCard:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.statValue {
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-accent);
+}
+
+.statLabel {
+  margin-top: var(--space-xs);
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}

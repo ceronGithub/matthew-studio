@@ -1,0 +1,53 @@
+/*
+ * FILE: app/styles/mediaQueries.css
+ * PURPOSE:
+ * All responsive breakpoints live here — never inside component or
+ * module CSS files (Rule 9). Mobile-first: base styles are mobile,
+ * these overrides scale up using min-width.
+ *
+ * Standard breakpoints:
+ *   480px  — small phones
+ *   768px  — tablets / landscape phones
+ *   1024px — small laptops
+ *   1280px — standard desktop
+ *   1536px — large screens
+ */
+
+/* ------------------------------------------------------------
+ * NAVBAR — collapse to hamburger menu below tablet
+ * ------------------------------------------------------------ */
+@media (max-width: 767px) {
+  .siteNavLinks,
+  .siteNavCta {
+    display: none;
+  }
+
+  .siteNavToggle {
+    display: flex;
+  }
+}
+
+/* ------------------------------------------------------------
+ * HOME HERO — two-column layout from tablet up
+ * ------------------------------------------------------------ */
+@media (min-width: 768px) {
+  .heroContainer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .heroCopy {
+    flex: 1 1 420px;
+  }
+
+  .heroVisual {
+    flex: 1 1 480px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .heroTitle {
+    font-size: 3.5rem;
+  }
+}
