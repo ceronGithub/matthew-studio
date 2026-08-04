@@ -1,0 +1,106 @@
+========================================================
+MATTHEW STUDIO — PROJECT OVERVIEW & BUILD PLAN
+========================================================
+
+1. PROJECT NAME & PURPOSE
+--------------------------------------------------------
+Matthew Studio — a portfolio + shop site showcasing a resort
+booking website template. Visitors browse past client work,
+compare the 3 pricing tiers (managed SaaS / self-hosted /
+custom build), learn what the template includes, read
+testimonials, and book a demo. A single superAdmin account
+manages the backend content (portfolio entries, pricing,
+testimonials).
+
+2. TECH STACK
+--------------------------------------------------------
+- Next.js 16.3.0 (App Router, Turbopack)
+- React 19.2.8
+- TypeScript
+- Tailwind CSS v4 (+ custom design token system in
+  app/styles/globals.css)
+- framer-motion — section entrance animations
+- lucide-react — icons
+- axios — client-side HTTP calls
+- Supabase — auth (superAdmin login) + database
+- Fonts: Geist Sans / Geist Mono (next/font)
+
+3. ACCOUNT TYPES
+--------------------------------------------------------
+- Public (no login) — all marketing/shop pages
+- superAdmin — protected dashboard at /superAdmin,
+  Supabase-authenticated, role checked via user_metadata.role
+
+4. FILE MAP (as of this build)
+--------------------------------------------------------
+app/layout.tsx                  Root shell — fonts, global CSS only
+app/styles/globals.css          Design tokens (color, spacing, z-index, transitions)
+app/styles/shared.css           NavBar + Footer styles
+app/styles/mediaQueries.css     All responsive breakpoints
+app/(public)/layout.tsx         Public route group — renders NavBar + Footer
+app/(public)/page.tsx           Home/Landing page
+app/styles/home.css             Home page styles
+app/api/auth/login/route.ts     superAdmin login endpoint (Supabase)
+app/(auth)/                     Login page route (not yet built)
+app/superAdmin/                 Admin dashboard (not yet built)
+components/shared/NavBar.tsx    Site nav, mobile menu
+components/shared/Footer.tsx    Site footer
+components/home/HeroSection.tsx Home hero + CTAs
+components/home/QuickWins.tsx   Client wordmarks + result stats
+services/supabase.ts            browserClient (anon) + adminClient (service role)
+
+5. BUILD PLAN — REMAINING PAGES (in order)
+--------------------------------------------------------
+[DONE] 1. Home/Landing
+        - Hero section, CTAs ("Browse Templates", "See Case Studies")
+        - Quick wins: client wordmarks + result stats
+
+[ ] 2. Portfolio/Showcase (/portfolio)
+        - Gallery grid of past resort website projects
+        - Each card -> case study page showing:
+          client name, resort type, problem, solution,
+          results, live demo link
+
+[ ] 3. Template Shop (/shop)
+        - 3 pricing tiers: Managed SaaS (monthly), Self-hosted
+          (one-time), Custom build (retainer)
+        - Each tier: price, feature list, "Get Started" button
+
+[ ] 4. Why Choose This Template (/features)
+        - Tech stack breakdown
+        - What's included out of the box
+        - ROI calculator (e.g. hours saved per week)
+        - Comparison table vs. competitors / building from scratch
+
+[ ] 5. How It Works (/how-it-works)
+        - Step-by-step onboarding flow per tier
+          (e.g. Tier 1: Sign up -> customize branding -> launch in 48h)
+
+[ ] 6. Testimonials (/testimonials)
+        - Resort owner quotes, ease-of-use / results focus
+
+[ ] 7. Blog/Guides (/blog) — optional, SEO value
+        - Articles like "How to increase resort bookings"
+
+[ ] 8. Contact / Get Demo (/contact)
+        - Contact form, calendar link for a walkthrough call
+
+[ ] 9. superAdmin dashboard
+        - Login page (app/(auth)/login)
+        - Manage portfolio entries, pricing tiers, testimonials
+        - middleware.ts auth guard for /superAdmin/*
+
+6. HOW WE'RE WORKING
+--------------------------------------------------------
+One page/feature is built per turn, delivered as a ZIP (or
+individual files if small), with a summary + verification
+steps. After each one, I ask before starting the next so
+nothing gets scaffolded ahead of what's actually requested.
+
+7. ENVIRONMENT VARIABLES REQUIRED
+--------------------------------------------------------
+.env.local:
+  NEXT_PUBLIC_SUPABASE_URL=
+  NEXT_PUBLIC_SUPABASE_ANON_KEY=
+  SUPABASE_SERVICE_ROLE_KEY=
+========================================================
