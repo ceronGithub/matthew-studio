@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     "Resort website templates with built-in multi-room booking, promos, and an admin dashboard.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"

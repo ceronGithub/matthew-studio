@@ -1,0 +1,252 @@
+/*
+ * FILE: app/styles/portfolio.css
+ * PURPOSE:
+ * Styles for the Portfolio/Showcase section — the /portfolio grid
+ * and each /portfolio/[slug] case study page. Responsive breakpoints
+ * live in mediaQueries.css, not here (Rule 9).
+ */
+
+/* ------------------------------------------------------------
+ * SHARED PAGE HEADER — used by both the grid and case study pages
+ * ------------------------------------------------------------ */
+.portfolioPageHeader {
+  padding: var(--space-2xl) var(--space-lg) var(--space-lg);
+}
+
+.portfolioPageHeaderInner {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  max-width: var(--max-width-narrow);
+}
+
+/* ------------------------------------------------------------
+ * PORTFOLIO GRID (/portfolio)
+ * ------------------------------------------------------------ */
+.portfolioGridSection {
+  padding: var(--space-xl) var(--space-lg) var(--space-2xl);
+}
+
+.portfolioGrid {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-lg);
+}
+
+.portfolioCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: var(--color-surface);
+  text-decoration: none;
+  color: inherit;
+  transition: background-color var(--transition-base), border-color var(--transition-base), transform var(--transition-base);
+  will-change: transform;
+}
+
+.portfolioCard:hover,
+.portfolioCard:focus-visible {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+  transform: translateY(-4px);
+}
+
+/* Decorative cover standing in for a real project screenshot */
+.portfolioCardCover {
+  aspect-ratio: 16 / 10;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--color-surface-hover), var(--color-surface-active));
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.portfolioCardCoverLabel {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.portfolioCardBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.portfolioCardResortType {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.portfolioCardTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+.portfolioCardTagline {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+.portfolioCardTags {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.portfolioCardTag {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+}
+
+.portfolioCardFooter {
+  margin-top: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+/* ------------------------------------------------------------
+ * CASE STUDY DETAIL (/portfolio/[slug])
+ * ------------------------------------------------------------ */
+.caseStudyBackLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.caseStudyBackLink:hover,
+.caseStudyBackLink:focus-visible {
+  color: var(--color-text-primary);
+}
+
+.caseStudyResortType {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.caseStudyTitle {
+  font-size: 2.25rem;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.caseStudyTagline {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  max-width: 60ch;
+}
+
+.caseStudySection {
+  padding: var(--space-lg) var(--space-lg) 0;
+}
+
+.caseStudySectionInner {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.caseStudyGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-lg);
+}
+
+.caseStudyBlock {
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+
+.caseStudyBlockLabel {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.caseStudyBlockText {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}
+
+.caseStudyResultsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-lg);
+}
+
+.caseStudyCta {
+  padding: var(--space-2xl) var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  text-align: center;
+}
+
+.caseStudyCtaActions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-md);
+}
+
+/* ------------------------------------------------------------
+ * NOT FOUND (invalid slug)
+ * ------------------------------------------------------------ */
+.portfolioNotFound {
+  padding: var(--space-2xl) var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-md);
+  min-height: 60dvh;
+  justify-content: center;
+}

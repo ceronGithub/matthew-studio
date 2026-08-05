@@ -43,6 +43,13 @@ app/styles/home.css             Home page styles
 app/api/auth/login/route.ts     superAdmin login endpoint (Supabase)
 app/(auth)/                     Login page route (not yet built)
 app/superAdmin/                 Admin dashboard (not yet built)
+app/(public)/portfolio/page.tsx           Portfolio/Showcase grid (/portfolio)
+app/(public)/portfolio/[slug]/page.tsx    Case study detail (/portfolio/[slug])
+app/(public)/portfolio/[slug]/not-found.tsx  Invalid-slug 404 state
+app/styles/portfolio.css        Portfolio grid + case study styles
+components/portfolio/PortfolioGrid.tsx    Animated case study card grid
+components/portfolio/CaseStudyDetail.tsx  Case study problem/solution/results layout
+lib/portfolioData.ts            Static placeholder case study data (4 projects)
 components/shared/NavBar.tsx    Site nav, mobile menu
 components/shared/Footer.tsx    Site footer
 components/home/HeroSection.tsx Home hero + CTAs
@@ -55,7 +62,7 @@ services/supabase.ts            browserClient (anon) + adminClient (service role
         - Hero section, CTAs ("Browse Templates", "See Case Studies")
         - Quick wins: client wordmarks + result stats
 
-[ ] 2. Portfolio/Showcase (/portfolio)
+[DONE] 2. Portfolio/Showcase (/portfolio)
         - Gallery grid of past resort website projects
         - Each card -> case study page showing:
           client name, resort type, problem, solution,
@@ -118,4 +125,18 @@ project is done.
   NavBar (with mobile menu) and Footer moved into a new
   (public) route group, mediaQueries.css breakpoints added,
   @supabase/supabase-js installed.
+
+[2026-08-05] Portfolio/Showcase built: /portfolio grid (4
+  placeholder case studies matching the Home page wordmarks)
+  and /portfolio/[slug] case study detail pages (problem,
+  solution, results, live demo link), with a not-found state
+  for invalid slugs. Fixed two pre-existing bugs found while
+  building this: app/globals.css never defined the design
+  token system (--color-accent, --space-*, --z-*, --transition-*)
+  that home.css/shared.css already depended on, so it's been
+  added properly; and app/layout.tsx imported "./styles/globals.css"
+  while the file lived at app/globals.css — moved the file into
+  app/styles/ to match the import and the project's own CSS
+  convention. Also fixed an invalid LayoutProps<"/"> type in
+  layout.tsx that failed npx tsc --noEmit.
 ========================================================
