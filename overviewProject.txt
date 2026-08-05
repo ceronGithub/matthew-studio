@@ -50,6 +50,10 @@ app/styles/portfolio.css        Portfolio grid + case study styles
 components/portfolio/PortfolioGrid.tsx    Animated case study card grid
 components/portfolio/CaseStudyDetail.tsx  Case study problem/solution/results layout
 lib/portfolioData.ts            Static placeholder case study data (4 projects)
+app/(public)/shop/page.tsx      Template Shop pricing tier grid (/shop)
+app/styles/shop.css             Shop page + pricing card styles
+components/shop/PricingGrid.tsx Animated pricing tier card grid
+lib/pricingData.ts              Static placeholder pricing tier data (3 tiers)
 components/shared/NavBar.tsx    Site nav, mobile menu
 components/shared/Footer.tsx    Site footer
 components/home/HeroSection.tsx Home hero + CTAs
@@ -68,7 +72,7 @@ services/supabase.ts            browserClient (anon) + adminClient (service role
           client name, resort type, problem, solution,
           results, live demo link
 
-[ ] 3. Template Shop (/shop)
+[DONE] 3. Template Shop (/shop)
         - 3 pricing tiers: Managed SaaS (monthly), Self-hosted
           (one-time), Custom build (retainer)
         - Each tier: price, feature list, "Get Started" button
@@ -139,4 +143,12 @@ project is done.
   app/styles/ to match the import and the project's own CSS
   convention. Also fixed an invalid LayoutProps<"/"> type in
   layout.tsx that failed npx tsc --noEmit.
+
+[2026-08-05] Template Shop built: /shop page with 3 pricing
+  tier cards (Managed SaaS, Self-Hosted, Custom Build), tier
+  names matching the tags already used on Portfolio case
+  studies for consistency. Middle tier (Self-Hosted) marked
+  Recommended with an accent border. Each CTA links to
+  /contact?tier=[slug] (page not yet built — item 8). Note
+  strip below the grid links back to /portfolio.
 ========================================================
