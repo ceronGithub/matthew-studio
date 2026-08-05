@@ -103,4 +103,19 @@ nothing gets scaffolded ahead of what's actually requested.
   NEXT_PUBLIC_SUPABASE_URL=
   NEXT_PUBLIC_SUPABASE_ANON_KEY=
   SUPABASE_SERVICE_ROLE_KEY=
+
+8. CHANGE LOG
+--------------------------------------------------------
+Every create/update/delete/modify on this project gets a
+one-line summary here, newest at the bottom. When this file
+passes 1000 lines, it closes and logging continues in
+overviewProject-1.txt (then -2.txt, and so on) until the
+project is done.
+
+[2026-08-05] Home/Landing page built: hero section (headline,
+  CTAs to /shop and /portfolio, decorative product mockup),
+  quick-wins strip (client wordmarks + result stats), shared
+  NavBar (with mobile menu) and Footer moved into a new
+  (public) route group, mediaQueries.css breakpoints added,
+  @supabase/supabase-js installed.
 ========================================================
