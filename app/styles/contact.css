@@ -1,0 +1,184 @@
+/*
+ * FILE: app/styles/contact.css
+ * PURPOSE:
+ * Styles for the Contact/Get Demo page (/contact) — page header,
+ * calendar callout block, and the ContactForm fields. Responsive
+ * breakpoints live in mediaQueries.css, not here (Rule 9).
+ */
+
+.contactPageHeader {
+  padding: var(--space-2xl) var(--space-lg) var(--space-lg);
+}
+
+.contactPageHeaderInner {
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.contactSection {
+  padding: var(--space-xl) var(--space-lg) var(--space-2xl);
+}
+
+.contactSectionInner {
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+/* ------------------------------------------------------------
+ * CALENDAR CALLOUT
+ * ------------------------------------------------------------ */
+.contactCalendarBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: var(--color-surface);
+  color: var(--color-accent);
+}
+
+.contactCalendarBlock > div {
+  flex: 1 1 auto;
+}
+
+.contactCalendarTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.contactCalendarText {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+.contactCalendarBlock .buttonSecondary {
+  flex-shrink: 0;
+}
+
+/* ------------------------------------------------------------
+ * CONTACT FORM
+ * ------------------------------------------------------------ */
+.contactForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: var(--color-surface);
+}
+
+.contactFormRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+}
+
+.contactFormField {
+  flex: 1 1 220px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.contactFormField span[aria-hidden="true"] {
+  color: var(--color-error);
+}
+
+.contactFormField input,
+.contactFormField select,
+.contactFormField textarea {
+  width: 100%;
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--color-text-primary);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: var(--space-sm) var(--space-md);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.contactFormField textarea {
+  resize: vertical;
+}
+
+.contactFormField input:focus-visible,
+.contactFormField select:focus-visible,
+.contactFormField textarea:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+.contactFormLegend {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.contactFormError {
+  font-size: 0.875rem;
+  color: var(--color-error);
+}
+
+.contactForm .buttonPrimary {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.contactSpinner {
+  animation: contactSpin 0.8s linear infinite;
+}
+
+@keyframes contactSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ------------------------------------------------------------
+ * SUCCESS STATE
+ * ------------------------------------------------------------ */
+.contactSuccess {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: var(--color-surface);
+  color: var(--color-success);
+}
+
+.contactSuccessTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.contactSuccessText {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  max-width: 40ch;
+}

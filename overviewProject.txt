@@ -66,8 +66,22 @@ app/(public)/testimonials/page.tsx  Testimonials page (/testimonials)
 app/styles/testimonials.css     Quote card grid styles
 components/testimonials/TestimonialGrid.tsx  Animated testimonial quote card grid
 lib/testimonialsData.ts         Static testimonial quotes (4 clients, matches portfolio)
+app/(public)/blog/page.tsx      Blog index — programming tutorials (/blog)
+app/(public)/blog/[slug]/page.tsx           Tutorial detail (/blog/[slug])
+app/(public)/blog/[slug]/not-found.tsx      Invalid-slug 404 state
+app/styles/blog.css             Blog grid + tutorial detail styles
+components/blog/BlogGrid.tsx    Animated tutorial card grid
+components/blog/TutorialDetail.tsx  Renders a tutorial's heading/paragraph/code blocks
+lib/blogData.ts                 Placeholder tutorial content — paste new posts here
+lib/socialLinksData.ts          Social media link config (Footer + Blog header)
+components/shared/SocialLinks.tsx  Social icon row, reused in Footer + Blog page
 components/shared/NavBar.tsx    Site nav, mobile menu
-components/shared/Footer.tsx    Site footer
+components/shared/Footer.tsx    Site footer (Blog link, social icons)
+app/(public)/contact/page.tsx   Contact/Get Demo page (/contact)
+app/api/contact/route.ts        Contact form submission handler (validates, logs — no email/DB delivery wired yet)
+app/styles/contact.css          Contact page + form styles
+components/contact/ContactForm.tsx  Client form: name/email/resort/tier/message, ?tier= prefill
+lib/contactData.ts              Tier select options + calendar booking link
 components/home/HeroSection.tsx Home hero + CTAs
 components/home/QuickWins.tsx   Client wordmarks + result stats
 services/supabase.ts            browserClient (anon) + adminClient (service role)
@@ -102,10 +116,11 @@ services/supabase.ts            browserClient (anon) + adminClient (service role
 [DONE] 6. Testimonials (/testimonials)
         - Resort owner quotes, ease-of-use / results focus
 
-[ ] 7. Blog/Guides (/blog) — optional, SEO value
-        - Articles like "How to increase resort bookings"
+[DONE] 7. Blog (/blog) — repurposed from marketing guides
+        - Programming tutorials the site owner writes and pastes
+          into lib/blogData.ts, plus social media links
 
-[ ] 8. Contact / Get Demo (/contact)
+[DONE] 8. Contact / Get Demo (/contact)
         - Contact form, calendar link for a walkthrough call
 
 [ ] 9. superAdmin dashboard
@@ -194,4 +209,28 @@ project is done.
   that client's full case study. Each card shows the quote, person
   name/role, and a tier tag matching the client's portfolio tags.
   Note strip links back to /portfolio.
+
+[2026-08-22] Blog built, repurposing item 7 from generic marketing
+  guides into a programming-tutorial blog: /blog index (BlogGrid) and
+  /blog/[slug] tutorial pages (TutorialDetail), with a not-found state
+  for invalid slugs. lib/blogData.ts holds placeholder tutorial
+  content as heading/paragraph/code blocks — paste new tutorials there
+  to publish them. Added lib/socialLinksData.ts + shared SocialLinks
+  icon-row component (hand-drawn SVG brand icons, since lucide-react
+  dropped brand/logo icons from its set), rendered in both the Blog
+  header and the site Footer. Footer's Company column now links to
+  /blog.
+
+[2026-08-22] Contact/Get Demo built: /contact page with a ContactForm
+  (name, email, resort name, tier select, message), posting to a new
+  /api/contact route that validates server-side and returns the
+  standard success/error JSON shape — no email/DB delivery wired yet,
+  logged server-side as a placeholder pending EmailJS or a Supabase
+  table. Tier select pre-fills from ?tier=[slug], matching the CTAs
+  already in place on /shop and NavBar. Added a calendar-booking
+  callout block above the form (CALENDAR_BOOKING_URL in
+  lib/contactData.ts — placeholder link, swap for a real Calendly/
+  Cal.com URL). Wrapped ContactForm in <Suspense> since it reads
+  useSearchParams. No other files needed changes — /shop's CTAs and
+  the NavBar's Contact link/CTA already pointed at /contact.
 ========================================================

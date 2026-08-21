@@ -7,6 +7,7 @@
  * shortcut, and copyright. No data fetching.
  */
 import Link from "next/link";
+import SocialLinks from "@/components/shared/SocialLinks";
 
 const FOOTER_LINK_COLUMNS = [
   {
@@ -22,6 +23,7 @@ const FOOTER_LINK_COLUMNS = [
     heading: "Company",
     links: [
       { label: "Testimonials", href: "/testimonials" },
+      { label: "Blog", href: "/blog" },
       { label: "Contact", href: "/contact" },
     ],
   },
@@ -39,6 +41,7 @@ export default function Footer() {
             Resort website templates with built-in booking, promos, and an admin dashboard —
             live in 48 hours.
           </p>
+          <SocialLinks />
         </div>
 
         <div className="siteFooterColumns">

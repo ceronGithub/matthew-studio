@@ -28,6 +28,16 @@
 }
 
 /* ------------------------------------------------------------
+ * CONTACT — calendar callout becomes a row from tablet up
+ * ------------------------------------------------------------ */
+@media (min-width: 768px) {
+  .contactCalendarBlock {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+/* ------------------------------------------------------------
  * HOME HERO — two-column layout from tablet up
  * ------------------------------------------------------------ */
 @media (min-width: 768px) {
