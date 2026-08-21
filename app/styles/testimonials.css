@@ -1,0 +1,139 @@
+/*
+ * FILE: app/styles/testimonials.css
+ * PURPOSE:
+ * Styles for the Testimonials page (/testimonials) — the quote card
+ * grid. Responsive breakpoints live in mediaQueries.css, not here
+ * (Rule 9).
+ */
+
+.testimonialsPageHeader {
+  padding: var(--space-2xl) var(--space-lg) var(--space-lg);
+}
+
+.testimonialsPageHeaderInner {
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-md);
+}
+
+.testimonialGridSection {
+  padding: var(--space-xl) var(--space-lg) var(--space-2xl);
+}
+
+.testimonialGrid {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-lg);
+  align-items: stretch;
+}
+
+.testimonialCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-xl) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: var(--color-surface);
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+
+.testimonialCard:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.testimonialCardQuoteIcon {
+  color: var(--color-accent);
+}
+
+.testimonialCardQuote {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-primary);
+  flex: 1;
+}
+
+.testimonialCardFooter {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+}
+
+.testimonialCardPersonName {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.testimonialCardPersonRole {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+
+.testimonialCardTierTag {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.testimonialCardLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.testimonialCardLink:hover,
+.testimonialCardLink:focus-visible {
+  color: var(--color-accent-hover);
+}
+
+/* ------------------------------------------------------------
+ * CLOSING NOTE — reassurance strip, same pattern as shop.css
+ * ------------------------------------------------------------ */
+.testimonialsNoteSection {
+  padding: 0 var(--space-lg) var(--space-2xl);
+}
+
+.testimonialsNoteInner {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.testimonialsNoteText {
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+}

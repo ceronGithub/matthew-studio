@@ -62,6 +62,10 @@ app/(public)/how-it-works/page.tsx  How It Works page (/how-it-works)
 app/styles/how-it-works.css     Tab list + step timeline styles
 components/how-it-works/OnboardingFlow.tsx  Client tier-tab switcher + step timeline
 lib/howItWorksData.ts           Static per-tier onboarding step data
+app/(public)/testimonials/page.tsx  Testimonials page (/testimonials)
+app/styles/testimonials.css     Quote card grid styles
+components/testimonials/TestimonialGrid.tsx  Animated testimonial quote card grid
+lib/testimonialsData.ts         Static testimonial quotes (4 clients, matches portfolio)
 components/shared/NavBar.tsx    Site nav, mobile menu
 components/shared/Footer.tsx    Site footer
 components/home/HeroSection.tsx Home hero + CTAs
@@ -95,7 +99,7 @@ services/supabase.ts            browserClient (anon) + adminClient (service role
         - Step-by-step onboarding flow per tier
           (e.g. Tier 1: Sign up -> customize branding -> launch in 48h)
 
-[ ] 6. Testimonials (/testimonials)
+[DONE] 6. Testimonials (/testimonials)
         - Resort owner quotes, ease-of-use / results focus
 
 [ ] 7. Blog/Guides (/blog) — optional, SEO value
@@ -182,4 +186,12 @@ project is done.
   timeline callout. Defaults the active tab to ?tier=[slug] so a
   visitor clicking through from a /shop CTA lands on the matching
   flow. Note strip links back to /shop.
+
+[2026-08-22] Testimonials built: /testimonials page with a
+  TestimonialGrid quote-card grid, sourcing all 4 quotes from the
+  same clients already shown on /portfolio (Cabana Bay Resort, Azure
+  Point, Marlin Cove, Solstice Villas) so each card links back to
+  that client's full case study. Each card shows the quote, person
+  name/role, and a tier tag matching the client's portfolio tags.
+  Note strip links back to /portfolio.
 ========================================================
