@@ -1,0 +1,189 @@
+/*
+ * FILE: app/styles/how-it-works.css
+ * PURPOSE:
+ * Styles for the How It Works page (/how-it-works) — the tier tab
+ * list and the numbered step timeline. Responsive breakpoints live in
+ * mediaQueries.css, not here (Rule 9).
+ */
+
+.howItWorksPageHeader {
+  padding: var(--space-2xl) var(--space-lg) var(--space-lg);
+}
+
+.howItWorksPageHeaderInner {
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-md);
+}
+
+/* ------------------------------------------------------------
+ * TAB LIST
+ * ------------------------------------------------------------ */
+.onboardingSection {
+  padding: 0 var(--space-lg) var(--space-2xl);
+}
+
+.onboardingSectionInner {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.onboardingTabList {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+}
+
+.onboardingTab {
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.onboardingTab:hover {
+  color: var(--color-text-primary);
+}
+
+.onboardingTabActive {
+  background: var(--color-accent);
+  color: var(--background);
+}
+
+.onboardingTabActive:hover {
+  color: var(--background);
+}
+
+.onboardingTimeline {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+/* ------------------------------------------------------------
+ * STEP TIMELINE
+ * ------------------------------------------------------------ */
+.onboardingStepList {
+  width: 100%;
+  max-width: var(--max-width-narrow);
+}
+
+.onboardingStepListInner {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  list-style: none;
+}
+
+.onboardingStep {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-lg);
+  padding: var(--space-lg) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.onboardingStep:last-child {
+  border-bottom: none;
+}
+
+.onboardingStepNumber {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.onboardingStepContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  flex: 1;
+}
+
+.onboardingStepHeader {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.onboardingStepTitle {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.onboardingStepDuration {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.onboardingStepDescription {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+/* ------------------------------------------------------------
+ * CLOSING NOTE — reassurance strip, same pattern as shop.css
+ * ------------------------------------------------------------ */
+.howItWorksNoteSection {
+  padding: 0 var(--space-lg) var(--space-2xl);
+}
+
+.howItWorksNoteInner {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.howItWorksNoteText {
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+}

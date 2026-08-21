@@ -58,6 +58,10 @@ app/(public)/features/page.tsx  Why Choose This Template page (/features)
 app/styles/features.css         Tech stack, included-features, ROI, comparison table styles
 components/features/ROICalculator.tsx  Client-side hours/money-saved calculator
 lib/featuresData.ts             Static tech stack, included features, comparison rows
+app/(public)/how-it-works/page.tsx  How It Works page (/how-it-works)
+app/styles/how-it-works.css     Tab list + step timeline styles
+components/how-it-works/OnboardingFlow.tsx  Client tier-tab switcher + step timeline
+lib/howItWorksData.ts           Static per-tier onboarding step data
 components/shared/NavBar.tsx    Site nav, mobile menu
 components/shared/Footer.tsx    Site footer
 components/home/HeroSection.tsx Home hero + CTAs
@@ -87,7 +91,7 @@ services/supabase.ts            browserClient (anon) + adminClient (service role
         - ROI calculator (e.g. hours saved per week)
         - Comparison table vs. competitors / building from scratch
 
-[ ] 5. How It Works (/how-it-works)
+[DONE] 5. How It Works (/how-it-works)
         - Step-by-step onboarding flow per tier
           (e.g. Tier 1: Sign up -> customize branding -> launch in 48h)
 
@@ -170,4 +174,12 @@ project is done.
   five classes into shared.css, which every public page loads via
   app/(public)/layout.tsx, and removed the now-duplicate definitions
   from home.css.
+
+[2026-08-22] How It Works built: /how-it-works page with a tabbed
+  OnboardingFlow (Client Component) — one tab per pricing tier
+  (Managed SaaS, Self-Hosted, Custom Build), each showing its own
+  numbered step timeline with per-step duration labels and a total
+  timeline callout. Defaults the active tab to ?tier=[slug] so a
+  visitor clicking through from a /shop CTA lands on the matching
+  flow. Note strip links back to /shop.
 ========================================================
