@@ -54,6 +54,10 @@ app/(public)/shop/page.tsx      Template Shop pricing tier grid (/shop)
 app/styles/shop.css             Shop page + pricing card styles
 components/shop/PricingGrid.tsx Animated pricing tier card grid
 lib/pricingData.ts              Static placeholder pricing tier data (3 tiers)
+app/(public)/features/page.tsx  Why Choose This Template page (/features)
+app/styles/features.css         Tech stack, included-features, ROI, comparison table styles
+components/features/ROICalculator.tsx  Client-side hours/money-saved calculator
+lib/featuresData.ts             Static tech stack, included features, comparison rows
 components/shared/NavBar.tsx    Site nav, mobile menu
 components/shared/Footer.tsx    Site footer
 components/home/HeroSection.tsx Home hero + CTAs
@@ -77,7 +81,7 @@ services/supabase.ts            browserClient (anon) + adminClient (service role
           (one-time), Custom build (retainer)
         - Each tier: price, feature list, "Get Started" button
 
-[ ] 4. Why Choose This Template (/features)
+[DONE] 4. Why Choose This Template (/features)
         - Tech stack breakdown
         - What's included out of the box
         - ROI calculator (e.g. hours saved per week)
@@ -151,4 +155,19 @@ project is done.
   Recommended with an accent border. Each CTA links to
   /contact?tier=[slug] (page not yet built — item 8). Note
   strip below the grid links back to /portfolio.
+
+[2026-08-22] Why Choose This Template built: /features page with a
+  tech stack grid, an out-of-the-box included-features grid, an
+  interactive ROI calculator (sliders for manual admin hours/week and
+  hourly rate, computes hours + money saved per month, assumes 80%
+  automation), and a comparison table (this template vs. building
+  from scratch vs. a generic site builder). Note strip links to
+  /shop. Fixed a pre-existing bug found while building this: .eyebrow,
+  .heroTitle, .heroSubtitle, .buttonPrimary, and .buttonSecondary
+  were only defined in home.css, which nothing but the Home page
+  imports — so a direct/hard load of /shop, /portfolio, or the
+  portfolio 404 state rendered those elements unstyled. Moved all
+  five classes into shared.css, which every public page loads via
+  app/(public)/layout.tsx, and removed the now-duplicate definitions
+  from home.css.
 ========================================================
