@@ -10,6 +10,9 @@
  * ------------------------------------------------------------ */
 .heroSection {
   padding: var(--space-2xl) var(--space-lg);
+  /* Subtle dark gradient, page bg fading to a slightly lighter tone
+   * toward the bottom of the hero — homepage only. */
+  background: linear-gradient(180deg, var(--background) 0%, var(--color-surface) 100%);
 }
 
 .heroContainer {
@@ -30,7 +33,17 @@
 }
 
 /* .eyebrow, .heroTitle, .heroSubtitle moved to shared.css — every
- * public page's header block uses them, not just Home. */
+ * public page's header block uses them, not just Home. Homepage hero
+ * needs a larger type scale than other pages' headers, so the two
+ * classes below override size only, scoped to this page. */
+.homeHeroTitle {
+  font-size: 2.25rem; /* 36px on mobile, per homepage hero spec */
+}
+
+.homeHeroSubtitle {
+  font-size: 1rem; /* 16px on mobile, per homepage hero spec */
+  opacity: 0.7;
+}
 
 .heroActions {
   display: flex;

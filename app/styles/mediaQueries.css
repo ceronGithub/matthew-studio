@@ -61,3 +61,25 @@
     font-size: 3.5rem;
   }
 }
+
+/* ------------------------------------------------------------
+ * HOME HERO TYPE SCALE — homepage only (.homeHeroTitle /
+ * .homeHeroSubtitle), per marketplace hero spec: 36px mobile up
+ * to 52-64px desktop. Does not affect other pages' shared
+ * .heroTitle/.heroSubtitle sizing above.
+ * ------------------------------------------------------------ */
+@media (min-width: 768px) {
+  .homeHeroTitle {
+    font-size: 3.25rem; /* 52px */
+  }
+
+  .homeHeroSubtitle {
+    font-size: 1.125rem; /* 18px */
+  }
+}
+
+@media (min-width: 1024px) {
+  .homeHeroTitle {
+    font-size: 4rem; /* 64px */
+  }
+}
