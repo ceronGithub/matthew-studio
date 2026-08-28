@@ -87,6 +87,27 @@
 }
 
 /* ------------------------------------------------------------
+ * SHARED SECTION HEADING — used by any section header across
+ * public pages (Home's Category Showcase, Features, etc.), not
+ * just one page's own CSS file.
+ * ------------------------------------------------------------ */
+.sectionTitle {
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.sectionSubtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  max-width: 60ch;
+}
+
+/* ------------------------------------------------------------
  * NAVBAR
  * ------------------------------------------------------------ */
 .siteHeader {

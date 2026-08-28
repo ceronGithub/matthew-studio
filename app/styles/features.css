@@ -39,21 +39,8 @@
   gap: var(--space-lg);
 }
 
-.sectionTitle {
-  font-size: 1.75rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--color-text-primary);
-  word-break: break-word;
-  overflow-wrap: break-word;
-}
-
-.sectionSubtitle {
-  font-size: 1rem;
-  line-height: 1.65;
-  color: var(--color-text-secondary);
-  max-width: 60ch;
-}
+/* .sectionTitle, .sectionSubtitle moved to shared.css — reused by
+ * Home's Category Showcase section too, not just Features. */
 
 /* ------------------------------------------------------------
  * TECH STACK GRID

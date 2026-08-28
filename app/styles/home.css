@@ -189,3 +189,138 @@
   font-size: 0.875rem;
   color: var(--color-text-secondary);
 }
+
+/* ------------------------------------------------------------
+ * CATEGORY SHOWCASE
+ * ------------------------------------------------------------ */
+.categoryShowcaseSection {
+  padding: var(--space-2xl) var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.categoryShowcaseContainer {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.categoryShowcaseHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-width: var(--max-width-narrow);
+}
+
+.categoryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-lg);
+}
+
+.categoryCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  min-height: 240px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+
+.categoryCard:hover,
+.categoryCard:focus-within {
+  background: var(--color-surface-hover);
+  border-color: var(--color-accent);
+}
+
+.categoryCardIconWrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  background: var(--color-surface-active);
+  transition: transform var(--transition-base);
+}
+
+.categoryCard:hover .categoryCardIconWrap {
+  transform: rotate(5deg) scale(1.05);
+}
+
+.categoryCardIcon {
+  color: var(--color-accent);
+}
+
+.categoryCardBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  flex: 1;
+}
+
+.categoryCardHeading {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.categoryCardName {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.categoryCardBadge {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px var(--space-sm);
+  border-radius: 999px;
+  background: var(--color-surface-active);
+  color: var(--color-text-secondary);
+}
+
+.categoryCardPrice {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.categoryCardDescription {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  /* Clamp to 2 lines so cards stay the same height regardless of copy length */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.categoryCardLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: none;
+  touch-action: manipulation;
+}
+
+.categoryCardLinkIcon {
+  transition: transform var(--transition-fast);
+}
+
+.categoryCard:hover .categoryCardLinkIcon,
+.categoryCardLink:focus-visible .categoryCardLinkIcon {
+  transform: translateX(4px);
+}
