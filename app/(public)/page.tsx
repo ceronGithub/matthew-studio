@@ -18,6 +18,7 @@ import "../styles/home.css";
 import HeroSection from "@/components/home/HeroSection";
 import QuickWins from "@/components/home/QuickWins";
 import CategoryShowcase from "@/components/home/CategoryShowcase";
+import FeaturedProducts from "@/components/home/FeaturedProducts";
 
 export const metadata: Metadata = {
   title: "Matthew Studio | Resort Booking Website Templates",
@@ -37,6 +38,7 @@ export default function HomePage() {
       <HeroSection />
       <QuickWins />
       <CategoryShowcase />
+      <FeaturedProducts />
     </>
   );
 }
