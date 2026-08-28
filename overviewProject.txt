@@ -84,7 +84,23 @@ components/contact/ContactForm.tsx  Client form: name/email/resort/tier/message,
 lib/contactData.ts              Tier select options + calendar booking link
 components/home/HeroSection.tsx Home hero + CTAs
 components/home/QuickWins.tsx   Client wordmarks + result stats
+lib/categoryShowcaseData.ts     6 marketplace category cards (static, pending products table)
+components/home/CategoryShowcase.tsx  Homepage 6-card category grid, each links to /shop?category=
+lib/featuredProductsData.ts     "Bestsellers This Month" static product list
+components/home/FeaturedProducts.tsx  Homepage auto-scroll product carousel (pause on hover, arrows, mobile stack)
+lib/howItWorksHomeData.ts       Universal 3-step (Browse/Choose/Start) homepage data
+components/home/HowItWorksSection.tsx  Homepage 3-step How It Works section (separate from the
+                                 per-tier OnboardingFlow on the standalone /how-it-works page)
 services/supabase.ts            browserClient (anon) + adminClient (service role)
+
+NOTE: MARKETPLACE_IMPROVEMENTS.md (repo root) is the multi-category
+marketplace build plan (Templates, T-Shirts, AI Videos, File Tools,
+Tutorials, Game Characters). The site is mid-pivot: the homepage now
+shows marketplace sections (Category Showcase, Featured Products, How
+It Works), but /shop, /portfolio, /features, /how-it-works, /contact,
+and /testimonials are still the older single-template (resort
+booking) pages — not yet split into /products + 6 category pages per
+that plan's Site Map (Section 3).
 
 5. BUILD PLAN — REMAINING PAGES (in order)
 --------------------------------------------------------
@@ -127,6 +143,36 @@ services/supabase.ts            browserClient (anon) + adminClient (service role
         - Login page (app/(auth)/login)
         - Manage portfolio entries, pricing tiers, testimonials
         - middleware.ts auth guard for /superAdmin/*
+
+5B. MARKETPLACE PIVOT — additional pages/sections from
+    MARKETPLACE_IMPROVEMENTS.md, tracked separately since they
+    layer on top of (not replace) the plan above.
+--------------------------------------------------------
+Homepage sections (10 total per the plan):
+[DONE] Hero Section
+[DONE] Quick Wins / Trust Metrics
+[DONE] Category Showcase Grid (6 cards)
+[DONE] Featured Products Carousel (auto-scroll, pause on hover, arrows)
+[DONE] How It Works (universal 3-step: Browse/Choose/Start)
+[ ]    Testimonials Carousel (homepage section — distinct from the
+       existing static /testimonials page grid)
+[ ]    FAQ Accordion
+[ ]    CTA Banner (bottom of homepage)
+
+Site structure (not yet started):
+[ ] /products master grid (filter/sort/search)
+[ ] 6 category pages: /templates, /tshirts, /ai-videos,
+    /file-tools, /tutorials, /game-characters
+[ ] Product detail pages per category ([slug], variant selectors)
+[ ] lib/productsData.ts — unified multi-category product schema
+    (Section 5 of the plan); categoryShowcaseData.ts and
+    featuredProductsData.ts are still separate placeholder files
+[ ] /pricing (dedicated marketplace pricing — /shop is still the
+    old single-template 3-tier page)
+[ ] /compare (variant comparison tool)
+[ ] /case-studies (rebrand of /portfolio with category tags)
+[ ] /faq, /about
+[ ] /security, /privacy, /terms, /refund-policy
 
 6. HOW WE'RE WORKING
 --------------------------------------------------------
@@ -233,4 +279,38 @@ project is done.
   Cal.com URL). Wrapped ContactForm in <Suspense> since it reads
   useSearchParams. No other files needed changes — /shop's CTAs and
   the NavBar's Contact link/CTA already pointed at /contact.
+
+[2026-08-27] (backfill — these two were built but never logged here)
+  Category Showcase built: homepage section with 6 marketplace
+  category cards (Templates, T-Shirts, AI Videos, File Tools,
+  Tutorials, Game Characters) per MARKETPLACE_IMPROVEMENTS.md.
+  Each card links to /shop?category=[slug] since dedicated category
+  routes don't exist yet.
+
+[2026-08-27] (backfill) Featured Products built: "Bestsellers This
+  Month" homepage carousel — auto-scrolls horizontally on tablet/
+  desktop (pauses on hover or arrow use), renders as a vertical
+  stack on mobile. No real product photos yet, so cards show a
+  category-tinted icon placeholder.
+
+[2026-08-28] Overview corrected: file map and build plan didn't
+  reflect the two entries above, or the fact that this project is
+  mid-pivot from a single-template resort site to a multi-category
+  marketplace per MARKETPLACE_IMPROVEMENTS.md. Added a new Section
+  5B tracking the marketplace pivot's homepage sections and site
+  structure separately from the original single-template build plan
+  (Section 5), so "DONE" status can be trusted again without
+  cross-checking git log.
+
+[2026-08-28] How It Works (homepage) built: universal 3-step section
+  (Browse Products → Choose What Fits → Start Using It) added to the
+  homepage after Featured Products. Kept as a new component
+  (HowItWorksSection.tsx) separate from the existing per-tier
+  OnboardingFlow.tsx on /how-it-works, since that page still covers
+  the Template product's own signup flow and stays as-is — this
+  section is the marketplace-wide explainer for any category. Icons
+  scale+rotate in on scroll, text slides in from the left, and a
+  connecting line animates its width between steps (row layout from
+  tablet up, stacked column on mobile). "View All Products" CTA
+  links to /shop pending /products. npx tsc --noEmit passes clean.
 ========================================================

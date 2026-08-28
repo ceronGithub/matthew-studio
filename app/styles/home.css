@@ -498,3 +498,131 @@
 .featuredProductsArrowNext {
   right: calc(var(--space-md) * -1);
 }
+
+/*
+ * HOW IT WORKS (homepage universal 3-step section)
+ * .howItWorksHomeSection
+ * Full-width section, centered content column, mirrors the spacing
+ * pattern used by categoryShowcaseSection / featuredProductsSection.
+ */
+.howItWorksHomeSection {
+  padding: var(--space-2xl) var(--space-lg);
+}
+
+.howItWorksHomeContainer {
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2xl);
+}
+
+.howItWorksHomeHeader {
+  text-align: center;
+}
+
+/*
+ * .howItWorksHomeSteps
+ * Mobile: vertical column, steps stacked with breathing room.
+ * Desktop (mediaQueries.css): switches to a horizontal row so the
+ * connecting line reads left-to-right between steps.
+ */
+.howItWorksHomeSteps {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2xl);
+  width: 100%;
+}
+
+.howItWorksHomeStepWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.howItWorksHomeStep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border-radius: 12px;
+  transition: background-color var(--transition-fast);
+}
+
+.howItWorksHomeStep:hover {
+  background: var(--color-surface-hover);
+}
+
+.howItWorksHomeIconWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--color-surface-active);
+  transition: transform var(--transition-fast);
+}
+
+.howItWorksHomeStep:hover .howItWorksHomeIconWrap {
+  transform: scale(1.05);
+}
+
+.howItWorksHomeIcon {
+  color: var(--color-accent);
+  transition: color var(--transition-fast);
+}
+
+.howItWorksHomeStepNumber {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.howItWorksHomeStepText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.howItWorksHomeStepTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.howItWorksHomeStepDescription {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  max-width: 240px;
+}
+
+/* Connecting line between steps — desktop-row layout only; hidden on
+   mobile in mediaQueries.css since steps stack vertically there. */
+.howItWorksHomeConnector {
+  display: none;
+  height: 2px;
+  background: var(--color-accent);
+}
+
+.howItWorksHomeCtaRow {
+  display: flex;
+  justify-content: center;
+}

@@ -83,3 +83,34 @@
     font-size: 4rem; /* 64px */
   }
 }
+
+/* ------------------------------------------------------------
+ * HOW IT WORKS (homepage) — steps go from a stacked column to a
+ * horizontal row from tablet up, with the connecting line shown
+ * between them (hidden on mobile since there's nothing to connect
+ * in a vertical stack).
+ * ------------------------------------------------------------ */
+@media (min-width: 768px) {
+  .howItWorksHomeSteps {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .howItWorksHomeStepWrap {
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+    flex: 1 1 0;
+  }
+
+  .howItWorksHomeStep {
+    flex: 1 1 auto;
+  }
+
+  .howItWorksHomeConnector {
+    display: block;
+    flex: 0 0 40px;
+    margin-top: 32px;
+  }
+}
