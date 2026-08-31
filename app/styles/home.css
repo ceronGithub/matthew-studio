@@ -897,3 +897,65 @@
   display: flex;
   justify-content: center;
 }
+
+/*
+ * CTA BANNER (bottom of homepage "Ready to Get Started?")
+ * .ctaBannerSection
+ * Last section on the page — gradient card, centered text, no border-
+ * top divider (spec has it visually distinct/floating, unlike the
+ * sections above it which are flush dividers).
+ */
+.ctaBannerSection {
+  padding: var(--space-2xl) var(--space-lg);
+}
+
+.ctaBannerContainer {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+  text-align: center;
+  padding: 60px 40px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, var(--color-surface-active) 0%, var(--color-surface) 100%);
+  border: 1px solid var(--color-border);
+}
+
+.ctaBannerText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.ctaBannerHeading {
+  font-size: 1.75rem; /* 28px mobile */
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.ctaBannerSubtext {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+}
+
+.ctaBannerActions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-md);
+}
+
+.ctaBannerButtonPrimary:hover,
+.ctaBannerButtonPrimary:focus-visible {
+  transform: scale(1.05);
+}
+
+.ctaBannerButtonSecondary:hover,
+.ctaBannerButtonSecondary:focus-visible {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}

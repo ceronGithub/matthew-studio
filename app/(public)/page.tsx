@@ -22,6 +22,7 @@ import FeaturedProducts from "@/components/home/FeaturedProducts";
 import HowItWorksSection from "@/components/home/HowItWorksSection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import FAQAccordion from "@/components/home/FAQAccordion";
+import CTABanner from "@/components/home/CTABanner";
 
 export const metadata: Metadata = {
   title: "Matthew Studio | Resort Booking Website Templates",
@@ -45,6 +46,7 @@ export default function HomePage() {
       <HowItWorksSection />
       <TestimonialsSection />
       <FAQAccordion />
+      <CTABanner />
     </>
   );
 }

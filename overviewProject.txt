@@ -100,15 +100,19 @@ components/home/TestimonialsSection.tsx  Homepage auto-scroll testimonials carou
 lib/homeFaqData.ts              Homepage FAQ Accordion data (6 general marketplace questions)
 components/home/FAQAccordion.tsx  Homepage FAQ accordion — single-open expand/collapse, chevron
                                  rotate, height/opacity animation, "See All FAQs" CTA to /faq
+components/home/CTABanner.tsx   Homepage bottom "Ready to Get Started?" CTA banner — Browse All
+                                 Products (/products, pending) + Book a Demo (/contact)
 services/supabase.ts            browserClient (anon) + adminClient (service role)
 
 NOTE: MARKETPLACE_IMPROVEMENTS.md (repo root) is the multi-category
 marketplace build plan (Templates, T-Shirts, AI Videos, File Tools,
-Tutorials, Game Characters). The site is mid-pivot: the homepage now
-shows marketplace sections (Category Showcase, Featured Products, How
-It Works), but /shop, /portfolio, /features, /how-it-works, /contact,
-and /testimonials are still the older single-template (resort
-booking) pages — not yet split into /products + 6 category pages per
+Tutorials, Game Characters). The site is mid-pivot: the homepage is
+now fully rebuilt per the plan's 10-section spec (Hero, Quick Wins,
+Category Showcase, Featured Products, How It Works, Testimonials,
+FAQ, CTA Banner), but /shop, /portfolio, /features, /how-it-works,
+/contact, and /testimonials are still the older single-template
+(resort booking) pages — not yet split into /products + 6 category
+pages per
 that plan's Site Map (Section 3).
 
 5. BUILD PLAN — REMAINING PAGES (in order)
@@ -166,7 +170,7 @@ Homepage sections (10 total per the plan):
 [DONE] Testimonials Carousel (homepage section — distinct from the
        existing static /testimonials page grid)
 [DONE] FAQ Accordion
-[ ]    CTA Banner (bottom of homepage)
+[DONE] CTA Banner (bottom of homepage)
 
 Site structure (not yet started):
 [ ] /products master grid (filter/sort/search)
@@ -349,4 +353,18 @@ project is done.
   still pending, Phase 3 of the marketplace plan — same forward-
   linking pattern already used elsewhere on the homepage). npx tsc
   --noEmit passes clean.
+
+[2026-09-01] CTA Banner (homepage) built: "Ready to Get Started?"
+  section added as the final homepage section, after FAQ. Gradient
+  card (surface-active to surface), centered heading + subtext, two
+  CTAs — "Browse All Products" (/products, pending — same forward-
+  linking pattern used elsewhere) and "Book a Demo" (/contact,
+  already live). Container fades in at 80% viewport visibility, text
+  slides up + fades in, buttons scale in with a 0.2s delay via a
+  cubic-bezier ease; primary button scales up on hover, secondary
+  button's border/text shift to accent color on hover. Heading steps
+  from 28px (mobile) to 40px (desktop, mediaQueries.css). This
+  completes all 10 homepage sections from MARKETPLACE_IMPROVEMENTS.md
+  Section 1 — homepage rebuild is DONE. npx tsc --noEmit passes
+  clean.
 ========================================================

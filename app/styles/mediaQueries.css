@@ -114,3 +114,13 @@
     margin-top: 32px;
   }
 }
+
+/* ------------------------------------------------------------
+ * CTA BANNER — heading steps up from 28px (mobile) to 40px
+ * (desktop) per the homepage spec.
+ * ------------------------------------------------------------ */
+@media (min-width: 768px) {
+  .ctaBannerHeading {
+    font-size: 2.5rem; /* 40px */
+  }
+}
