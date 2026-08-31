@@ -15,6 +15,8 @@
  * Reads FILE_TOOLS_FEATURES (fileToolsSectionData.ts) and PRODUCTS
  * (productsData.ts) filtered to category "file-tools".
  */
+"use client";
+
 import SectionHeader from "@/components/shared/SectionHeader";
 import FeatureGrid from "@/components/home/FeatureGrid";
 import ProductCard from "@/components/home/ProductCard";
