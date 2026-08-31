@@ -182,6 +182,16 @@
   }
 }
 
+/* ------------------------------------------------------------
+ * TUTORIALS SECTION — persona grid goes 3-column row from
+ * tablet up, per spec (stacked single column on mobile).
+ * ------------------------------------------------------------ */
+@media (min-width: 768px) {
+  .personaGrid {
+    flex-direction: row;
+    align-items: stretch;
+  }
+}
 
 
 

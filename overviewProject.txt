@@ -475,3 +475,17 @@ project is done.
   inline in the data file. Not wired into page.tsx yet — still Phase
   2/3. npx tsc --noEmit passes clean.
 ========================================================
+[2026-09-01] Phase 2 (5/6): TutorialsSection.tsx built — 3-persona
+  "Who's this for?" callout (Developers/Designers/Founders; icon +
+  role + bullet, fade-in stagger 0.15s, no hover state per spec;
+  role-based background uses single-accent opacity steps instead of
+  a second hue, per Rule 17.2), product cards for the "tutorials"
+  category ordered Beginner→Intermediate→Advanced with a level badge
+  (green/amber/red status tokens) and duration overlaid per card via
+  a thin wrapper — ProductCard.tsx itself untouched, level/duration
+  come from new lib/tutorialsSectionData.ts (TUTORIAL_META, keyed by
+  product id) rather than extending the shared Product type. New
+  shared.css classes: .personaGrid/Item/Icon/Role/Bullet,
+  .tutorialCardWrap/LevelBadge/Duration + level color variants. Not
+  wired into page.tsx yet — still Phase 2/3. npx tsc --noEmit passes
+  clean.

@@ -973,5 +973,106 @@ th.comparisonTableTierHighlighted,
   align-self: flex-start;
 }
 
+/* ------------------------------------------------------------
+ * PERSONA GRID — Tutorials section "Who's this for?" callout.
+ * Row layout from tablet up (mediaQueries.css), stacked on mobile.
+ * No hover state per spec — informational only.
+ * ------------------------------------------------------------ */
+.personaGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  margin: var(--space-xl) 0;
+}
+
+.personaItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  flex: 1;
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius, 12px);
+  text-align: center;
+}
+
+/* Role-based variation without a second hue (Rule 17.2) — same
+ * single-accent-at-different-opacity treatment as
+ * designGalleryImage0/1/2 and FileToolsSection's icon colors. */
+.personaItem0 {
+  background: rgba(34, 197, 94, 0.04);
+}
+
+.personaItem1 {
+  background: rgba(34, 197, 94, 0.08);
+}
+
+.personaItem2 {
+  background: rgba(34, 197, 94, 0.12);
+}
+
+.personaIcon {
+  color: var(--color-accent);
+}
+
+.personaRole {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.personaBullet {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  max-width: 32ch;
+}
+
+/* ------------------------------------------------------------
+ * TUTORIAL CARD WRAP — level badge + duration overlaid on the
+ * shared ProductCard, without adding tutorial-only fields to
+ * ProductCard.tsx itself. Level badge sits top-left so it never
+ * collides with ProductCard's own top-right bestseller/new/limited
+ * badge.
+ * ------------------------------------------------------------ */
+.tutorialCardWrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.tutorialLevelBadge {
+  position: absolute;
+  top: var(--space-sm);
+  left: var(--space-sm);
+  z-index: var(--z-raised);
+  padding: 0.2rem var(--space-sm);
+  border-radius: 999px;
+  color: var(--color-bg);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tutorialLevelBeginner {
+  background: var(--color-success);
+}
+
+.tutorialLevelIntermediate {
+  background: var(--color-warning);
+}
+
+.tutorialLevelAdvanced {
+  background: var(--color-error);
+}
+
+.tutorialDuration {
+  margin-top: var(--space-xs);
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+}
 
 
