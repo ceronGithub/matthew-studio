@@ -91,6 +91,12 @@ components/home/FeaturedProducts.tsx  Homepage auto-scroll product carousel (pau
 lib/howItWorksHomeData.ts       Universal 3-step (Browse/Choose/Start) homepage data
 components/home/HowItWorksSection.tsx  Homepage 3-step How It Works section (separate from the
                                  per-tier OnboardingFlow on the standalone /how-it-works page)
+lib/homeTestimonialsData.ts     "What Our Creators Say" homepage carousel data (6 quotes, one
+                                 per marketplace category) — distinct from lib/testimonialsData.ts
+                                 (resort-owner quotes on the standalone /testimonials page)
+components/home/TestimonialsSection.tsx  Homepage auto-scroll testimonials carousel (right-to-left,
+                                 18s loop, pause on hover, arrows, mobile stack) — same pattern as
+                                 FeaturedProducts.tsx, opposite scroll direction
 services/supabase.ts            browserClient (anon) + adminClient (service role)
 
 NOTE: MARKETPLACE_IMPROVEMENTS.md (repo root) is the multi-category
@@ -154,7 +160,7 @@ Homepage sections (10 total per the plan):
 [DONE] Category Showcase Grid (6 cards)
 [DONE] Featured Products Carousel (auto-scroll, pause on hover, arrows)
 [DONE] How It Works (universal 3-step: Browse/Choose/Start)
-[ ]    Testimonials Carousel (homepage section — distinct from the
+[DONE] Testimonials Carousel (homepage section — distinct from the
        existing static /testimonials page grid)
 [ ]    FAQ Accordion
 [ ]    CTA Banner (bottom of homepage)
@@ -313,4 +319,18 @@ project is done.
   connecting line animates its width between steps (row layout from
   tablet up, stacked column on mobile). "View All Products" CTA
   links to /shop pending /products. npx tsc --noEmit passes clean.
+
+[2026-09-01] Testimonials Carousel (homepage) built: "What Our
+  Creators Say" section added after How It Works. Six quotes, one per
+  marketplace category (Templates/T-Shirts/AI Videos/File
+  Tools/Tutorials/Game Characters), each card showing a star rating,
+  italic quote, initials avatar, author name/role, and a category
+  badge. Auto-scrolls right-to-left on an 18s infinite loop (opposite
+  direction from Featured Products' 20s left-to-right loop), pauses
+  on hover, prev/next arrows fade in on carousel hover, falls back to
+  a plain vertical stack under 768px — same responsive pattern as
+  FeaturedProducts.tsx. New file lib/homeTestimonialsData.ts keeps
+  this separate from lib/testimonialsData.ts (the resort-owner quotes
+  on the standalone /testimonials page). npx tsc --noEmit passes
+  clean.
 ========================================================

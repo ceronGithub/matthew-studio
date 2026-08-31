@@ -626,3 +626,194 @@
   display: flex;
   justify-content: center;
 }
+
+/*
+ * TESTIMONIALS (homepage "What Our Creators Say" carousel)
+ * .testimonialsHomeSection
+ * Mirrors the featuredProductsSection layout/scroll pattern above —
+ * same card-track structure, opposite scroll direction (right, 18s
+ * vs. Featured Products' left, 20s), reversed relative to page.tsx
+ * order.
+ */
+.testimonialsHomeSection {
+  padding: var(--space-xl) 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.testimonialsHomeContainer {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: 0 var(--space-lg);
+}
+
+.testimonialsHomeHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-width: var(--max-width-narrow);
+}
+
+.testimonialsHomeCarousel {
+  position: relative;
+}
+
+.testimonialsHomeTrack {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-lg);
+  overflow-x: auto;
+  scroll-behavior: auto; /* the rAF loop drives scrollLeft directly */
+  scrollbar-width: none; /* Firefox */
+}
+
+.testimonialsHomeTrack::-webkit-scrollbar {
+  display: none; /* Chrome/Safari — this is a decorative auto-scroller, not a user scrollbar */
+}
+
+.testimonialsHomeStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.testimonialHomeCard {
+  flex: 0 0 340px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  transition: border-color var(--transition-base), transform var(--transition-base);
+}
+
+.testimonialsHomeStack .testimonialHomeCard {
+  flex: 1 1 auto;
+}
+
+.testimonialHomeCard:hover,
+.testimonialHomeCard:focus-within {
+  border-color: var(--color-accent);
+  transform: translateY(-8px);
+}
+
+.testimonialHomeStars {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.testimonialHomeStarFilled {
+  color: var(--color-accent);
+}
+
+.testimonialHomeStarEmpty {
+  color: var(--color-surface-active);
+}
+
+.testimonialHomeQuote {
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--color-text-primary);
+}
+
+.testimonialHomeFooter {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: auto;
+}
+
+.testimonialHomeAvatar {
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: var(--color-surface-active);
+  transition: transform var(--transition-base);
+}
+
+.testimonialHomeCard:hover .testimonialHomeAvatar {
+  transform: scale(1.1);
+}
+
+.testimonialHomeAuthor {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.testimonialHomeAuthorName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.testimonialHomeAuthorRole {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.testimonialHomeCategoryBadge {
+  flex: 0 0 auto;
+  margin-left: auto;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px var(--space-sm);
+  border-radius: 999px;
+  background: var(--color-surface-active);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.testimonialsHomeArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  opacity: 0;
+  touch-action: manipulation;
+  transition: opacity var(--transition-fast), border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.testimonialsHomeCarousel:hover .testimonialsHomeArrow,
+.testimonialsHomeArrow:focus-visible {
+  opacity: 1;
+}
+
+.testimonialsHomeArrow:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-accent);
+}
+
+.testimonialsHomeArrowPrev {
+  left: calc(var(--space-md) * -1);
+}
+
+.testimonialsHomeArrowNext {
+  right: calc(var(--space-md) * -1);
+}
