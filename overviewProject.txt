@@ -123,6 +123,9 @@ components/home/TShirtsSection.tsx  Homepage T-Shirts section (Phase 2, 2/6) —
 lib/aiVideosSectionData.ts      AI Videos section content: sample videos, custom-order callout
 components/home/AIVideosSection.tsx  Homepage AI Videos section (Phase 2, 3/6) — video carousel,
                                  custom callout, product cards. Not wired into page.tsx yet
+lib/fileToolsSectionData.ts     File Tools section content: 3-item feature grid
+components/home/FileToolsSection.tsx  Homepage File Tools section (Phase 2, 4/6) — feature grid,
+                                 product cards. Lightest section, no new CSS. Not wired into page.tsx yet
 services/supabase.ts            browserClient (anon) + adminClient (service role)
 
 NOTE: MARKETPLACE_IMPROVEMENTS.md (repo root) is the multi-category
@@ -459,4 +462,16 @@ project is done.
   lib/aiVideosSectionData.ts holds the sample video list and callout
   copy. New shared.css classes: .customCallout*. Not wired into
   page.tsx yet — still Phase 2/3. npx tsc --noEmit passes clean.
+
+[2026-09-01] Phase 2 (4/6): FileToolsSection.tsx built — the lightest
+  of the six sections per spec: header, the reusable FeatureGrid (3
+  items instead of Templates' 6), product cards for the "file-tools"
+  category, CTA. No new reusable components or CSS needed — entirely
+  built from Phase 1 pieces + existing section-anatomy classes. New
+  lib/fileToolsSectionData.ts holds the 3 feature items. Note: spec's
+  "icon colors rotate through green/teal/coral" was intentionally not
+  followed — kept the single accent-green icon color instead, per
+  Rule 17.2 (never more than one accent color per project); documented
+  inline in the data file. Not wired into page.tsx yet — still Phase
+  2/3. npx tsc --noEmit passes clean.
 ========================================================
