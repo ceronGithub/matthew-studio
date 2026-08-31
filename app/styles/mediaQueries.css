@@ -144,3 +144,14 @@
   }
 }
 
+/* ------------------------------------------------------------
+ * TEMPLATES SECTION — Why Us row layout from tablet up
+ * ------------------------------------------------------------ */
+@media (min-width: 768px) {
+  .whyUsGrid {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+

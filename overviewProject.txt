@@ -114,6 +114,9 @@ components/home/ProductCard.tsx      Reusable product tile driven by the Product
 components/home/ComparisonTable.tsx  Reusable tier comparison table, mobile horizontal scroll, count-up price
 components/home/FeatureGrid.tsx      Reusable 2x3/1-col benefits grid, staggered fade-in
 components/home/VideoCarousel.tsx    Reusable video demo carousel, 60%-visibility autoplay, swipe support
+lib/templatesSectionData.ts     Templates section content: benefits, why-us copy, demo video
+components/home/TemplatesSection.tsx  Homepage Templates section (Phase 2, 1/6) — comparison table,
+                                 benefits grid, why-us, demo, product cards. Not wired into page.tsx yet
 services/supabase.ts            browserClient (anon) + adminClient (service role)
 
 NOTE: MARKETPLACE_IMPROVEMENTS.md (repo root) is the multi-category
@@ -414,4 +417,18 @@ project is done.
   Rule 9. None of these components are wired into the homepage yet —
   that's Phase 2 (the six category sections) and Phase 3
   (integration). npx tsc --noEmit passes clean.
+
+[2026-09-01] Phase 2 (1/6): TemplatesSection.tsx built — comparison
+  table (Managed/Self-Hosted/Custom, reusing PRICING_TIERS from
+  pricingData.ts; feature rows are the deduped union of each tier's
+  own bullets rather than a separately invented master list), 6-item
+  benefits grid, 3-column "Why Us" trust builder (new .whyUsGrid/Item/
+  Heading/Body classes in shared.css, row layout from tablet up),
+  demo VideoCarousel, and product cards for the "templates" category
+  (productsData.ts). New lib/templatesSectionData.ts holds the
+  section's own content (benefits, why-us copy, demo video) that
+  doesn't live anywhere else. New shared.css classes reused by every
+  future category section: .categorySection, .sectionContainer,
+  .sectionContent, .productCardsGrid, .sectionCTA. Not wired into
+  page.tsx yet — still Phase 2/3. npx tsc --noEmit passes clean.
 ========================================================

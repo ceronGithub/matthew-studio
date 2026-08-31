@@ -715,3 +715,78 @@ th.comparisonTableTierHighlighted,
   border-color: var(--color-border-hover);
   color: var(--color-text-primary);
 }
+
+/* ------------------------------------------------------------
+ * CATEGORY SECTION ANATOMY — the standard wrapper/container/CTA
+ * classes shared by all 6 homepage category sections (Templates,
+ * T-Shirts, AI Videos, File Tools, Tutorials, Game Characters), per
+ * IMPROVEMENTS.md Section 1's "Section Anatomy (standard pattern)".
+ * Lives here (not home.css) since every category section component
+ * reuses these same class names.
+ * ------------------------------------------------------------ */
+.categorySection {
+  padding: var(--space-2xl) var(--space-lg);
+}
+
+.categorySection:nth-of-type(even) {
+  background: var(--color-surface);
+}
+
+.sectionContainer {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+}
+
+.sectionContent {
+  margin: var(--space-xl) 0;
+}
+
+.productCardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-lg);
+  margin: var(--space-xl) 0;
+}
+
+.sectionCTA {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-xl);
+}
+
+/* ------------------------------------------------------------
+ * WHY US — 3-column trust builder (Templates section).
+ * ------------------------------------------------------------ */
+.whyUsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  margin: var(--space-xl) 0;
+}
+
+.whyUsItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  text-align: center;
+  flex: 1;
+}
+
+.whyUsHeading {
+  display: inline-block;
+  padding: 0.2rem var(--space-md);
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.12);
+  color: var(--color-accent);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.whyUsBody {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  max-width: 32ch;
+}
+
