@@ -102,6 +102,11 @@ components/home/FAQAccordion.tsx  Homepage FAQ accordion — single-open expand/
                                  rotate, height/opacity animation, "See All FAQs" CTA to /faq
 components/home/CTABanner.tsx   Homepage bottom "Ready to Get Started?" CTA banner — Browse All
                                  Products (/products, pending) + Book a Demo (/contact)
+lib/productsData.ts             Unified multi-category product catalog (21 products across all
+                                 6 categories) — single source for the upcoming /products master
+                                 grid, category pages, and product detail pages. Templates keep
+                                 the 3-tier (Managed/Self-Hosted/Custom) pricing shape; every
+                                 other category is a flat startingPrice.
 services/supabase.ts            browserClient (anon) + adminClient (service role)
 
 NOTE: MARKETPLACE_IMPROVEMENTS.md (repo root) is the multi-category
@@ -177,7 +182,7 @@ Site structure (not yet started):
 [ ] 6 category pages: /templates, /tshirts, /ai-videos,
     /file-tools, /tutorials, /game-characters
 [ ] Product detail pages per category ([slug], variant selectors)
-[ ] lib/productsData.ts — unified multi-category product schema
+[DONE] lib/productsData.ts — unified multi-category product schema
     (Section 5 of the plan); categoryShowcaseData.ts and
     featuredProductsData.ts are still separate placeholder files
 [ ] /pricing (dedicated marketplace pricing — /shop is still the
@@ -367,4 +372,18 @@ project is done.
   completes all 10 homepage sections from MARKETPLACE_IMPROVEMENTS.md
   Section 1 — homepage rebuild is DONE. npx tsc --noEmit passes
   clean.
+
+[2026-09-01] lib/productsData.ts built: unified Product interface and
+  21-item catalog spanning all 6 marketplace categories (3-4 products
+  each), per Section 5 of MARKETPLACE_IMPROVEMENTS.md. price.starting
+  Price is the universal sort/filter value; the Managed/Self-Hosted/
+  Custom tier breakdown from the plan's example only applies to
+  Templates, matching that category's real pricing model (others are
+  flat one-time/subscription prices). Each product also carries
+  dateAdded and trendingScore to drive the upcoming /products page's
+  "Newest" and "Trending" sort options. iconName reuses the same
+  category-tinted placeholder pattern as FeaturedProducts.tsx — no
+  real product photos yet. This is the data layer only; /products
+  master grid, the 6 category pages, and product detail pages are
+  still pending. npx tsc --noEmit passes clean.
 ========================================================
