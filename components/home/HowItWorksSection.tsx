@@ -31,7 +31,7 @@ const STEP_ICONS: Record<HowItWorksHomeStep["iconName"], LucideIcon> = {
 
 export default function HowItWorksSection() {
   return (
-    <section className="howItWorksHomeSection">
+    <section id="how-it-works-section" className="howItWorksHomeSection">
       <div className="howItWorksHomeContainer">
         <motion.div
           className="howItWorksHomeHeader"

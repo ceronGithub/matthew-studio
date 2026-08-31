@@ -119,7 +119,7 @@ export default function TestimonialsSection() {
   }
 
   return (
-    <section className="testimonialsHomeSection">
+    <section id="testimonials-section" className="testimonialsHomeSection">
       <motion.div
         className="testimonialsHomeContainer"
         initial={{ opacity: 0 }}

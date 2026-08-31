@@ -19,6 +19,10 @@ import HeroSection from "@/components/home/HeroSection";
 import QuickWins from "@/components/home/QuickWins";
 import CategoryShowcase from "@/components/home/CategoryShowcase";
 import FeaturedProducts from "@/components/home/FeaturedProducts";
+import TemplatesSection from "@/components/home/TemplatesSection";
+import TShirtsSection from "@/components/home/TShirtsSection";
+import AIVideosSection from "@/components/home/AIVideosSection";
+import FileToolsSection from "@/components/home/FileToolsSection";
 import HowItWorksSection from "@/components/home/HowItWorksSection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import FAQAccordion from "@/components/home/FAQAccordion";
@@ -43,6 +47,10 @@ export default function HomePage() {
       <QuickWins />
       <CategoryShowcase />
       <FeaturedProducts />
+      <TemplatesSection />
+      <TShirtsSection />
+      <AIVideosSection />
+      <FileToolsSection />
       <HowItWorksSection />
       <TestimonialsSection />
       <FAQAccordion />
