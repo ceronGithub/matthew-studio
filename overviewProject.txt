@@ -107,6 +107,13 @@ lib/productsData.ts             Unified multi-category product catalog (21 produ
                                  grid, category pages, and product detail pages. Templates keep
                                  the 3-tier (Managed/Self-Hosted/Custom) pricing shape; every
                                  other category is a flat startingPrice.
+lib/categoryIcons.tsx            Shared category iconName -> LucideIcon map (new components only —
+                                 CategoryShowcase.tsx/FeaturedProducts.tsx keep their own inline copies)
+components/shared/SectionHeader.tsx  Reusable eyebrow+title+subtitle section header, fade+slide entrance
+components/home/ProductCard.tsx      Reusable product tile driven by the Product type (productsData.ts)
+components/home/ComparisonTable.tsx  Reusable tier comparison table, mobile horizontal scroll, count-up price
+components/home/FeatureGrid.tsx      Reusable 2x3/1-col benefits grid, staggered fade-in
+components/home/VideoCarousel.tsx    Reusable video demo carousel, 60%-visibility autoplay, swipe support
 services/supabase.ts            browserClient (anon) + adminClient (service role)
 
 NOTE: MARKETPLACE_IMPROVEMENTS.md (repo root) is the multi-category
@@ -386,4 +393,25 @@ project is done.
   real product photos yet. This is the data layer only; /products
   master grid, the 6 category pages, and product detail pages are
   still pending. npx tsc --noEmit passes clean.
+
+[2026-09-01] Phase 1 reusable components built, per IMPROVEMENTS.md
+  Section 11/12 rollout plan: components/shared/SectionHeader.tsx
+  (eyebrow+title+subtitle header, fade+slide entrance), components/
+  home/ProductCard.tsx (reads the shared Product type from
+  lib/productsData.ts), components/home/ComparisonTable.tsx (generic
+  tier comparison table, horizontally scrollable on mobile, optional
+  count-up price animation), components/home/FeatureGrid.tsx (2x3
+  desktop / 1-col mobile benefits grid, staggered fade-in), and
+  components/home/VideoCarousel.tsx (single-video-at-a-time demo
+  carousel, native <video> controls, plays only at 60%+ viewport
+  visibility via IntersectionObserver, swipe support on touch). New
+  lib/categoryIcons.tsx centralizes the category icon map so these
+  new components don't add a third inline copy of it (the two
+  existing inline copies in CategoryShowcase.tsx/FeaturedProducts.tsx
+  are untouched). New shared.css classes: .sectionHeader/Left,
+  .srOnly, .productCard*, .comparisonTable*, .featureGrid*,
+  .videoCarousel*; responsive rules added to mediaQueries.css per
+  Rule 9. None of these components are wired into the homepage yet —
+  that's Phase 2 (the six category sections) and Phase 3
+  (integration). npx tsc --noEmit passes clean.
 ========================================================

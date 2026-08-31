@@ -107,6 +107,356 @@
   max-width: 60ch;
 }
 
+/* Wrapper around eyebrow + sectionTitle + sectionSubtitle — centers
+ * the block by default; sections that need a denser, left-aligned
+ * header (e.g. inside a two-column layout) use sectionHeaderLeft. */
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.sectionHeaderLeft {
+  align-items: flex-start;
+  text-align: left;
+}
+
+/* Visually hidden but still readable by screen readers — used for
+ * table headers that are structurally required but redundant on
+ * screen (e.g. the empty top-left cell of ComparisonTable). */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ------------------------------------------------------------
+ * PRODUCT CARD — reusable across every category section's product
+ * grid (components/home/ProductCard.tsx).
+ * ------------------------------------------------------------ */
+.productCard {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius, 12px);
+  background: var(--color-surface);
+  overflow: hidden;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.productCard:hover,
+.productCard:focus-within {
+  border-color: var(--color-border-hover);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.productCardThumb {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 10;
+  background: var(--color-surface-hover);
+  color: var(--color-accent);
+}
+
+.productCardBadge {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  padding: 0.2rem var(--space-sm);
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: var(--color-bg);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.productCardBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
+}
+
+.productCardTitle {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.productCardMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.productCardMeta svg {
+  color: var(--color-accent);
+}
+
+.productCardPrice {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-top: var(--space-xs);
+}
+
+.productCardCta {
+  margin-top: var(--space-sm);
+  width: 100%;
+}
+
+/* ------------------------------------------------------------
+ * COMPARISON TABLE — reusable tier comparison
+ * (components/home/ComparisonTable.tsx).
+ * ------------------------------------------------------------ */
+.comparisonTableWrap {
+  width: 100%;
+  overflow-x: auto;
+  margin: var(--space-xl) 0;
+}
+
+.comparisonTable {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+}
+
+.comparisonTable th,
+.comparisonTable td {
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.comparisonTableFeatureHeader {
+  min-width: 200px;
+}
+
+.comparisonTableFeatureLabel {
+  text-align: left;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.comparisonTableTierHeader {
+  position: relative;
+  vertical-align: bottom;
+}
+
+.comparisonTableTierHighlighted {
+  background: var(--color-surface-hover);
+}
+
+th.comparisonTableTierHighlighted,
+.comparisonTableTierHeader.comparisonTableTierHighlighted {
+  border-left: 2px solid var(--color-accent);
+  border-right: 2px solid var(--color-accent);
+  border-top: 2px solid var(--color-accent);
+}
+
+.comparisonTablePopularPill {
+  display: inline-block;
+  margin-bottom: var(--space-xs);
+  padding: 0.15rem var(--space-sm);
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: var(--color-bg);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.comparisonTableTierName {
+  display: block;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.comparisonTableTierPrice {
+  display: block;
+  margin-top: var(--space-xs);
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.comparisonTableTierSuffix {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+}
+
+.comparisonTable tbody tr:hover {
+  background: var(--color-surface-hover);
+  transition: background var(--transition-base);
+}
+
+.comparisonTableCheck {
+  color: var(--color-accent);
+}
+
+.comparisonTableDash {
+  color: var(--color-text-muted);
+}
+
+.comparisonTableCta {
+  width: 100%;
+}
+
+/* ------------------------------------------------------------
+ * FEATURE GRID — reusable benefits/features grid
+ * (components/home/FeatureGrid.tsx).
+ * ------------------------------------------------------------ */
+.featureGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+}
+
+.featureGridItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius, 12px);
+  background: var(--color-surface);
+  transition: background var(--transition-base), border-color var(--transition-base);
+}
+
+.featureGridItem:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.featureGridIcon {
+  color: var(--color-accent);
+  transition: transform var(--transition-base);
+}
+
+.featureGridItem:hover .featureGridIcon {
+  transform: rotate(5deg);
+}
+
+.featureGridTitle {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.featureGridDescription {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+/* ------------------------------------------------------------
+ * VIDEO CAROUSEL — reusable video demo carousel
+ * (components/home/VideoCarousel.tsx).
+ * ------------------------------------------------------------ */
+.videoCarousel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin: var(--space-xl) 0;
+}
+
+.videoCarouselStage {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius, 12px);
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.videoCarouselPlayer {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.videoCarouselArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: rgba(9, 9, 11, 0.6);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.videoCarouselArrow:hover,
+.videoCarouselArrow:focus-visible {
+  background: var(--color-surface-active);
+  border-color: var(--color-border-hover);
+}
+
+.videoCarouselArrowPrev {
+  left: var(--space-sm);
+}
+
+.videoCarouselArrowNext {
+  right: var(--space-sm);
+}
+
+.videoCarouselCaption {
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.videoCarouselDots {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+.videoCarouselDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--color-border-hover);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.videoCarouselDot:hover {
+  transform: scale(1.2);
+}
+
+.videoCarouselDotActive {
+  background: var(--color-accent);
+}
+
 /* ------------------------------------------------------------
  * NAVBAR
  * ------------------------------------------------------------ */

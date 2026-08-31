@@ -124,3 +124,23 @@
     font-size: 2.5rem; /* 40px */
   }
 }
+
+/* ------------------------------------------------------------
+ * PHASE 1 REUSABLE COMPONENTS — ProductCard, ComparisonTable,
+ * FeatureGrid, VideoCarousel (shared.css base styles are mobile:
+ * single column / 44px+ arrows already; these scale up from tablet).
+ * ------------------------------------------------------------ */
+@media (min-width: 768px) {
+  /* 2x3 grid per IMPROVEMENTS.md Section 4A Benefits Grid spec. */
+  .featureGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .videoCarouselArrow {
+    width: 40px;
+    height: 40px;
+  }
+}
+
