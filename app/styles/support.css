@@ -1,0 +1,117 @@
+/*
+ * FILE: app/styles/support.css
+ * PURPOSE:
+ * Layout for the Support page (/support) — page header, the two
+ * section widths from IMPROVEMENTS.md Section 9 ("Contact form:
+ * max-width 600px, centered" / "FAQ accordion: max-width 700px,
+ * centered"), the FAQ search bar, and category group headings.
+ * Reuses .contactForm / .contactFormField (contact.css) for the form
+ * fields and .faqHomeList / .faqHomeItem (home.css) for individual
+ * accordion rows — this file only adds what's new for /support.
+ * Responsive breakpoints live in mediaQueries.css, not here (Rule 9).
+ */
+
+.supportPageHeader {
+  padding: var(--space-2xl) var(--space-lg) var(--space-lg);
+  text-align: center;
+}
+
+.supportPageHeaderInner {
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+/* ------------------------------------------------------------
+ * CONTACT FORM SECTION — 600px centered per spec
+ * ------------------------------------------------------------ */
+.supportContactSection {
+  padding: var(--space-xl) var(--space-lg) var(--space-2xl);
+}
+
+.supportContactSectionInner {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ------------------------------------------------------------
+ * FAQ SECTION — 700px centered per spec
+ * ------------------------------------------------------------ */
+.supportFaqSection {
+  padding: var(--space-xl) var(--space-lg) var(--space-2xl);
+  border-top: 1px solid var(--color-border);
+}
+
+.supportFaqContainer {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.supportFaqHeader {
+  text-align: center;
+}
+
+.supportFaqSearchBar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.supportFaqSearchBar:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+.supportFaqSearchBar input {
+  flex: 1 1 auto;
+  width: 100%;
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--color-text-primary);
+  background: transparent;
+  border: none;
+}
+
+.supportFaqSearchBar input:focus-visible {
+  outline: none;
+}
+
+/* Removes the native search-input clear/cancel icon so our own
+ * layout stays consistent across browsers. */
+.supportFaqSearchBar input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+.supportFaqEmpty {
+  text-align: center;
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+  padding: var(--space-lg) 0;
+}
+
+.supportFaqGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.supportFaqGroupTitle {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+}
