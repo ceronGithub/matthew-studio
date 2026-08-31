@@ -937,4 +937,41 @@ th.comparisonTableTierHighlighted,
   color: var(--color-text-secondary);
 }
 
+/* ------------------------------------------------------------
+ * CUSTOM CALLOUT — AI Videos section "Need custom videos?" card.
+ * ------------------------------------------------------------ */
+.customCallout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  margin: var(--space-xl) 0;
+  border-left: 4px solid var(--color-accent);
+  border-radius: var(--radius, 12px);
+  background: var(--color-surface-hover);
+}
+
+.customCalloutText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.customCalloutHeadline {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.customCalloutBody {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+.customCalloutCta {
+  align-self: flex-start;
+}
+
+
 

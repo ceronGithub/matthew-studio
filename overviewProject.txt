@@ -120,6 +120,9 @@ components/home/TemplatesSection.tsx  Homepage Templates section (Phase 2, 1/6) 
 lib/tshirtsSectionData.ts       T-Shirts section content: gallery slides, story quote
 components/home/TShirtsSection.tsx  Homepage T-Shirts section (Phase 2, 2/6) — design gallery carousel,
                                  story callout, product cards. Not wired into page.tsx yet
+lib/aiVideosSectionData.ts      AI Videos section content: sample videos, custom-order callout
+components/home/AIVideosSection.tsx  Homepage AI Videos section (Phase 2, 3/6) — video carousel,
+                                 custom callout, product cards. Not wired into page.tsx yet
 services/supabase.ts            browserClient (anon) + adminClient (service role)
 
 NOTE: MARKETPLACE_IMPROVEMENTS.md (repo root) is the multi-category
@@ -447,4 +450,13 @@ project is done.
   story quote. New shared.css classes: .designGallery*, .storyCallout*.
   Not wired into page.tsx yet — still Phase 2/3. npx tsc --noEmit
   passes clean.
+
+[2026-09-01] Phase 2 (3/6): AIVideosSection.tsx built — reuses the
+  Phase 1 VideoCarousel component (its original spec target) with 3
+  sample videos, a "Need custom videos?" callout (2-col from tablet
+  up: text left, CTA right; accent left-border, bounce-style scale-in
+  entrance), product cards for the "ai-videos" category, and CTA. New
+  lib/aiVideosSectionData.ts holds the sample video list and callout
+  copy. New shared.css classes: .customCallout*. Not wired into
+  page.tsx yet — still Phase 2/3. npx tsc --noEmit passes clean.
 ========================================================

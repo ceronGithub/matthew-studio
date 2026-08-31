@@ -165,5 +165,23 @@
   }
 }
 
+/* ------------------------------------------------------------
+ * AI VIDEOS SECTION — custom callout goes 2-column (text left,
+ * CTA right) from tablet up.
+ * ------------------------------------------------------------ */
+@media (min-width: 768px) {
+  .customCallout {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .customCalloutCta {
+    align-self: center;
+    flex-shrink: 0;
+  }
+}
+
+
 
 
