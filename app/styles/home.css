@@ -817,3 +817,83 @@
 .testimonialsHomeArrowNext {
   right: calc(var(--space-md) * -1);
 }
+
+/*
+ * FAQ (homepage "Frequently Asked Questions" accordion)
+ * .faqHomeSection
+ * Single narrow centered column (spec: 800px max-width) — distinct
+ * from the wider max-width-content column used by the carousel
+ * sections above it.
+ */
+.faqHomeSection {
+  padding: var(--space-2xl) var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.faqHomeContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xl);
+}
+
+.faqHomeHeader {
+  text-align: center;
+}
+
+.faqHomeList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  width: 100%;
+}
+
+.faqHomeItem {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.faqHomeItemOpen {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.faqHomeQuestion {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.faqHomeChevron {
+  flex: 0 0 auto;
+  display: inline-flex;
+  color: var(--color-accent);
+}
+
+.faqHomeAnswer {
+  padding: 0 var(--space-lg) var(--space-lg);
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+}
+
+.faqHomeCtaRow {
+  display: flex;
+  justify-content: center;
+}

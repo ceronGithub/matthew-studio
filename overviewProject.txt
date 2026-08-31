@@ -97,6 +97,9 @@ lib/homeTestimonialsData.ts     "What Our Creators Say" homepage carousel data (
 components/home/TestimonialsSection.tsx  Homepage auto-scroll testimonials carousel (right-to-left,
                                  18s loop, pause on hover, arrows, mobile stack) — same pattern as
                                  FeaturedProducts.tsx, opposite scroll direction
+lib/homeFaqData.ts              Homepage FAQ Accordion data (6 general marketplace questions)
+components/home/FAQAccordion.tsx  Homepage FAQ accordion — single-open expand/collapse, chevron
+                                 rotate, height/opacity animation, "See All FAQs" CTA to /faq
 services/supabase.ts            browserClient (anon) + adminClient (service role)
 
 NOTE: MARKETPLACE_IMPROVEMENTS.md (repo root) is the multi-category
@@ -162,7 +165,7 @@ Homepage sections (10 total per the plan):
 [DONE] How It Works (universal 3-step: Browse/Choose/Start)
 [DONE] Testimonials Carousel (homepage section — distinct from the
        existing static /testimonials page grid)
-[ ]    FAQ Accordion
+[DONE] FAQ Accordion
 [ ]    CTA Banner (bottom of homepage)
 
 Site structure (not yet started):
@@ -333,4 +336,17 @@ project is done.
   this separate from lib/testimonialsData.ts (the resort-owner quotes
   on the standalone /testimonials page). npx tsc --noEmit passes
   clean.
+
+[2026-09-01] FAQ Accordion (homepage) built: "Frequently Asked
+  Questions" section added after Testimonials. Six general
+  marketplace questions (payment methods, refunds, access time,
+  support, commercial-use licensing, catalog cadence), single-open
+  accordion (opening one item closes whichever was previously open),
+  chevron rotates 180deg on expand, answer panel animates
+  height/opacity via framer-motion AnimatePresence, proper
+  aria-expanded/aria-controls on the toggle button and role="region"
+  on the answer panel. "See All FAQs" CTA links to /faq (page itself
+  still pending, Phase 3 of the marketplace plan — same forward-
+  linking pattern already used elsewhere on the homepage). npx tsc
+  --noEmit passes clean.
 ========================================================
