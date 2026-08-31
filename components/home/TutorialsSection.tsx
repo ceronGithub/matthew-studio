@@ -3,94 +3,64 @@
  * ROLE: Public — homepage section for the Tutorials category
  * (IMPROVEMENTS.md Section 4E). Purpose: "Educate buyers on what
  * fits them. Show depth of catalog." — one of the two lighter
- * sections (with File Tools), built from Phase 1 pieces plus one
- * section-specific persona grid.
+ * sections, no comparison table or video demo.
  *
  * PURPOSE:
- * Header, a 3-persona "Who's this for?" callout (icon + role +
- * bullet, fade-in stagger, no hover state per spec), product cards
- * for the "tutorials" category ordered Beginner → Intermediate →
- * Advanced with a level badge and duration overlaid on each card,
- * and a CTA. ProductCard.tsx itself is untouched — level/duration are
- * rendered by this section only, from TUTORIAL_META, so the shared
- * card component stays free of tutorial-only fields.
+ * Header, a "Who's this for?" 3-persona callout (reuses FeatureGrid —
+ * it's already the exact icon + role + one-line layout the spec
+ * calls for), product cards for the "tutorials" category grouped by
+ * level (Beginner → Intermediate → Advanced, staggered per group per
+ * spec's "Entrance: Stagger by level group"), and a CTA.
  *
  * DATA FLOW:
- * Reads TUTORIAL_PERSONAS/TUTORIAL_META/TUTORIAL_LEVEL_ORDER
+ * Reads TUTORIAL_PERSONAS/TUTORIAL_COURSE_META/COURSE_LEVEL_LABELS
  * (tutorialsSectionData.ts) and PRODUCTS (productsData.ts) filtered
- * to category "tutorials", sorted by TUTORIAL_LEVEL_ORDER.
+ * to category "tutorials", sorted into level order. Course level and
+ * duration aren't part of the shared Product type (only this
+ * category needs them), so they're layered on top of the reusable
+ * ProductCard as a small badge/meta line rather than added to every
+ * product in the catalog.
  */
 "use client";
 
 import { motion } from "framer-motion";
 import SectionHeader from "@/components/shared/SectionHeader";
+import FeatureGrid from "@/components/home/FeatureGrid";
 import ProductCard from "@/components/home/ProductCard";
 import { PRODUCTS } from "@/lib/productsData";
-import { TUTORIAL_PERSONAS, TUTORIAL_META, TUTORIAL_LEVEL_ORDER } from "@/lib/tutorialsSectionData";
+import { TUTORIAL_PERSONAS, TUTORIAL_COURSE_META, COURSE_LEVEL_LABELS, type CourseLevel } from "@/lib/tutorialsSectionData";
 
-const TUTORIAL_PRODUCTS = PRODUCTS.filter((product) => product.category === "tutorials").sort(
-  (a, b) => TUTORIAL_LEVEL_ORDER.indexOf(TUTORIAL_META[a.id].level) - TUTORIAL_LEVEL_ORDER.indexOf(TUTORIAL_META[b.id].level)
-);
+const TUTORIAL_PRODUCTS = PRODUCTS.filter((product) => product.category === "tutorials");
 
-const LEVEL_BADGE_CLASS: Record<string, string> = {
-  Beginner: "tutorialLevelBadge tutorialLevelBeginner",
-  Intermediate: "tutorialLevelBadge tutorialLevelIntermediate",
-  Advanced: "tutorialLevelBadge tutorialLevelAdvanced",
-};
-
-// Parent drives the 0.15s persona stagger (spec: "stagger 0.15s between cards").
-const personaContainerVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
-};
-
-const personaItemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
-
-function PersonaGrid() {
-  return (
-    <motion.div
-      className="personaGrid"
-      variants={personaContainerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
-    >
-      {TUTORIAL_PERSONAS.map((persona, index) => {
-        const Icon = persona.icon;
-        return (
-          <motion.div className={`personaItem personaItem${index}`} key={persona.role} variants={personaItemVariants}>
-            <Icon size={32} strokeWidth={1.5} className="personaIcon" aria-hidden="true" />
-            <span className="personaRole">{persona.role}</span>
-            <p className="personaBullet">{persona.bullet}</p>
-          </motion.div>
-        );
-      })}
-    </motion.div>
-  );
-}
+const LEVEL_ORDER: CourseLevel[] = ["beginner", "intermediate", "advanced"];
 
 export default function TutorialsSection() {
   return (
     <section className="categorySection">
       <div className="sectionContainer">
-        <SectionHeader eyebrow="Tutorials" title="Learn from real projects" subtitle="Courses built from the same codebases we ship to clients, not isolated demos." />
+        <SectionHeader eyebrow="Tutorials" title="Learn from real projects" subtitle="Grouped by level, so you start at the right place." />
 
-        <PersonaGrid />
+        <FeatureGrid items={TUTORIAL_PERSONAS} />
 
         <div className="productCardsGrid">
-          {TUTORIAL_PRODUCTS.map((product) => {
-            const meta = TUTORIAL_META[product.id];
-            return (
-              <div className="tutorialCardWrap" key={product.id}>
-                <span className={LEVEL_BADGE_CLASS[meta.level]}>{meta.level}</span>
+          {LEVEL_ORDER.flatMap((level, groupIndex) =>
+            TUTORIAL_PRODUCTS.filter((product) => TUTORIAL_COURSE_META[product.id]?.level === level).map((product, itemIndex) => (
+              <motion.div
+                className="tutorialCardWrap"
+                key={product.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.5, delay: groupIndex * 0.15 + itemIndex * 0.05, ease: "easeOut" }}
+              >
+                <div className="tutorialCardMeta">
+                  <span className={`levelBadge levelBadge${level.charAt(0).toUpperCase()}${level.slice(1)}`}>{COURSE_LEVEL_LABELS[level]}</span>
+                  <span className="tutorialCardDuration">{TUTORIAL_COURSE_META[product.id]?.duration}</span>
+                </div>
                 <ProductCard product={product} />
-                <p className="tutorialDuration">{meta.duration}</p>
-              </div>
-            );
-          })}
+              </motion.div>
+            ))
+          )}
         </div>
 
         <div className="sectionCTA">

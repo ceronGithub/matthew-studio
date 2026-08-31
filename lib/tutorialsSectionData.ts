@@ -3,52 +3,48 @@
  * PURPOSE:
  * Static placeholder content for the homepage's Tutorials section
  * (IMPROVEMENTS.md Section 4E): the 3-persona "Who's this for?"
- * callout, plus a level/duration lookup for the "tutorials" category
- * products in lib/productsData.ts. Product identity (name, price,
- * rating) still comes from productsData.ts — this file only adds the
- * two tutorial-specific display fields the shared Product type
- * doesn't carry (level badge, duration), keyed by product id so
- * ProductCard.tsx never has to know tutorials exist.
- *
- * Spec note: "Persona background: subtle role-based color (e.g. blue
- * for devs, green for designers)" was intentionally not followed —
- * per Rule 17.2 (never more than one accent color per project), each
- * persona instead uses the single --color-accent token at a
- * different opacity step (same treatment FileToolsSection.tsx used
- * for its feature icons), which reads as variation without
- * introducing a second hue.
+ * callout. Product cards reuse the "tutorials" category items
+ * already in lib/productsData.ts — this file only holds the persona
+ * copy and the course-level badge/order used to group those cards.
  *
  * DATA FLOW:
- * Imported by components/home/TutorialsSection.tsx only.
+ * Imported by components/home/TutorialsSection.tsx only. Reuses the
+ * FeatureGridItem shape (icon + title + description) for the persona
+ * cards since it's already the exact "icon + role + one line" layout
+ * the spec calls for — no need for a separate one-off type.
  */
-import { Code2, Paintbrush, Rocket } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { Code2, Palette, Briefcase } from "lucide-react";
+import type { FeatureGridItem } from "@/components/home/FeatureGrid";
 
-export interface TutorialPersona {
-  icon: LucideIcon;
-  role: string;
-  bullet: string;
-}
-
-export const TUTORIAL_PERSONAS: TutorialPersona[] = [
-  { icon: Code2, role: "Developers", bullet: "Ship production patterns, not toy examples." },
-  { icon: Paintbrush, role: "Designers", bullet: "Turn your own Figma files into working code." },
-  { icon: Rocket, role: "Founders", bullet: "Learn just enough to brief your dev team well." },
+export const TUTORIAL_PERSONAS: FeatureGridItem[] = [
+  {
+    icon: Code2,
+    title: "Developers",
+    description: "Ship faster with real project walkthroughs, not toy examples.",
+  },
+  {
+    icon: Palette,
+    title: "Designers",
+    description: "Learn just enough code to turn your own Figma files into production UI.",
+  },
+  {
+    icon: Briefcase,
+    title: "Freelancers",
+    description: "Pick up the exact stack clients are already asking for.",
+  },
 ];
 
-export type TutorialLevel = "Beginner" | "Intermediate" | "Advanced";
+export type CourseLevel = "beginner" | "intermediate" | "advanced";
 
-export interface TutorialMeta {
-  level: TutorialLevel;
-  duration: string;
-}
-
-/** Keyed by Product["id"] from lib/productsData.ts (category "tutorials"). */
-export const TUTORIAL_META: Record<string, TutorialMeta> = {
-  "nextjs-from-zero": { level: "Beginner", duration: "12 hours" },
-  "figma-to-code": { level: "Intermediate", duration: "8 hours" },
-  "prisma-postgres-crash-course": { level: "Advanced", duration: "6 hours" },
+/** Maps a product id (lib/productsData.ts, category "tutorials") to its course level and duration meta. */
+export const TUTORIAL_COURSE_META: Record<string, { level: CourseLevel; duration: string }> = {
+  "nextjs-from-zero": { level: "beginner", duration: "16 lessons" },
+  "figma-to-code": { level: "intermediate", duration: "12 hours" },
+  "prisma-postgres-crash-course": { level: "advanced", duration: "9 hours" },
 };
 
-/** Fixed display order — Beginner first regardless of productsData.ts order. */
-export const TUTORIAL_LEVEL_ORDER: TutorialLevel[] = ["Beginner", "Intermediate", "Advanced"];
+export const COURSE_LEVEL_LABELS: Record<CourseLevel, string> = {
+  beginner: "Beginner",
+  intermediate: "Intermediate",
+  advanced: "Advanced",
+};
