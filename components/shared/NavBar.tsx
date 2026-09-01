@@ -54,10 +54,26 @@ export default function NavBar() {
 
     if (elements.length === 0) return;
 
+    // Tracks which tracked sections are currently inside the viewport's
+    // center band. IntersectionObserver reports both enter and exit
+    // events, so this set (not just the latest batch) always reflects
+    // current state. When nothing is intersecting (scrolled above the
+    // first section or below the last one), activeSectionId resets to
+    // null instead of staying stuck on whichever section was last seen.
+    const intersectingIds = new Set<string>();
+
     const observer = new IntersectionObserver(
       (entries) => {
-        const visible = entries.find((entry) => entry.isIntersecting);
-        if (visible) setActiveSectionId(visible.target.id);
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            intersectingIds.add(entry.target.id);
+          } else {
+            intersectingIds.delete(entry.target.id);
+          }
+        });
+
+        const currentId = trackedIds.find((id) => intersectingIds.has(id)) ?? null;
+        setActiveSectionId(currentId);
       },
       { rootMargin: "-45% 0px -45% 0px" } // fires when a section crosses the viewport's vertical center
     );
