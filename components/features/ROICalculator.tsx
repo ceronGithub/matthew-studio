@@ -4,12 +4,13 @@
  *
  * PURPOSE:
  * Lets a visitor estimate how many hours and how much money they'd
- * save per week by switching from manual booking management (phone,
- * email, spreadsheet) to the template's automated booking engine.
- * Assumes the template removes 80% of the manual admin time — a
- * placeholder ratio pending real customer data from the superAdmin
- * dashboard (portfolio results could inform a more precise number
- * once enough case studies exist).
+ * save per week by buying ready-made from the marketplace instead of
+ * building, sourcing, or managing it themselves — applies across every
+ * category (templates, apparel, AI videos, file tools, tutorials,
+ * game characters). Assumes buying ready-made removes 80% of the DIY
+ * time — a placeholder ratio pending real customer data from the
+ * superAdmin dashboard (case study results could inform a more
+ * precise number once enough exist).
  */
 "use client";
 
@@ -19,7 +20,7 @@ import { Clock, Coins } from "lucide-react";
 const AUTOMATION_RATIO = 0.8;
 
 export default function ROICalculator() {
-  // Hours per week the resort currently spends on manual booking admin
+  // Hours per week currently spent building, sourcing, or managing it manually
   const [manualHours, setManualHours] = useState(10);
   // What that time is worth per hour, so savings can be shown in money too
   const [hourlyRate, setHourlyRate] = useState(300);
@@ -33,17 +34,17 @@ export default function ROICalculator() {
       <div className="roiSectionInner">
         <div className="roiCopy">
           <p className="eyebrow">ROI Calculator</p>
-          <h2 className="sectionTitle">See what manual booking admin is really costing you</h2>
+          <h2 className="sectionTitle">See what doing it yourself is really costing you</h2>
           <p className="sectionSubtitle">
-            Move the sliders to match your resort. The estimate assumes the booking engine
-            removes about 80% of the time spent taking bookings by phone, email, or spreadsheet.
+            Move the sliders to match your situation. The estimate assumes buying ready-made
+            removes about 80% of the time spent building, sourcing, or managing it yourself.
           </p>
         </div>
 
         <div className="roiCard">
           <div className="roiInputGroup">
             <label htmlFor="manualHours" className="roiLabel">
-              Hours/week on manual booking admin
+              Hours/week spent doing it yourself
               <span className="roiLabelValue">{manualHours}h</span>
             </label>
             <input

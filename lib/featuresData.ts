@@ -1,10 +1,11 @@
 /**
  * FILE: lib/featuresData.ts
  * PURPOSE:
- * Static placeholder content for the "Why Choose This Template" page
+ * Static placeholder content for the "Why Choose Matthew Studio" page
  * (/features): the tech stack breakdown, the out-of-the-box feature
- * list, and the comparison table vs. building from scratch or buying
- * a generic template.
+ * list, and the comparison table vs. DIY/from-scratch or a generic
+ * marketplace. Generalized to the marketplace as a whole — not any
+ * single category — per improvement_1.md Section 3.
  *
  * DATA FLOW:
  * No database yet — this is static content, same pattern as
@@ -23,7 +24,7 @@ export const TECH_STACK: TechStackItem[] = [
   { name: "TypeScript", role: "Every file type-checked before it ships — fewer runtime surprises" },
   { name: "Supabase", role: "Managed Postgres, auth, and row-level security out of the box" },
   { name: "Tailwind CSS", role: "Consistent design tokens, fast to restyle for your brand" },
-  { name: "Cloudflare R2", role: "CDN-backed image storage — room photos load fast worldwide" },
+  { name: "Cloudflare R2", role: "CDN-backed asset storage — product images and files load fast worldwide" },
   { name: "Vercel", role: "One-click deploys, automatic previews on every change" },
 ];
 
@@ -34,16 +35,16 @@ export interface IncludedFeature {
 
 export const INCLUDED_FEATURES: IncludedFeature[] = [
   {
-    title: "Multi-room booking engine",
-    description: "Real-time availability across every room type, no double-bookings.",
+    title: "Fast delivery, every category",
+    description: "From instant digital downloads to a live site in days — no open-ended timelines.",
   },
   {
-    title: "Promo codes & seasonal pricing",
-    description: "Run discounts and adjust rates by date range without touching code.",
+    title: "Built for every category",
+    description: "Templates, apparel, AI videos, file tools, tutorials, and game characters — one platform.",
   },
   {
-    title: "Super-admin dashboard",
-    description: "Manage rooms, bookings, and content from a single protected area.",
+    title: "Direct support, not a ticket queue",
+    description: "Reach the team that actually built what you bought — no outsourced support desk.",
   },
   {
     title: "Mobile-first design",
@@ -51,7 +52,7 @@ export const INCLUDED_FEATURES: IncludedFeature[] = [
   },
   {
     title: "Security built in",
-    description: "Rate limiting, RLS policies, and audit logging ship with every tier.",
+    description: "Rate limiting, RLS policies, and audit logging ship with every product tier.",
   },
   {
     title: "SEO-ready pages",
@@ -68,33 +69,33 @@ export interface ComparisonRow {
 
 export const COMPARISON_ROWS: ComparisonRow[] = [
   {
-    criteria: "Time to launch",
-    template: "48 hours – 2 weeks",
-    fromScratch: "3–6 months",
-    genericBuilder: "1–2 weeks",
+    criteria: "Time to get it",
+    template: "Same day – 2 weeks, by category",
+    fromScratch: "Weeks to months",
+    genericBuilder: "Instant, but generic",
   },
   {
-    criteria: "Booking engine included",
-    template: "Yes, multi-room",
-    fromScratch: "Built separately",
-    genericBuilder: "Rarely, or bolted-on plugin",
+    criteria: "Made for your use case",
+    template: "Yes, category-specific work",
+    fromScratch: "Yes, but you build it all",
+    genericBuilder: "Rarely — one-size-fits-all",
   },
   {
-    criteria: "Source code ownership",
-    template: "Yes (Self-Hosted & Custom tiers)",
+    criteria: "Ownership",
+    template: "Yes — files/assets are yours",
     fromScratch: "Yes",
-    genericBuilder: "No, locked to platform",
+    genericBuilder: "Often licensed, not owned",
   },
   {
-    criteria: "Ongoing hosting cost",
-    template: "$0–$149/mo",
+    criteria: "Ongoing cost",
+    template: "One-time or low monthly, by category",
     fromScratch: "Varies, often higher",
-    genericBuilder: "$30–$300/mo",
+    genericBuilder: "Subscription lock-in common",
   },
   {
-    criteria: "Custom branding",
-    template: "Full control",
-    fromScratch: "Full control",
-    genericBuilder: "Limited to theme options",
+    criteria: "Direct support",
+    template: "Yes, from the team that built it",
+    fromScratch: "None — you're on your own",
+    genericBuilder: "Ticket queue, slow turnaround",
   },
 ];

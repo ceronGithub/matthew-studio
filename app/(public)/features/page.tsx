@@ -1,14 +1,15 @@
 /**
  * FILE: app/(public)/features/page.tsx
- * ROLE: Public — "Why Choose This Template" page, served at "/features".
+ * ROLE: Public — "Why Choose Matthew Studio" page, served at "/features".
  *
  * PURPOSE:
- * Makes the case for the template over building from scratch or using
- * a generic site builder: the tech stack it's built on, what ships
- * out of the box, an interactive ROI calculator, and a comparison
- * table against the two alternatives. Data is static placeholder
- * content from lib/featuresData.ts, same pattern as /shop and
- * /portfolio, pending superAdmin-managed content.
+ * Makes the case for buying from the marketplace over DIY/from-scratch
+ * or a generic marketplace: the tech stack products are built on, what
+ * ships out of the box across every category, an interactive ROI
+ * calculator, and a comparison table against the two alternatives.
+ * Marketplace-wide, not tied to any single category. Data is static
+ * placeholder content from lib/featuresData.ts, same pattern as
+ * /pricing and /case-studies, pending superAdmin-managed content.
  *
  * DATA FLOW:
  * 1. This Server Component reads TECH_STACK, INCLUDED_FEATURES, and
@@ -25,13 +26,13 @@ import ROICalculator from "@/components/features/ROICalculator";
 import { TECH_STACK, INCLUDED_FEATURES, COMPARISON_ROWS } from "@/lib/featuresData";
 
 export const metadata: Metadata = {
-  title: "Why Choose This Template | Matthew Studio",
+  title: "Why Choose Matthew Studio | Digital Marketplace",
   description:
-    "The tech stack, the features that ship out of the box, and how the resort booking template compares to building from scratch or a generic site builder.",
+    "The tech stack, the features that ship with every category, and how buying from Matthew Studio compares to DIY or a generic marketplace.",
   openGraph: {
-    title: "Why Choose This Template | Matthew Studio",
+    title: "Why Choose Matthew Studio | Digital Marketplace",
     description:
-      "The tech stack, the features that ship out of the box, and how the resort booking template compares to building from scratch or a generic site builder.",
+      "The tech stack, the features that ship with every category, and how buying from Matthew Studio compares to DIY or a generic marketplace.",
     images: ["/og-features.png"],
   },
 };
@@ -41,13 +42,13 @@ export default function FeaturesPage() {
     <>
       <header className="featuresPageHeader">
         <div className="featuresPageHeaderInner">
-          <p className="eyebrow">Why Choose This Template</p>
+          <p className="eyebrow">Why Choose Matthew Studio</p>
           <h1 className="heroTitle" style={{ fontSize: "2.25rem" }}>
-            Everything a resort booking site needs, already built
+            Every category, built on the same solid foundation
           </h1>
           <p className="heroSubtitle">
-            A modern tech stack, a booking engine that actually works, and no months spent
-            building the basics from zero.
+            A modern tech stack, products that actually work, and no months spent building the
+            basics from zero — whatever category you're buying from.
           </p>
         </div>
       </header>
@@ -102,17 +103,17 @@ export default function FeaturesPage() {
       <section className="featuresSection featuresSectionAlt">
         <div className="featuresSectionInner">
           <p className="eyebrow">Compare Your Options</p>
-          <h2 className="sectionTitle">Template vs. building it yourself</h2>
+          <h2 className="sectionTitle">Matthew Studio vs. doing it yourself</h2>
           <div className="comparisonTableWrapper">
             <table className="comparisonTable">
               <thead>
                 <tr>
                   <th scope="col">Criteria</th>
                   <th scope="col" className="comparisonTableHighlightCol">
-                    This Template
+                    Matthew Studio
                   </th>
-                  <th scope="col">From Scratch</th>
-                  <th scope="col">Generic Builder</th>
+                  <th scope="col">DIY / From Scratch</th>
+                  <th scope="col">Generic Marketplace</th>
                 </tr>
               </thead>
               <tbody>
