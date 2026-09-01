@@ -1,0 +1,41 @@
+/**
+ * FILE: app/styles/authBackground.css
+ * PURPOSE:
+ * Full-bleed cross-fading background slideshow rendered behind the
+ * glass card on /auth/login (Mockup 2). Owns its own stacking context
+ * so the glass card and toasts always render above it.
+ */
+
+.authPageWrapper {
+  position: relative;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.authBackgroundSlideshow {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-base, 0);
+}
+
+.authBackgroundSlide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: opacity 1.3s ease;
+}
+
+/*
+ * .authBackgroundScrim
+ * Flat dark wash over the slideshow so the white glass-card text and
+ * inputs stay legible regardless of which photo is showing.
+ */
+.authBackgroundScrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.22);
+}

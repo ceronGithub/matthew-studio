@@ -1,0 +1,249 @@
+/**
+ * FILE: app/styles/auth.css
+ * PURPOSE:
+ * The glass card, tab, form, and field styles for /auth/login
+ * (Mockup 2). Sits above app/styles/authBackground.css — the card
+ * itself stays translucent so the slideshow shows through it at all
+ * times. Colors here are intentionally hardcoded white/rgba rather
+ * than the site's --color-text-* tokens: this card floats over a
+ * photo, not the site's paper background, so it needs to stay legible
+ * against any slide rather than adapt to the site's light/dark theme.
+ */
+
+.authGlassCard {
+  position: relative;
+  z-index: var(--z-raised, 10);
+  width: 340px;
+  max-width: calc(100% - 2rem);
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  border: 0.5px solid rgba(255, 255, 255, 0.38);
+  border-radius: 12px;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+/* ------------------------------------------------------------
+ * TABS
+ * ------------------------------------------------------------ */
+.authTabs {
+  display: flex;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.authTab {
+  background: none;
+  border: none;
+  padding: 0 0 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.65);
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: color var(--transition-fast, 0.15s ease), border-color var(--transition-fast, 0.15s ease);
+}
+
+.authTab--active {
+  color: #fff;
+  border-bottom-color: #fff;
+}
+
+.authTabContent {
+  animation: authTabFadeIn 0.25s ease;
+}
+
+@keyframes authTabFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ------------------------------------------------------------
+ * FORM / FIELDS
+ * ------------------------------------------------------------ */
+.authForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.authField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.authField label {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.authField input[type="text"],
+.authField input[type="email"],
+.authField input[type="password"] {
+  width: 100%;
+  min-height: 44px;
+  font-size: 1rem;
+  padding: 0 0.85rem;
+  border-radius: var(--radius, 8px);
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1b1b18;
+}
+
+.authPasswordWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.authPasswordWrapper input {
+  padding-right: 2.5rem;
+}
+
+.authPasswordToggle {
+  position: absolute;
+  right: 0.6rem;
+  background: none;
+  border: none;
+  color: #55554f;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+  justify-content: center;
+}
+
+.authFieldError {
+  font-size: 0.75rem;
+  color: #ffd7d2;
+}
+
+.authForgotLink {
+  align-self: flex-end;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.authForgotLink:hover,
+.authForgotLink:focus {
+  color: #fff;
+}
+
+.authTermsCheckbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.authTermsCheckbox a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.authSubmitButton {
+  width: 100%;
+  min-height: 44px;
+  background: #fff;
+  color: #1b1b18;
+  border: none;
+  border-radius: var(--radius, 8px);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  touch-action: manipulation;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-fast, 0.15s ease);
+}
+
+.authSubmitButton:hover,
+.authSubmitButton:focus-visible {
+  background: #f0efe9;
+}
+
+.authSubmitButton:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.authSpinner {
+  animation: authSpin 0.8s linear infinite;
+}
+
+@keyframes authSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.authSwitchPrompt {
+  margin-top: var(--space-lg);
+  text-align: center;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.authSwitchPrompt button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-weight: 500;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* ------------------------------------------------------------
+ * PASSWORD STRENGTH METER
+ * ------------------------------------------------------------ */
+.passwordStrengthMeter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.passwordStrengthBars {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+
+.passwordStrengthBar {
+  height: 4px;
+  flex: 1;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.passwordStrengthBar--1 {
+  background: var(--color-error);
+}
+
+.passwordStrengthBar--2 {
+  background: var(--color-warning);
+}
+
+.passwordStrengthBar--3 {
+  background: #e8c468;
+}
+
+.passwordStrengthBar--4 {
+  background: var(--color-success);
+}
+
+.passwordStrengthLabel {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.8);
+  white-space: nowrap;
+}

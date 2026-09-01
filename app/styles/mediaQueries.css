@@ -232,3 +232,12 @@
 
 
 
+
+/* ------------------------------------------------------------
+ * AUTH — glass card width and padding on small phones
+ * ------------------------------------------------------------ */
+@media (max-width: 479px) {
+  .authGlassCard {
+    padding: var(--space-lg) var(--space-md);
+  }
+}

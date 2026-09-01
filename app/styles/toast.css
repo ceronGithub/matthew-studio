@@ -1,0 +1,55 @@
+/**
+ * FILE: app/styles/toast.css
+ * PURPOSE:
+ * Styles for components/shared/ToastStack.tsx. Fixed top-center
+ * stack, slide-in-from-top animation, auto-dismiss handled in JS.
+ */
+
+.toastStack {
+  position: fixed;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-toast, 600);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.toastItem {
+  pointer-events: auto;
+  cursor: pointer;
+  padding: 0.65rem 1.1rem;
+  border-radius: var(--radius, 8px);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  animation: toastSlideIn 0.25s ease;
+}
+
+.toastItem--success {
+  background: var(--color-success);
+}
+
+.toastItem--error {
+  background: var(--color-error);
+}
+
+.toastItem--warning {
+  background: var(--color-warning);
+  color: var(--color-text-primary);
+}
+
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
