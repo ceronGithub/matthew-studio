@@ -509,3 +509,18 @@ project is done.
   /products (the marketplace master grid, already built per
   improvement_1.md Section 4). Nav label renamed "Shop" → "Products"
   to match. npx tsc --noEmit passes clean.
+========================================================
+[2026-09-02] Reordered app/(public)/page.tsx homepage section render
+  order. HowItWorksSection moved from position 11 (after all 6
+  category sections) to position 4 (right after CategoryShowcase,
+  before FeaturedProducts) — rationale: visitors should understand
+  the browse/choose/start process before scrolling through 6 long
+  category-specific sections, not after. New order: HeroSection,
+  QuickWins, CategoryShowcase, HowItWorksSection, FeaturedProducts,
+  TemplatesSection, TShirtsSection, AIVideosSection, FileToolsSection,
+  TutorialsSection, GameCharactersSection, TestimonialsSection,
+  FAQAccordion, CTABanner. No component files touched, only render
+  order in page.tsx — confirmed NavBar's /#how-it-works-section and
+  /#testimonials-section scroll-anchor links still resolve correctly
+  since the id attributes live on the section elements themselves,
+  order-independent. npx tsc --noEmit passes clean.

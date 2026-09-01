@@ -5,10 +5,13 @@
  * PURPOSE:
  * Introduces the Matthew Studio digital marketplace — Templates,
  * T-Shirts, AI Videos, File Tools, Tutorials, and Game Characters —
- * via HeroSection, QuickWins, CategoryShowcase, FeaturedProducts, and
- * one dedicated section per category. Section components are Client
- * Components (framer-motion entrance animation); this page itself
- * stays a Server Component so it can export static metadata for SEO.
+ * via HeroSection, QuickWins, CategoryShowcase, HowItWorksSection
+ * (moved up so visitors understand the browse/choose/start flow
+ * before scrolling through the 6 category sections), FeaturedProducts,
+ * one dedicated section per category, TestimonialsSection, FAQAccordion,
+ * then CTABanner. Section components are Client Components (framer-motion
+ * entrance animation); this page itself stays a Server Component so it
+ * can export static metadata for SEO.
  *
  * DATA FLOW:
  * No data fetching — all copy is static placeholder content pending
@@ -49,6 +52,7 @@ export default function HomePage() {
       <HeroSection />
       <QuickWins />
       <CategoryShowcase />
+      <HowItWorksSection />
       <FeaturedProducts />
       <TemplatesSection />
       <TShirtsSection />
@@ -56,7 +60,6 @@ export default function HomePage() {
       <FileToolsSection />
       <TutorialsSection />
       <GameCharactersSection />
-      <HowItWorksSection />
       <TestimonialsSection />
       <FAQAccordion />
       <CTABanner />
