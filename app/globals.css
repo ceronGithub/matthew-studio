@@ -1,8 +1,75 @@
+/**
+ * FILE: app/globals.css
+ * PURPOSE:
+ * Site-wide design tokens (Rule 33) and the modern CSS reset. Every
+ * component/page CSS file references these tokens — never hardcoded
+ * colors, spacing, z-index, or transition values. Dark theme is the
+ * default; --background/--foreground stay in sync with the token
+ * system so Tailwind's @theme inline mapping keeps working.
+ */
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Base background/foreground — kept for Tailwind @theme mapping below */
+  --background: #09090b;
+  --foreground: #f4f4f5;
+
+  /* Background layers — layered translucency, darkest to lightest */
+  --color-bg: #09090b;
+  --color-surface: rgba(255, 255, 255, 0.03);
+  --color-surface-hover: rgba(255, 255, 255, 0.06);
+  --color-surface-active: rgba(255, 255, 255, 0.10);
+
+  /* Borders — always subtle */
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-hover: rgba(255, 255, 255, 0.16);
+
+  /* Text */
+  --color-text-primary: #f4f4f5;
+  --color-text-secondary: rgba(255, 255, 255, 0.55);
+  --color-text-muted: rgba(255, 255, 255, 0.35);
+
+  /* Accent — used only on CTAs, active states, highlights */
+  --color-accent: #22c55e;
+  --color-accent-hover: #16a34a;
+
+  /* Status colors */
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+
+  /* Skeleton loader */
+  --color-skeleton-base: rgba(255, 255, 255, 0.06);
+  --color-skeleton-shine: rgba(255, 255, 255, 0.12);
+
+  /* Spacing scale */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+  /* Layout widths */
+  --max-width-content: 1280px;
+  --max-width-narrow: 720px;
+
+  /* Z-index scale (Rule 33.2) */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-drawer: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-toast: 600;
+  --z-tooltip: 700;
+
+  /* Transition tokens (Rule 33.4) */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.25s ease;
+  --transition-slow: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @theme inline {
@@ -12,15 +79,57 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  min-height: 100dvh;
+}
+
+/* Focus-visible standard (Rule 33.3) — keyboard-only focus ring */
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+/*
+ * Reduced motion (Rule 17.5 / IMPROVEMENTS.md Section 7 + Section 13
+ * accessibility checklist). Collapses every CSS transition/animation
+ * to near-instant for users who have this OS-level preference set,
+ * without removing the transition property entirely (so nothing
+ * breaks — it just resolves in one frame instead of animating).
+ * Framer Motion components (whileInView, useScroll, etc.) read this
+ * same media query internally and short-circuit their own animations,
+ * so this rule alone covers both CSS and JS-driven motion site-wide.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
