@@ -8,12 +8,26 @@
  */
 import Link from "next/link";
 import SocialLinks from "@/components/shared/SocialLinks";
+import { CATEGORY_SHOWCASE } from "@/lib/categoryShowcaseData";
+
+// Categories column is generated from the same CATEGORY_SHOWCASE data the
+// homepage grid uses — one source of truth, so the footer can never drift
+// out of sync with the actual 6 marketplace categories (improvement_1.md
+// Section 2: footer previously only listed old single-template pages).
+const CATEGORY_LINKS = CATEGORY_SHOWCASE.map((category) => ({
+  label: category.name,
+  href: `/${category.slug}`,
+}));
 
 const FOOTER_LINK_COLUMNS = [
   {
+    heading: "Categories",
+    links: CATEGORY_LINKS,
+  },
+  {
     heading: "Product",
     links: [
-      { label: "Products", href: "/products" },
+      { label: "All Products", href: "/products" },
       { label: "Pricing", href: "/pricing" },
       { label: "Case Studies", href: "/case-studies" },
       { label: "Features", href: "/features" },
