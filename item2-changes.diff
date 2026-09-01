@@ -1,0 +1,412 @@
+diff --git a/app/(public)/products/page.tsx b/app/(public)/products/page.tsx
+new file mode 100644
+index 0000000..97c9fc2
+--- /dev/null
++++ b/app/(public)/products/page.tsx
+@@ -0,0 +1,56 @@
++/**
++ * FILE: app/(public)/products/page.tsx
++ * ROLE: Public — marketplace master grid, served at "/products".
++ *
++ * PURPOSE:
++ * Single browsable grid of every product across all 6 marketplace
++ * categories (Templates, T-Shirts, AI Videos, File Tools, Tutorials,
++ * Game Characters), with search, category filter, and sort — per
++ * improvement_1.md Section 4 ("/products — master grid (filter/sort/
++ * search), pulls from lib/productsData.ts").
++ *
++ * DATA FLOW:
++ * 1. This Server Component reads PRODUCTS directly (no fetch needed —
++ *    it's a local static array today, same pattern as /shop reading
++ *    PRICING_TIERS).
++ * 2. The full product list is passed as a prop into the Client
++ *    Component ProductsGrid, which owns the search/filter/sort state
++ *    and re-derives the visible list on every change.
++ */
++import type { Metadata } from "next";
++import "../../styles/products.css";
++import ProductsGrid from "@/components/products/ProductsGrid";
++import { PRODUCTS } from "@/lib/productsData";
++
++export const metadata: Metadata = {
++  title: "All Products | Matthew Studio",
++  description:
++    "Browse every product in the Matthew Studio marketplace — templates, t-shirts, AI videos, file tools, tutorials, and game characters. Filter, sort, and search the full catalog.",
++  openGraph: {
++    title: "All Products | Matthew Studio",
++    description:
++      "Browse every product in the Matthew Studio marketplace — templates, t-shirts, AI videos, file tools, tutorials, and game characters. Filter, sort, and search the full catalog.",
++    images: ["/og-home.png"],
++  },
++};
++
++export default function ProductsPage() {
++  return (
++    <>
++      <header className="productsPageHeader">
++        <div className="productsPageHeaderInner">
++          <p className="eyebrow">Full Catalog</p>
++          <h1 className="heroTitle" style={{ fontSize: "2.25rem" }}>
++            All products
++          </h1>
++          <p className="heroSubtitle">
++            Every template, t-shirt, AI video pack, file tool, tutorial, and game character
++            we sell — in one place. Search, filter by category, or sort to find what you need.
++          </p>
++        </div>
++      </header>
++
++      <ProductsGrid products={PRODUCTS} />
++    </>
++  );
++}
+diff --git a/app/styles/mediaQueries.css b/app/styles/mediaQueries.css
+index 113c0cc..ff393ba 100644
+--- a/app/styles/mediaQueries.css
++++ b/app/styles/mediaQueries.css
+@@ -193,5 +193,15 @@
+   }
+ }
+ 
++/* ------------------------------------------------------------
++ * PRODUCTS PAGE — search bar and sort select sit side by side
++ * from tablet up (stacked, full-width on mobile).
++ * ------------------------------------------------------------ */
++@media (min-width: 768px) {
++  .productsControls {
++    flex-direction: row;
++  }
++}
++
+ 
+ 
+diff --git a/app/styles/products.css b/app/styles/products.css
+new file mode 100644
+index 0000000..fc1e3f0
+--- /dev/null
++++ b/app/styles/products.css
+@@ -0,0 +1,157 @@
++/*
++ * FILE: app/styles/products.css
++ * PURPOSE:
++ * Styles for the marketplace master grid (/products) — page header,
++ * search/sort controls bar, category filter pills, and result states.
++ * Reuses .productCard / .productCardsGrid (shared.css) for the cards
++ * themselves and .supportFaqSearchBar's pattern (support.css) for the
++ * search input — this file only adds what's new for /products.
++ * Responsive breakpoints live in mediaQueries.css, not here (Rule 9).
++ */
++
++.productsPageHeader {
++  padding: var(--space-2xl) var(--space-lg) var(--space-lg);
++  text-align: center;
++}
++
++.productsPageHeaderInner {
++  max-width: var(--max-width-narrow);
++  margin: 0 auto;
++  display: flex;
++  flex-direction: column;
++  align-items: center;
++  gap: var(--space-md);
++}
++
++.productsSection {
++  padding: var(--space-lg) var(--space-lg) var(--space-2xl);
++}
++
++.productsSectionInner {
++  max-width: var(--max-width-content);
++  margin: 0 auto;
++}
++
++/* ------------------------------------------------------------
++ * CONTROLS BAR — search input + sort select, side by side on
++ * desktop, stacked on mobile (see mediaQueries.css).
++ * ------------------------------------------------------------ */
++.productsControls {
++  display: flex;
++  flex-direction: column;
++  gap: var(--space-md);
++  align-items: stretch;
++}
++
++.productsSearchBar {
++  flex: 1 1 auto;
++  display: flex;
++  flex-direction: row;
++  align-items: center;
++  gap: var(--space-sm);
++  padding: var(--space-sm) var(--space-md);
++  border: 1px solid var(--color-border);
++  border-radius: 8px;
++  background: var(--color-surface);
++  color: var(--color-text-muted);
++  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
++}
++
++.productsSearchBar:focus-within {
++  border-color: var(--color-accent);
++  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
++}
++
++.productsSearchBar input {
++  flex: 1 1 auto;
++  width: 100%;
++  font-size: 1rem;
++  font-family: inherit;
++  color: var(--color-text-primary);
++  background: transparent;
++  border: none;
++}
++
++.productsSearchBar input:focus-visible {
++  outline: none;
++}
++
++/* Removes the native search-input clear/cancel icon so our own
++ * layout stays consistent across browsers. */
++.productsSearchBar input[type="search"]::-webkit-search-cancel-button {
++  -webkit-appearance: none;
++}
++
++.productsSortSelect {
++  flex: 0 0 auto;
++  display: flex;
++  align-items: center;
++}
++
++.productsSortSelect select {
++  min-height: 44px;
++  padding: var(--space-sm) var(--space-md);
++  border: 1px solid var(--color-border);
++  border-radius: 8px;
++  background: var(--color-surface);
++  color: var(--color-text-primary);
++  font-size: 0.9375rem;
++  font-family: inherit;
++  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
++}
++
++.productsSortSelect select:focus-visible {
++  border-color: var(--color-accent);
++  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
++}
++
++/* ------------------------------------------------------------
++ * CATEGORY PILLS
++ * ------------------------------------------------------------ */
++.productsCategoryPills {
++  display: flex;
++  flex-wrap: wrap;
++  gap: var(--space-sm);
++  margin-top: var(--space-lg);
++}
++
++.productsCategoryPill {
++  min-height: 36px;
++  padding: 0.4rem var(--space-md);
++  border-radius: 999px;
++  border: 1px solid var(--color-border);
++  background: var(--color-surface);
++  color: var(--color-text-secondary);
++  font-size: 0.875rem;
++  font-weight: 500;
++  touch-action: manipulation;
++  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
++}
++
++.productsCategoryPill:hover {
++  background: var(--color-surface-hover);
++  border-color: var(--color-border-hover);
++}
++
++.productsCategoryPillActive,
++.productsCategoryPillActive:hover {
++  background: var(--color-accent);
++  border-color: var(--color-accent);
++  color: var(--color-bg);
++}
++
++/* ------------------------------------------------------------
++ * RESULT STATES
++ * ------------------------------------------------------------ */
++.productsResultCount {
++  margin-top: var(--space-lg);
++  font-size: 0.875rem;
++  color: var(--color-text-muted);
++}
++
++.productsEmpty {
++  text-align: center;
++  font-size: 0.9375rem;
++  color: var(--color-text-secondary);
++  padding: var(--space-2xl) 0;
++}
+diff --git a/components/products/ProductsGrid.tsx b/components/products/ProductsGrid.tsx
+new file mode 100644
+index 0000000..93fc8e9
+--- /dev/null
++++ b/components/products/ProductsGrid.tsx
+@@ -0,0 +1,148 @@
++/**
++ * FILE: components/products/ProductsGrid.tsx
++ * ROLE: Public — interactive body of /products (search, category
++ * filter, sort, and the resulting product grid).
++ *
++ * PURPOSE:
++ * Takes the full static PRODUCTS list and derives the visible subset
++ * from three pieces of client state: a text search (matched against
++ * name + description), a category filter (all 6 categories or "all"),
++ * and a sort mode. Reuses the existing ProductCard component and
++ * .productCard / .productCardsGrid styles (shared.css) so cards look
++ * identical to the ones already shown in each homepage category
++ * section — this page is a new way to browse the same catalog, not a
++ * new visual language.
++ *
++ * DATA FLOW:
++ * Receives the full Product[] as a prop from the Server Component
++ * page (no fetch — static data). All filtering/sorting happens
++ * client-side with useMemo; nothing is persisted or sent anywhere.
++ */
++"use client";
++
++import { useMemo, useState } from "react";
++import { Search } from "lucide-react";
++import ProductCard from "@/components/home/ProductCard";
++import type { Product, ProductCategorySlug } from "@/lib/productsData";
++
++type CategoryFilter = ProductCategorySlug | "all";
++type SortMode = "bestselling" | "newest" | "price-asc" | "price-desc" | "rating";
++
++const CATEGORY_FILTERS: { value: CategoryFilter; label: string }[] = [
++  { value: "all", label: "All" },
++  { value: "templates", label: "Templates" },
++  { value: "tshirts", label: "T-Shirts" },
++  { value: "ai-videos", label: "AI Videos" },
++  { value: "file-tools", label: "File Tools" },
++  { value: "tutorials", label: "Tutorials" },
++  { value: "game-characters", label: "Game Characters" },
++];
++
++const SORT_OPTIONS: { value: SortMode; label: string }[] = [
++  { value: "bestselling", label: "Bestselling" },
++  { value: "newest", label: "Newest" },
++  { value: "price-asc", label: "Price: Low to High" },
++  { value: "price-desc", label: "Price: High to Low" },
++  { value: "rating", label: "Top Rated" },
++];
++
++function sortProducts(products: Product[], sortMode: SortMode): Product[] {
++  const sorted = [...products];
++  switch (sortMode) {
++    case "newest":
++      return sorted.sort((a, b) => b.dateAdded.localeCompare(a.dateAdded));
++    case "price-asc":
++      return sorted.sort((a, b) => a.price.startingPrice - b.price.startingPrice);
++    case "price-desc":
++      return sorted.sort((a, b) => b.price.startingPrice - a.price.startingPrice);
++    case "rating":
++      return sorted.sort((a, b) => b.rating.average - a.rating.average);
++    case "bestselling":
++    default:
++      return sorted.sort((a, b) => b.trendingScore - a.trendingScore);
++  }
++}
++
++export default function ProductsGrid({ products }: { products: Product[] }) {
++  const [searchQuery, setSearchQuery] = useState("");
++  const [category, setCategory] = useState<CategoryFilter>("all");
++  const [sortMode, setSortMode] = useState<SortMode>("bestselling");
++
++  const visibleProducts = useMemo(() => {
++    const query = searchQuery.trim().toLowerCase();
++
++    const filtered = products.filter((product) => {
++      const matchesCategory = category === "all" || product.category === category;
++      const matchesQuery =
++        query.length === 0 ||
++        product.name.toLowerCase().includes(query) ||
++        product.description.toLowerCase().includes(query);
++      return matchesCategory && matchesQuery;
++    });
++
++    return sortProducts(filtered, sortMode);
++  }, [products, searchQuery, category, sortMode]);
++
++  return (
++    <section className="productsSection">
++      <div className="productsSectionInner">
++        <div className="productsControls">
++          <div className="productsSearchBar">
++            <Search size={18} strokeWidth={1.75} aria-hidden="true" />
++            <input
++              type="search"
++              placeholder="Search products…"
++              aria-label="Search products"
++              value={searchQuery}
++              onChange={(event) => setSearchQuery(event.target.value)}
++            />
++          </div>
++
++          <label className="productsSortSelect">
++            <span className="srOnly">Sort by</span>
++            <select value={sortMode} onChange={(event) => setSortMode(event.target.value as SortMode)}>
++              {SORT_OPTIONS.map((option) => (
++                <option key={option.value} value={option.value}>
++                  {option.label}
++                </option>
++              ))}
++            </select>
++          </label>
++        </div>
++
++        <div className="productsCategoryPills" role="group" aria-label="Filter by category">
++          {CATEGORY_FILTERS.map((filter) => (
++            <button
++              key={filter.value}
++              type="button"
++              className={
++                category === filter.value ? "productsCategoryPill productsCategoryPillActive" : "productsCategoryPill"
++              }
++              aria-pressed={category === filter.value}
++              onClick={() => setCategory(filter.value)}
++            >
++              {filter.label}
++            </button>
++          ))}
++        </div>
++
++        <p className="productsResultCount">
++          {visibleProducts.length} {visibleProducts.length === 1 ? "product" : "products"}
++        </p>
++
++        {visibleProducts.length === 0 ? (
++          <p className="productsEmpty">
++            No products match {searchQuery ? `"${searchQuery}"` : "this filter"} — try a different search term or
++            category.
++          </p>
++        ) : (
++          <div className="productCardsGrid">
++            {visibleProducts.map((product) => (
++              <ProductCard key={product.id} product={product} />
++            ))}
++          </div>
++        )}
++      </div>
++    </section>
++  );
++}
+diff --git a/improvement_1.md b/improvement_1.md
+index b840413..6328a97 100644
+--- a/improvement_1.md
++++ b/improvement_1.md
+@@ -55,7 +55,7 @@ marketplace:
+ 
+ ## 4. Missing pages (from the marketplace site map, not yet built)
+ 
+-- [ ] `/products` — master grid (filter/sort/search), pulls from
++- [x] `/products` — master grid (filter/sort/search), pulls from
+       `lib/productsData.ts` (already has 21 products across all 6 categories
+       — currently unused except in the homepage carousel)
+ - [ ] 6 category pages: `/templates`, `/tshirts`, `/ai-videos`,

@@ -193,5 +193,15 @@
   }
 }
 
+/* ------------------------------------------------------------
+ * PRODUCTS PAGE — search bar and sort select sit side by side
+ * from tablet up (stacked, full-width on mobile).
+ * ------------------------------------------------------------ */
+@media (min-width: 768px) {
+  .productsControls {
+    flex-direction: row;
+  }
+}
+
 
 

@@ -1,0 +1,157 @@
+/*
+ * FILE: app/styles/products.css
+ * PURPOSE:
+ * Styles for the marketplace master grid (/products) — page header,
+ * search/sort controls bar, category filter pills, and result states.
+ * Reuses .productCard / .productCardsGrid (shared.css) for the cards
+ * themselves and .supportFaqSearchBar's pattern (support.css) for the
+ * search input — this file only adds what's new for /products.
+ * Responsive breakpoints live in mediaQueries.css, not here (Rule 9).
+ */
+
+.productsPageHeader {
+  padding: var(--space-2xl) var(--space-lg) var(--space-lg);
+  text-align: center;
+}
+
+.productsPageHeaderInner {
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.productsSection {
+  padding: var(--space-lg) var(--space-lg) var(--space-2xl);
+}
+
+.productsSectionInner {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+}
+
+/* ------------------------------------------------------------
+ * CONTROLS BAR — search input + sort select, side by side on
+ * desktop, stacked on mobile (see mediaQueries.css).
+ * ------------------------------------------------------------ */
+.productsControls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  align-items: stretch;
+}
+
+.productsSearchBar {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.productsSearchBar:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+.productsSearchBar input {
+  flex: 1 1 auto;
+  width: 100%;
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--color-text-primary);
+  background: transparent;
+  border: none;
+}
+
+.productsSearchBar input:focus-visible {
+  outline: none;
+}
+
+/* Removes the native search-input clear/cancel icon so our own
+ * layout stays consistent across browsers. */
+.productsSearchBar input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+.productsSortSelect {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.productsSortSelect select {
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 0.9375rem;
+  font-family: inherit;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.productsSortSelect select:focus-visible {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+/* ------------------------------------------------------------
+ * CATEGORY PILLS
+ * ------------------------------------------------------------ */
+.productsCategoryPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.productsCategoryPill {
+  min-height: 36px;
+  padding: 0.4rem var(--space-md);
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.productsCategoryPill:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.productsCategoryPillActive,
+.productsCategoryPillActive:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* ------------------------------------------------------------
+ * RESULT STATES
+ * ------------------------------------------------------------ */
+.productsResultCount {
+  margin-top: var(--space-lg);
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.productsEmpty {
+  text-align: center;
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+  padding: var(--space-2xl) 0;
+}

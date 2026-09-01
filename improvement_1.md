@@ -55,7 +55,7 @@ marketplace:
 
 ## 4. Missing pages (from the marketplace site map, not yet built)
 
-- [ ] `/products` — master grid (filter/sort/search), pulls from
+- [x] `/products` — master grid (filter/sort/search), pulls from
       `lib/productsData.ts` (already has 21 products across all 6 categories
       — currently unused except in the homepage carousel)
 - [ ] 6 category pages: `/templates`, `/tshirts`, `/ai-videos`,
