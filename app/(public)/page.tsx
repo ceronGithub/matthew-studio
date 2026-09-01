@@ -23,6 +23,8 @@ import TemplatesSection from "@/components/home/TemplatesSection";
 import TShirtsSection from "@/components/home/TShirtsSection";
 import AIVideosSection from "@/components/home/AIVideosSection";
 import FileToolsSection from "@/components/home/FileToolsSection";
+import TutorialsSection from "@/components/home/TutorialsSection";
+import GameCharactersSection from "@/components/home/GameCharactersSection";
 import HowItWorksSection from "@/components/home/HowItWorksSection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import FAQAccordion from "@/components/home/FAQAccordion";
@@ -51,6 +53,8 @@ export default function HomePage() {
       <TShirtsSection />
       <AIVideosSection />
       <FileToolsSection />
+      <TutorialsSection />
+      <GameCharactersSection />
       <HowItWorksSection />
       <TestimonialsSection />
       <FAQAccordion />
