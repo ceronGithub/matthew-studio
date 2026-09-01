@@ -1,0 +1,29 @@
+// FILE: prisma/schema.prisma
+// PURPOSE:
+// Prisma 7 schema for matthew-studio. Connection URLs are NOT read from
+// here for CLI operations — those live in prisma.config.mjs (DIRECT_URL,
+// session pooler, port 5432). This datasource url is used only as the
+// fallback/reference value; the actual runtime client is built with the
+// pg driver adapter in services/prisma.ts using DATABASE_URL (transaction
+// pooler, port 6543).
+//
+// Add models below as features are built. Kept empty for now per request —
+// just scaffolding, ready to receive tables.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------
+// Models go here. Example shape for reference (not created yet):
+//
+// model Example {
+//   id        String   @id @default(cuid())
+//   createdAt DateTime @default(now())
+// }
+// ---------------------------------------------------------------------
