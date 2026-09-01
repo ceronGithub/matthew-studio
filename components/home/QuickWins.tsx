@@ -3,31 +3,31 @@
  * ROLE: Public — second section of the Home/Landing page.
  *
  * PURPOSE:
- * Builds quick credibility below the hero: a row of past-client
- * wordmarks and a short strip of headline results. All names and
- * numbers below are placeholders — replace with real client names
- * and verified metrics before launch.
+ * Builds quick credibility below the hero for the marketplace as a
+ * whole (not one category): a row of the 6 categories on offer, and
+ * a short strip of headline marketplace stats. Numbers below are
+ * placeholders — replace with real verified metrics before launch.
  */
 "use client";
 
 import { motion } from "framer-motion";
 
-const CLIENT_WORDMARKS = ["Cabana Bay Resort", "Azure Point", "Marlin Cove", "Solstice Villas"];
+const CATEGORY_CHIPS = ["Templates", "T-Shirts", "AI Videos", "File Tools", "Tutorials", "Game Characters"];
 
 const RESULT_STATS = [
-  { value: "+38%", label: "Direct bookings vs. phone-only" },
-  { value: "5 hrs", label: "Saved per week on manual booking" },
-  { value: "48h", label: "Average time to launch" },
+  { value: "18+", label: "Products across 6 categories" },
+  { value: "6", label: "Creator categories in one marketplace" },
+  { value: "48h", label: "Average delivery time" },
 ];
 
 export default function QuickWins() {
   return (
     <section className="quickWinsSection">
       <div className="quickWinsContainer">
-        <p className="quickWinsLabel">Trusted by resorts already running the template</p>
+        <p className="quickWinsLabel">One marketplace, every category creators need</p>
 
         <div className="wordmarkRow">
-          {CLIENT_WORDMARKS.map((name, index) => (
+          {CATEGORY_CHIPS.map((name, index) => (
             <motion.span
               key={name}
               className="wordmarkChip"

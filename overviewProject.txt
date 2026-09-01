@@ -489,3 +489,23 @@ project is done.
   .tutorialCardWrap/LevelBadge/Duration + level color variants. Not
   wired into page.tsx yet — still Phase 2/3. npx tsc --noEmit passes
   clean.
+========================================================
+[2026-09-02] Fixed homepage marketplace-alignment mismatch per
+  improvement_1.md Section 2/3: QuickWins.tsx's proof section was
+  still resort-template-only (label "Trusted by resorts already
+  running the template", resort wordmarks Cabana Bay/Azure
+  Point/Marlin Cove/Solstice Villas, resort-booking stats +38%
+  bookings/5hrs saved/48h launch) despite the rest of the homepage
+  already selling all 6 marketplace categories. Replaced with
+  marketplace-wide content: label now "One marketplace, every
+  category creators need", wordmark row now lists the 6 categories
+  (Templates/T-Shirts/AI Videos/File Tools/Tutorials/Game
+  Characters), stats now "18+ Products across 6 categories", "6
+  Creator categories in one marketplace", "48h Average delivery
+  time" (18 verified by counting lib/productsData.ts product
+  objects). Also repointed NavBar.tsx: "Shop" nav link and both
+  "Browse Marketplace" CTAs (desktop + mobile) were still pointing
+  to /shop (old single-template pricing page) — now point to
+  /products (the marketplace master grid, already built per
+  improvement_1.md Section 4). Nav label renamed "Shop" → "Products"
+  to match. npx tsc --noEmit passes clean.

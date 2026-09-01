@@ -31,9 +31,18 @@ whole, not just the resort template.
 
 **Files:** `components/shared/NavBar.tsx`, `components/shared/Footer.tsx`
 
-- Confirm nav links point at marketplace destinations (or at least don't
-  imply "this whole site is one resort template")
-- Footer link set should reflect the marketplace, not just the old page set
+- [x] NavBar "Shop" link + both "Browse Marketplace" CTAs now point to
+      `/products` (was `/shop`); nav label renamed "Shop" → "Products"
+- [ ] Footer link set still needs review — reflect the marketplace, not
+      just the old page set
+
+## 2a. QuickWins.tsx homepage proof section — FIXED
+
+- [x] Was 100% resort-template ("Trusted by resorts already running the
+      template", resort wordmarks, resort booking stats). Replaced with
+      marketplace-wide content: category chips instead of resort names,
+      marketplace stats (18+ products / 6 categories / 48h delivery)
+      instead of resort-booking metrics.
 
 ---
 

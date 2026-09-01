@@ -27,9 +27,10 @@ const NAV_LINKS = [
   { label: "Testimonials", href: "/#testimonials-section", anchorId: "testimonials-section" },
   { label: "Support", href: "/support", anchorId: null },
   { label: "How It Works", href: "/#how-it-works-section", anchorId: "how-it-works-section" },
-  // "Shop" is the marketplace catalog entry point today; once /products
-  // ships (see improvement_1.md) this should repoint there.
-  { label: "Shop", href: "/shop", anchorId: null },
+  // /products (marketplace master grid) is now the catalog entry point;
+  // "Shop" (old single-template pricing page) is repointed here per
+  // improvement_1.md Section 4/5.
+  { label: "Products", href: "/products", anchorId: null },
 ];
 
 export default function NavBar() {
@@ -116,7 +117,7 @@ export default function NavBar() {
             })}
           </ul>
 
-          <Link href="/shop" className="siteNavCta">
+          <Link href="/products" className="siteNavCta">
             Browse Marketplace
           </Link>
 
@@ -147,7 +148,7 @@ export default function NavBar() {
               </li>
             ))}
             <li>
-              <Link href="/shop" className="siteNavCta siteNavCtaMobile" onClick={() => setIsMenuOpen(false)}>
+              <Link href="/products" className="siteNavCta siteNavCtaMobile" onClick={() => setIsMenuOpen(false)}>
                 Browse Marketplace
               </Link>
             </li>
