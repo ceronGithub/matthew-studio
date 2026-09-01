@@ -64,7 +64,7 @@ marketplace:
       — currently unused except in the homepage carousel)
 - [x] 6 category pages: `/templates`, `/tshirts`, `/ai-videos`,
       `/file-tools`, `/tutorials`, `/game-characters`
-- [ ] Product detail pages per category (`[slug]`, variant selectors)
+- [x] Product detail pages per category (`[slug]`, variant selectors)
 - [x] `/pricing` — marketplace-wide pricing (distinct from `/shop`,
       which now redirects here). Reuses categoryShowcaseData.ts so
       figures match the homepage.
@@ -77,7 +77,7 @@ marketplace:
       one FAQ source of truth instead of two.
 - [x] `/about` — mission intro, category grid (reuses CATEGORY_SHOWCASE),
       3 value pillars, linked from Footer's Company column.
-- [ ] `/security`, `/privacy`, `/terms`, `/refund-policy` — needed before any
+- [x] `/security`, `/privacy`, `/terms`, `/refund-policy` — needed before any
       real checkout/payment flow goes live
 
 ---

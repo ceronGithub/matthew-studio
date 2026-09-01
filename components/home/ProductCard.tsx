@@ -7,10 +7,12 @@
  * PURPOSE:
  * Renders a single product from lib/productsData.ts as a card:
  * category-tinted icon placeholder, name, star rating, starting
- * price, optional badge, and a "View Details" link into /shop. Kept
- * separate from FeaturedProducts.tsx's inline card (different data
- * shape — FeaturedProduct vs the fuller Product type) so it can be
- * reused as-is by the six Phase 2 sections without prop mismatches.
+ * price, optional badge, and a "View Details" link into that
+ * product's own detail page at "/[category]/[slug]" (see
+ * components/products/ProductDetail.tsx). Kept separate from
+ * FeaturedProducts.tsx's inline card (different data shape —
+ * FeaturedProduct vs the fuller Product type) so it can be reused
+ * as-is by the six Phase 2 sections without prop mismatches.
  *
  * DATA FLOW:
  * No data fetching — receives a single Product via props. No real
@@ -53,7 +55,10 @@ export default function ProductCard({ product }: ProductCardProps) {
           {product.price.managed ? "/mo" : ""}
         </p>
 
-        <Link href={`/shop?category=${product.category}`} className="buttonSecondary productCardCta">
+        <Link
+          href={`/${product.category}/${product.slug}`}
+          className="buttonSecondary productCardCta"
+        >
           View Details
         </Link>
       </div>

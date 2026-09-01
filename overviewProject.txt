@@ -139,6 +139,30 @@ FAQ, CTA Banner), but /shop, /portfolio, /features, /how-it-works,
 pages per
 that plan's Site Map (Section 3).
 
+components/products/ProductDetail.tsx       Shared product detail body (icon,
+                                              rating, price, variant selector,
+                                              "More in this category" strip)
+app/styles/productDetail.css                 Product detail page styles
+app/(public)/templates/[slug]/page.tsx       Templates product detail (/templates/[slug])
+app/(public)/templates/[slug]/not-found.tsx  Invalid-slug 404 state
+app/(public)/tshirts/[slug]/page.tsx         T-Shirts product detail (/tshirts/[slug])
+app/(public)/tshirts/[slug]/not-found.tsx    Invalid-slug 404 state
+app/(public)/ai-videos/[slug]/page.tsx       AI Videos product detail (/ai-videos/[slug])
+app/(public)/ai-videos/[slug]/not-found.tsx  Invalid-slug 404 state
+app/(public)/file-tools/[slug]/page.tsx      File Tools product detail (/file-tools/[slug])
+app/(public)/file-tools/[slug]/not-found.tsx Invalid-slug 404 state
+app/(public)/tutorials/[slug]/page.tsx       Tutorials product detail (/tutorials/[slug])
+app/(public)/tutorials/[slug]/not-found.tsx  Invalid-slug 404 state
+app/(public)/game-characters/[slug]/page.tsx      Game Characters product detail
+app/(public)/game-characters/[slug]/not-found.tsx Invalid-slug 404 state
+lib/legalData.ts                             Static content for all 4 legal pages
+components/legal/LegalDocument.tsx           Shared legal page body (title, sections)
+app/styles/legal.css                         Legal page styles
+app/(public)/privacy/page.tsx                Privacy Policy (/privacy)
+app/(public)/terms/page.tsx                  Terms of Service (/terms)
+app/(public)/security/page.tsx               Security (/security)
+app/(public)/refund-policy/page.tsx          Refund Policy (/refund-policy)
+
 5. BUILD PLAN — REMAINING PAGES (in order)
 --------------------------------------------------------
 [DONE] 1. Home/Landing
@@ -641,3 +665,26 @@ project is done.
   no inbound link. improvement_1.md Section 4 is now fully checked
   off - every page in that list exists. npx tsc --noEmit and eslint
   both pass clean on all new/modified files.
+
+[2026-09-02] Closed out improvement_1.md Section 4's last two open
+  items: product detail pages and the 4 legal pages. New shared
+  components/products/ProductDetail.tsx (icon thumb, rating,
+  description, variant selector for Templates' Static/Dynamic/Modern
+  breakdown, price, CTA row, "More in this category" strip) plus
+  app/styles/productDetail.css - reused by 6 new [slug] routes
+  (app/(public)/{templates,tshirts,ai-videos,file-tools,tutorials,
+  game-characters}/[slug]/page.tsx), each with generateStaticParams
+  scoped to its own category, generateMetadata, and a sibling
+  not-found.tsx (same pattern as case-studies/[slug]). Repointed the
+  stale /shop?category= "View Details" links in
+  components/home/ProductCard.tsx and components/home/
+  FeaturedProducts.tsx to the new real detail pages; also removed a
+  pre-existing duplicated file-header comment block found while
+  editing FeaturedProducts.tsx. New lib/legalData.ts (Privacy Policy,
+  Terms of Service, Security, Refund Policy content) plus shared
+  components/legal/LegalDocument.tsx and app/styles/legal.css, reused
+  by 4 new pages: /privacy, /terms, /security, /refund-policy. Added
+  a "Legal" column to Footer.tsx linking all 4 so none of them are
+  orphaned with no inbound link. improvement_1.md Section 4 is now
+  fully checked off - every page in that list exists. npx tsc
+  --noEmit passes clean on all new/modified files.

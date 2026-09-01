@@ -5,22 +5,6 @@
  * PURPOSE:
  * Shows a handful of top products spanning different marketplace
  * categories. On tablet/desktop it auto-scrolls horizontally in an
- * infinite loop (pauses on hover); on mobile it renders as a plain
- * vertical stack instead, per the homepage animation spec, since an
- * infinite horizontal loop doesn't translate to a single column.
- *
- * DATA FLOW:
- * Reads FEATURED_PRODUCTS (static). No real product photos exist yet,
- * so each card shows a category-tinted icon placeholder — swap for
- * next/image once real thumbnails are available (Rule 27).
- */
-/**
- * FILE: components/home/FeaturedProducts.tsx
- * ROLE: Public — "Bestsellers This Month" section of the homepage.
- *
- * PURPOSE:
- * Shows a handful of top products spanning different marketplace
- * categories. On tablet/desktop it auto-scrolls horizontally in an
  * infinite loop (pauses on hover or manual scroll); on mobile it
  * renders as a plain vertical stack instead, per the homepage
  * animation spec, since an infinite horizontal loop doesn't translate
@@ -29,7 +13,11 @@
  * DATA FLOW:
  * Reads FEATURED_PRODUCTS (static). No real product photos exist yet,
  * so each card shows a category-tinted icon placeholder — swap for
- * next/image once real thumbnails are available (Rule 27).
+ * next/image once real thumbnails are available (Rule 27). Each
+ * card's "View Details" link goes to that product's detail page at
+ * "/[categorySlug]/[id]" — FEATURED_PRODUCTS.id is always kept equal
+ * to the matching lib/productsData.ts Product.slug by convention, so
+ * no extra lookup is needed here.
  */
 "use client";
 
@@ -83,7 +71,10 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
           {product.rating.average.toFixed(1)}/5 · {product.rating.count} reviews
         </p>
         <p className="featuredProductPrice">{product.price}</p>
-        <Link href={`/shop?category=${product.categorySlug}`} className="buttonSecondary featuredProductCta">
+        <Link
+          href={`/${product.categorySlug}/${product.id}`}
+          className="buttonSecondary featuredProductCta"
+        >
           View Details
         </Link>
       </div>

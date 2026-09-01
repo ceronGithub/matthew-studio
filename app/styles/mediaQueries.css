@@ -214,5 +214,21 @@
   }
 }
 
+/* ------------------------------------------------------------
+ * PRODUCT DETAIL PAGE — mobile default is a single stacked
+ * column (base CSS); thumb + body sit side by side from tablet
+ * up, and the thumb drops its mobile-only max-width cap.
+ * ------------------------------------------------------------ */
+@media (min-width: 768px) {
+  .productDetailGrid {
+    grid-template-columns: minmax(240px, 360px) 1fr;
+  }
+
+  .productDetailThumb {
+    max-width: none;
+    margin: 0;
+  }
+}
+
 
 

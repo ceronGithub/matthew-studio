@@ -1,0 +1,62 @@
+/*
+ * FILE: app/styles/legal.css
+ * PURPOSE:
+ * Styles for components/legal/LegalDocument.tsx, shared by all 4
+ * legal pages (/security, /privacy, /terms, /refund-policy).
+ * Responsive breakpoints live in mediaQueries.css (Rule 9), not here.
+ */
+
+.legalPage {
+  padding: var(--space-2xl) var(--space-lg);
+}
+
+.legalPageInner {
+  width: 100%;
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+}
+
+.legalPageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-2xl);
+}
+
+.legalPageUpdated {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.legalPageSections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.legalPageSection {
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--color-border);
+}
+
+.legalPageSection:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.legalPageSectionTitle {
+  font-size: 1.25rem;
+  margin-bottom: var(--space-sm);
+}
+
+.legalPageSectionBody {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+  max-width: 70ch;
+  margin-bottom: var(--space-sm);
+}
+
+.legalPageSectionBody:last-child {
+  margin-bottom: 0;
+}
