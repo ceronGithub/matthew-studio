@@ -89,12 +89,32 @@ export default function VideoCarousel({ videos }: VideoCarouselProps) {
     if (distance < -SWIPE_THRESHOLD_PX) goTo(activeIndex - 1); // swiped right → prev
   }
 
+  // Arrow-key navigation (Section 13 accessibility checklist: "Carousel
+  // has keyboard navigation"). Ignored when the <video> element itself
+  // is the focused target, since the native controls already use
+  // Left/Right there to seek — this only fires when the carousel
+  // wrapper (or its prev/next/dot buttons) has focus instead.
+  function handleKeyDown(event: React.KeyboardEvent) {
+    if (event.target === videoRef.current) return;
+    if (event.key === "ArrowLeft") goTo(activeIndex - 1);
+    if (event.key === "ArrowRight") goTo(activeIndex + 1);
+  }
+
   const activeVideo = videos[activeIndex];
   if (!activeVideo) return null;
 
   return (
     <div className="videoCarousel">
-      <div className="videoCarouselStage" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+      <div
+        className="videoCarouselStage"
+        role="group"
+        aria-roledescription="carousel"
+        aria-label="Video demos"
+        tabIndex={0}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onKeyDown={handleKeyDown}
+      >
         <video
           key={activeVideo.id}
           ref={videoRef}

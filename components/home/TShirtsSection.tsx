@@ -46,11 +46,25 @@ function DesignGalleryCarousel() {
     setActiveIndex(((index % TSHIRT_DESIGN_GALLERY.length) + TSHIRT_DESIGN_GALLERY.length) % TSHIRT_DESIGN_GALLERY.length);
   }
 
+  // Arrow-key navigation (Section 13 accessibility checklist: "Carousel
+  // has keyboard navigation"), mirroring VideoCarousel's pattern.
+  function handleKeyDown(event: React.KeyboardEvent) {
+    if (event.key === "ArrowLeft") goTo(activeIndex - 1);
+    if (event.key === "ArrowRight") goTo(activeIndex + 1);
+  }
+
   const activeSlide = TSHIRT_DESIGN_GALLERY[activeIndex];
 
   return (
     <div className="designGalleryCarousel" ref={containerRef}>
-      <div className="designGallerySlideWrap">
+      <div
+        className="designGallerySlideWrap"
+        role="group"
+        aria-roledescription="carousel"
+        aria-label="Shirt designs"
+        tabIndex={0}
+        onKeyDown={handleKeyDown}
+      >
         <motion.div
           key={activeSlide.id}
           className="designGallerySlide"
