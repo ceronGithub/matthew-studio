@@ -52,5 +52,6 @@ export const TEMPLATE_DEMO_VIDEOS: VideoCarouselItem[] = [
     title: "See a 2-minute walkthrough of the dashboard in action",
     src: "/videos/resort-booking-demo.mp4",
     poster: "/images/resort-booking-demo-poster.jpg",
+    captionsSrc: "/videos/captions/resort-booking-demo.vtt",
   },
 ];

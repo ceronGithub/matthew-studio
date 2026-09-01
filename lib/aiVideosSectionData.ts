@@ -18,12 +18,32 @@ export interface AIVideoSample {
   title: string;
   src: string;
   poster?: string;
+  /** WebVTT captions file path — see VideoCarouselItem's captionsSrc doc. */
+  captionsSrc?: string;
 }
 
 export const AI_VIDEO_SAMPLES: AIVideoSample[] = [
-  { id: "product-teaser-sample", title: "Product teaser — 30s", src: "/videos/ai-product-teaser-sample.mp4", poster: "/images/ai-product-teaser-poster.jpg" },
-  { id: "explainer-sample", title: "Explainer with auto voiceover — 45s", src: "/videos/ai-explainer-sample.mp4", poster: "/images/ai-explainer-poster.jpg" },
-  { id: "social-short-sample", title: "Vertical social short — 20s", src: "/videos/ai-social-short-sample.mp4", poster: "/images/ai-social-short-poster.jpg" },
+  {
+    id: "product-teaser-sample",
+    title: "Product teaser — 30s",
+    src: "/videos/ai-product-teaser-sample.mp4",
+    poster: "/images/ai-product-teaser-poster.jpg",
+    captionsSrc: "/videos/captions/ai-product-teaser-sample.vtt",
+  },
+  {
+    id: "explainer-sample",
+    title: "Explainer with auto voiceover — 45s",
+    src: "/videos/ai-explainer-sample.mp4",
+    poster: "/images/ai-explainer-poster.jpg",
+    captionsSrc: "/videos/captions/ai-explainer-sample.vtt",
+  },
+  {
+    id: "social-short-sample",
+    title: "Vertical social short — 20s",
+    src: "/videos/ai-social-short-sample.mp4",
+    poster: "/images/ai-social-short-poster.jpg",
+    captionsSrc: "/videos/captions/ai-social-short-sample.vtt",
+  },
 ];
 
 export const AI_VIDEO_CUSTOM_CALLOUT = {

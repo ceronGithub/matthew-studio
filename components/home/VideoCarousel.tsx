@@ -29,6 +29,13 @@ export interface VideoCarouselItem {
   title: string;
   src: string;
   poster?: string;
+  /** Path to a WebVTT (.vtt) captions file for this video. Rendered as
+   * a <track kind="captions"> so the player is accessible without
+   * relying on the video's own audio (Section 13 accessibility
+   * checklist: "Videos have captions"). Optional so callers without a
+   * captions file yet (no real videos exist in this project either)
+   * still render a working, uncaptioned player. */
+  captionsSrc?: string;
 }
 
 interface VideoCarouselProps {
@@ -98,7 +105,17 @@ export default function VideoCarousel({ videos }: VideoCarouselProps) {
           playsInline
           loop={false}
           controls
-        />
+        >
+          {activeVideo.captionsSrc && (
+            <track
+              kind="captions"
+              src={activeVideo.captionsSrc}
+              srcLang="en"
+              label="English"
+              default
+            />
+          )}
+        </video>
 
         {videos.length > 1 && (
           <>
