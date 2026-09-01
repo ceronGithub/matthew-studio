@@ -1,6 +1,6 @@
 /**
  * FILE: components/portfolio/CaseStudyDetail.tsx
- * ROLE: Public — main content of a single case study page (/portfolio/[slug]).
+ * ROLE: Public — main content of a single case study page (/case-studies/[slug]).
  *
  * PURPOSE:
  * Displays the full case study: resort type, headline tagline, the
@@ -19,7 +19,7 @@ export default function CaseStudyDetail({ project }: { project: PortfolioProject
     <>
       <header className="portfolioPageHeader">
         <div className="portfolioPageHeaderInner">
-          <Link href="/portfolio" className="caseStudyBackLink">
+          <Link href="/case-studies" className="caseStudyBackLink">
             <ArrowLeft size={16} strokeWidth={1.75} aria-hidden="true" />
             Back to Portfolio
           </Link>

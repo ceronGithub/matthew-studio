@@ -1,10 +1,12 @@
 /**
  * FILE: components/portfolio/PortfolioGrid.tsx
- * ROLE: Public — main content of the Portfolio/Showcase page (/portfolio).
+ * ROLE: Public — main content of the Case Studies page (/case-studies).
  *
  * PURPOSE:
  * Renders every case study as a card in a responsive grid. Each card
- * links to its own case study page at /portfolio/[slug]. Entrance
+ * links to its own case study page at /case-studies/[slug] and shows
+ * a category badge (per improvement_1.md Section 3 — case studies are
+ * now tagged by marketplace category, not just pricing tier). Entrance
  * animation is staggered per card via framer-motion, triggered once
  * the grid scrolls into view.
  */
@@ -27,9 +29,10 @@ export default function PortfolioGrid({ projects }: { projects: PortfolioProject
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.45, delay: index * 0.06, ease: "easeOut" }}
           >
-            <Link href={`/portfolio/${project.slug}`} className="portfolioCard">
+            <Link href={`/case-studies/${project.slug}`} className="portfolioCard">
               {/* Decorative cover — replace with a real project screenshot */}
               <div className="portfolioCardCover" aria-hidden="true">
+                <span className="portfolioCardCategoryBadge">{project.categoryLabel}</span>
                 <span className="portfolioCardCoverLabel">{project.clientName}</span>
               </div>
 

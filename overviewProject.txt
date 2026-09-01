@@ -563,3 +563,42 @@ project is done.
   - Portfolio → /case-studies rebrand (second half of build-order item
     4) intentionally deferred to its own turn.
   npx tsc --noEmit passes clean.
+========================================================
+[2026-09-02] Implemented improvement_1.md Section 5 build-order item 4
+  (second half): rebranded /portfolio to /case-studies.
+  - New app/(public)/case-studies/page.tsx and
+    app/(public)/case-studies/[slug]/page.tsx +
+    app/(public)/case-studies/[slug]/not-found.tsx (moved from
+    /portfolio, copy updated: "Resorts already running on the
+    template" → "Real projects, real results"; header note now
+    mentions more categories will join Templates here).
+  - app/(public)/portfolio/page.tsx and
+    app/(public)/portfolio/[slug]/page.tsx replaced with
+    redirect()s to /case-studies and /case-studies/[slug] (slug
+    preserved) so old bookmarks/deep links don't 404.
+  - lib/portfolioData.ts: added `category`/`categoryLabel` fields to
+    PortfolioProject (all 4 existing projects are genuinely
+    "templates" — not a placeholder value) so case studies are ready
+    to filter/tag by marketplace category once other categories have
+    their own. Kept the file name and PortfolioProject/
+    PORTFOLIO_PROJECTS/getPortfolioProjectBySlug identifiers as-is
+    (not renamed to caseStudiesData.ts) — only the user-facing route
+    changed, renaming the file would have forced needless import
+    churn across every consumer for no functional benefit.
+  - components/portfolio/PortfolioGrid.tsx: card links repointed to
+    /case-studies/[slug]; added a category badge (categoryLabel) in
+    the top-left of each card's cover — the "category tags" piece
+    from improvement_1.md Section 3. New CSS: .portfolioCardCategoryBadge
+    in app/styles/portfolio.css (portfolioCardCover given position:
+    relative to anchor it).
+  - components/portfolio/CaseStudyDetail.tsx: back-link repointed to
+    /case-studies.
+  - Fixed dependent stale "/portfolio" link references: Footer.tsx
+    ("Portfolio" → "Case Studies", now points at /case-studies);
+    TestimonialGrid.tsx card links; /testimonials page's "View Case
+    Studies" CTA and its "in our Portfolio" copy reference (fixed
+    since it named the old page directly — the rest of that page's
+    resort-only copy is intentionally left for its own Section 3 turn,
+    not rewritten here).
+  - improvement_1.md Section 3's "/portfolio" row marked done.
+  npx tsc --noEmit passes clean.

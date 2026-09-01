@@ -4,7 +4,7 @@
  *
  * PURPOSE:
  * Displays a quote grid (TestimonialGrid) from the same four clients
- * shown on /portfolio, each linking back to their full case study.
+ * shown on /case-studies, each linking back to their full case study.
  * Data is static placeholder content from lib/testimonialsData.ts
  * pending superAdmin-managed content.
  *
@@ -42,7 +42,7 @@ export default function TestimonialsPage() {
             What resort owners are saying
           </h1>
           <p className="heroSubtitle">
-            Straight from the people running the properties in our Portfolio — no scripted
+            Straight from the people running the properties in our Case Studies — no scripted
             quotes, just what changed for them.
           </p>
         </div>
@@ -53,7 +53,7 @@ export default function TestimonialsPage() {
       <section className="testimonialsNoteSection">
         <div className="testimonialsNoteInner">
           <p className="testimonialsNoteText">Want to see the full story behind these results?</p>
-          <Link href="/portfolio" className="buttonSecondary">
+          <Link href="/case-studies" className="buttonSecondary">
             View Case Studies
           </Link>
         </div>

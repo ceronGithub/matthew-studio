@@ -5,7 +5,7 @@
  * PURPOSE:
  * Renders every testimonial as a quote card in a responsive grid.
  * Each card links to that client's full case study at
- * /portfolio/[slug]. Entrance animation is staggered per card via
+ * /case-studies/[slug]. Entrance animation is staggered per card via
  * framer-motion, same pattern as PortfolioGrid and PricingGrid.
  */
 "use client";
@@ -42,7 +42,7 @@ export default function TestimonialGrid({ testimonials }: { testimonials: Testim
               <span className="testimonialCardTierTag">{testimonial.tierTag}</span>
             </div>
 
-            <Link href={`/portfolio/${testimonial.clientSlug}`} className="testimonialCardLink">
+            <Link href={`/case-studies/${testimonial.clientSlug}`} className="testimonialCardLink">
               Read the case study
               <ArrowRight size={14} strokeWidth={1.75} aria-hidden="true" />
             </Link>

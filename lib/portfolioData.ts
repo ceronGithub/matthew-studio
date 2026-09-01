@@ -1,16 +1,23 @@
 /**
  * FILE: lib/portfolioData.ts
  * PURPOSE:
- * Static placeholder data for the Portfolio/Showcase section — the
- * grid at /portfolio and each case study at /portfolio/[slug] both
- * read from this single source. Client names match the wordmarks
- * already shown on the Home page (components/home/QuickWins.tsx).
+ * Static placeholder data for the Case Studies section — the grid at
+ * /case-studies and each case study at /case-studies/[slug] both read
+ * from this single source ("/portfolio" is retired, redirects here —
+ * improvement_1.md Section 3). Client names match the wordmarks
+ * previously shown on the Home page. Kept this file's name and the
+ * PortfolioProject/PORTFOLIO_PROJECTS identifiers as-is (rather than
+ * renaming to caseStudiesData.ts) to avoid a needless rename churn
+ * across every file that imports them — only the user-facing route
+ * changed. Each project now carries a `category` field so the page
+ * is ready to filter/tag by marketplace category once categories
+ * beyond Templates have case studies of their own.
  *
  * DATA FLOW:
  * No database yet — all entries are hardcoded placeholders pending
  * real client names, screenshots, and verified metrics. Once
  * Supabase is wired up for content management, this file is replaced
- * by a fetch from a `portfolioProjects` table (see overviewProject.txt
+ * by a fetch from a `caseStudies` table (see overviewProject.txt
  * superAdmin section) — the shape below should map directly to that
  * table's columns.
  */
@@ -22,6 +29,11 @@ export interface PortfolioResult {
 
 export interface PortfolioProject {
   slug: string;
+  /** Which marketplace category this case study belongs to. All 4
+   * projects today are Templates clients (genuinely, not a placeholder) —
+   * this field is ready for other categories once they get case studies. */
+  category: "templates" | "tshirts" | "ai-videos" | "file-tools" | "tutorials" | "game-characters";
+  categoryLabel: string;
   clientName: string;
   resortType: string;
   tagline: string;
@@ -35,6 +47,8 @@ export interface PortfolioProject {
 export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
   {
     slug: "cabana-bay-resort",
+    category: "templates",
+    categoryLabel: "Templates",
     clientName: "Cabana Bay Resort",
     resortType: "Beachfront family resort, 42 rooms",
     tagline: "Replaced phone-only booking with a live 24/7 engine.",
@@ -52,6 +66,8 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
   },
   {
     slug: "azure-point",
+    category: "templates",
+    categoryLabel: "Templates",
     clientName: "Azure Point",
     resortType: "Boutique clifftop villas, 18 rooms",
     tagline: "A self-hosted booking site that matched their brand exactly.",
@@ -69,6 +85,8 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
   },
   {
     slug: "marlin-cove",
+    category: "templates",
+    categoryLabel: "Templates",
     clientName: "Marlin Cove",
     resortType: "Dive resort & marina, 30 rooms",
     tagline: "Multi-room booking plus add-on dive package upsells.",
@@ -86,6 +104,8 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
   },
   {
     slug: "solstice-villas",
+    category: "templates",
+    categoryLabel: "Templates",
     clientName: "Solstice Villas",
     resortType: "Adults-only villa retreat, 24 rooms",
     tagline: "Launched fast on the managed tier ahead of peak season.",

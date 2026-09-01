@@ -60,6 +60,7 @@
 
 /* Decorative cover standing in for a real project screenshot */
 .portfolioCardCover {
+  position: relative;
   aspect-ratio: 16 / 10;
   border-radius: 10px;
   background: linear-gradient(135deg, var(--color-surface-hover), var(--color-surface-active));
@@ -67,6 +68,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Category tag (e.g. "Templates") — top-left corner of the cover, so
+   visitors can scan which marketplace category a case study belongs
+   to before reading the client name (improvement_1.md Section 3). */
+.portfolioCardCategoryBadge {
+  position: absolute;
+  top: var(--space-sm);
+  left: var(--space-sm);
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: var(--color-surface-active);
+  border: 1px solid var(--color-border-hover);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
 }
 
 .portfolioCardCoverLabel {
