@@ -383,6 +383,22 @@ th.comparisonTableTierHighlighted,
   transform: rotate(5deg);
 }
 
+/*
+ * NO-HOVER MODIFIER — File Tools' Feature Grid opts out (IMPROVEMENTS.md
+ * Section 4D: "No hover state needed (light content)"), while the
+ * Templates Benefits Grid keeps the default hover above (Section 4A).
+ * Overrides the :hover rules back to resting-state values instead of
+ * removing them, so the same .featureGridItem base styles still apply.
+ */
+.featureGridItemNoHover:hover {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+.featureGridItemNoHover:hover .featureGridIcon {
+  transform: none;
+}
+
 .featureGridTitle {
   font-size: 1rem;
   font-weight: 500;

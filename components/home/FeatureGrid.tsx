@@ -28,6 +28,12 @@ export interface FeatureGridItem {
 
 interface FeatureGridProps {
   items: FeatureGridItem[];
+  /** Set false to render without the card background-shift + icon-rotate
+   * hover effect — e.g. File Tools' Feature Grid (IMPROVEMENTS.md
+   * Section 4D: "No hover state needed (light content)"). Defaults to
+   * true, matching the Templates Benefits Grid's spec (Section 4A:
+   * "Hover: card background shifts, icon rotates 5deg"). */
+  enableHover?: boolean;
 }
 
 // Parent container drives the stagger timing; each card just fades + rises.
@@ -44,7 +50,7 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-export default function FeatureGrid({ items }: FeatureGridProps) {
+export default function FeatureGrid({ items, enableHover = true }: FeatureGridProps) {
   return (
     <motion.div
       className="featureGrid"
@@ -56,7 +62,11 @@ export default function FeatureGrid({ items }: FeatureGridProps) {
       {items.map((item) => {
         const Icon = item.icon;
         return (
-          <motion.div className="featureGridItem" key={item.title} variants={itemVariants}>
+          <motion.div
+            className={enableHover ? "featureGridItem" : "featureGridItem featureGridItemNoHover"}
+            key={item.title}
+            variants={itemVariants}
+          >
             <Icon size={32} strokeWidth={1.5} className="featureGridIcon" aria-hidden="true" />
             <h3 className="featureGridTitle">{item.title}</h3>
             <p className="featureGridDescription">{item.description}</p>

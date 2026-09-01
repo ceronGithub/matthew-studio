@@ -35,7 +35,7 @@ export default function FileToolsSection() {
           subtitle="Small utilities that save you the busywork between projects."
         />
 
-        <FeatureGrid items={FILE_TOOLS_FEATURES} />
+        <FeatureGrid items={FILE_TOOLS_FEATURES} enableHover={false} />
 
         <div className="productCardsGrid">
           {FILE_TOOLS_PRODUCTS.map((product) => (
