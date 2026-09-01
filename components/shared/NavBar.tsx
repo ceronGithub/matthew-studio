@@ -27,6 +27,8 @@ const NAV_LINKS = [
   { label: "Testimonials", href: "/#testimonials-section", anchorId: "testimonials-section" },
   { label: "Support", href: "/support", anchorId: null },
   { label: "How It Works", href: "/#how-it-works-section", anchorId: "how-it-works-section" },
+  // "Shop" is the marketplace catalog entry point today; once /products
+  // ships (see improvement_1.md) this should repoint there.
   { label: "Shop", href: "/shop", anchorId: null },
 ];
 
@@ -115,7 +117,7 @@ export default function NavBar() {
           </ul>
 
           <Link href="/shop" className="siteNavCta">
-            Get a Demo
+            Browse Marketplace
           </Link>
 
           {/* Mobile menu toggle — only visible below tablet breakpoint */}
@@ -146,7 +148,7 @@ export default function NavBar() {
             ))}
             <li>
               <Link href="/shop" className="siteNavCta siteNavCtaMobile" onClick={() => setIsMenuOpen(false)}>
-                Get a Demo
+                Browse Marketplace
               </Link>
             </li>
           </ul>

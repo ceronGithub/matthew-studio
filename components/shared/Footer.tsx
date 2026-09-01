@@ -14,7 +14,7 @@ const FOOTER_LINK_COLUMNS = [
     heading: "Product",
     links: [
       { label: "Portfolio", href: "/portfolio" },
-      { label: "Template Shop", href: "/shop" },
+      { label: "Shop", href: "/shop" },
       { label: "Features", href: "/features" },
       { label: "How It Works", href: "/how-it-works" },
     ],
@@ -38,8 +38,8 @@ export default function Footer() {
         <div className="siteFooterBrand">
           <p className="siteFooterLogo">Matthew Studio</p>
           <p className="siteFooterTagline">
-            Resort website templates with built-in booking, promos, and an admin dashboard —
-            live in 48 hours.
+            A digital marketplace for website templates, t-shirts, AI videos, file tools,
+            tutorials, and game characters — ready to use, built to launch fast.
           </p>
           <SocialLinks />
         </div>

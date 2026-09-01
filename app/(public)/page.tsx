@@ -3,11 +3,12 @@
  * ROLE: Public — Home/Landing page, served at "/".
  *
  * PURPOSE:
- * Introduces the resort booking template. Composed of two sections:
- * HeroSection (headline + CTAs) and QuickWins (client wordmarks +
- * result stats). Both sections are Client Components (framer-motion
- * entrance animation); this page itself stays a Server Component so
- * it can export static metadata for SEO.
+ * Introduces the Matthew Studio digital marketplace — Templates,
+ * T-Shirts, AI Videos, File Tools, Tutorials, and Game Characters —
+ * via HeroSection, QuickWins, CategoryShowcase, FeaturedProducts, and
+ * one dedicated section per category. Section components are Client
+ * Components (framer-motion entrance animation); this page itself
+ * stays a Server Component so it can export static metadata for SEO.
  *
  * DATA FLOW:
  * No data fetching — all copy is static placeholder content pending
@@ -31,13 +32,13 @@ import FAQAccordion from "@/components/home/FAQAccordion";
 import CTABanner from "@/components/home/CTABanner";
 
 export const metadata: Metadata = {
-  title: "Matthew Studio | Resort Booking Website Templates",
+  title: "Matthew Studio | Templates, T-Shirts, AI Videos & Digital Products",
   description:
-    "Production-ready resort website templates with multi-room booking, promos, and an admin dashboard — live in 48 hours.",
+    "A digital marketplace for website templates, custom t-shirts, AI-generated videos, file tools, tutorials, and game characters — ready to use, built to launch fast.",
   openGraph: {
-    title: "Matthew Studio | Resort Booking Website Templates",
+    title: "Matthew Studio | Templates, T-Shirts, AI Videos & Digital Products",
     description:
-      "Production-ready resort website templates with multi-room booking, promos, and an admin dashboard — live in 48 hours.",
+      "A digital marketplace for website templates, custom t-shirts, AI-generated videos, file tools, tutorials, and game characters — ready to use, built to launch fast.",
     images: ["/og-home.png"],
   },
 };
