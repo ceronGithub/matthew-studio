@@ -524,3 +524,42 @@ project is done.
   /#testimonials-section scroll-anchor links still resolve correctly
   since the id attributes live on the section elements themselves,
   order-independent. npx tsc --noEmit passes clean.
+========================================================
+[2026-09-02] Implemented improvement_1.md Section 5 build-order item 4
+  (first half): retired /shop, built marketplace-wide /pricing.
+  - New app/(public)/pricing/page.tsx: 6-category pricing overview
+    reusing lib/categoryShowcaseData.ts's CATEGORY_SHOWCASE (same
+    data already shown on the homepage's CategoryShowcase section, so
+    starting prices never contradict each other). Each card links to
+    its own category page. Closing note bridges to /features for
+    visitors who need the deeper Templates-only Managed/Self-Hosted/
+    Custom tier comparison (that 3-tier model stays there — it's
+    genuinely Templates-specific, not marketplace-wide, so it was not
+    duplicated onto /pricing). New app/styles/pricing.css added.
+  - app/(public)/shop/page.tsx replaced with a redirect("/pricing")
+    (old single-template Managed/Self-Hosted/Custom pricing page) so
+    old bookmarks/links funnel forward instead of 404ing.
+  - Fixed 8 stale "/shop" link references discovered during this pass
+    (pre-dated /products and the 6 category pages existing, so they
+    were pointing at the wrong destination even before /shop's
+    retirement): HeroSection.tsx "Browse All Products"/"See What's
+    New" → /products and /products?sort=newest; TemplatesSection.tsx
+    "Explore Templates" → /templates; CategoryShowcase.tsx's 6 card
+    links (was /shop?category=X, a query param /shop never actually
+    read) → /${slug} (their real category pages); features/page.tsx
+    and how-it-works/page.tsx "see pricing" CTAs → /pricing;
+    CaseStudyDetail.tsx "Browse Templates" → /templates;
+    HowItWorksSection.tsx (homepage) "View All Products" → /products;
+    Footer.tsx "Shop" link → "Pricing" pointing at /pricing, added a
+    "Products" link pointing at /products.
+  - lib/pricingData.ts (PRICING_TIERS) was NOT touched/removed — it's
+    still legitimately used by TemplatesSection.tsx's own Templates-
+    specific 3-tier comparison table on the homepage.
+  - components/shop/PricingGrid.tsx and app/styles/shop.css are now
+    orphaned (no longer imported anywhere) — flagged for cleanup, not
+    deleted automatically.
+  - improvement_1.md Section 3's "/shop" row and Section 4's "/pricing"
+    checkbox marked done.
+  - Portfolio → /case-studies rebrand (second half of build-order item
+    4) intentionally deferred to its own turn.
+  npx tsc --noEmit passes clean.

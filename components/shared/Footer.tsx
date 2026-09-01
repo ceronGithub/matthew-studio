@@ -13,8 +13,9 @@ const FOOTER_LINK_COLUMNS = [
   {
     heading: "Product",
     links: [
+      { label: "Products", href: "/products" },
+      { label: "Pricing", href: "/pricing" },
       { label: "Portfolio", href: "/portfolio" },
-      { label: "Shop", href: "/shop" },
       { label: "Features", href: "/features" },
       { label: "How It Works", href: "/how-it-works" },
     ],

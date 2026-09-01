@@ -9,9 +9,9 @@
  * scroll, staggered, and lift slightly with an accent border on hover.
  *
  * DATA FLOW:
- * Category routes (e.g. /tshirts, /ai-videos) don't exist yet — each
- * card links to /shop filtered by category so nothing 404s until the
- * dedicated category pages are built (Task 1.3).
+ * Each card links directly to its own category page (e.g. /tshirts,
+ * /ai-videos) — those 6 pages are already built (improvement_1.md
+ * Section 4), so cards no longer need to funnel through /shop.
  */
 "use client";
 
@@ -79,7 +79,7 @@ export default function CategoryShowcase() {
                   <p className="categoryCardDescription">{category.description}</p>
                 </div>
 
-                <Link href={`/shop?category=${category.slug}`} className="categoryCardLink">
+                <Link href={`/${category.slug}`} className="categoryCardLink">
                   Explore
                   <ArrowRight size={16} strokeWidth={1.75} className="categoryCardLinkIcon" aria-hidden="true" />
                 </Link>

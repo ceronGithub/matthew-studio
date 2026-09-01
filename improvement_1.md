@@ -53,7 +53,7 @@ marketplace:
 
 | Page            | Problem                                                                         | Direction                                                                                                                                     |
 | --------------- | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/shop`         | 3-tier pricing (Managed/Self-hosted/Custom) is resort-template-only             | Either rename to "Templates pricing" explicitly, or retire in favor of `/pricing` (marketplace-wide) once it exists                           |
+| ~~`/shop`~~     | ~~3-tier pricing (Managed/Self-hosted/Custom) is resort-template-only~~ **DONE** | Retired → redirects to new marketplace-wide `/pricing`. All site links repointed (see Section 4).                                             |
 | `/portfolio`    | Case studies are all resort clients                                             | Rebrand as `/case-studies` with category tags per `MARKETPLACE_IMPROVEMENTS.md` Section 3                                                     |
 | `/features`     | "Why choose this template" — tech stack framed around the resort booking system | Generalize, or split into a per-category version                                                                                              |
 | `/how-it-works` | Onboarding steps are per pricing tier of the resort template                    | Check against the universal 3-step (Browse/Choose/Start) already on the homepage; reconcile or clearly separate audiences                     |
@@ -70,8 +70,9 @@ marketplace:
 - [x] 6 category pages: `/templates`, `/tshirts`, `/ai-videos`,
       `/file-tools`, `/tutorials`, `/game-characters`
 - [ ] Product detail pages per category (`[slug]`, variant selectors)
-- [ ] `/pricing` — marketplace-wide pricing (distinct from `/shop`, which is
-      still the old single-template 3-tier page)
+- [x] `/pricing` — marketplace-wide pricing (distinct from `/shop`,
+      which now redirects here). Reuses categoryShowcaseData.ts so
+      figures match the homepage.
 - [ ] `/compare` — variant comparison tool
 - [ ] `/faq`, `/about`
 - [ ] `/security`, `/privacy`, `/terms`, `/refund-policy` — needed before any

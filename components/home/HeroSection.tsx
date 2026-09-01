@@ -85,11 +85,11 @@ export default function HeroSection() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.4, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
-            <Link href="/shop" className="buttonPrimary">
+            <Link href="/products" className="buttonPrimary">
               Browse All Products
               <ArrowRight size={18} strokeWidth={1.75} aria-hidden="true" />
             </Link>
-            <Link href="/shop?sort=newest" className="buttonSecondary">
+            <Link href="/products?sort=newest" className="buttonSecondary">
               <Sparkles size={18} strokeWidth={1.75} aria-hidden="true" />
               See What&apos;s New
             </Link>

@@ -135,8 +135,8 @@ export default function FeaturesPage() {
           <p className="featuresNoteText">
             Ready to see pricing for each tier?
           </p>
-          <Link href="/shop" className="buttonPrimary">
-            View Template Shop
+          <Link href="/pricing" className="buttonPrimary">
+            View Pricing
           </Link>
         </div>
       </section>

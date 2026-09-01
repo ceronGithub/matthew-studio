@@ -62,8 +62,8 @@ export default async function HowItWorksPage({
       <section className="howItWorksNoteSection">
         <div className="howItWorksNoteInner">
           <p className="howItWorksNoteText">Ready to see what each tier costs?</p>
-          <Link href="/shop" className="buttonPrimary">
-            View Template Shop
+          <Link href="/pricing" className="buttonPrimary">
+            View Pricing
           </Link>
         </div>
       </section>

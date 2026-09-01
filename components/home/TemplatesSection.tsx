@@ -90,7 +90,7 @@ export default function TemplatesSection() {
         </div>
 
         <div className="sectionCTA">
-          <a href="/shop" className="buttonPrimary">
+          <a href="/templates" className="buttonPrimary">
             Explore Templates
           </a>
         </div>

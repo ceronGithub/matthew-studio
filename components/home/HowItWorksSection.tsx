@@ -100,7 +100,7 @@ export default function HowItWorksSection() {
         </div>
 
         <div className="howItWorksHomeCtaRow">
-          <Link href="/shop" className="buttonSecondary">
+          <Link href="/products" className="buttonSecondary">
             View All Products
           </Link>
         </div>

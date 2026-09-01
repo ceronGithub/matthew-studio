@@ -1,0 +1,129 @@
+/*
+ * FILE: app/styles/pricing.css
+ * PURPOSE:
+ * Styles for the marketplace-wide Pricing page (/pricing) — the
+ * 6-category pricing card grid and the closing note section that
+ * links out to the deeper Template tier comparison on /features.
+ * Responsive breakpoints live in mediaQueries.css, not here (Rule 9).
+ */
+
+.pricingPageHeader {
+  padding: var(--space-2xl) var(--space-lg) var(--space-lg);
+}
+
+.pricingPageHeaderInner {
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-md);
+}
+
+/* Parent grid — six category pricing cards, responsive auto-fill */
+.categoryPricingSection {
+  padding: var(--space-xl) var(--space-lg) var(--space-2xl);
+}
+
+.categoryPricingGrid {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-lg);
+}
+
+/* Individual category pricing card — elevated, bordered per Rule 23.10 */
+.categoryPricingCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  transition: background-color var(--transition-base), border-color var(--transition-base), transform var(--transition-base);
+  will-change: transform;
+}
+
+.categoryPricingCard:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+  transform: translateY(-4px);
+}
+
+.categoryPricingIconWrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  background: var(--color-surface-active);
+  color: var(--color-accent);
+}
+
+.categoryPricingBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.categoryPricingName {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.categoryPricingPrice {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.categoryPricingDescription {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+.categoryPricingLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-top: auto;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  transition: color var(--transition-fast);
+}
+
+.categoryPricingLink:hover,
+.categoryPricingLink:focus-visible {
+  color: var(--color-accent);
+}
+
+/* Closing note — bridges to the deeper Template-only tier comparison */
+.pricingNoteSection {
+  padding: 0 var(--space-lg) var(--space-2xl);
+}
+
+.pricingNoteInner {
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-md);
+  padding: var(--space-xl) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: var(--color-surface);
+}
+
+.pricingNoteText {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+}

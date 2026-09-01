@@ -104,7 +104,7 @@ export default function CaseStudyDetail({ project }: { project: PortfolioProject
               <ExternalLink size={16} strokeWidth={1.75} aria-hidden="true" />
             </a>
           )}
-          <Link href="/shop" className="buttonPrimary">
+          <Link href="/templates" className="buttonPrimary">
             Browse Templates
             <ArrowRight size={18} strokeWidth={1.75} aria-hidden="true" />
           </Link>
