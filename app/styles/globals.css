@@ -112,3 +112,24 @@ select:focus-visible {
   border-color: var(--color-accent);
   box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
 }
+
+/*
+ * Reduced motion (Rule 17.5 / IMPROVEMENTS.md Section 7 + Section 13
+ * accessibility checklist). Collapses every CSS transition/animation
+ * to near-instant for users who have this OS-level preference set,
+ * without removing the transition property entirely (so nothing
+ * breaks — it just resolves in one frame instead of animating).
+ * Framer Motion components (whileInView, useScroll, etc.) read this
+ * same media query internally and short-circuit their own animations,
+ * so this rule alone covers both CSS and JS-driven motion site-wide.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

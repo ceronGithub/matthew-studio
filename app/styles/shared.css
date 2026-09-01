@@ -16,6 +16,33 @@
 }
 
 /* ------------------------------------------------------------
+ * SKIP-TO-CONTENT LINK
+ * Off-screen by default; snaps into view at the top-left corner on
+ * keyboard focus so keyboard/screen-reader users can bypass the nav
+ * links and jump straight to <main>. Sits above the sticky NavBar
+ * (--z-tooltip, the highest token) so it's never covered once focused.
+ * ------------------------------------------------------------ */
+.skipToContentLink {
+  position: absolute;
+  top: var(--space-md);
+  left: var(--space-md);
+  z-index: var(--z-tooltip);
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--color-accent);
+  color: var(--color-bg);
+  font-weight: 500;
+  border-radius: 6px;
+  transform: translateY(-150%);
+  transition: transform var(--transition-fast);
+}
+
+.skipToContentLink:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 3px;
+}
+
+/* ------------------------------------------------------------
  * SHARED PAGE-HEADER TYPOGRAPHY & BUTTONS
  * Used by every public page's header block (Home, Portfolio, Shop,
  * Features, 404 states, etc.) — lives here (not home.css) so it's
