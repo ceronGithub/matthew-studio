@@ -203,5 +203,16 @@
   }
 }
 
+/* ------------------------------------------------------------
+ * COMPARE PAGE — 3 picker/result slots sit side by side from
+ * tablet up (stacked, full-width on mobile).
+ * ------------------------------------------------------------ */
+@media (min-width: 768px) {
+  .compareSlotsGrid {
+    flex-direction: row;
+    align-items: stretch;
+  }
+}
+
 
 

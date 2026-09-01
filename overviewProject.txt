@@ -602,3 +602,23 @@ project is done.
     not rewritten here).
   - improvement_1.md Section 3's "/portfolio" row marked done.
   npx tsc --noEmit passes clean.
+
+[2026-09-02] Built /compare — marketplace-wide product comparison
+  tool (improvement_1.md Section 4, "/compare — variant comparison
+  tool"). New files: app/(public)/compare/page.tsx (Server Component
+  shell, reads PRODUCTS), components/compare/ProductCompareTool.tsx
+  (Client Component — 3 search-to-add slots, excludes already-picked
+  products, remove button per filled slot; renders a comparison table
+  once 2+ products are picked: category, rating, starting price,
+  badge, description, and a Variants row that only appears when at
+  least one selected product has variants, listing each Templates
+  variant's name and monthly price), app/styles/compare.css. Modified
+  app/styles/mediaQueries.css: added the tablet-up breakpoint that
+  puts the 3 slots in a row (stacked on mobile, per Rule 9 — no
+  breakpoints inside compare.css itself). Also confirmed while
+  reviewing improvement_1.md's Section 1 (homepage metadata), Section
+  2 (Footer), and Section 5 (/features, /how-it-works, /testimonials,
+  /contact copy) that all of those were already implemented in a
+  prior turn but never had their checkboxes/table rows updated in the
+  doc — no code changes were needed for those, only this /compare
+  build. npx tsc --noEmit passes clean.
