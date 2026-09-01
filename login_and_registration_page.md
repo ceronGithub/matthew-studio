@@ -33,10 +33,20 @@ This page enables new buyers to register an account and existing buyers to log i
 
 ## 3. LAYOUT & DESIGN
 
-- Full-viewport centered card layout (desktop) / full-width (mobile)
-- Card has subtle border, layered background (surface-active), rounded corners (12px)
-- Two tabs: "Sign In" (default) and "Create Account" — tab headers use accent green on active
-- Both tabs have smooth opacity fade between them (0.25s transition)
+**Design reference: Mockup 2 — Full-bleed background, glass card**
+
+- Full-viewport background layer sits behind everything — a rotating set of studio photos/videos, cross-fading into each other on an auto-sliding timer (4–5s per slide, 1.2–1.4s cross-fade). The background is continuous and does **not** change based on which tab (Sign In / Create Account) is active — it is ambient, not tab-linked.
+- Background layer stacking order (bottom → top):
+  1. `AuthBackgroundSlideshow` — full-bleed image/video slides, `object-fit: cover`, absolutely positioned, cross-fade via opacity transition
+  2. A subtle dark scrim (`linear-gradient` or flat `rgba(0,0,0,0.15–0.25)`) over the slideshow so the glass card and its text stay legible against any photo
+  3. The auth card, centered both axes (`display:flex; align-items:center; justify-content:center` on the page wrapper)
+- **Glass card:** ~300–340px wide, `background: rgba(255,255,255,0.12–0.16)`, `backdrop-filter: blur(6–8px)`, `border: 0.5px solid rgba(255,255,255,0.35–0.4)`, `border-radius: 12px`, padding `1.75rem 1.5rem`. This card sits on top of the moving background at all times — it is never opaque, so the slideshow stays visible through it.
+- Two tabs inside the glass card: "Sign In" (default) and "Create Account" — tab label text is white/near-white; active tab gets a `2px solid white` underline, inactive tab text drops to `rgba(255,255,255,0.6–0.7)`.
+- Switching tabs cross-fades the form fields only (0.25s opacity transition) — the background and glass card container never re-render or resize between tabs.
+- Inputs inside the glass card use a light/near-opaque field style (`rgba(255,255,255,0.85–0.9)` background) so they stay readable regardless of the photo behind them — never transparent inputs on this layout.
+- Primary action button (Sign In / Create Account) is solid white with dark text — reads clearly against every slide.
+- Mobile: same glass-card-over-slideshow composition, card width becomes `calc(100% - 2rem)` with the same padding/blur values; slideshow crop stays `object-fit: cover` so no letterboxing.
+- Respect `prefers-reduced-motion: reduce` — when set, freeze the slideshow on its first slide (no auto-advance, no cross-fade) instead of disabling the background entirely.
 
 ### 3.1 — Sign In Tab
 
@@ -200,15 +210,18 @@ This page enables new buyers to register an account and existing buyers to log i
 
 ## 6. COMPONENTS & FILES
 
-- `app/(auth)/layout.tsx` — auth route group layout (no nav/footer, centered card)
+- `app/(auth)/layout.tsx` — auth route group layout (no nav/footer, full-bleed background wrapper, centered glass card)
 - `app/(auth)/login/page.tsx` — main page component (tabs + form switching)
+- `components/auth/AuthBackgroundSlideshow.tsx` — full-bleed cross-fading background slideshow (images/video), owns its own slide timer and `prefers-reduced-motion` check, renders behind the glass card
 - `components/auth/SignInForm.tsx` — sign-in tab form, calls `/api/auth/login`
 - `components/auth/RegisterForm.tsx` — registration tab form, calls `/api/auth/register`
 - `components/auth/PasswordStrengthMeter.tsx` — visual password strength indicator
 - `app/api/auth/login/route.ts` — login endpoint
 - `app/api/auth/register/route.ts` — registration endpoint
 - `app/api/auth/check-email/route.ts` — email availability check (debounced from client)
-- `app/styles/auth.css` — sign-in/register card, tab, form, error/success states
+- `app/styles/auth.css` — glass card, tab, form, error/success states
+- `app/styles/authBackground.css` — slideshow layer, cross-fade, scrim, and reduced-motion styles
+- `public/videos/auth/` — background slideshow source images/video clips
 
 ## 7. ROUTING & REDIRECTS
 
