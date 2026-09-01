@@ -559,6 +559,104 @@ th.comparisonTableTierHighlighted,
   border-bottom: 1px solid var(--color-accent);
 }
 
+/*
+ * .siteNavDropdown
+ * Wraps the "Legal" trigger button + its panel so outside-click
+ * detection and absolute positioning have a single anchor.
+ */
+.siteNavDropdown {
+  position: relative;
+}
+
+/*
+ * .siteNavDropdownTrigger
+ * Button styled to match the plain nav links, plus a small chevron
+ * that rotates when the panel is open.
+ */
+.siteNavDropdownTrigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: none;
+  border: none;
+  border-bottom: 1px solid transparent;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.siteNavDropdownTrigger svg {
+  transition: transform var(--transition-fast);
+}
+
+.siteNavDropdownTriggerOpen svg {
+  transform: rotate(180deg);
+}
+
+/*
+ * .siteNavDropdownPanel
+ * Floating list of legal links beneath the trigger. Hidden by default
+ * via opacity + pointer-events (not display:none) so the open/close
+ * transition can animate instead of snapping.
+ */
+.siteNavDropdownPanel {
+  position: absolute;
+  top: calc(100% + var(--space-sm));
+  right: 0;
+  min-width: 190px;
+  list-style: none;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: var(--space-xs);
+  z-index: var(--z-dropdown);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.siteNavDropdownPanelOpen {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.siteNavDropdownPanel li + li {
+  margin-top: 2px;
+}
+
+.siteNavDropdownPanel a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-sm);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.siteNavDropdownPanel a:hover,
+.siteNavDropdownPanel a:focus-visible {
+  background: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+
+/*
+ * .siteNavMobileGroupLabel
+ * Small eyebrow-style heading inside the mobile slide-down panel,
+ * separating the Legal links from the primary nav links.
+ */
+.siteNavMobileGroupLabel {
+  padding: var(--space-sm) 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
 .siteNavCta {
   font-size: 0.875rem;
   font-weight: 600;
@@ -1280,6 +1378,3 @@ th.comparisonTableTierHighlighted,
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
-
-
-

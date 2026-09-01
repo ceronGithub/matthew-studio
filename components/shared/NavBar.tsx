@@ -11,8 +11,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ChevronDown, Menu, X } from "lucide-react";
 
 /**
  * NAV_LINKS
@@ -33,9 +33,38 @@ const NAV_LINKS = [
   { label: "Products", href: "/products", anchorId: null },
 ];
 
+// LEGAL_LINKS — previously footer-only; now also reachable from the
+// navbar (grouped under a "Legal" dropdown so 4 extra items don't
+// clutter the top-level link row).
+const LEGAL_LINKS = [
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Terms of Service", href: "/terms" },
+  { label: "Security", href: "/security" },
+  { label: "Refund Policy", href: "/refund-policy" },
+];
+
 export default function NavBar() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // Desktop "Legal" dropdown open/closed state.
+  const [isLegalMenuOpen, setIsLegalMenuOpen] = useState(false);
+  const legalMenuRef = useRef<HTMLLIElement>(null);
+
+  // Closes the Legal dropdown when a click lands outside it, and on
+  // route change — otherwise it would stay open after navigating.
+  useEffect(() => {
+    function handleOutsideClick(event: MouseEvent) {
+      if (legalMenuRef.current && !legalMenuRef.current.contains(event.target as Node)) {
+        setIsLegalMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, []);
+
+  useEffect(() => {
+    setIsLegalMenuOpen(false);
+  }, [pathname]);
   // Tracks which in-page section is currently in view, so the anchor
   // links can highlight as active while scrolling the homepage —
   // pathname alone never changes for hash links, so this fills the gap.
@@ -115,6 +144,39 @@ export default function NavBar() {
                 </li>
               );
             })}
+
+            {/* Legal dropdown — click-toggled, closes on outside click or route change */}
+            <li className="siteNavDropdown" ref={legalMenuRef}>
+              <button
+                type="button"
+                className={
+                  isLegalMenuOpen
+                    ? "siteNavLink siteNavDropdownTrigger siteNavDropdownTriggerOpen"
+                    : "siteNavLink siteNavDropdownTrigger"
+                }
+                aria-expanded={isLegalMenuOpen}
+                aria-haspopup="true"
+                onClick={() => setIsLegalMenuOpen((open) => !open)}
+              >
+                Legal
+                <ChevronDown size={14} strokeWidth={2} aria-hidden="true" />
+              </button>
+              <ul
+                className={
+                  isLegalMenuOpen
+                    ? "siteNavDropdownPanel siteNavDropdownPanelOpen"
+                    : "siteNavDropdownPanel"
+                }
+              >
+                {LEGAL_LINKS.map((link) => (
+                  <li key={link.href}>
+                    <Link href={link.href} onClick={() => setIsLegalMenuOpen(false)}>
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </li>
           </ul>
 
           <Link href="/products" className="siteNavCta">
@@ -147,6 +209,20 @@ export default function NavBar() {
                 </Link>
               </li>
             ))}
+
+            {/* Legal links, grouped under a small heading — mobile has no
+                hover/click dropdown, so they're listed flat instead. */}
+            <li className="siteNavMobileGroupLabel" aria-hidden="true">
+              Legal
+            </li>
+            {LEGAL_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} onClick={() => setIsMenuOpen(false)}>
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+
             <li>
               <Link href="/products" className="siteNavCta siteNavCtaMobile" onClick={() => setIsMenuOpen(false)}>
                 Browse Marketplace
