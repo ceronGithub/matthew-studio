@@ -93,6 +93,9 @@ export default function TemplatesSection() {
           <a href="/templates" className="buttonPrimary">
             Explore Templates
           </a>
+          <a href="/testimonials" className="buttonSecondary">
+            Read Testimonials
+          </a>
         </div>
       </div>
     </section>

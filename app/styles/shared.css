@@ -794,6 +794,9 @@ th.comparisonTableTierHighlighted,
 .sectionCTA {
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
   margin-top: var(--space-xl);
 }
 

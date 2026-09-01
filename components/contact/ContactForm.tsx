@@ -3,30 +3,39 @@
  * ROLE: Public — main form on the Contact page (/contact).
  *
  * PURPOSE:
- * Collects name, email, resort/business name, tier interest, and a
- * message, then POSTs to /api/contact. Pre-selects the tier dropdown
- * from a ?tier= query param so a visitor clicking "Get Started" on
- * /shop lands here with their tier already chosen. Shows inline
- * success/error feedback and disables the submit button while
- * sending to prevent double-submit.
+ * Collects name, email, business name, category, tier interest (when
+ * relevant), and a message, then POSTs to /api/contact. Pre-selects
+ * category from a ?category= query param and tier from ?tier= so a
+ * visitor clicking through from /templates or /pricing lands here
+ * with their choice already made. The tier field only applies to the
+ * Templates category (other categories don't have tiers yet, per
+ * improvement_1.md Section 3), so it only renders once Templates is
+ * selected. Shows inline success/error feedback and disables the
+ * submit button while sending to prevent double-submit.
  */
 "use client";
 
 import { useState, type FormEvent } from "react";
 import { useSearchParams } from "next/navigation";
 import { Loader2, CheckCircle2 } from "lucide-react";
-import { TIER_OPTIONS } from "@/lib/contactData";
+import { CATEGORY_OPTIONS, TIER_OPTIONS } from "@/lib/contactData";
 
 type SubmitState = "idle" | "submitting" | "success" | "error";
 
 export default function ContactForm() {
   const searchParams = useSearchParams();
   const tierFromQuery = searchParams.get("tier") ?? "";
+  // A ?tier= link always comes from a Templates CTA, so infer category
+  // "templates" in that case even without an explicit ?category= param.
+  const categoryFromQuery = searchParams.get("category") ?? (tierFromQuery ? "templates" : "");
 
   const [formValues, setFormValues] = useState({
     name: "",
     email: "",
-    resortName: "",
+    businessName: "",
+    category: CATEGORY_OPTIONS.some((option) => option.slug === categoryFromQuery)
+      ? categoryFromQuery
+      : "",
     tier: TIER_OPTIONS.some((option) => option.slug === tierFromQuery) ? tierFromQuery : "",
     message: "",
   });
@@ -65,7 +74,7 @@ export default function ContactForm() {
       }
 
       setSubmitState("success");
-      setFormValues({ name: "", email: "", resortName: "", tier: "", message: "" });
+      setFormValues({ name: "", email: "", businessName: "", category: "", tier: "", message: "" });
     } catch {
       setSubmitState("error");
       setErrorMessage("We couldn't reach the server. Check your connection and try again.");
@@ -115,16 +124,40 @@ export default function ContactForm() {
 
       <div className="contactFormRow">
         <label className="contactFormField">
-          <span>Resort / business name</span>
+          <span>Business / project name</span>
           <input
             type="text"
-            value={formValues.resortName}
-            onChange={(event) => updateField("resortName", event.target.value)}
+            value={formValues.businessName}
+            onChange={(event) => updateField("businessName", event.target.value)}
           />
         </label>
 
         <label className="contactFormField">
           <span>Interested in</span>
+          <select
+            value={formValues.category}
+            onChange={(event) => {
+              // Switching away from Templates clears any tier already
+              // picked — a tier only means something for that category.
+              updateField("category", event.target.value);
+              if (event.target.value !== "templates") updateField("tier", "");
+            }}
+          >
+            <option value="">Select a category</option>
+            {CATEGORY_OPTIONS.map((option) => (
+              <option key={option.slug} value={option.slug}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+
+      {/* Tier only applies to Templates — other categories don't have
+          tiers yet, so this field only appears once Templates is picked. */}
+      {formValues.category === "templates" && (
+        <label className="contactFormField">
+          <span>Templates tier</span>
           <select value={formValues.tier} onChange={(event) => updateField("tier", event.target.value)}>
             <option value="">Select a tier</option>
             {TIER_OPTIONS.map((option) => (
@@ -134,7 +167,7 @@ export default function ContactForm() {
             ))}
           </select>
         </label>
-      </div>
+      )}
 
       <label className="contactFormField">
         <span>

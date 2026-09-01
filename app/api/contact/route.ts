@@ -11,8 +11,9 @@
  * once one of those is configured for this project.
  *
  * DATA FLOW:
- * 1. ContactForm (Client Component) POSTs { name, email, resortName,
- *    tier, message } as JSON.
+ * 1. ContactForm (Client Component) POSTs { name, email, businessName,
+ *    category, tier, message } as JSON. `tier` is Templates-only and
+ *    may be empty for every other category.
  * 2. This handler validates required fields and email format.
  * 3. On success, logs the submission (audit trail placeholder) and
  *    returns { success: true }.
@@ -28,7 +29,8 @@ export async function POST(request: Request) {
     const body = await request.json();
     const name = typeof body?.name === "string" ? body.name.trim() : "";
     const email = typeof body?.email === "string" ? body.email.trim() : "";
-    const resortName = typeof body?.resortName === "string" ? body.resortName.trim() : "";
+    const businessName = typeof body?.businessName === "string" ? body.businessName.trim() : "";
+    const category = typeof body?.category === "string" ? body.category.trim() : "";
     const tier = typeof body?.tier === "string" ? body.tier.trim() : "";
     const message = typeof body?.message === "string" ? body.message.trim() : "";
 
@@ -51,7 +53,7 @@ export async function POST(request: Request) {
     // Supabase `contactSubmissions` table once one is set up for this
     // project (see Rule 35 in the dev protocol). For now, log server-side
     // so submissions are visible during development.
-    console.log("[contact] New submission:", { name, email, resortName, tier });
+    console.log("[contact] New submission:", { name, email, businessName, category, tier });
 
     return NextResponse.json({
       success: true,

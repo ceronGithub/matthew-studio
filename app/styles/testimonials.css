@@ -20,6 +20,23 @@
   gap: var(--space-md);
 }
 
+/*
+ * .testimonialsScopeNote
+ * Small disclosure under the hero subtitle clarifying these quotes are
+ * Templates-only, with a link to the marketplace-wide quotes carousel
+ * on the homepage for every other category.
+ */
+.testimonialsScopeNote {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.testimonialsScopeNote a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .testimonialGridSection {
   padding: var(--space-xl) var(--space-lg) var(--space-2xl);
 }
