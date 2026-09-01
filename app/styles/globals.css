@@ -10,38 +10,40 @@
 @import "tailwindcss";
 
 :root {
-  /* Base background/foreground — kept for Tailwind @theme mapping below */
-  --background: #09090b;
-  --foreground: #f4f4f5;
+  /* Base background/foreground — kept for Tailwind @theme mapping below.
+   * Editorial rebrand (Mockup 1, approved full-site): warm paper instead
+   * of near-black, forest green replaces acid green as the sole accent. */
+  --background: #f6f3ec;
+  --foreground: #1b1b18;
 
-  /* Background layers — layered translucency, darkest to lightest */
-  --color-bg: #09090b;
-  --color-surface: rgba(255, 255, 255, 0.03);
-  --color-surface-hover: rgba(255, 255, 255, 0.06);
-  --color-surface-active: rgba(255, 255, 255, 0.10);
+  /* Background layers — layered ink-tinted translucency, paper to raised */
+  --color-bg: #f6f3ec;
+  --color-surface: rgba(27, 27, 24, 0.035);
+  --color-surface-hover: rgba(27, 27, 24, 0.07);
+  --color-surface-active: rgba(27, 27, 24, 0.11);
 
   /* Borders — always subtle */
-  --color-border: rgba(255, 255, 255, 0.08);
-  --color-border-hover: rgba(255, 255, 255, 0.16);
+  --color-border: rgba(27, 27, 24, 0.12);
+  --color-border-hover: rgba(27, 27, 24, 0.22);
 
   /* Text */
-  --color-text-primary: #f4f4f5;
-  --color-text-secondary: rgba(255, 255, 255, 0.55);
-  --color-text-muted: rgba(255, 255, 255, 0.35);
+  --color-text-primary: #1b1b18;
+  --color-text-secondary: rgba(27, 27, 24, 0.6);
+  --color-text-muted: rgba(27, 27, 24, 0.38);
 
   /* Accent — used only on CTAs, active states, highlights */
-  --color-accent: #22c55e;
-  --color-accent-hover: #16a34a;
+  --color-accent: #274b3c;
+  --color-accent-hover: #1c3a2d;
 
-  /* Status colors */
-  --color-success: #22c55e;
-  --color-warning: #f59e0b;
-  --color-error: #ef4444;
-  --color-info: #3b82f6;
+  /* Status colors — kept distinct from the accent on purpose */
+  --color-success: #2f7d4f;
+  --color-warning: #b6791f;
+  --color-error: #b3402f;
+  --color-info: #2b4cff;
 
   /* Skeleton loader */
-  --color-skeleton-base: rgba(255, 255, 255, 0.06);
-  --color-skeleton-shine: rgba(255, 255, 255, 0.12);
+  --color-skeleton-base: rgba(27, 27, 24, 0.06);
+  --color-skeleton-shine: rgba(27, 27, 24, 0.12);
 
   /* Spacing scale */
   --space-xs: 0.25rem;
@@ -77,6 +79,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-display);
 }
 
 * {

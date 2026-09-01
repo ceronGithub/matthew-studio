@@ -49,17 +49,19 @@
  * guaranteed to load on every public route, not just "/".
  * ------------------------------------------------------------ */
 .eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-accent);
 }
 
 .heroTitle {
+  font-family: var(--font-display);
   font-size: 2.75rem;
-  font-weight: 600;
-  line-height: 1.1;
+  font-weight: 500;
+  line-height: 1.05;
   letter-spacing: -0.02em;
   color: var(--color-text-primary);
   word-break: break-word;
@@ -81,9 +83,9 @@
   gap: var(--space-sm);
   min-height: 44px;
   padding: var(--space-sm) var(--space-lg);
-  border-radius: 999px;
+  border-radius: 2px;
   font-size: 0.9375rem;
-  font-weight: 600;
+  font-weight: 500;
   text-decoration: none;
   touch-action: manipulation;
   transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
@@ -91,7 +93,7 @@
 
 .buttonPrimary {
   background: var(--color-accent);
-  color: var(--background);
+  color: var(--color-bg);
   border: 1px solid var(--color-accent);
 }
 
@@ -119,8 +121,9 @@
  * just one page's own CSS file.
  * ------------------------------------------------------------ */
 .sectionTitle {
-  font-size: 1.75rem;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 500;
   letter-spacing: -0.01em;
   color: var(--color-text-primary);
   word-break: break-word;
