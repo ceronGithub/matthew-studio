@@ -2,9 +2,12 @@
  * FILE: lib/howItWorksData.ts
  * PURPOSE:
  * Static placeholder onboarding-flow content for the "How It Works"
- * page (/how-it-works). One ordered step list per pricing tier, keyed
- * by the same `slug` values used in lib/pricingData.ts so the tab
- * labels and CTA links stay consistent across /shop and /how-it-works.
+ * page (/how-it-works). Scoped to the Templates category only — one
+ * ordered step list per Templates pricing tier, keyed by the same
+ * `slug` values used in lib/pricingData.ts so the tab labels and CTA
+ * links stay consistent with /templates. The marketplace-wide flow
+ * (Browse → Choose → Start, covering every category) lives separately
+ * on the homepage — see lib/howItWorksHomeData.ts.
  *
  * DATA FLOW:
  * No database yet — static content, same pattern as pricingData.ts,
@@ -38,7 +41,7 @@ export const ONBOARDING_FLOWS: OnboardingFlow[] = [
       },
       {
         title: "Customize branding",
-        description: "Upload your logo, set your colors, and add your rooms through the super-admin dashboard.",
+        description: "Upload your logo, set your colors, and add your bookable inventory through the super-admin dashboard.",
         duration: "Day 1, afternoon",
       },
       {
@@ -74,8 +77,8 @@ export const ONBOARDING_FLOWS: OnboardingFlow[] = [
         duration: "Day 3",
       },
       {
-        title: "Customize branding & rooms",
-        description: "Apply your color palette and typography, then add your room inventory.",
+        title: "Customize branding & inventory",
+        description: "Apply your color palette and typography, then add what you're taking bookings or orders for.",
         duration: "Days 4–5",
       },
       {
@@ -92,7 +95,7 @@ export const ONBOARDING_FLOWS: OnboardingFlow[] = [
     steps: [
       {
         title: "Discovery call",
-        description: "We walk through your resort's workflow and identify what the template doesn't cover yet.",
+        description: "We walk through your business's booking workflow and identify what the template doesn't cover yet.",
         duration: "Week 1",
       },
       {

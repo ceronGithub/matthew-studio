@@ -20,6 +20,23 @@
   gap: var(--space-md);
 }
 
+/*
+ * .howItWorksScopeNote
+ * Small disclosure under the hero subtitle clarifying this timeline is
+ * Templates-only, with a link to the marketplace-wide 3-step flow on
+ * the homepage for every other category.
+ */
+.howItWorksScopeNote {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.howItWorksScopeNote a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 /* ------------------------------------------------------------
  * TAB LIST
  * ------------------------------------------------------------ */
