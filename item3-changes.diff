@@ -1,0 +1,269 @@
+diff --git a/app/(public)/ai-videos/page.tsx b/app/(public)/ai-videos/page.tsx
+new file mode 100644
+index 0000000..9dd978e
+--- /dev/null
++++ b/app/(public)/ai-videos/page.tsx
+@@ -0,0 +1,36 @@
++/**
++ * FILE: app/(public)/ai-videos/page.tsx
++ * ROLE: Public — AI Videos category page, served at "/ai-videos".
++ *
++ * PURPOSE:
++ * Standalone page for the AI Videos category, per improvement_1.md
++ * Section 4's missing-pages list. Renders the existing
++ * AIVideosSection component (sample video carousel, custom-order
++ * callout, product cards, CTA) as the full page body — see
++ * /templates/page.tsx for why reusing the existing section (vs.
++ * rebuilding it) is the right call here.
++ *
++ * DATA FLOW:
++ * No data fetching in this file — AIVideosSection reads PRODUCTS and
++ * aiVideosSectionData.ts itself. Every class it uses lives in
++ * app/styles/shared.css, already loaded globally by
++ * app/(public)/layout.tsx — no extra CSS import needed here.
++ */
++import type { Metadata } from "next";
++import AIVideosSection from "@/components/home/AIVideosSection";
++
++export const metadata: Metadata = {
++  title: "AI Videos | Matthew Studio",
++  description:
++    "Ready-made AI video packs for product teasers, explainers, and social shorts — or a custom video built around your brief.",
++  openGraph: {
++    title: "AI Videos | Matthew Studio",
++    description:
++      "Ready-made AI video packs for product teasers, explainers, and social shorts — or a custom video built around your brief.",
++    images: ["/og-home.png"],
++  },
++};
++
++export default function AIVideosPage() {
++  return <AIVideosSection />;
++}
+diff --git a/app/(public)/file-tools/page.tsx b/app/(public)/file-tools/page.tsx
+new file mode 100644
+index 0000000..eb1eb0b
+--- /dev/null
++++ b/app/(public)/file-tools/page.tsx
+@@ -0,0 +1,35 @@
++/**
++ * FILE: app/(public)/file-tools/page.tsx
++ * ROLE: Public — File Tools category page, served at "/file-tools".
++ *
++ * PURPOSE:
++ * Standalone page for the File Tools category, per improvement_1.md
++ * Section 4's missing-pages list. Renders the existing
++ * FileToolsSection component (feature grid, product cards, CTA) as
++ * the full page body — see /templates/page.tsx for why reusing the
++ * existing section (vs. rebuilding it) is the right call here.
++ *
++ * DATA FLOW:
++ * No data fetching in this file — FileToolsSection reads PRODUCTS and
++ * fileToolsSectionData.ts itself. Every class it uses lives in
++ * app/styles/shared.css, already loaded globally by
++ * app/(public)/layout.tsx — no extra CSS import needed here.
++ */
++import type { Metadata } from "next";
++import FileToolsSection from "@/components/home/FileToolsSection";
++
++export const metadata: Metadata = {
++  title: "File Tools | Matthew Studio",
++  description:
++    "Small productivity tools that save you the busywork between projects — batch file conversion, PDF compression, background removal, and more.",
++  openGraph: {
++    title: "File Tools | Matthew Studio",
++    description:
++      "Small productivity tools that save you the busywork between projects — batch file conversion, PDF compression, background removal, and more.",
++    images: ["/og-home.png"],
++  },
++};
++
++export default function FileToolsPage() {
++  return <FileToolsSection />;
++}
+diff --git a/app/(public)/game-characters/page.tsx b/app/(public)/game-characters/page.tsx
+new file mode 100644
+index 0000000..bb7faed
+--- /dev/null
++++ b/app/(public)/game-characters/page.tsx
+@@ -0,0 +1,37 @@
++/**
++ * FILE: app/(public)/game-characters/page.tsx
++ * ROLE: Public — Game Characters category page, served at
++ * "/game-characters".
++ *
++ * PURPOSE:
++ * Standalone page for the Game Characters category, per
++ * improvement_1.md Section 4's missing-pages list. Renders the
++ * existing GameCharactersSection component (thumbnail gallery with
++ * lightbox, product cards, CTA) as the full page body — see
++ * /templates/page.tsx for why reusing the existing section (vs.
++ * rebuilding it) is the right call here.
++ *
++ * DATA FLOW:
++ * No data fetching in this file — GameCharactersSection reads
++ * PRODUCTS and gameCharactersSectionData.ts itself. Every class it
++ * uses lives in app/styles/shared.css, already loaded globally by
++ * app/(public)/layout.tsx — no extra CSS import needed here.
++ */
++import type { Metadata } from "next";
++import GameCharactersSection from "@/components/home/GameCharactersSection";
++
++export const metadata: Metadata = {
++  title: "Game Characters | Matthew Studio",
++  description:
++    "3D-ready game characters — rigged, modular, and low-poly sets that export straight into your engine.",
++  openGraph: {
++    title: "Game Characters | Matthew Studio",
++    description:
++      "3D-ready game characters — rigged, modular, and low-poly sets that export straight into your engine.",
++    images: ["/og-home.png"],
++  },
++};
++
++export default function GameCharactersPage() {
++  return <GameCharactersSection />;
++}
+diff --git a/app/(public)/templates/page.tsx b/app/(public)/templates/page.tsx
+new file mode 100644
+index 0000000..b150304
+--- /dev/null
++++ b/app/(public)/templates/page.tsx
+@@ -0,0 +1,40 @@
++/**
++ * FILE: app/(public)/templates/page.tsx
++ * ROLE: Public — Templates category page, served at "/templates".
++ *
++ * PURPOSE:
++ * Standalone page for the Templates category, per improvement_1.md
++ * Section 4's missing-pages list. Renders the existing
++ * TemplatesSection component (comparison table, benefits, "why us",
++ * demo video, product cards, CTA) as the full page body — that
++ * section is already a complete, self-contained pitch for this
++ * category, built for the homepage but equally valid standalone.
++ * Reusing it here (rather than rebuilding the same content) keeps
++ * the homepage and this page from drifting out of sync.
++ *
++ * DATA FLOW:
++ * No data fetching in this file — TemplatesSection reads
++ * PRICING_TIERS, PRODUCTS, and templatesSectionData.ts itself. Every
++ * class TemplatesSection uses (categorySection, sectionContainer,
++ * comparisonTable, whyUsGrid, productCardsGrid, etc.) lives in
++ * app/styles/shared.css, already loaded globally by
++ * app/(public)/layout.tsx — no extra CSS import needed here.
++ */
++import type { Metadata } from "next";
++import TemplatesSection from "@/components/home/TemplatesSection";
++
++export const metadata: Metadata = {
++  title: "Templates | Matthew Studio",
++  description:
++    "Production-ready booking website templates, three ways to own one: managed, self-hosted, or custom-built. Every template ships with a real booking engine.",
++  openGraph: {
++    title: "Templates | Matthew Studio",
++    description:
++      "Production-ready booking website templates, three ways to own one: managed, self-hosted, or custom-built. Every template ships with a real booking engine.",
++    images: ["/og-home.png"],
++  },
++};
++
++export default function TemplatesPage() {
++  return <TemplatesSection />;
++}
+diff --git a/app/(public)/tshirts/page.tsx b/app/(public)/tshirts/page.tsx
+new file mode 100644
+index 0000000..7b2c7f2
+--- /dev/null
++++ b/app/(public)/tshirts/page.tsx
+@@ -0,0 +1,36 @@
++/**
++ * FILE: app/(public)/tshirts/page.tsx
++ * ROLE: Public — T-Shirts category page, served at "/tshirts".
++ *
++ * PURPOSE:
++ * Standalone page for the T-Shirts category, per improvement_1.md
++ * Section 4's missing-pages list. Renders the existing
++ * TShirtsSection component (design gallery carousel, story callout,
++ * product cards, CTA) as the full page body — see /templates/page.tsx
++ * for why reusing the existing section (vs. rebuilding it) is the
++ * right call here.
++ *
++ * DATA FLOW:
++ * No data fetching in this file — TShirtsSection reads PRODUCTS and
++ * tshirtsSectionData.ts itself. Every class it uses lives in
++ * app/styles/shared.css, already loaded globally by
++ * app/(public)/layout.tsx — no extra CSS import needed here.
++ */
++import type { Metadata } from "next";
++import TShirtsSection from "@/components/home/TShirtsSection";
++
++export const metadata: Metadata = {
++  title: "T-Shirts | Matthew Studio",
++  description:
++    "Limited-run t-shirt designs made for creators. Heavyweight cotton, screen-printed drops — browse the current designs.",
++  openGraph: {
++    title: "T-Shirts | Matthew Studio",
++    description:
++      "Limited-run t-shirt designs made for creators. Heavyweight cotton, screen-printed drops — browse the current designs.",
++    images: ["/og-home.png"],
++  },
++};
++
++export default function TShirtsPage() {
++  return <TShirtsSection />;
++}
+diff --git a/app/(public)/tutorials/page.tsx b/app/(public)/tutorials/page.tsx
+new file mode 100644
+index 0000000..d63882c
+--- /dev/null
++++ b/app/(public)/tutorials/page.tsx
+@@ -0,0 +1,36 @@
++/**
++ * FILE: app/(public)/tutorials/page.tsx
++ * ROLE: Public — Tutorials category page, served at "/tutorials".
++ *
++ * PURPOSE:
++ * Standalone page for the Tutorials category, per improvement_1.md
++ * Section 4's missing-pages list. Renders the existing
++ * TutorialsSection component ("who's this for?" persona callout,
++ * product cards grouped by level, CTA) as the full page body — see
++ * /templates/page.tsx for why reusing the existing section (vs.
++ * rebuilding it) is the right call here.
++ *
++ * DATA FLOW:
++ * No data fetching in this file — TutorialsSection reads PRODUCTS and
++ * tutorialsSectionData.ts itself. Every class it uses lives in
++ * app/styles/shared.css, already loaded globally by
++ * app/(public)/layout.tsx — no extra CSS import needed here.
++ */
++import type { Metadata } from "next";
++import TutorialsSection from "@/components/home/TutorialsSection";
++
++export const metadata: Metadata = {
++  title: "Tutorials | Matthew Studio",
++  description:
++    "Learn from real projects, grouped by level — from Next.js fundamentals to Figma-to-code workflows and database crash courses.",
++  openGraph: {
++    title: "Tutorials | Matthew Studio",
++    description:
++      "Learn from real projects, grouped by level — from Next.js fundamentals to Figma-to-code workflows and database crash courses.",
++    images: ["/og-home.png"],
++  },
++};
++
++export default function TutorialsPage() {
++  return <TutorialsSection />;
++}
+diff --git a/improvement_1.md b/improvement_1.md
+index 6328a97..11b2aa9 100644
+--- a/improvement_1.md
++++ b/improvement_1.md
+@@ -58,7 +58,7 @@ marketplace:
+ - [x] `/products` — master grid (filter/sort/search), pulls from
+       `lib/productsData.ts` (already has 21 products across all 6 categories
+       — currently unused except in the homepage carousel)
+-- [ ] 6 category pages: `/templates`, `/tshirts`, `/ai-videos`,
++- [x] 6 category pages: `/templates`, `/tshirts`, `/ai-videos`,
+       `/file-tools`, `/tutorials`, `/game-characters`
+ - [ ] Product detail pages per category (`[slug]`, variant selectors)
+ - [ ] `/pricing` — marketplace-wide pricing (distinct from `/shop`, which is
