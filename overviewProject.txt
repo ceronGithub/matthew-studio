@@ -622,3 +622,22 @@ project is done.
   prior turn but never had their checkboxes/table rows updated in the
   doc — no code changes were needed for those, only this /compare
   build. npx tsc --noEmit passes clean.
+
+[2026-09-02] Closed out improvement_1.md Section 4's last two missing
+  pages. app/(public)/faq/page.tsx: new redirect-only route to
+  /support, same pattern as app/(public)/shop/page.tsx -> /pricing -
+  /support already ships a searchable, category-grouped FAQ
+  (SupportFaqAccordion) and NavBar already links "Support" there, so
+  a second standalone /faq page would have forked the same content in
+  two places instead of adding real value. app/(public)/about/page.tsx
+  (new): mission intro, a category grid reusing CATEGORY_SHOWCASE
+  (lib/categoryShowcaseData.ts - same source of truth as the
+  homepage, so it can't drift), and 3 value-pillar cards from the new
+  lib/aboutData.ts (static placeholder content - no real founder/team
+  bios exist in the codebase yet, so this deliberately stays generic
+  rather than inventing names or a founding story). New
+  app/styles/about.css. Added "About" to Footer's Company column
+  (components/shared/Footer.tsx) so the new page isn't an orphan with
+  no inbound link. improvement_1.md Section 4 is now fully checked
+  off - every page in that list exists. npx tsc --noEmit and eslint
+  both pass clean on all new/modified files.

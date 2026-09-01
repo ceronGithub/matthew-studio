@@ -1,0 +1,128 @@
+/*
+ * FILE: app/styles/about.css
+ * PURPOSE:
+ * Styles for the /about page — category grid and value pillars.
+ * Responsive breakpoints live in mediaQueries.css, not here (Rule 9).
+ */
+
+.aboutPageHeader {
+  padding: var(--space-2xl) var(--space-lg) var(--space-lg);
+}
+
+.aboutPageHeaderInner {
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-md);
+}
+
+.aboutSection {
+  padding: var(--space-2xl) var(--space-lg);
+}
+
+.aboutSectionAlt {
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.aboutSectionInner {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* ------------------------------------------------------------
+ * CATEGORY GRID
+ * ------------------------------------------------------------ */
+.aboutCategoryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-lg);
+}
+
+.aboutCategoryCard {
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  transition: border-color var(--transition-fast, 0.15s ease), background-color var(--transition-fast, 0.15s ease);
+}
+
+.aboutCategoryCard:hover {
+  border-color: var(--color-border-hover);
+  background: var(--color-surface-hover);
+}
+
+.aboutCategoryCardIcon {
+  color: var(--color-accent);
+}
+
+.aboutCategoryCardTitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.aboutCategoryCardDescription {
+  color: var(--color-text-secondary);
+  line-height: 1.65;
+}
+
+/* ------------------------------------------------------------
+ * VALUES GRID
+ * ------------------------------------------------------------ */
+.aboutValuesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-lg);
+}
+
+.aboutValueCard {
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.aboutValueCardTitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.aboutValueCardDescription {
+  color: var(--color-text-secondary);
+  line-height: 1.65;
+}
+
+/* ------------------------------------------------------------
+ * CLOSING CTA NOTE
+ * ------------------------------------------------------------ */
+.aboutNoteSection {
+  padding: var(--space-2xl) var(--space-lg);
+  text-align: center;
+}
+
+.aboutNoteInner {
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.aboutNoteText {
+  font-size: 1.1rem;
+  color: var(--color-text-primary);
+}

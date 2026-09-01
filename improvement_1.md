@@ -72,7 +72,11 @@ marketplace:
       search-to-add slots (any category), comparison table with
       category/rating/price/badge/description, plus a Variants row for
       Templates products that have variant breakdowns.
-- [ ] `/faq`, `/about`
+- [x] `/faq` — redirects to `/support`, which already has a searchable,
+      category-grouped FAQ accordion; no separate page needed, keeps
+      one FAQ source of truth instead of two.
+- [x] `/about` — mission intro, category grid (reuses CATEGORY_SHOWCASE),
+      3 value pillars, linked from Footer's Company column.
 - [ ] `/security`, `/privacy`, `/terms`, `/refund-policy` — needed before any
       real checkout/payment flow goes live
 

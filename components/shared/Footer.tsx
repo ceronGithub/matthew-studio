@@ -37,6 +37,7 @@ const FOOTER_LINK_COLUMNS = [
   {
     heading: "Company",
     links: [
+      { label: "About", href: "/about" },
       { label: "Testimonials", href: "/testimonials" },
       { label: "Blog", href: "/blog" },
       { label: "Contact", href: "/contact" },
