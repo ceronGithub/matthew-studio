@@ -33,6 +33,12 @@ const LOOP_TESTIMONIALS = [...HOME_TESTIMONIALS, ...HOME_TESTIMONIALS];
 // Roughly one card-width per arrow click (card + gap, see home.css).
 const ARROW_SCROLL_DISTANCE = 340;
 
+// testimonialHomeCard flex-basis (340px) + .testimonialsHomeTrack gap
+// (--space-lg, 24px) — the pixel distance between one card's left edge
+// and the next. Used to translate scrollLeft into a testimonial index
+// for the dot indicators, and to scroll to a specific dot on click.
+const ITEM_PITCH = 364;
+
 function TestimonialCard({ testimonial }: { testimonial: HomeTestimonial }) {
   return (
     <article className="testimonialHomeCard">
@@ -126,6 +132,48 @@ export default function TestimonialsSection() {
     setSrStatus(direction === 1 ? "Showing next testimonials." : "Showing previous testimonials.");
   }
 
+  // Dot indicators (spec 3.12: "Navigation arrows + dot indicators").
+  // activeIndex tracks whichever original testimonial currently sits at
+  // the track's leading edge, derived straight from scrollLeft — so it
+  // stays correct whether the movement came from the auto-scroll loop,
+  // an arrow click, a dot click, or manual touch/trackpad scrolling.
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (!isDesktop) return;
+    const track = trackRef.current;
+    if (!track) return;
+
+    let frameId: number | null = null;
+    const updateActiveIndex = () => {
+      frameId = null;
+      const halfWidth = track.scrollWidth / 2;
+      if (!halfWidth) return;
+      // Normalize into [0, halfWidth) first — scrollLeft can briefly sit
+      // just outside that range for a frame right as the loop wraps.
+      const positionInSet = ((track.scrollLeft % halfWidth) + halfWidth) % halfWidth;
+      const nextIndex = Math.round(positionInSet / ITEM_PITCH) % HOME_TESTIMONIALS.length;
+      setActiveIndex(nextIndex);
+    };
+
+    const handleScroll = () => {
+      if (frameId !== null) return;
+      frameId = requestAnimationFrame(updateActiveIndex);
+    };
+
+    track.addEventListener("scroll", handleScroll, { passive: true });
+    updateActiveIndex();
+    return () => {
+      track.removeEventListener("scroll", handleScroll);
+      if (frameId !== null) cancelAnimationFrame(frameId);
+    };
+  }, [isDesktop]);
+
+  function scrollToIndex(index: number) {
+    trackRef.current?.scrollTo({ left: index * ITEM_PITCH, behavior: "smooth" });
+    setSrStatus(`Showing testimonial ${index + 1} of ${HOME_TESTIMONIALS.length}.`);
+  }
+
   return (
     <section id="testimonials-section" className="testimonialsHomeSection">
       <motion.div
@@ -176,6 +224,22 @@ export default function TestimonialsSection() {
               >
                 <ChevronRight size={20} strokeWidth={2} aria-hidden="true" />
               </button>
+
+              <div className="testimonialsHomeDots" role="tablist" aria-label="Testimonial slides">
+                {HOME_TESTIMONIALS.map((testimonial, index) => (
+                  <button
+                    key={testimonial.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={index === activeIndex}
+                    aria-label={`Show testimonial from ${testimonial.authorName}`}
+                    className={`testimonialsHomeDot${
+                      index === activeIndex ? " testimonialsHomeDotActive" : ""
+                    }`}
+                    onClick={() => scrollToIndex(index)}
+                  />
+                ))}
+              </div>
             </>
           ) : (
             <div className="testimonialsHomeStack">

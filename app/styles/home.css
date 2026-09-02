@@ -1176,6 +1176,41 @@
 }
 
 /*
+ * .testimonialsHomeDots
+ * Row of dot indicators below the carousel (spec 3.12). The active dot
+ * pill-stretches and switches to the accent color; inactive dots stay
+ * small and muted. activeIndex is derived from scrollLeft in the
+ * component, so these stay in sync with auto-scroll, arrows, and drag.
+ */
+.testimonialsHomeDots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.testimonialsHomeDot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border-radius: 999px;
+  background: var(--color-border);
+  transition: background-color var(--transition-fast), width var(--transition-fast);
+}
+
+.testimonialsHomeDot:hover,
+.testimonialsHomeDot:focus-visible {
+  background: var(--color-surface-active);
+}
+
+.testimonialsHomeDotActive,
+.testimonialsHomeDotActive:hover {
+  width: 22px;
+  background: var(--color-accent);
+}
+
+/*
  * FAQ (homepage "Frequently Asked Questions" accordion)
  * .faqHomeSection
  * Single narrow centered column (spec: 800px max-width) — distinct
