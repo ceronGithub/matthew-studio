@@ -217,13 +217,21 @@
   border-radius: var(--radius, 12px);
   background: var(--color-surface);
   overflow: hidden;
-  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  transition: transform var(--transition-base), border-color var(--transition-base),
+    background-color var(--transition-base);
+  will-change: transform;
 }
 
+/* Rule 17.7: shadows are reserved for floating elements (modals,
+   tooltips) — card depth here comes from a translateY lift + border
+   and background brighten instead of a box-shadow, per
+   visitor_specification.md §3.2. Mirrored on :focus-within so
+   keyboard users get the same feedback. */
 .productCard:hover,
 .productCard:focus-within {
+  transform: translateY(-4px);
   border-color: var(--color-border-hover);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  background: var(--color-surface-hover);
 }
 
 .productCardThumb {

@@ -28,10 +28,17 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
 import ProductCard from "@/components/home/ProductCard";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 import { PRODUCTS } from "@/lib/productsData";
 import { TSHIRT_DESIGN_GALLERY, TSHIRT_STORY } from "@/lib/tshirtsSectionData";
 
 const TSHIRT_PRODUCTS = PRODUCTS.filter((product) => product.category === "tshirts");
+
+// Per-card stagger delay for the scroll-entrance animation — same
+// values as ProductsGrid.tsx so every card grid across the site
+// feels identical (visitor_specification.md §3.1).
+const STAGGER_STEP_SECONDS = 0.06;
+const STAGGER_CAP = 8;
 
 function DesignGalleryCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -138,8 +145,13 @@ export default function TShirtsSection() {
         </motion.blockquote>
 
         <div className="productCardsGrid">
-          {TSHIRT_PRODUCTS.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {TSHIRT_PRODUCTS.map((product, index) => (
+            <ScrollReveal
+              key={product.id}
+              delay={Math.min(index, STAGGER_CAP) * STAGGER_STEP_SECONDS}
+            >
+              <ProductCard product={product} />
+            </ScrollReveal>
           ))}
         </div>
 

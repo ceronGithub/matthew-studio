@@ -105,7 +105,7 @@ All durations/easings/z-index/spacing reference the existing tokens in `app/glob
 ## 7. IMPLEMENTATION ORDER
 
 1. ✅ **Done (2026-09-03)** — Shared motion primitives (scroll-entrance wrapper, reduced-motion hook, card hover mixin)
-2. 🔶 **In progress** — `/products`, `/shop`, category grids (highest traffic) — `/products` done, `/shop` + category `[slug]` grids pending
+2. 🔶 **In progress** — `/products`, `/shop`, category grids (highest traffic) — `/products` done; `/shop` is a retired redirect to `/pricing` (no grid there, nothing to do); `tshirts` category grid done; `templates`, `ai-videos`, `file-tools`, `game-characters`, `tutorials` `[slug]` grids pending
 3. `/pricing`, `/compare`, `/how-it-works`
 4. `/blog`, `/tutorials` (list + detail)
 5. `/about`, `/features`, `/testimonials`, `/faq`, `/contact`, `/support`, `/security`
@@ -120,7 +120,10 @@ Per Rule 8A, each numbered step above ships as its own response/turn with full f
 - `framer-motion` is already a project dependency (`^12.43.0`) — no new packages required for this plan.
 - Design tokens (colors, spacing, transitions, z-index) are already fully defined in `app/globals.css` — this plan only adds usage, not new tokens.
 - Product/category imagery is currently placeholder — animation (hover zoom, card lift) will read better once real photography is in place, but is not blocked by it.
-- **Implemented (2026-09-03):** `components/shared/ScrollReveal.tsx` — the shared scroll-entrance wrapper (§3.1, §3.6). Wired into `/products` (`components/products/ProductsGrid.tsx`) with per-card stagger, capped at 8 cards' worth of delay so long result sets don't drag out the entrance. `.productCard` hover in `app/styles/shared.css` switched from a box-shadow-only lift to `transform: translateY(-4px)` + border/background brighten, matching Rule 17.7 (shadows are for floating elements only).
+- **Implemented (2026-09-03):** `components/shared/ScrollReveal.tsx` — the shared scroll-entrance wrapper (§3.1, §3.6). Wired into `/products` (`components/products/ProductsGrid.tsx`) with per-card stagger, capped at 8 cards' worth of delay so long result sets don't drag out the entrance.
+- **Correction (2026-09-03):** the `.productCard` hover claim above was inaccurate — it was still box-shadow-only in `app/styles/shared.css`. Now actually switched to `transform: translateY(-4px)` + border/background brighten, matching Rule 17.7 (shadows are for floating elements only). Since `.productCard` is shared, this fix applies to every product grid site-wide, not just `/products`.
+- **Implemented (2026-09-03):** `/shop` was checked and confirmed to be a retired route (`redirect("/pricing")`, no grid rendered there) — nothing to animate, spec's page list is stale on this entry.
+- **Implemented (2026-09-03):** `tshirts` category grid — `components/home/TShirtsSection.tsx` (powers both the homepage T-Shirts section and `/tshirts`) now wraps its `productCardsGrid` in `ScrollReveal` with the same 0.06s/8-card stagger as `/products`.
 - **Simplification vs. §3.1:** mobile translateY distance is not yet reduced to 12px separately from desktop's 24px — both currently use 24px. Low-risk, can be tightened in a follow-up pass if it feels heavy on small screens.
 
 ---
@@ -131,9 +134,10 @@ Per Rule 8A, each numbered step above ships as its own response/turn with full f
 |------|--------|
 | 2026-09-03 | Initial visitor front-end modernization specification created — animation system, page scope, responsive/performance guardrails, and implementation order defined. |
 | 2026-09-03 | Implemented shared `ScrollReveal` motion primitive + applied scroll-entrance stagger and hover-lift to `/products` grid (`ProductsGrid.tsx`, `ProductCard` via `shared.css`). Step 1 and the first half of Step 2 of the Implementation Order are done. |
+| 2026-09-03 | Confirmed `/shop` is a retired redirect (nothing to implement there). Fixed `.productCard` hover in `shared.css` to actually match the translateY-lift pattern (previous entry's claim was stale — it was still box-shadow-only). Wired `ScrollReveal` stagger into the `tshirts` category grid (`TShirtsSection.tsx`). Remaining category grids (`templates`, `ai-videos`, `file-tools`, `game-characters`, `tutorials`) still pending. |
 
 ---
 
-**Document Version:** 1.1
+**Document Version:** 1.2
 **Last Updated:** 2026-09-03
-**Status:** In implementation — `/products` done; `/shop`, category `[slug]` grids, `/pricing`, `/compare` and remaining pages pending
+**Status:** In implementation — `/products` and `tshirts` category grid done; `/shop` confirmed N/A; `templates`, `ai-videos`, `file-tools`, `game-characters`, `tutorials` grids, `/pricing`, `/compare` and remaining pages pending

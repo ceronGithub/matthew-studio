@@ -817,3 +817,17 @@ project is done.
   viewport with the bottom of the form — including the submit button —
   clipped and unreachable. Added max-height: calc(100dvh - 2rem) +
   overflow-y: auto to .authGlassCard so it scrolls internally instead.
+
+[2026-09-03] Started visitor_specification.md Implementation Order
+  Step 2 (category grids): confirmed "/shop" is a retired redirect to
+  "/pricing" (no grid to animate there, spec note is stale). Fixed
+  .productCard hover in app/styles/shared.css — was still box-shadow-
+  only despite the spec claiming it was already switched; now uses
+  transform: translateY(-4px) + border/background brighten per Rule
+  17.7 (shadows reserved for floating elements). This is a shared
+  class so it applies to every product grid site-wide. Wired the
+  ScrollReveal scroll-entrance stagger (same 0.06s step, 8-card cap as
+  ProductsGrid.tsx) into components/home/TShirtsSection.tsx's product
+  grid, which powers both the homepage T-Shirts section and the
+  "/tshirts" category page. Remaining category grids (templates,
+  ai-videos, file-tools, game-characters, tutorials) still pending.
