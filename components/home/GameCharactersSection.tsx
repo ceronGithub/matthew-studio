@@ -23,6 +23,7 @@
  */
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
@@ -153,9 +154,9 @@ export default function GameCharactersSection() {
         </div>
 
         <div className="sectionCTA">
-          <a href="/shop?category=game-characters" className="buttonPrimary">
+          <Link href="/game-characters" className="buttonPrimary">
             View All Characters
-          </a>
+          </Link>
         </div>
       </div>
     </section>

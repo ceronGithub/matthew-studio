@@ -22,6 +22,7 @@
  */
 "use client";
 
+import Link from "next/link";
 import { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -143,9 +144,9 @@ export default function TShirtsSection() {
         </div>
 
         <div className="sectionCTA">
-          <a href="/shop?category=tshirts" className="buttonPrimary">
+          <Link href="/tshirts" className="buttonPrimary">
             Shop T-Shirts
-          </a>
+          </Link>
         </div>
       </div>
     </section>

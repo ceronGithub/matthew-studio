@@ -17,6 +17,7 @@
  */
 "use client";
 
+import Link from "next/link";
 import SectionHeader from "@/components/shared/SectionHeader";
 import FeatureGrid from "@/components/home/FeatureGrid";
 import ProductCard from "@/components/home/ProductCard";
@@ -44,9 +45,9 @@ export default function FileToolsSection() {
         </div>
 
         <div className="sectionCTA">
-          <a href="/shop?category=file-tools" className="buttonPrimary">
+          <Link href="/file-tools" className="buttonPrimary">
             Explore Tools
-          </a>
+          </Link>
         </div>
       </div>
     </section>

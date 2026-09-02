@@ -23,6 +23,7 @@
  */
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import SectionHeader from "@/components/shared/SectionHeader";
 import FeatureGrid from "@/components/home/FeatureGrid";
@@ -64,9 +65,9 @@ export default function TutorialsSection() {
         </div>
 
         <div className="sectionCTA">
-          <a href="/shop?category=tutorials" className="buttonPrimary">
+          <Link href="/tutorials" className="buttonPrimary">
             Browse All Courses
-          </a>
+          </Link>
         </div>
       </div>
     </section>

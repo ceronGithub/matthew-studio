@@ -18,6 +18,7 @@
  */
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import SectionHeader from "@/components/shared/SectionHeader";
 import VideoCarousel from "@/components/home/VideoCarousel";
@@ -62,9 +63,9 @@ export default function AIVideosSection() {
         </div>
 
         <div className="sectionCTA">
-          <a href="/shop?category=ai-videos" className="buttonPrimary">
+          <Link href="/ai-videos" className="buttonPrimary">
             Get Started with AI Videos
-          </a>
+          </Link>
         </div>
       </div>
     </section>
