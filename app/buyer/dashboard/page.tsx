@@ -8,10 +8,14 @@
  * message and the same four quick-start items listed in Section 10's
  * onboarding checklist. Profile and payment method pages don't exist
  * yet, so those two cards are shown as upcoming rather than dead links.
+ * OnboardingModal (client) additionally renders the Section 10 welcome
+ * overlay itself, but only right after registration — see that
+ * component's header comment for how it detects a fresh signup.
  */
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ShoppingBag, GraduationCap, UserRound, CreditCard } from "lucide-react";
+import OnboardingModal from "@/components/buyer/OnboardingModal";
 
 export const metadata: Metadata = {
   title: "Dashboard | Matthew Studio",
@@ -52,6 +56,7 @@ const QUICK_LINKS = [
 export default function BuyerDashboardPage() {
   return (
     <section className="buyerDashboard">
+      <OnboardingModal />
       <div className="buyerDashboardHeader">
         <p className="buyerDashboardEyebrow">Buyer dashboard</p>
         <h1 className="buyerDashboardTitle">Welcome to Matthew Studio</h1>

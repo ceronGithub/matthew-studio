@@ -23,6 +23,7 @@ import { cookies } from "next/headers";
 import { supabaseAdminClient } from "@/lib/supabase/serverClient";
 import BuyerNav from "@/components/buyer/BuyerNav";
 import "../styles/buyerDashboard.css";
+import "../styles/onboardingModal.css";
 
 export default async function BuyerLayout({ children }: { children: ReactNode }) {
   const cookieStore = await cookies();

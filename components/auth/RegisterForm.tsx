@@ -137,6 +137,10 @@ export default function RegisterForm({ showToast }: RegisterFormProps) {
       }
 
       showToast("Account created! Welcome to Matthew Studio.", "success");
+      // One-shot signal for OnboardingModal (Section 10) — read once on
+      // the dashboard's next mount, then cleared, so it never reappears
+      // on a later refresh or a normal returning sign-in.
+      sessionStorage.setItem("mtwOnboarding:justRegistered", "true");
       router.push("/buyer/dashboard");
     } catch {
       showToast("Couldn't reach the server. Check your connection and try again.", "error");

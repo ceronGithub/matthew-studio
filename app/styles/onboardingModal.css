@@ -1,0 +1,114 @@
+/*
+ * FILE: app/styles/onboardingModal.css
+ * Styles for components/buyer/OnboardingModal.tsx — the first-time
+ * buyer welcome overlay (login_and_registration_page.md Section 10).
+ * Uses the shared token system (Rule 33) — no hardcoded colors,
+ * z-index, or transition values.
+ */
+
+.onboardingModalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal-backdrop);
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+}
+
+.onboardingModalDialog {
+  position: relative;
+  z-index: var(--z-modal);
+  width: 100%;
+  max-width: 420px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: var(--space-xl) var(--space-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  transition: transform var(--transition-slow), opacity var(--transition-slow);
+}
+
+.onboardingModalDismiss {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  width: 32px;
+  height: 32px;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: color var(--transition-fast);
+}
+
+.onboardingModalDismiss:hover,
+.onboardingModalDismiss:focus-visible {
+  color: var(--color-text-primary);
+}
+
+.onboardingModalTitle {
+  font-size: 1.4rem;
+  line-height: 1.25;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-xs) 0;
+  padding-right: var(--space-xl);
+}
+
+.onboardingModalSubtitle {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--space-lg) 0;
+}
+
+.onboardingModalChecklist {
+  list-style: none;
+  margin: 0 0 var(--space-xl) 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.onboardingModalChecklistItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 1rem;
+  color: var(--color-text-primary);
+}
+
+.onboardingModalChecklistBox {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--color-border-hover);
+  border-radius: 4px;
+}
+
+.onboardingModalPrimaryButton {
+  width: 100%;
+  min-height: 44px;
+  background: var(--color-accent);
+  color: #09090b;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+
+.onboardingModalPrimaryButton:hover,
+.onboardingModalPrimaryButton:focus-visible {
+  background: var(--color-accent-hover);
+}
