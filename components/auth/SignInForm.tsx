@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import type { ToastType } from "@/components/shared/useToast";
 import { getCsrfHeader } from "@/lib/csrf";
+import { getDashboardPathForRole } from "@/lib/roleRouting";
 
 interface SignInFormProps {
   showToast: (message: string, type: ToastType) => void;
@@ -60,8 +61,7 @@ export default function SignInForm({ showToast }: SignInFormProps) {
       }
 
       showToast("Signed in. Redirecting…", "success");
-      const destination = result.data?.role === "buyer" ? "/buyer/dashboard" : "/superAdmin/dashboard";
-      router.push(destination);
+      router.push(getDashboardPathForRole(result.data?.role));
     } catch {
       showToast("Couldn't reach the server. Check your connection and try again.", "error");
     } finally {

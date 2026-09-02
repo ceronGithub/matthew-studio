@@ -2,22 +2,39 @@
  * FILE: middleware.ts
  * PURPOSE:
  * Route guard for the auth flow described in
- * login_and_registration_page.md Sections 7-8. Reads the sb-access-token
- * HttpOnly cookie set by /api/auth/login and /api/auth/register,
- * validates it against Supabase, and redirects based on role. All
- * route protection lives here — never inside page components.
+ * login_and_registration_page.md Sections 7-8 and 12.3. Reads the
+ * sb-access-token HttpOnly cookie set by /api/auth/login and
+ * /api/auth/register, validates it against Supabase, and redirects
+ * based on role. All route protection lives here — never inside page
+ * components.
+ *
+ * Three separate protected areas, per Section 12.3 — never collapsed
+ * into one "any non-buyer" check:
+ *   /buyer/*      requires role "buyer"
+ *   /admin/*      requires role "admin" OR "superAdmin" (super-admin
+ *                 can reach admin tooling too; admin cannot reach
+ *                 super-admin's routes — see next line)
+ *   /superAdmin/* requires role "superAdmin" only
  *
  * Also issues the CSRF double-submit cookie (Rule 32.2) for every
  * matched request that doesn't already have one, so it's in place
- * before any auth form on /auth/* ever submits, and before BuyerNav's
- * Sign Out call on /buyer/*.
+ * before any auth form or Sign Out call ever submits.
  */
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { supabaseAdminClient } from "@/lib/supabase/serverClient";
 import { CSRF_COOKIE_NAME, generateCsrfToken } from "@/lib/csrf";
+import { getDashboardPathForRole } from "@/lib/roleRouting";
 
 const isProduction = process.env.NODE_ENV === "production";
+
+// Sends an unauthorized visitor to /auth/login with a ?next= prefill
+// so they land back where they were headed after signing in.
+function redirectToLogin(request: NextRequest, pathname: string): NextResponse {
+  const loginUrl = new URL("/auth/login", request.url);
+  loginUrl.searchParams.set("next", pathname);
+  return NextResponse.redirect(loginUrl);
+}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -30,16 +47,18 @@ export async function middleware(request: NextRequest) {
 
   let response: NextResponse;
 
-  // Buyer area requires a valid session with role "buyer".
   if (pathname.startsWith("/buyer") && role !== "buyer") {
-    const loginUrl = new URL("/auth/login", request.url);
-    loginUrl.searchParams.set("next", pathname);
-    response = NextResponse.redirect(loginUrl);
+    response = redirectToLogin(request, pathname);
+  } else if (pathname.startsWith("/superAdmin") && role !== "superAdmin") {
+    response = redirectToLogin(request, pathname);
+  } else if (pathname.startsWith("/admin") && role !== "admin" && role !== "superAdmin") {
+    response = redirectToLogin(request, pathname);
   } else if (pathname === "/auth/login" && role) {
     // Already signed in and hitting the login page — send them to their
-    // dashboard instead of showing the form again.
-    const destination = role === "buyer" ? "/buyer/dashboard" : "/superAdmin/dashboard";
-    response = NextResponse.redirect(new URL(destination, request.url));
+    // own dashboard instead of showing the form again. Buyer, admin, and
+    // super-admin each land on a different route (Section 12.3) — never
+    // a single shared destination.
+    response = NextResponse.redirect(new URL(getDashboardPathForRole(role), request.url));
   } else {
     response = NextResponse.next();
   }
@@ -63,5 +82,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/buyer/:path*", "/auth/:path*"],
+  matcher: ["/buyer/:path*", "/admin/:path*", "/superAdmin/:path*", "/auth/:path*"],
 };

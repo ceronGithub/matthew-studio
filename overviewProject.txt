@@ -762,3 +762,24 @@ project is done.
   sites (SignInForm, RegisterForm, ForgotPasswordForm,
   ResetPasswordForm, BuyerNav's Sign Out) now spread getCsrfHeader()
   into their fetch headers. No schema change.
+
+[2026-09-02] Fixed the admin/super-admin redirect mismatch
+  (login_and_registration_page.md Section 12.3 gap) and built the
+  minimal placeholder destinations it needed to point at, since
+  neither /app/admin nor /app/superAdmin existed yet. New
+  lib/roleRouting.ts exports getDashboardPathForRole() as the single
+  source of truth (buyer -> /buyer/dashboard, admin -> /admin/dashboard,
+  superAdmin -> /superAdmin/dashboard) - both middleware.ts's
+  already-signed-in redirect and SignInForm.tsx's post-login redirect
+  now call this instead of each hardcoding their own mapping.
+  middleware.ts also gained real route guards for /admin/* (role
+  "admin" or "superAdmin") and /superAdmin/* (role "superAdmin" only)
+  - previously only /buyer/* and /auth/login were matched. Added
+  app/admin/layout.tsx + app/admin/dashboard/page.tsx and
+  app/superAdmin/layout.tsx + app/superAdmin/dashboard/page.tsx as
+  scoped placeholders (not 404s) - each lists its real planned
+  sections per admin_account_specification.md /
+  super_admin_account_specification.md Section 3, pending the full
+  build. New shared components/shared/RoleAreaHeader.tsx (display
+  name + Sign Out, CSRF-protected) and app/styles/roleAreaDashboard.css
+  back both placeholder shells. No schema change.

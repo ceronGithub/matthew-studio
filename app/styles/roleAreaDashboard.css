@@ -1,0 +1,142 @@
+/**
+ * FILE: app/styles/roleAreaDashboard.css
+ * PURPOSE:
+ * Shared styles for the /admin and /superAdmin placeholder shells
+ * (RoleAreaHeader + the "coming soon" dashboard card each renders).
+ * References the token system in app/globals.css — no hardcoded
+ * colors, spacing, or z-index. Responsive breakpoints live in
+ * app/styles/mediaQueries.css, not inline here.
+ */
+
+.roleAreaShell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background-color: var(--color-bg);
+}
+
+.roleAreaNav {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.roleAreaNavInner {
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-md) var(--space-lg);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.roleAreaNavLabel {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.roleAreaNavRight {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.roleAreaNavWelcome {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.roleAreaNavSignOut {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-md);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.roleAreaNavSignOut:hover,
+.roleAreaNavSignOut:focus-visible {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.roleAreaMain {
+  flex: 1;
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-2xl) var(--space-lg);
+}
+
+.roleAreaComingSoon {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-xl) var(--space-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+}
+
+.roleAreaComingSoonEyebrow {
+  font-family: var(--font-geist-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.roleAreaComingSoonTitle {
+  font-size: 1.6rem;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.roleAreaComingSoonSubtitle {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  max-width: 60ch;
+  margin: 0 0 var(--space-md) 0;
+}
+
+.roleAreaComingSoonList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.roleAreaComingSoonListItem {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.roleAreaComingSoonListItem::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--color-text-muted);
+}
