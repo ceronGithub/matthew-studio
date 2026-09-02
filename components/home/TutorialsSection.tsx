@@ -17,9 +17,15 @@
  * (tutorialsSectionData.ts) and PRODUCTS (productsData.ts) filtered
  * to category "tutorials", sorted into level order. Course level and
  * duration aren't part of the shared Product type (only this
- * category needs them), so they're layered on top of the reusable
- * ProductCard as a small badge/meta line rather than added to every
- * product in the catalog.
+ * category needs them), so they're passed into ProductCard's
+ * overlayTopLeft/overlayBottomRight slots (level badge top-left,
+ * duration bottom-right, over the thumb image) rather than added to
+ * every product in the catalog — matches
+ * buyer_homepage_specification.md Section 3.9's "badge positioned
+ * top-right, duration positioned bottom-right per card" overlay
+ * intent; the level badge sits top-left instead of top-right
+ * specifically because several tutorial products already carry a
+ * top-right bestseller/new badge (see ProductCard.tsx's header note).
  */
 "use client";
 
@@ -47,18 +53,23 @@ export default function TutorialsSection() {
           {LEVEL_ORDER.flatMap((level, groupIndex) =>
             TUTORIAL_PRODUCTS.filter((product) => TUTORIAL_COURSE_META[product.id]?.level === level).map((product, itemIndex) => (
               <motion.div
-                className="tutorialCardWrap"
                 key={product.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.5, delay: groupIndex * 0.15 + itemIndex * 0.05, ease: "easeOut" }}
               >
-                <div className="tutorialCardMeta">
-                  <span className={`levelBadge levelBadge${level.charAt(0).toUpperCase()}${level.slice(1)}`}>{COURSE_LEVEL_LABELS[level]}</span>
-                  <span className="tutorialCardDuration">{TUTORIAL_COURSE_META[product.id]?.duration}</span>
-                </div>
-                <ProductCard product={product} />
+                <ProductCard
+                  product={product}
+                  overlayTopLeft={
+                    <span className={`levelBadge levelBadge${level.charAt(0).toUpperCase()}${level.slice(1)}`}>
+                      {COURSE_LEVEL_LABELS[level]}
+                    </span>
+                  }
+                  overlayBottomRight={
+                    <span className="tutorialCardDuration">{TUTORIAL_COURSE_META[product.id]?.duration}</span>
+                  }
+                />
               </motion.div>
             ))
           )}

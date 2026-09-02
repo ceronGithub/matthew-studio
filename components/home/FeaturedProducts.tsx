@@ -157,6 +157,26 @@ export default function FeaturedProducts() {
     setSrStatus(direction === 1 ? "Showing next bestsellers." : "Showing previous bestsellers.");
   }
 
+  /**
+   * handleCarouselKeyDown
+   * ArrowLeft/ArrowRight scroll the carousel one card-width, same as
+   * clicking the prev/next arrow buttons — spec 7.3: "Arrow keys
+   * navigate carousel on desktop (manual, not auto-play during
+   * keyboard nav)". Only wired on desktop, where the arrow buttons and
+   * auto-scroll track exist; mobile renders a plain stack instead.
+   */
+  function handleCarouselKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    if (!isDesktop) return;
+
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      scrollByArrow(1);
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      scrollByArrow(-1);
+    }
+  }
+
   return (
     <section className="featuredProductsSection">
       <motion.div
@@ -175,8 +195,12 @@ export default function FeaturedProducts() {
           className="featuredProductsCarousel"
           role="region"
           aria-label="Product carousel"
+          tabIndex={isDesktop ? 0 : undefined}
+          onKeyDown={handleCarouselKeyDown}
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
+          onFocus={() => setIsPaused(true)}
+          onBlur={() => setIsPaused(false)}
         >
           {/* Announces manual navigation only — see srStatus comment above. */}
           <span className="srOnly" role="status" aria-live="polite">

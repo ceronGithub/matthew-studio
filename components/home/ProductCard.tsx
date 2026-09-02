@@ -14,18 +14,34 @@
  * FeaturedProduct vs the fuller Product type) so it can be reused
  * as-is by the six Phase 2 sections without prop mismatches.
  *
+ * `overlayTopLeft`/`overlayBottomRight` are optional slots rendered on
+ * top of the thumb image, alongside the existing bestseller/new/
+ * limited badge (which always sits top-right). Only TutorialsSection
+ * uses these today, for its level badge (top-left) and duration
+ * (bottom-right) — buyer_homepage_specification.md Section 3.9 calls
+ * for the level badge top-right specifically, but several tutorial
+ * products already carry a top-right bestseller/new badge (see
+ * lib/productsData.ts), so the level badge moves to top-left to avoid
+ * the two overlapping; duration keeps the spec's bottom-right slot,
+ * which nothing else in this card ever occupies.
+ *
  * DATA FLOW:
  * No data fetching — receives a single Product via props. No real
  * product photos exist yet, so the thumb shows an icon placeholder
  * (Rule 27 — swap for next/image once photos exist).
  */
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { Star } from "lucide-react";
 import { CATEGORY_ICONS } from "@/lib/categoryIcons";
 import type { Product } from "@/lib/productsData";
 
 interface ProductCardProps {
   product: Product;
+  /** Optional overlay rendered top-left of the thumb (e.g. Tutorials' level badge). */
+  overlayTopLeft?: ReactNode;
+  /** Optional overlay rendered bottom-right of the thumb (e.g. Tutorials' duration). */
+  overlayBottomRight?: ReactNode;
 }
 
 const BADGE_LABELS: Record<NonNullable<Product["badge"]>, string> = {
@@ -34,7 +50,7 @@ const BADGE_LABELS: Record<NonNullable<Product["badge"]>, string> = {
   limited: "Limited",
 };
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product, overlayTopLeft, overlayBottomRight }: ProductCardProps) {
   const Icon = CATEGORY_ICONS[product.iconName];
 
   return (
@@ -42,6 +58,10 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="productCardThumb">
         <Icon size={40} strokeWidth={1.5} className="productCardThumbIcon" aria-hidden="true" />
         {product.badge && <span className="productCardBadge">{BADGE_LABELS[product.badge]}</span>}
+        {overlayTopLeft && <span className="productCardOverlayTopLeft">{overlayTopLeft}</span>}
+        {overlayBottomRight && (
+          <span className="productCardOverlayBottomRight">{overlayBottomRight}</span>
+        )}
       </div>
 
       <div className="productCardBody">

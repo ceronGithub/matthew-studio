@@ -250,6 +250,28 @@
   letter-spacing: 0.05em;
 }
 
+/* Generic overlay slots for category-specific badges rendered over the
+   thumb (components/home/ProductCard.tsx's overlayTopLeft/
+   overlayBottomRight props) — currently only TutorialsSection's level
+   badge (top-left) and duration (bottom-right); see ProductCard.tsx's
+   header comment for why level sits top-left instead of top-right. */
+.productCardOverlayTopLeft {
+  position: absolute;
+  top: var(--space-sm);
+  left: var(--space-sm);
+}
+
+.productCardOverlayBottomRight {
+  position: absolute;
+  bottom: var(--space-sm);
+  right: var(--space-sm);
+  padding: 0.15rem var(--space-sm);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  color: var(--color-text-primary);
+  font-size: 0.75rem;
+}
+
 .productCardBody {
   display: flex;
   flex-direction: column;
@@ -1374,25 +1396,16 @@ th.comparisonTableTierHighlighted,
 }
 
 /* ------------------------------------------------------------
- * TUTORIALS SECTION — level badge + duration meta layered above
- * each ProductCard, and the "Beginner/Intermediate/Advanced" pill
+ * TUTORIALS SECTION — level badge + duration overlaid on each
+ * ProductCard's thumb (via overlayTopLeft/overlayBottomRight, see
+ * ProductCard.tsx), and the "Beginner/Intermediate/Advanced" pill
  * colors (Section 4E: "level badges (Beginner: green, Intermediate:
  * amber, Advanced: red)"). Reuses the status color tokens rather
- * than adding new accent colors, per Rule 17.2.
+ * than adding new accent colors, per Rule 17.2. Duration sits over
+ * a dark thumb image (see .productCardOverlayBottomRight), so it
+ * keeps the light/semi-opaque text treatment rather than the
+ * secondary-text color used elsewhere on the card body.
  * ------------------------------------------------------------ */
-.tutorialCardWrap {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-}
-
-.tutorialCardMeta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-sm);
-}
-
 .levelBadge {
   padding: 0.2rem var(--space-sm);
   border-radius: 999px;
@@ -1418,8 +1431,7 @@ th.comparisonTableTierHighlighted,
 }
 
 .tutorialCardDuration {
-  font-size: 0.8125rem;
-  color: var(--color-text-secondary);
+  font-size: 0.75rem;
 }
 
 /* ------------------------------------------------------------

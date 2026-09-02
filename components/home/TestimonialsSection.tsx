@@ -174,6 +174,26 @@ export default function TestimonialsSection() {
     setSrStatus(`Showing testimonial ${index + 1} of ${HOME_TESTIMONIALS.length}.`);
   }
 
+  /**
+   * handleCarouselKeyDown
+   * ArrowLeft/ArrowRight scroll the carousel one card-width, same as
+   * clicking the prev/next arrow buttons — spec 7.3: "Arrow keys
+   * navigate carousel on desktop (manual, not auto-play during
+   * keyboard nav)". Only wired on desktop, where the arrow buttons,
+   * dots, and auto-scroll track exist; mobile renders a plain stack.
+   */
+  function handleCarouselKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    if (!isDesktop) return;
+
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      scrollByArrow(1);
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      scrollByArrow(-1);
+    }
+  }
+
   return (
     <section id="testimonials-section" className="testimonialsHomeSection">
       <motion.div
@@ -192,8 +212,12 @@ export default function TestimonialsSection() {
           className="testimonialsHomeCarousel"
           role="region"
           aria-label="Testimonials carousel"
+          tabIndex={isDesktop ? 0 : undefined}
+          onKeyDown={handleCarouselKeyDown}
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
+          onFocus={() => setIsPaused(true)}
+          onBlur={() => setIsPaused(false)}
         >
           {/* Announces manual navigation only — see srStatus comment above. */}
           <span className="srOnly" role="status" aria-live="polite">
