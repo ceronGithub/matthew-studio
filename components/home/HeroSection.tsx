@@ -70,6 +70,10 @@ function HeroMediaVisual({ item, size = "md" }: { item: MediaShowcaseItem; size?
       fill
       sizes={size === "md" ? "300px" : "180px"}
       style={{ objectFit: "cover" }}
+      // Only the primary (md) visual is the actual above-the-fold LCP
+      // candidate — the smaller "Up Next" thumbnail stays lazy so it
+      // doesn't compete for the browser's priority fetch budget.
+      priority={size === "md"}
       onError={() => setHasError(true)}
     />
   );

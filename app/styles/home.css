@@ -110,6 +110,12 @@
   flex-direction: column;
   align-items: center;
   gap: var(--space-md);
+  /* Scroll-linked parallax (HeroSection's parallaxY) updates this
+     element's transform on every scroll frame — hint the GPU ahead of
+     time so the browser doesn't repaint the layer from scratch each
+     tick (spec 6.2: "will-change applied to elements with frequent
+     transforms — carousels, parallax sections"). */
+  will-change: transform;
 }
 
 .heroVisualBadge {
@@ -652,6 +658,11 @@
   overflow-x: auto;
   scroll-behavior: auto; /* the rAF loop drives scrollLeft directly */
   scrollbar-width: none; /* Firefox */
+  /* Driven by scrollLeft every animation frame (not a CSS transform),
+     so scroll-position is the correct will-change target — hints the
+     browser to keep this layer's scroll offset GPU-composited instead
+     of repainting on each rAF tick (spec 6.2). */
+  will-change: scroll-position;
   /* overflow-x: auto forces overflow-y to compute as auto too (browsers
      don't allow x:auto + y:visible), which was clipping the top of
      .featuredProductCard's hover lift (translateY(-8px)). Add top
@@ -955,6 +966,8 @@
   overflow-x: auto;
   scroll-behavior: auto; /* the rAF loop drives scrollLeft directly */
   scrollbar-width: none; /* Firefox */
+  /* Same rationale as .featuredProductsTrack above (spec 6.2). */
+  will-change: scroll-position;
   /* Same fix as .featuredProductsTrack above: overflow-x: auto forces
      overflow-y to auto as well, clipping the top of
      .testimonialHomeCard's hover lift (translateY(-8px)). */
