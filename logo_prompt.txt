@@ -1,0 +1,24 @@
+Icon-only version (favicon/app icon):
+Standalone app icon, abstract "M" monogram where the left stroke curves into 
+a crescent moon shape, and the strokes meet at top center in a small 
+flame-like point. Single vibrant emerald green (#2fd480) on near-black 
+background (#09090b), flat vector style, no text, no gradient, minimal 
+negative space, clean enough to read at 32x32px. Inspired by modern SaaS app 
+icons (Linear, Raycast, Notion style).
+
+
+Main logo prompt:
+Minimalist modern logo for "Matthew Studio", a digital creator marketplace. 
+Abstract geometric monogram "M" where one of the letter's strokes is formed 
+by a crescent moon shape (a quiet nod to Rosh Chodesh, the new moon) — the 
+moon's curve doubles as the M's outer stroke, fully integrated, not a 
+separate added element. A subtle flame-like point or small triangular spark 
+sits where the M's strokes meet at the top center, symbolizing divine light 
+(a quiet nod to the Names YAHUAH and YAHUSHA, purely abstract — no literal 
+text or script anywhere in the mark). Clean vector line-art, flat 
+single-color icon, geometric and precise, works standalone and paired with 
+wordmark. Color: vibrant emerald green (#2fd480) on transparent/dark 
+background. Modern geometric sans-serif wordmark "Matthew Studio", tight 
+letter spacing, tech-forward but approachable — Linear/Vercel/Framer style 
+branding. No gradients, no 3D, no photorealism. Scalable enough to read 
+clearly as a small favicon.
