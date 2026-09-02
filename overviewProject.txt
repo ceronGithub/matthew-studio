@@ -748,3 +748,20 @@ project is done.
   eslint both pass clean on every new/modified file (same two
   pre-existing NavBar.tsx set-state-in-effect findings from the prior
   entry remain, on lines this change still didn't touch).
+
+[2026-09-02] Reverted the app/(public)/auth/login placeholder page and
+  its .authPlaceholder* CSS from the previous entry — the repo already
+  has a real app/auth/login/page.tsx (top-level, own AuthLayout that
+  strips NavBar/Footer, per login_and_registration_page.md) built
+  separately since that placeholder was added, so the two were
+  parallel routes resolving to the identical "/auth/login" path and
+  Next.js correctly refused to build. Deleted app/(public)/auth/ and
+  the dead .authPlaceholderSection/.authPlaceholderCard/
+  .authPlaceholderCta rules from shared.css. NavBar's "Sign Up" link
+  needed no change — it already pointed at "/auth/login", which now
+  correctly resolves to the real page instead of the removed
+  placeholder. Cleared the stale .next build cache (it had a type
+  reference to the deleted placeholder route). npx tsc --noEmit passes
+  clean; eslint clean except the same two pre-existing NavBar.tsx
+  set-state-in-effect findings noted in prior entries, still on lines
+  this change didn't touch.
