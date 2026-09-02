@@ -685,14 +685,47 @@ lib/
 
 ---
 
-## 13. CHANGE LOG
+## 13. FRONT-END MODERNIZATION ENHANCEMENT PLAN (2026)
 
-| Date       | Change                                                                                        |
-| ---------- | --------------------------------------------------------------------------------------------- |
-| 2026-09-01 | Initial homepage specification created; all 14 sections documented; component mappings added. |
+**Goal:** Make the buyer-facing experience (this homepage + `app/buyer/dashboard`) feel alive, modern, and smooth on both wide and small screens — companion effort to `visitor_specification.md`, which covers the rest of the public marketing pages. Same design-token system (`app/globals.css`), same `framer-motion` dependency already installed — no new libraries needed.
+
+**13.1 — Scope**
+
+- `/` homepage (all 14 sections above)
+- `app/buyer/dashboard/page.tsx` + `app/styles/buyerDashboard.css`
+- Shared buyer-facing components under `components/buyer/`, `components/home/`
+
+**13.2 — Motion upgrades to apply**
+| Area | Current state | Enhancement |
+|---|---|---|
+| Section entrances | Some sections already fade/translate on load | Standardize every section on scroll-triggered `IntersectionObserver` + `framer-motion` `whileInView` (once: true), 24px translateY → 0, per Rule 17.5 |
+| Hero | Static fade-in on mount | Add subtle parallax on the hero background layer (0.10–0.15x scroll speed), CTA buttons stagger in after headline |
+| Product/category cards | Hover color change only | Add lift + shadow-soften on hover/focus (`transform: translateY(-4px)`, `transition: var(--transition-base)`), staggered entrance per card (60–80ms delay per index) |
+| Testimonials / carousels | Instant slide switch | Crossfade + slight scale transition between slides (`--transition-slow`) |
+| Buyer dashboard cards/widgets | Static render | Skeleton-in → fade/scale-in on data arrival (ties into Rule 25 loading states already required) |
+| Mobile (≤768px) | Same animations as desktop | Reduce translate distances (12px instead of 24px) and disable parallax entirely — parallax on text/foreground is already forbidden per Rule 17.5 |
+| Reduced motion | Not yet handled | Respect `prefers-reduced-motion: reduce` — drop to opacity-only transitions, no translate/parallax |
+
+**13.3 — Non-negotiables carried over from this spec's existing rules**
+
+- All new transition values reference `--transition-fast/base/slow` tokens (Section 4 / Rule 33.4) — never ad-hoc durations.
+- No `min/max-width` layout hacks introduced to achieve animation effects — flex/grid stays the layout mechanism (Rule 23.3).
+- No parallax on readable text, ever.
+
+**13.4 — Delivery approach**
+Following Rule 8A, each section/page is enhanced and delivered as its own turn (e.g. Hero + Quick Wins first, then Category Showcase + Featured Products, etc.) rather than one giant diff — full component + CSS files delivered per change, ZIP if 5+ files touch the same response.
 
 ---
 
-**Document Version:** 1.0  
-**Last Updated:** 2026-09-01  
-**Status:** Specification Complete (Implementation Phase 1 done, Phase 2–3 pending)
+## 14. CHANGE LOG
+
+| Date       | Change                                                                                                                                                                                                                             |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-09-01 | Initial homepage specification created; all 14 sections documented; component mappings added.                                                                                                                                      |
+| 2026-09-03 | Added Section 13 (Front-End Modernization Enhancement Plan) — scroll-triggered motion, card hover/lift, carousel crossfade, reduced-motion handling, buyer dashboard entrance states. Companion to new `visitor_specification.md`. |
+
+---
+
+**Document Version:** 1.1  
+**Last Updated:** 2026-09-03  
+**Status:** Specification Complete (Implementation Phase 1 done, Phase 2–3 pending; Modernization Phase — planned, not yet built)
