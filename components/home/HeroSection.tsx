@@ -190,7 +190,7 @@ export default function HeroSection() {
                 </motion.div>
               </AnimatePresence>
             </div>
-            <h4>{activeItem.caption}</h4>
+            <p className="heroMediaCardCaption">{activeItem.caption}</p>
             {activeItem.subcaption && <p>{activeItem.subcaption}</p>}
           </div>
 
@@ -201,7 +201,7 @@ export default function HeroSection() {
             <div className="heroMediaCardThumbSmall">
               <HeroMediaVisual item={nextItem} size="sm" />
             </div>
-            <h4>{nextItem.caption}</h4>
+            <p className="heroMediaCardCaption">{nextItem.caption}</p>
           </div>
         </motion.div>
       </div>

@@ -23,6 +23,7 @@
  */
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import SectionHeader from "@/components/shared/SectionHeader";
 import ComparisonTable, { type ComparisonTier } from "@/components/home/ComparisonTable";
@@ -90,12 +91,12 @@ export default function TemplatesSection() {
         </div>
 
         <div className="sectionCTA">
-          <a href="/templates" className="buttonPrimary">
+          <Link href="/templates" className="buttonPrimary">
             Explore Templates
-          </a>
-          <a href="/testimonials" className="buttonSecondary">
+          </Link>
+          <Link href="/testimonials" className="buttonSecondary">
             Read Testimonials
-          </a>
+          </Link>
         </div>
       </div>
     </section>

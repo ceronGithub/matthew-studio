@@ -172,7 +172,7 @@
   display: block;
 }
 
-.heroMediaCardMain h4 {
+.heroMediaCardMain .heroMediaCardCaption {
   font-size: 0.9375rem;
   font-weight: 600;
   color: var(--color-text-primary);
@@ -210,7 +210,7 @@
   display: block;
 }
 
-.heroMediaCardSecondary h4 {
+.heroMediaCardSecondary .heroMediaCardCaption {
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--color-text-primary);
