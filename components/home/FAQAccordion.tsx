@@ -17,7 +17,7 @@
  */
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
@@ -27,6 +27,32 @@ export default function FAQAccordion() {
   // Tracks the single open item's id — null means every item is
   // collapsed. Opening a new item closes whichever was previously open.
   const [openId, setOpenId] = useState<string | null>(null);
+
+  // Question button refs, indexed same as HOME_FAQ_ITEMS, so ArrowUp/
+  // ArrowDown can move focus directly without querying the DOM.
+  const questionButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  /**
+   * handleQuestionKeyDown
+   * ArrowDown/ArrowUp move focus to the next/previous question button,
+   * wrapping around at the ends (spec 7.3). Escape collapses the
+   * currently open item without moving focus off the button.
+   */
+  function handleQuestionKeyDown(event: React.KeyboardEvent<HTMLButtonElement>, index: number) {
+    const itemCount = HOME_FAQ_ITEMS.length;
+
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      const nextIndex = (index + 1) % itemCount;
+      questionButtonRefs.current[nextIndex]?.focus();
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      const previousIndex = (index - 1 + itemCount) % itemCount;
+      questionButtonRefs.current[previousIndex]?.focus();
+    } else if (event.key === "Escape") {
+      setOpenId(null);
+    }
+  }
 
   return (
     <section className="faqHomeSection">
@@ -56,10 +82,14 @@ export default function FAQAccordion() {
               >
                 <button
                   type="button"
+                  ref={(el) => {
+                    questionButtonRefs.current[index] = el;
+                  }}
                   className="faqHomeQuestion"
                   aria-expanded={isOpen}
                   aria-controls={`faq-answer-${item.id}`}
                   onClick={() => setOpenId(isOpen ? null : item.id)}
+                  onKeyDown={(event) => handleQuestionKeyDown(event, index)}
                 >
                   <span>{item.question}</span>
                   <motion.span
