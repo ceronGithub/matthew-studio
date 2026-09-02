@@ -32,3 +32,29 @@ model RateLimitAttempt {
 
   @@index([ipAddress, endpoint, createdAt])
 }
+
+/// SecurityLog
+/// Append-only record of auth-related security events — separate from
+/// RateLimitAttempt (which only tracks request counts). Basic version:
+/// event + actor + request metadata (IP, user agent, parsed
+/// browser/OS). Geolocation fields are left out for now since they'd
+/// require a MaxMind GeoLite2 database that has to be downloaded
+/// manually — can be added later without breaking this shape.
+model SecurityLog {
+  id             String   @id @default(cuid())
+  eventType      String // login_success | login_failed | registration_failed
+  actor          String? // email, nullable when the attempt never resolved to one
+  details        String? // human-readable one-liner
+  ipAddress      String?
+  userAgent      String?
+  deviceType     String? // mobile | tablet | desktop
+  browserName    String?
+  browserVersion String?
+  osName         String?
+  osVersion      String?
+  createdAt      DateTime @default(now())
+
+  @@index([eventType])
+  @@index([actor])
+  @@index([createdAt])
+}

@@ -12,6 +12,7 @@ export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
 import { supabaseServerClient } from "@/lib/supabase/serverClient";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
+import { logSecurityEvent } from "@/lib/securityLog";
 
 const isProduction = process.env.NODE_ENV === "production";
 const FORBIDDEN_CHARACTERS = /[<>{}[\]/\\;'"`=]/g;
@@ -75,6 +76,12 @@ export async function POST(request: Request) {
 
     if (error) {
       const isDuplicate = error.message.toLowerCase().includes("already registered");
+      await logSecurityEvent({
+        eventType: "registration_failed",
+        actor: email,
+        request,
+        details: error.message,
+      });
       return NextResponse.json(
         {
           success: false,
@@ -87,6 +94,13 @@ export async function POST(request: Request) {
         { status: isDuplicate ? 409 : 400 }
       );
     }
+
+    await logSecurityEvent({
+      eventType: "registration_success",
+      actor: data.user?.email ?? email,
+      request,
+      details: "Account created (buyer role)",
+    });
 
     const response = NextResponse.json({
       success: true,

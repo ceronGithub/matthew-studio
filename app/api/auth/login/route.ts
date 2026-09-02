@@ -12,6 +12,7 @@ export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
 import { supabaseServerClient } from "@/lib/supabase/serverClient";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
+import { logSecurityEvent } from "@/lib/securityLog";
 
 const isProduction = process.env.NODE_ENV === "production";
 const LOGIN_MAX_ATTEMPTS = 5;
@@ -43,6 +44,15 @@ export async function POST(request: Request) {
 
     // Generic message either way — prevents email enumeration.
     if (error || !data.session || !data.user) {
+      // Awaited (not fire-and-forget) — serverless functions can be
+      // frozen/terminated right after the response is sent, which would
+      // drop an un-awaited write. logSecurityEvent itself never throws.
+      await logSecurityEvent({
+        eventType: "login_failed",
+        actor: email,
+        request,
+        details: error?.message ?? "No session returned",
+      });
       return NextResponse.json(
         { success: false, data: null, message: "Invalid email or password.", error: "Authentication failed" },
         { status: 401 }
@@ -50,6 +60,13 @@ export async function POST(request: Request) {
     }
 
     const role = (data.user.user_metadata?.role as string) ?? "buyer";
+
+    await logSecurityEvent({
+      eventType: "login_success",
+      actor: data.user.email ?? email,
+      request,
+      details: `Signed in as role: ${role}`,
+    });
 
     const response = NextResponse.json({
       success: true,
