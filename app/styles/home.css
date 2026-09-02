@@ -910,14 +910,6 @@
   max-width: 240px;
 }
 
-/* Connecting line between steps — desktop-row layout only; hidden on
-   mobile in mediaQueries.css since steps stack vertically there. */
-.howItWorksHomeConnector {
-  display: none;
-  height: 2px;
-  background: var(--color-accent);
-}
-
 .howItWorksHomeCtaRow {
   display: flex;
   justify-content: center;

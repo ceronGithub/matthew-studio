@@ -13,8 +13,14 @@
  *
  * DATA FLOW:
  * Reads HOW_IT_WORKS_HOME_STEPS (static, lib/howItWorksHomeData.ts).
- * Each step icon scales in with a rotate on scroll-enter, and the
- * connecting line between steps animates its width in afterward.
+ * Each step icon scales in with a rotate on scroll-enter, and its
+ * text card slides in from the side it sits on. Desktop (1024px+)
+ * renders a vertical timeline with a center line (mediaQueries.css);
+ * steps alternate which side of the line their text card sits on via
+ * the "howItWorksHomeStepWrapOdd" class (spec 3.11/5.2 — "Vertical
+ * timeline on desktop, alternating left/right cards"). Tablet and
+ * mobile both stay the plain stacked column, matching the spec's
+ * responsive table for this section.
  */
 "use client";
 
@@ -46,10 +52,13 @@ export default function HowItWorksSection() {
         <div className="howItWorksHomeSteps">
           {HOW_IT_WORKS_HOME_STEPS.map((item, index) => {
             const Icon = STEP_ICONS[item.iconName];
-            const isLastStep = index === HOW_IT_WORKS_HOME_STEPS.length - 1;
+            // Odd steps (1, 3, ...) sit on the left of the desktop center
+            // line, so their text should slide in from the left instead of
+            // the right — mirrors the alternating side, not just the class.
+            const isOddStep = index % 2 === 1;
 
             return (
-              <div className="howItWorksHomeStepWrap" key={item.step}>
+              <div className={`howItWorksHomeStepWrap${isOddStep ? " howItWorksHomeStepWrapOdd" : ""}`} key={item.step}>
                 <motion.div
                   className="howItWorksHomeStep"
                   initial="hidden"
@@ -72,7 +81,7 @@ export default function HowItWorksSection() {
                   <motion.div
                     className="howItWorksHomeStepText"
                     variants={{
-                      hidden: { opacity: 0, x: -30 },
+                      hidden: { opacity: 0, x: isOddStep ? 30 : -30 },
                       visible: { opacity: 1, x: 0 },
                     }}
                     transition={{ duration: 0.6, ease: "easeOut" }}
@@ -81,19 +90,6 @@ export default function HowItWorksSection() {
                     <p className="howItWorksHomeStepDescription">{item.description}</p>
                   </motion.div>
                 </motion.div>
-
-                {/* Connecting line — hidden after the last step, and hidden
-                    entirely on mobile via mediaQueries.css (steps stack). */}
-                {!isLastStep && (
-                  <motion.span
-                    className="howItWorksHomeConnector"
-                    initial={{ width: 0 }}
-                    whileInView={{ width: "100%" }}
-                    viewport={{ once: true, margin: "-80px" }}
-                    transition={{ duration: 0.8, ease: "easeInOut", delay: index * 0.15 + 0.3 }}
-                    aria-hidden="true"
-                  />
-                )}
               </div>
             );
           })}

@@ -127,33 +127,67 @@
 }
 
 /* ------------------------------------------------------------
- * HOW IT WORKS (homepage) — steps go from a stacked column to a
- * horizontal row from tablet up, with the connecting line shown
- * between them (hidden on mobile since there's nothing to connect
- * in a vertical stack).
+ * HOW IT WORKS (homepage) — spec 3.11/5.2: "Vertical timeline on
+ * desktop (center line, alternating left/right cards). Vertical
+ * stack on mobile (no alternation)." Tablet stays the same stacked
+ * column as mobile — only 1024px+ switches to the alternating
+ * timeline, so there's no in-between horizontal-row state.
+ *
+ * .howItWorksHomeSteps::before draws the single continuous center
+ * line behind every step (z-index 0); each .howItWorksHomeStepWrap
+ * sits above it (z-index 1) as a 3-column grid — icon always in the
+ * middle column, text card in the left or right column depending on
+ * whether the step is even/odd (see .howItWorksHomeStepWrapOdd).
  * ------------------------------------------------------------ */
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .howItWorksHomeSteps {
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 0;
+    position: relative;
+    gap: var(--space-2xl);
+  }
+
+  .howItWorksHomeSteps::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background: var(--color-border);
+    transform: translateX(-50%);
+    z-index: 0;
   }
 
   .howItWorksHomeStepWrap {
-    flex-direction: row;
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 64px 1fr;
     align-items: center;
-    width: auto;
-    flex: 1 1 0;
+    column-gap: var(--space-lg);
+    width: 100%;
   }
 
   .howItWorksHomeStep {
-    flex: 1 1 auto;
+    display: contents; /* icon and text become direct grid children of the wrap */
   }
 
-  .howItWorksHomeConnector {
-    display: block;
-    flex: 0 0 40px;
-    margin-top: 32px;
+  .howItWorksHomeIconWrap {
+    grid-column: 2;
+    margin: 0 auto;
+  }
+
+  /* Even steps (0, 2, ...): text card on the right of the line. */
+  .howItWorksHomeStepText {
+    grid-column: 3;
+    text-align: left;
+  }
+
+  /* Odd steps (1, 3, ...): text card on the left of the line. */
+  .howItWorksHomeStepWrapOdd .howItWorksHomeStepText {
+    grid-column: 1;
+    grid-row: 1;
+    text-align: right;
+    align-items: flex-end;
   }
 }
 
