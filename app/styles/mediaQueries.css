@@ -82,7 +82,7 @@
     position: absolute;
     top: 40px;
     left: 0;
-    width: 260px;
+    width: 300px;
     max-width: none;
     z-index: var(--z-dropdown);
   }
@@ -91,7 +91,7 @@
     position: absolute;
     bottom: 20px;
     right: 0;
-    width: 190px;
+    width: 220px;
     max-width: none;
     transform: rotate(2.5deg);
     z-index: var(--z-raised);

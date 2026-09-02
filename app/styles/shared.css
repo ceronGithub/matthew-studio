@@ -464,11 +464,6 @@ th.comparisonTableTierHighlighted,
 
 .videoCarouselStage {
   position: relative;
-  width: 100%;
-  /* Capped so the player reads as a demo clip inside the section
-     instead of stretching to the full ~1280px content width. */
-  max-width: 720px;
-  margin: 0 auto;
   aspect-ratio: 16 / 9;
   border-radius: var(--radius, 12px);
   overflow: hidden;

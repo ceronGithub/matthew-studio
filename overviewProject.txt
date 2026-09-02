@@ -817,12 +817,3 @@ project is done.
   viewport with the bottom of the form — including the submit button —
   clipped and unreachable. Added max-height: calc(100dvh - 2rem) +
   overflow-y: auto to .authGlassCard so it scrolls internally instead.
-
-[2026-09-02] Shrank the visitor-side video players a little, per
-  request: .videoCarouselStage (shared.css — the Templates and AI
-  Videos sections' demo player) now caps at max-width: 720px, centered,
-  instead of stretching to the full ~1280px section width;
-  .heroMediaCardMain/.heroMediaCardSecondary (home.css + their
-  desktop-layered sizes in mediaQueries.css) went from 320px/220px to
-  280px/190px; .quickWinsMediaFrame (home.css) went from 420px to
-  360px. Sizes only — no markup or behavior changes.
