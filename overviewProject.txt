@@ -787,3 +787,13 @@ project is done.
   hover state) so the 3 items now show as centered, visible cards.
   Removed the now-dead .whyUsGrid row-layout rule from
   mediaQueries.css.
+
+[2026-09-02] Fixed hover-lift clipping on the homepage's two
+  auto-scroll carousels (Bestsellers/.featuredProductsTrack and
+  Testimonials/.testimonialsHomeTrack in app/styles/home.css): both
+  tracks use overflow-x: auto, which forces overflow-y to compute as
+  auto too (browsers don't support x:auto + y:visible), so hovering a
+  card and triggering its translateY(-8px) lift clipped the card's top
+  edge against the track's box. Added padding-top: 12px (clearance for
+  the lift) paired with margin-top: -12px (keeps the track's resting
+  position unchanged) to both tracks.

@@ -649,6 +649,13 @@
   overflow-x: auto;
   scroll-behavior: auto; /* the rAF loop drives scrollLeft directly */
   scrollbar-width: none; /* Firefox */
+  /* overflow-x: auto forces overflow-y to compute as auto too (browsers
+     don't allow x:auto + y:visible), which was clipping the top of
+     .featuredProductCard's hover lift (translateY(-8px)). Add top
+     clearance equal to the lift, then pull the track back up by the
+     same amount so the cards' resting position is unchanged. */
+  padding-top: 12px;
+  margin-top: -12px;
 }
 
 .featuredProductsTrack::-webkit-scrollbar {
@@ -952,6 +959,11 @@
   overflow-x: auto;
   scroll-behavior: auto; /* the rAF loop drives scrollLeft directly */
   scrollbar-width: none; /* Firefox */
+  /* Same fix as .featuredProductsTrack above: overflow-x: auto forces
+     overflow-y to auto as well, clipping the top of
+     .testimonialHomeCard's hover lift (translateY(-8px)). */
+  padding-top: 12px;
+  margin-top: -12px;
 }
 
 .testimonialsHomeTrack::-webkit-scrollbar {
