@@ -23,6 +23,39 @@
   padding: var(--space-xl) var(--space-lg);
 }
 
+/*
+ * .authLogoLink
+ * Brand mark at the top of the glass card, linking back to the
+ * visitor home page ("/"). Sits above the Sign in / Create account
+ * tabs. Same hardcoded-white treatment as the rest of this file
+ * (see file header) since it floats over the photo slideshow.
+ */
+.authLogoLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  transition: opacity var(--transition-fast, 0.15s ease);
+}
+
+.authLogoLink:hover,
+.authLogoLink:focus-visible {
+  opacity: 0.8;
+}
+
+.authLogoMark {
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  flex-shrink: 0;
+}
+
 /* ------------------------------------------------------------
  * TABS
  * ------------------------------------------------------------ */

@@ -17,6 +17,8 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import { useToast } from "@/components/shared/useToast";
 import ToastStack from "@/components/shared/ToastStack";
 import AuthBackgroundSlideshow from "@/components/auth/AuthBackgroundSlideshow";
@@ -35,6 +37,15 @@ export default function LoginPage() {
       <ToastStack toasts={toasts} onDismiss={dismissToast} />
 
       <div className="authGlassCard">
+        {/* Logo link back to the visitor home page — lets anyone who
+            lands on /auth/login directly (bookmark, shared link) get
+            back to the marketing site without using the browser's
+            back button. */}
+        <Link href="/" className="authLogoLink" aria-label="Go to Matthew Studio home page">
+          <Image src="/logo-icon.png" alt="" width={32} height={32} className="authLogoMark" priority />
+          <span>Matthew Studio</span>
+        </Link>
+
         <div className="authTabs">
           <button
             type="button"
