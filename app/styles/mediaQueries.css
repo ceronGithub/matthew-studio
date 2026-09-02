@@ -19,6 +19,7 @@
 @media (max-width: 767px) {
   .siteNavLinks,
   .siteNavCta,
+  .siteNavSignUp,
   .siteNavThemeToggle {
     display: none;
   }

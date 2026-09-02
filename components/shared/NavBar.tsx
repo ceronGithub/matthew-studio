@@ -180,6 +180,10 @@ export default function NavBar() {
             </li>
           </ul>
 
+          <Link href="/auth/login" className="siteNavSignUp">
+            Sign Up
+          </Link>
+
           <Link href="/products" className="siteNavCta">
             Browse Marketplace
           </Link>
@@ -229,6 +233,11 @@ export default function NavBar() {
               </li>
             ))}
 
+            <li>
+              <Link href="/auth/login" className="siteNavSignUpMobile" onClick={() => setIsMenuOpen(false)}>
+                Sign Up
+              </Link>
+            </li>
             <li>
               <Link href="/products" className="siteNavCta siteNavCtaMobile" onClick={() => setIsMenuOpen(false)}>
                 Browse Marketplace

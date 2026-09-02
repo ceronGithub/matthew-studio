@@ -727,3 +727,24 @@ project is done.
   sandbox only because fonts.googleapis.com is unreachable here
   (next/font/google needs it at build time) — unrelated to this
   change; a normal dev machine with internet access is unaffected.
+
+[2026-09-02] Fixed a React hydration mismatch on <html> caused by the
+  theme anti-flash script (app/layout.tsx) setting data-theme before
+  hydration while the server-rendered markup has no such attribute —
+  added suppressHydrationWarning to that one element, scoped narrowly
+  per Next.js's documented dark-mode pattern, no other change needed.
+  Also added the previously-missing Sign Up link: new "Sign Up" link
+  in NavBar.tsx (desktop nav row, next to the theme toggle; mobile
+  slide-down panel, above Browse Marketplace), styled via new
+  .siteNavSignUp/.siteNavSignUpMobile rules in shared.css. Points to a
+  new minimal placeholder route, app/(public)/auth/login/page.tsx — a
+  "coming soon" card built from existing .eyebrow/.heroTitle/
+  .heroSubtitle/.buttonPrimary classes plus 3 new small
+  .authPlaceholder* rules, so no new stylesheet was needed. The real
+  Sign In / Create Account experience is specced in
+  login_and_registration_page.md (Supabase auth, API routes, security
+  logging) but was explicitly deferred — this is a placeholder only,
+  confirmed with the developer before building. npx tsc --noEmit and
+  eslint both pass clean on every new/modified file (same two
+  pre-existing NavBar.tsx set-state-in-effect findings from the prior
+  entry remain, on lines this change still didn't touch).

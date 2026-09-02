@@ -660,6 +660,23 @@ th.comparisonTableTierHighlighted,
   color: var(--color-text-muted);
 }
 
+.siteNavSignUp {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  touch-action: manipulation;
+  transition: color var(--transition-fast);
+}
+
+.siteNavSignUp:hover,
+.siteNavSignUp:focus-visible {
+  color: var(--color-text-primary);
+}
+
 .siteNavCta {
   font-size: 0.875rem;
   font-weight: 600;
@@ -779,6 +796,12 @@ th.comparisonTableTierHighlighted,
 .siteNavCtaMobile {
   justify-content: center;
   color: var(--background) !important;
+}
+
+.siteNavSignUpMobile {
+  justify-content: center;
+  font-weight: 600;
+  color: var(--color-text-primary);
 }
 
 /* ------------------------------------------------------------
@@ -1422,4 +1445,31 @@ th.comparisonTableTierHighlighted,
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+/* ------------------------------------------------------------
+ * AUTH PLACEHOLDER (app/(public)/auth/login) — temporary "coming
+ * soon" card until the full Sign In / Create Account page from
+ * login_and_registration_page.md is built. Reuses .eyebrow/.heroTitle/
+ * .heroSubtitle/.buttonPrimary above rather than duplicating them.
+ * ------------------------------------------------------------ */
+.authPlaceholderSection {
+  padding: var(--space-2xl) var(--space-lg);
+}
+
+.authPlaceholderCard {
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-md);
+  padding: var(--space-2xl) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+
+.authPlaceholderCta {
+  margin-top: var(--space-sm);
 }

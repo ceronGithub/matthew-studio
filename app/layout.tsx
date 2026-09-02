@@ -63,6 +63,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
+      // The anti-flash script above sets data-theme on this element
+      // before hydration runs, so its attributes will legitimately
+      // differ from what was server-rendered — suppressHydrationWarning
+      // tells React that mismatch is expected here, not a bug. Scoped
+      // to just this element, not the whole tree.
+      suppressHydrationWarning
       className={`${fraunces.variable} ${inter.variable} ${plexMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
