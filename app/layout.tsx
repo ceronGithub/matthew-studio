@@ -16,6 +16,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter, IBM_Plex_Mono } from "next/font/google";
 import Script from "next/script";
+import { MotionConfig } from "framer-motion";
 import "./styles/globals.css";
 import "./styles/mediaQueries.css";
 import { ThemeProvider } from "@/context/ThemeContext";
@@ -75,7 +76,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Script id="theme-init" strategy="beforeInteractive">
           {THEME_INIT_SCRIPT}
         </Script>
-        <ThemeProvider>{children}</ThemeProvider>
+        {/*
+          reducedMotion="user" makes every framer-motion motion.* component
+          site-wide automatically honor the OS-level prefers-reduced-motion
+          setting — whileInView/initial/animate transitions collapse to an
+          instant jump to their end state instead of animating. This does
+          NOT cover custom rAF/setInterval loops written outside motion.*
+          (auto-scroll carousels, count-up numbers) — those still call
+          lib/hooks/usePrefersReducedMotion.ts directly, same as
+          HeroSection/FeaturedProducts/TestimonialsSection/ComparisonTable/
+          VideoCarousel already do.
+        */}
+        <MotionConfig reducedMotion="user">
+          <ThemeProvider>{children}</ThemeProvider>
+        </MotionConfig>
       </body>
     </html>
   );
