@@ -7,9 +7,6 @@
 // app's own runtime client is built separately with the pg driver
 // adapter in services/prisma.ts using DATABASE_URL (transaction pooler,
 // port 6543) — neither one reads a url from this file.
-//
-// Add models below as features are built. Kept empty for now per request —
-// just scaffolding, ready to receive tables.
 
 generator client {
   provider = "prisma-client-js"
@@ -19,11 +16,19 @@ datasource db {
   provider = "postgresql"
 }
 
-// ---------------------------------------------------------------------
-// Models go here. Example shape for reference (not created yet):
-//
-// model Example {
-//   id        String   @id @default(cuid())
-//   createdAt DateTime @default(now())
-// }
-// ---------------------------------------------------------------------
+/// RateLimitAttempt
+/// One row per request attempt against a rate-limited endpoint (login,
+/// register). lib/rateLimit.ts counts rows for a given ipAddress +
+/// endpoint within the trailing window instead of maintaining a
+/// read-modify-write counter — safe under concurrent requests since
+/// every attempt is an independent insert, never an update.
+/// Rows are disposable: safe to periodically delete anything older
+/// than the longest window in use (15 minutes) if this table grows.
+model RateLimitAttempt {
+  id        String   @id @default(cuid())
+  ipAddress String
+  endpoint  String // "login" | "register"
+  createdAt DateTime @default(now())
+
+  @@index([ipAddress, endpoint, createdAt])
+}

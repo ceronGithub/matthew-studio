@@ -11,11 +11,25 @@ export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 import { supabaseServerClient } from "@/lib/supabase/serverClient";
+import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 
 const isProduction = process.env.NODE_ENV === "production";
+const LOGIN_MAX_ATTEMPTS = 5;
+const LOGIN_WINDOW_MINUTES = 15;
 
 export async function POST(request: Request) {
   try {
+    // Rate limit BEFORE touching Supabase — blocks brute-force attempts
+    // as cheaply as possible, before any auth call is even made.
+    const ipAddress = getClientIp(request);
+    const rateLimit = await checkRateLimit(ipAddress, "login", LOGIN_MAX_ATTEMPTS, LOGIN_WINDOW_MINUTES);
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { success: false, data: null, message: "Too many attempts. Please try again in 15 minutes." },
+        { status: 429 }
+      );
+    }
+
     const { email, password } = await request.json();
 
     if (!email || !password) {

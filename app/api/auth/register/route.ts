@@ -11,9 +11,12 @@ export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 import { supabaseServerClient } from "@/lib/supabase/serverClient";
+import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 
 const isProduction = process.env.NODE_ENV === "production";
 const FORBIDDEN_CHARACTERS = /[<>{}[\]/\\;'"`=]/g;
+const REGISTER_MAX_ATTEMPTS = 3;
+const REGISTER_WINDOW_MINUTES = 15;
 
 function isPasswordStrongEnough(password: string): boolean {
   return (
@@ -27,6 +30,17 @@ function isPasswordStrongEnough(password: string): boolean {
 
 export async function POST(request: Request) {
   try {
+    // Rate limit BEFORE touching Supabase — stricter than login (3 vs 5)
+    // since account creation is more expensive to let an attacker spam.
+    const ipAddress = getClientIp(request);
+    const rateLimit = await checkRateLimit(ipAddress, "register", REGISTER_MAX_ATTEMPTS, REGISTER_WINDOW_MINUTES);
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { success: false, data: null, message: "Too many attempts. Please try again in 15 minutes." },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
     const email: string = body.email ?? "";
     const password: string = body.password ?? "";
