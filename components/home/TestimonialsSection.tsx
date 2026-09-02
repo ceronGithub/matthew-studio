@@ -116,8 +116,14 @@ export default function TestimonialsSection() {
     return () => cancelAnimationFrame(animationFrameId);
   }, [isDesktop, isPaused, prefersReducedMotion]);
 
+  // Screen-reader-only status text, updated only on manual arrow
+  // navigation (not on every auto-scroll animation frame — announcing
+  // continuous pixel movement would be unusable noise for SR users).
+  const [srStatus, setSrStatus] = useState("");
+
   function scrollByArrow(direction: 1 | -1) {
     trackRef.current?.scrollBy({ left: direction * ARROW_SCROLL_DISTANCE, behavior: "smooth" });
+    setSrStatus(direction === 1 ? "Showing next testimonials." : "Showing previous testimonials.");
   }
 
   return (
@@ -136,9 +142,16 @@ export default function TestimonialsSection() {
 
         <div
           className="testimonialsHomeCarousel"
+          role="region"
+          aria-label="Testimonials carousel"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
+          {/* Announces manual navigation only — see srStatus comment above. */}
+          <span className="srOnly" role="status" aria-live="polite">
+            {srStatus}
+          </span>
+
           {isDesktop ? (
             <>
               <div className="testimonialsHomeTrack" ref={trackRef}>

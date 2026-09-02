@@ -130,8 +130,14 @@ export default function FeaturedProducts() {
     return () => cancelAnimationFrame(animationFrameId);
   }, [isDesktop, isPaused, prefersReducedMotion]);
 
+  // Screen-reader-only status text, updated only on manual arrow
+  // navigation (not on every auto-scroll animation frame — announcing
+  // continuous pixel movement would be unusable noise for SR users).
+  const [srStatus, setSrStatus] = useState("");
+
   function scrollByArrow(direction: 1 | -1) {
     trackRef.current?.scrollBy({ left: direction * ARROW_SCROLL_DISTANCE, behavior: "smooth" });
+    setSrStatus(direction === 1 ? "Showing next bestsellers." : "Showing previous bestsellers.");
   }
 
   return (
@@ -150,9 +156,16 @@ export default function FeaturedProducts() {
 
         <div
           className="featuredProductsCarousel"
+          role="region"
+          aria-label="Product carousel"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
+          {/* Announces manual navigation only — see srStatus comment above. */}
+          <span className="srOnly" role="status" aria-live="polite">
+            {srStatus}
+          </span>
+
           {isDesktop ? (
             <>
               <div className="featuredProductsTrack" ref={trackRef}>
