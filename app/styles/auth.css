@@ -21,6 +21,14 @@
   border: 0.5px solid rgba(255, 255, 255, 0.38);
   border-radius: 12px;
   padding: var(--space-xl) var(--space-lg);
+  /* The Create Account tab has more fields than Sign In and can grow
+     taller than the viewport. The page wrapper (.authPageWrapper) is
+     overflow: hidden with no page-level scroll, so without this the
+     bottom of the form (and its submit button) got clipped with no
+     way to reach it. Cap the card to the viewport and let it scroll
+     internally instead. */
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
 }
 
 /*

@@ -808,3 +808,12 @@ project is done.
   hover styles — .categoryCard also feeds its own --categoryAccent
   into the pulse color via --cardHeartbeatColor so each category
   keeps its accent tint.
+
+[2026-09-02] Fixed the Create Account tab getting clipped on
+  /auth/login (app/styles/auth.css): .authGlassCard had no height cap,
+  and its parent .authPageWrapper is overflow: hidden with no page
+  scroll (full-bleed background slideshow), so the longer Register
+  form (name/email/password/confirm/terms) could grow taller than the
+  viewport with the bottom of the form — including the submit button —
+  clipped and unreachable. Added max-height: calc(100dvh - 2rem) +
+  overflow-y: auto to .authGlassCard so it scrolls internally instead.
