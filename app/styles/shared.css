@@ -506,13 +506,39 @@ th.comparisonTableTierHighlighted,
 /* ------------------------------------------------------------
  * NAVBAR
  * ------------------------------------------------------------ */
+/*
+ * .siteHeader is intentionally always a dark bar, regardless of the
+ * site's light/dark theme toggle (data-theme on <html>). Every nav
+ * child element below (.siteLogo, .siteNavLink, .siteNavSignUp,
+ * .siteNavToggle, .themeToggle, the Legal dropdown, the mobile
+ * panel) reads its color from the shared --color-text-, --color-border,
+ * --color-surface, and --color-bg tokens. Those tokens flip to DARK text
+ * in the light theme (Rule 33.1) — which, against this permanently
+ * dark bar, made every nav label invisible (dark-on-dark) whenever
+ * the site was in light/white theme. Fixed by re-declaring just the
+ * tokens this header actually uses, scoped to .siteHeader, so they
+ * always resolve to the dark-theme (light-on-dark) values no matter
+ * what <html data-theme> currently is. --background and --color-accent
+ * are deliberately left untouched — the CTA pill's contrast already
+ * works correctly in both themes and re-scoping it here would break it.
+ */
 .siteHeader {
   position: sticky;
   top: 0;
   z-index: var(--z-sticky);
   background: rgba(9, 9, 11, 0.72);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+
+  --color-text-primary: #f5f5f4;
+  --color-text-secondary: rgba(245, 245, 244, 0.62);
+  --color-text-muted: rgba(245, 245, 244, 0.38);
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-border-hover: rgba(255, 255, 255, 0.22);
+  --color-surface: rgba(255, 255, 255, 0.035);
+  --color-surface-hover: rgba(255, 255, 255, 0.07);
+  --color-surface-active: rgba(255, 255, 255, 0.11);
+  --color-bg: #09090b;
 }
 
 .siteNavInner {
