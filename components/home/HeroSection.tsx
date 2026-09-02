@@ -25,7 +25,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Sparkles, Sparkle } from "lucide-react";
+import { ArrowRight, Calendar, Sparkle } from "lucide-react";
 import { useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { HERO_MEDIA_ITEMS, type MediaShowcaseItem } from "@/lib/mediaShowcaseData";
@@ -147,9 +147,9 @@ export default function HeroSection() {
               Browse All Products
               <ArrowRight size={18} strokeWidth={1.75} aria-hidden="true" />
             </Link>
-            <Link href="/products?sort=newest" className="buttonSecondary">
-              <Sparkles size={18} strokeWidth={1.75} aria-hidden="true" />
-              See What&apos;s New
+            <Link href="/contact" className="buttonSecondary">
+              <Calendar size={18} strokeWidth={1.75} aria-hidden="true" />
+              Book a Demo
             </Link>
           </motion.div>
         </div>
