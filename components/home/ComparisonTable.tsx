@@ -25,6 +25,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { Check } from "lucide-react";
+import { usePrefersReducedMotion } from "@/lib/hooks/usePrefersReducedMotion";
 
 export interface ComparisonTier {
   slug: string;
@@ -50,12 +51,23 @@ function AnimatedPrice({ value, prefix = "" }: { value: number; prefix?: string 
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.6 });
   const [displayValue, setDisplayValue] = useState(0);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   // Counts up from 0 to `value` once the price scrolls into view — mirrors
   // the useMotionValue/useTransform counter pattern from Section 3,
   // Pattern 3, using a plain rAF loop to keep this component dependency-light.
+  // Reduced-motion visitors get the final number immediately instead of
+  // watching it climb (Section 7.5) — there's no meaningful "opacity-only"
+  // equivalent for a counting number, so jumping straight to the answer
+  // is the closest analog.
   useEffect(() => {
     if (!isInView) return;
+
+    if (prefersReducedMotion) {
+      setDisplayValue(value);
+      return;
+    }
+
     const durationMs = 1500;
     let startTimestamp: number | null = null;
 
@@ -68,7 +80,7 @@ function AnimatedPrice({ value, prefix = "" }: { value: number; prefix?: string 
     };
     frameId = requestAnimationFrame(step);
     return () => cancelAnimationFrame(frameId);
-  }, [isInView, value]);
+  }, [isInView, value, prefersReducedMotion]);
 
   return (
     <span ref={ref}>

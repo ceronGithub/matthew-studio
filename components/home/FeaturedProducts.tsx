@@ -37,6 +37,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { FEATURED_PRODUCTS, type FeaturedProduct } from "@/lib/featuredProductsData";
+import { usePrefersReducedMotion } from "@/lib/hooks/usePrefersReducedMotion";
 
 const CATEGORY_ICONS: Record<FeaturedProduct["iconName"], LucideIcon> = {
   "layout-template": LayoutTemplate,
@@ -88,6 +89,7 @@ export default function FeaturedProducts() {
   const [isDesktop, setIsDesktop] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const query = window.matchMedia("(min-width: 768px)");
@@ -103,7 +105,7 @@ export default function FeaturedProducts() {
   // originals). Pauses whenever the user is hovering or has just used
   // an arrow button.
   useEffect(() => {
-    if (!isDesktop || isPaused) return;
+    if (!isDesktop || isPaused || prefersReducedMotion) return;
     const track = trackRef.current;
     if (!track) return;
 
@@ -126,7 +128,7 @@ export default function FeaturedProducts() {
 
     animationFrameId = requestAnimationFrame(step);
     return () => cancelAnimationFrame(animationFrameId);
-  }, [isDesktop, isPaused]);
+  }, [isDesktop, isPaused, prefersReducedMotion]);
 
   function scrollByArrow(direction: 1 | -1) {
     trackRef.current?.scrollBy({ left: direction * ARROW_SCROLL_DISTANCE, behavior: "smooth" });

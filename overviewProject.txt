@@ -783,3 +783,24 @@ project is done.
   build. New shared components/shared/RoleAreaHeader.tsx (display
   name + Sign Out, CSRF-protected) and app/styles/roleAreaDashboard.css
   back both placeholder shells. No schema change.
+
+[2026-09-02] Added prefers-reduced-motion support site-wide
+  (buyer_homepage_specification.md Section 4/7.5 gap - none of the 14
+  homepage sections respected it before this). Two mechanisms: (1)
+  app/layout.tsx now wraps children in framer-motion's <MotionConfig
+  reducedMotion="user">, which automatically strips transform-based
+  entrance animations (translateY, scale) and keeps only opacity fades
+  for every motion.* component site-wide, not homepage-only - the
+  correct scope since the same accessibility expectation applies
+  everywhere. (2) New lib/hooks/usePrefersReducedMotion.ts (matchMedia,
+  reacts to live changes) covers the plain rAF/IntersectionObserver-
+  driven motion outside framer-motion's reach: FeaturedProducts.tsx and
+  TestimonialsSection.tsx now freeze their auto-scroll carousel loops
+  entirely when set; VideoCarousel.tsx (reused by AI Videos, Templates
+  demo, and T-Shirts gallery) skips its visibility-triggered autoplay,
+  leaving native <video> controls for manual play; ComparisonTable.tsx's
+  AnimatedPrice count-up snaps straight to the final number instead of
+  animating. No schema change. Not yet done from the same review: the
+  count-up stat animation still missing from QuickWins.tsx, missing
+  lib/quickWinsData.ts, missing public/og-home.png, and no session-
+  aware Sign In / Go to Dashboard CTA in NavBar.tsx.

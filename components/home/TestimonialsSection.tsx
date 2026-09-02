@@ -23,6 +23,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { HOME_TESTIMONIALS, type HomeTestimonial } from "@/lib/homeTestimonialsData";
+import { usePrefersReducedMotion } from "@/lib/hooks/usePrefersReducedMotion";
 
 // Duplicated once so the auto-scroll can jump from the end of the first
 // copy back to 0 the instant it crosses the halfway point — the two
@@ -70,6 +71,7 @@ export default function TestimonialsSection() {
   const [isDesktop, setIsDesktop] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const query = window.matchMedia("(min-width: 768px)");
@@ -86,7 +88,7 @@ export default function TestimonialsSection() {
   // halfway point once it reaches 0, where the duplicated items line
   // back up with the originals.
   useEffect(() => {
-    if (!isDesktop || isPaused) return;
+    if (!isDesktop || isPaused || prefersReducedMotion) return;
     const track = trackRef.current;
     if (!track) return;
 
@@ -112,7 +114,7 @@ export default function TestimonialsSection() {
 
     animationFrameId = requestAnimationFrame(step);
     return () => cancelAnimationFrame(animationFrameId);
-  }, [isDesktop, isPaused]);
+  }, [isDesktop, isPaused, prefersReducedMotion]);
 
   function scrollByArrow(direction: 1 | -1) {
     trackRef.current?.scrollBy({ left: direction * ARROW_SCROLL_DISTANCE, behavior: "smooth" });

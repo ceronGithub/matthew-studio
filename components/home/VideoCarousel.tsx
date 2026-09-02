@@ -23,6 +23,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { usePrefersReducedMotion } from "@/lib/hooks/usePrefersReducedMotion";
 
 export interface VideoCarouselItem {
   id: string;
@@ -48,6 +49,7 @@ export default function VideoCarousel({ videos }: VideoCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
   const touchStartX = useRef(0);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   function goTo(index: number) {
     setActiveIndex(((index % videos.length) + videos.length) % videos.length);
@@ -56,10 +58,13 @@ export default function VideoCarousel({ videos }: VideoCarouselProps) {
   // Plays the active video only once 60%+ of it is visible in the
   // viewport, and pauses it the instant that drops below threshold —
   // prevents videos autoplaying off-screen or fighting for attention
-  // with other page content.
+  // with other page content. Skipped entirely when the visitor prefers
+  // reduced motion (Section 7.5: "Auto-play carousels pause/disable if
+  // user prefers reduced motion") — the native <video> controls still
+  // let them press play manually.
   useEffect(() => {
     const videoElement = videoRef.current;
-    if (!videoElement) return;
+    if (!videoElement || prefersReducedMotion) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -77,7 +82,7 @@ export default function VideoCarousel({ videos }: VideoCarouselProps) {
 
     observer.observe(videoElement);
     return () => observer.disconnect();
-  }, [activeIndex]);
+  }, [activeIndex, prefersReducedMotion]);
 
   function handleTouchStart(event: React.TouchEvent) {
     touchStartX.current = event.touches[0].clientX;
