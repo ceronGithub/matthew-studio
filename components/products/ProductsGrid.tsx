@@ -23,7 +23,14 @@
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import ProductCard from "@/components/home/ProductCard";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 import type { Product, ProductCategorySlug } from "@/lib/productsData";
+
+// Per-card stagger delay for the scroll-entrance animation — capped at
+// 8 so a long results page doesn't push the last row's entrance out
+// several seconds (visitor_specification.md §3.1).
+const STAGGER_STEP_SECONDS = 0.06;
+const STAGGER_CAP = 8;
 
 type CategoryFilter = ProductCategorySlug | "all";
 type SortMode = "bestselling" | "newest" | "price-asc" | "price-desc" | "rating";
@@ -137,8 +144,13 @@ export default function ProductsGrid({ products }: { products: Product[] }) {
           </p>
         ) : (
           <div className="productCardsGrid">
-            {visibleProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+            {visibleProducts.map((product, index) => (
+              <ScrollReveal
+                key={product.id}
+                delay={Math.min(index, STAGGER_CAP) * STAGGER_STEP_SECONDS}
+              >
+                <ProductCard product={product} />
+              </ScrollReveal>
             ))}
           </div>
         )}

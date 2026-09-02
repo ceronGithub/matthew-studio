@@ -217,13 +217,21 @@
   border-radius: var(--radius, 12px);
   background: var(--color-surface);
   overflow: hidden;
-  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  transition:
+    border-color var(--transition-base),
+    background-color var(--transition-base),
+    transform var(--transition-base);
+  will-change: transform;
 }
 
+/* Lift + border/background brighten on hover — replaces the old
+ * box-shadow-only depth cue per Rule 17.7 (shadows are for floating
+ * elements only, not the primary depth mechanism on in-flow cards). */
 .productCard:hover,
 .productCard:focus-within {
   border-color: var(--color-border-hover);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  background: var(--color-surface-hover);
+  transform: translateY(-4px);
 }
 
 .productCardThumb {
