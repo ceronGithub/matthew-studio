@@ -1446,30 +1446,3 @@ th.comparisonTableTierHighlighted,
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
-/* ------------------------------------------------------------
- * AUTH PLACEHOLDER (app/(public)/auth/login) — temporary "coming
- * soon" card until the full Sign In / Create Account page from
- * login_and_registration_page.md is built. Reuses .eyebrow/.heroTitle/
- * .heroSubtitle/.buttonPrimary above rather than duplicating them.
- * ------------------------------------------------------------ */
-.authPlaceholderSection {
-  padding: var(--space-2xl) var(--space-lg);
-}
-
-.authPlaceholderCard {
-  max-width: var(--max-width-narrow);
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: var(--space-md);
-  padding: var(--space-2xl) var(--space-lg);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  background: var(--color-surface);
-}
-
-.authPlaceholderCta {
-  margin-top: var(--space-sm);
-}
