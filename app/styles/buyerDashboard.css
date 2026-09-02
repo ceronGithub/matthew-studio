@@ -1,0 +1,210 @@
+/**
+ * FILE: app/styles/buyerDashboard.css
+ * PURPOSE:
+ * Styles for the buyer account shell (BuyerNav) and the dashboard page
+ * itself. References the design tokens defined in app/globals.css —
+ * never hardcoded colors or spacing. Responsive breakpoints for this
+ * file live in app/styles/mediaQueries.css, not inline here.
+ */
+
+/* buyerShell
+ * Full-height wrapper for every /buyer/* page — nav on top, content
+ * below, both constrained to --max-width-content and centered. */
+.buyerShell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background-color: var(--color-bg);
+}
+
+/* buyerNav
+ * Sticky top bar shown on every buyer page. Thin bottom border only —
+ * no shadow, matches the rest of the site's flat-surface language. */
+.buyerNav {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.buyerNavInner {
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-md) var(--space-lg);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.buyerNavWordmark {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+
+.buyerNavRight {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.buyerNavWelcome {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.buyerNavSignOut {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.buyerNavSignOut:hover,
+.buyerNavSignOut:focus-visible,
+.buyerNavSignOut:active {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+.buyerNavSignOut:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.buyerSpin {
+  animation: buyerSpin 0.8s linear infinite;
+}
+@keyframes buyerSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* buyerMain
+ * Content area below the nav — same max-width/centering pattern. */
+.buyerMain {
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+  flex: 1;
+}
+
+/* buyerDashboard
+ * Welcome header + quick-link grid, per Section 10's onboarding list. */
+.buyerDashboardHeader {
+  margin-bottom: var(--space-xl);
+}
+
+.buyerDashboardEyebrow {
+  font-family: var(--font-geist-mono, monospace);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-sm) 0;
+}
+
+.buyerDashboardTitle {
+  font-size: 1.75rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-sm) 0;
+}
+
+.buyerDashboardSubtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin: 0;
+  max-width: 60ch;
+}
+
+/* buyerQuickLinkGrid
+ * Auto-responsive card grid — no manual breakpoints needed. */
+.buyerQuickLinkGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-lg);
+}
+
+.buyerQuickLinkWrapper {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.buyerQuickLinkCard {
+  height: 100%;
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+.buyerQuickLinkWrapper:hover .buyerQuickLinkCard,
+.buyerQuickLinkWrapper:focus-visible .buyerQuickLinkCard {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-accent);
+}
+
+.buyerQuickLinkCard--soon {
+  opacity: 0.65;
+}
+.buyerQuickLinkWrapper[aria-disabled="true"] {
+  cursor: default;
+}
+
+.buyerQuickLinkIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background-color: var(--color-surface-active);
+  color: var(--color-accent);
+}
+
+.buyerQuickLinkTitle {
+  font-size: 1.05rem;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.buyerQuickLinkDescription {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.buyerQuickLinkBadge {
+  align-self: flex-start;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 0.2rem 0.5rem;
+  margin-top: auto;
+}
