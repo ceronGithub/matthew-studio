@@ -438,8 +438,14 @@
 
 .statGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  /* auto-fit (not auto-fill): with exactly 3 fixed stat cards, auto-fill
+     kept leftover empty tracks on wide viewports, pinning the cards to
+     the left with dead space on the right. auto-fit collapses those
+     empty tracks so the 3 cards center as a group inside the section. */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: var(--space-lg);
+  max-width: 780px;
+  margin: 0 auto;
 }
 
 .statCard {

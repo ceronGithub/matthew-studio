@@ -765,3 +765,12 @@ project is done.
   clean; eslint clean except the same two pre-existing NavBar.tsx
   set-state-in-effect findings noted in prior entries, still on lines
   this change didn't touch.
+
+[2026-09-02] Fixed the homepage QuickWins stat row (statGrid in
+  app/styles/home.css): grid-template-columns used auto-fill, which
+  keeps empty leftover tracks when a row has fewer items than the
+  viewport can fit, pinning the 3 "18+/6/48h" stat cards to the left
+  with dead space on the right instead of centering them. Switched to
+  auto-fit (collapses the empty tracks so the 3 items share the row
+  evenly) and capped/centered the row with max-width: 780px; margin: 0
+  auto so it reads as one centered group on wide screens.
