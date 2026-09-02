@@ -26,10 +26,54 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Sparkles, Sparkle } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import type { CSSProperties } from "react";
-import { HERO_MEDIA_ITEMS } from "@/lib/mediaShowcaseData";
+import { HERO_MEDIA_ITEMS, type MediaShowcaseItem } from "@/lib/mediaShowcaseData";
 import { useMediaCarousel } from "@/hooks/useMediaCarousel";
+import MediaPreviewPlaceholder from "@/components/shared/MediaPreviewPlaceholder";
+
+/**
+ * HeroMediaVisual
+ * Same fallback pattern as QuickWinsMediaVisual (components/home/QuickWins.tsx):
+ * shows the real photo/video, or a centered MediaPreviewPlaceholder if
+ * the file 404s. `size` controls the placeholder icon size so the
+ * smaller "Up Next" thumb doesn't get an oversized icon.
+ */
+function HeroMediaVisual({ item, size = "md" }: { item: MediaShowcaseItem; size?: "sm" | "md" }) {
+  const [hasError, setHasError] = useState(false);
+
+  if (hasError) {
+    return (
+      <MediaPreviewPlaceholder
+        iconName={item.iconName}
+        label={item.caption}
+        accentColor={item.accentColor}
+        size={size}
+      />
+    );
+  }
+
+  return item.type === "video" ? (
+    <video
+      src={item.src}
+      autoPlay={size === "md"}
+      muted
+      loop
+      playsInline
+      aria-label={item.alt}
+      onError={() => setHasError(true)}
+    />
+  ) : (
+    <Image
+      src={item.src}
+      alt={item.alt}
+      fill
+      sizes={size === "md" ? "300px" : "180px"}
+      style={{ objectFit: "cover" }}
+      onError={() => setHasError(true)}
+    />
+  );
+}
 
 export default function HeroSection() {
   // Tracks this section's scroll progress so the visual can move at a
@@ -142,24 +186,7 @@ export default function HeroSection() {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.5, ease: "easeOut" }}
                 >
-                  {activeItem.type === "video" ? (
-                    <video
-                      src={activeItem.src}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      aria-label={activeItem.alt}
-                    />
-                  ) : (
-                    <Image
-                      src={activeItem.src}
-                      alt={activeItem.alt}
-                      fill
-                      sizes="300px"
-                      style={{ objectFit: "cover" }}
-                    />
-                  )}
+                  <HeroMediaVisual item={activeItem} size="md" />
                 </motion.div>
               </AnimatePresence>
             </div>
@@ -172,17 +199,7 @@ export default function HeroSection() {
               Up Next
             </span>
             <div className="heroMediaCardThumbSmall">
-              {nextItem.type === "video" ? (
-                <video src={nextItem.src} muted loop playsInline aria-label={nextItem.alt} />
-              ) : (
-                <Image
-                  src={nextItem.src}
-                  alt={nextItem.alt}
-                  fill
-                  sizes="180px"
-                  style={{ objectFit: "cover" }}
-                />
-              )}
+              <HeroMediaVisual item={nextItem} size="sm" />
             </div>
             <h4>{nextItem.caption}</h4>
           </div>

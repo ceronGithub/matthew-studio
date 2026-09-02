@@ -38,6 +38,12 @@ export interface MediaShowcaseItem {
   caption: string;
   subcaption?: string;
   accentColor: string;
+  // iconName — used by components/shared/MediaPreviewPlaceholder.tsx as
+  // the centered fallback graphic whenever `src` 404s (see ASSETS —
+  // ACTION NEEDED note above). Same iconName union as
+  // CategoryShowcaseItem so both sections' fallbacks stay visually
+  // consistent with the category grid.
+  iconName: "layout-template" | "shirt" | "clapperboard" | "wrench" | "book-open" | "box";
 }
 
 // Mirrors HERO_PREVIEW_CATEGORIES' old order (Templates → T-Shirts →
@@ -53,6 +59,7 @@ export const HERO_MEDIA_ITEMS: MediaShowcaseItem[] = [
     caption: "Resort Booking — Modern",
     subcaption: "Next.js · booking flow included",
     accentColor: "#2fd480",
+    iconName: "layout-template",
   },
   {
     id: "hero-tshirts",
@@ -62,6 +69,7 @@ export const HERO_MEDIA_ITEMS: MediaShowcaseItem[] = [
     caption: "Creator Merch Drop",
     subcaption: "Custom print · size & color options",
     accentColor: "#ff8a5c",
+    iconName: "shirt",
   },
   {
     id: "hero-ai-video",
@@ -71,6 +79,7 @@ export const HERO_MEDIA_ITEMS: MediaShowcaseItem[] = [
     caption: "AI Product Teaser Pack",
     subcaption: "Ready to publish or repurpose",
     accentColor: "#7f9cf5",
+    iconName: "clapperboard",
   },
 ];
 
@@ -84,6 +93,7 @@ export const QUICK_WINS_MEDIA_ITEMS: MediaShowcaseItem[] = [
     alt: "Templates category preview",
     caption: "Templates",
     accentColor: "#2fd480",
+    iconName: "layout-template",
   },
   {
     id: "quickwins-tshirts",
@@ -92,6 +102,7 @@ export const QUICK_WINS_MEDIA_ITEMS: MediaShowcaseItem[] = [
     alt: "T-Shirts category preview",
     caption: "T-Shirts",
     accentColor: "#ff8a5c",
+    iconName: "shirt",
   },
   {
     id: "quickwins-ai-videos",
@@ -100,6 +111,7 @@ export const QUICK_WINS_MEDIA_ITEMS: MediaShowcaseItem[] = [
     alt: "AI Videos category preview",
     caption: "AI Videos",
     accentColor: "#7f9cf5",
+    iconName: "clapperboard",
   },
   {
     id: "quickwins-file-tools",
@@ -108,6 +120,7 @@ export const QUICK_WINS_MEDIA_ITEMS: MediaShowcaseItem[] = [
     alt: "File Tools category preview",
     caption: "File Tools",
     accentColor: "#e8c96a",
+    iconName: "wrench",
   },
   {
     id: "quickwins-tutorials",
@@ -116,6 +129,7 @@ export const QUICK_WINS_MEDIA_ITEMS: MediaShowcaseItem[] = [
     alt: "Tutorials category preview",
     caption: "Tutorials",
     accentColor: "#c988e0",
+    iconName: "book-open",
   },
   {
     id: "quickwins-game-characters",
@@ -124,5 +138,6 @@ export const QUICK_WINS_MEDIA_ITEMS: MediaShowcaseItem[] = [
     alt: "Game Characters category preview",
     caption: "Game Characters",
     accentColor: "#6fd6d6",
+    iconName: "box",
   },
 ];

@@ -216,6 +216,45 @@
   color: var(--color-text-primary);
 }
 
+/*
+ * .mediaPreviewPlaceholder
+ * Centered fallback shown inside a media thumb (hero main/secondary,
+ * QuickWins strip) when the real photo/video file hasn't been
+ * uploaded yet — see components/shared/MediaPreviewPlaceholder.tsx.
+ * Fills its positioned parent (each parent already has
+ * position: relative + overflow: hidden), so it needs no size of its
+ * own — Rule 23.7's "component fills its parent" applies here too.
+ */
+.mediaPreviewPlaceholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  background: color-mix(in srgb, var(--placeholderAccent) 12%, var(--color-surface-active));
+}
+
+.mediaPreviewPlaceholderIconWrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  color: var(--placeholderAccent);
+  background: color-mix(in srgb, var(--placeholderAccent) 18%, transparent);
+}
+
+.mediaPreviewPlaceholderLabel {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
 /* ------------------------------------------------------------
  * QUICK WINS
  * ------------------------------------------------------------ */

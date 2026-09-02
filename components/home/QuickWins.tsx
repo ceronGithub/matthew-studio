@@ -22,11 +22,53 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { useState } from "react";
 import type { CSSProperties } from "react";
 import { CATEGORY_SHOWCASE } from "@/lib/categoryShowcaseData";
 import { CATEGORY_ACCENT_COLORS } from "@/lib/categoryAccentColors";
-import { QUICK_WINS_MEDIA_ITEMS } from "@/lib/mediaShowcaseData";
+import { QUICK_WINS_MEDIA_ITEMS, type MediaShowcaseItem } from "@/lib/mediaShowcaseData";
 import { useMediaCarousel } from "@/hooks/useMediaCarousel";
+import MediaPreviewPlaceholder from "@/components/shared/MediaPreviewPlaceholder";
+
+/**
+ * QuickWinsMediaVisual
+ * Renders the active category's photo/video, falling back to a
+ * centered MediaPreviewPlaceholder if the file 404s (see
+ * lib/mediaShowcaseData.ts's "ASSETS — ACTION NEEDED" note). The
+ * `hasError` state is local to this component and re-mounts fresh
+ * each time the parent's `key={item.id}` changes, so switching
+ * categories always re-attempts the real file first.
+ */
+function QuickWinsMediaVisual({ item }: { item: MediaShowcaseItem }) {
+  const [hasError, setHasError] = useState(false);
+
+  if (hasError) {
+    return (
+      <MediaPreviewPlaceholder iconName={item.iconName} label={item.caption} accentColor={item.accentColor} />
+    );
+  }
+
+  return item.type === "video" ? (
+    <video
+      src={item.src}
+      autoPlay
+      muted
+      loop
+      playsInline
+      aria-label={item.alt}
+      onError={() => setHasError(true)}
+    />
+  ) : (
+    <Image
+      src={item.src}
+      alt={item.alt}
+      fill
+      sizes="(min-width: 768px) 420px, 100vw"
+      style={{ objectFit: "cover" }}
+      onError={() => setHasError(true)}
+    />
+  );
+}
 
 const RESULT_STATS = [
   { value: "18+", label: "Products across 6 categories" },
@@ -96,24 +138,7 @@ export default function QuickWins() {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.5, ease: "easeOut" }}
                 >
-                  {activeMedia.type === "video" ? (
-                    <video
-                      src={activeMedia.src}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      aria-label={activeMedia.alt}
-                    />
-                  ) : (
-                    <Image
-                      src={activeMedia.src}
-                      alt={activeMedia.alt}
-                      fill
-                      sizes="(min-width: 768px) 420px, 100vw"
-                      style={{ objectFit: "cover" }}
-                    />
-                  )}
+                  <QuickWinsMediaVisual item={activeMedia} />
                 </motion.div>
               </AnimatePresence>
             </div>
