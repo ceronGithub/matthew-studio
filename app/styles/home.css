@@ -9,19 +9,59 @@
  * HERO
  * ------------------------------------------------------------ */
 .heroSection {
+  position: relative;
+  overflow: hidden; /* keeps the ambient glow from causing horizontal scroll (Rule 23.8) */
   padding: var(--space-2xl) var(--space-lg);
   /* Subtle dark gradient, page bg fading to a slightly lighter tone
    * toward the bottom of the hero — homepage only. */
   background: linear-gradient(180deg, var(--background) 0%, var(--color-surface) 100%);
 }
 
+/* Blurred ambient glow behind the hero visual, tinted to whichever
+ * rotating media item is currently active (--activeAccent, set inline
+ * by HeroSection.tsx). Only background-color transitions — never a
+ * layout-affecting property (Rule 17.5). */
+.heroAmbientGlow {
+  position: absolute;
+  top: -160px;
+  right: -120px;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: var(--activeAccent, var(--color-accent));
+  opacity: 0.16;
+  filter: blur(90px);
+  transition: background-color var(--transition-slow);
+  pointer-events: none;
+  z-index: var(--z-base);
+}
+
 .heroContainer {
+  position: relative;
+  z-index: var(--z-raised);
   max-width: var(--max-width-content);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-2xl);
+}
+
+/* Pill-style kicker above the headline (approved mockup direction),
+ * replacing the old plain-text .eyebrow treatment on the homepage only. */
+.heroKicker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: 999px;
+  border: 1px solid var(--color-border-hover);
+  background: var(--color-surface-hover);
+  color: var(--color-text-secondary);
+}
+
+.heroKicker svg {
+  color: var(--color-accent);
 }
 
 .heroCopy {
@@ -56,106 +96,158 @@
 /* .buttonPrimary, .buttonSecondary moved to shared.css — used as
  * CTAs across every public page, not just Home. */
 
-/* Decorative browser mockup standing in for a real product screenshot */
+/* ------------------------------------------------------------
+ * HERO ROTATING MEDIA SHOWCASE
+ * Mobile-first: badge + main card + secondary card stack in normal
+ * document flow. From 768px up (mediaQueries.css), they switch to the
+ * layered/overlapping absolute-position arrangement from the approved
+ * mockup — never absolute-positioned on mobile, to avoid overlap.
+ * ------------------------------------------------------------ */
 .heroVisual {
   width: 100%;
   max-width: var(--max-width-content);
-}
-
-.mockBrowser {
-  width: 100%;
-  border-radius: 14px;
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-  overflow: hidden;
-  will-change: transform;
-}
-
-.mockBrowserBar {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-sm) var(--space-md);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.mockBrowserDot {
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  background: var(--color-border-hover);
-}
-
-.mockScreen {
-  padding: var(--space-xl);
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg);
-}
-
-.mockScreenSearchBar {
-  height: 2.5rem;
-  width: 100%;
-  max-width: 60%;
-  border-radius: 6px;
-  background: var(--color-surface-hover);
-  display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: var(--space-sm);
-  padding: 0 var(--space-md);
-  color: var(--color-text-muted);
-}
-
-.mockScreenSearchBar span {
-  font-size: 0.8125rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.mockScreenGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: var(--space-md);
 }
 
-.mockScreenCard {
-  border-radius: 10px;
-  border: 1px solid var(--color-border);
-  background: var(--color-surface-hover);
-  padding: var(--space-md);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-}
-
-.mockScreenCardIcon {
-  color: var(--color-accent);
-}
-
-.mockScreenCardName {
+.heroVisualBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
   font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--color-text-primary);
-  line-height: 1.3;
+  color: var(--color-text-secondary);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: 999px;
+  border: 1px solid var(--color-border-hover);
+  background: var(--color-surface-hover);
 }
 
-.mockScreenCardPrice {
-  font-size: 0.75rem;
-  color: var(--color-text-secondary);
+.heroVisualBadgeDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  transition: background-color var(--transition-slow);
+}
+
+.heroMediaCardMain {
+  width: 100%;
+  max-width: 320px;
+  padding: var(--space-lg);
+  border-radius: 14px;
+  border: 1px solid var(--color-border-hover);
+  background: var(--color-surface);
+}
+
+.heroMediaCardTag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-sm);
+  transition: color var(--transition-slow);
+}
+
+.heroMediaCardThumb {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--color-surface-active);
+  border: 1px solid var(--color-border);
+  margin-bottom: var(--space-md);
+}
+
+.heroMediaCardThumbInner {
+  position: absolute;
+  inset: 0;
+}
+
+.heroMediaCardThumbInner video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.heroMediaCardMain h4 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 2px;
+}
+
+.heroMediaCardMain p {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+
+.heroMediaCardSecondary {
+  width: 100%;
+  max-width: 220px;
+  padding: var(--space-md);
+  border-radius: 14px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.heroMediaCardThumbSmall {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--color-surface-active);
+  border: 1px solid var(--color-border);
+  margin-bottom: var(--space-sm);
+}
+
+.heroMediaCardThumbSmall video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.heroMediaCardSecondary h4 {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
 }
 
 /* ------------------------------------------------------------
  * QUICK WINS
  * ------------------------------------------------------------ */
 .quickWinsSection {
+  position: relative;
+  overflow: hidden; /* keeps the ambient glow from causing horizontal scroll (Rule 23.8) */
   padding: var(--space-2xl) var(--space-lg);
   border-top: 1px solid var(--color-border);
 }
 
+/* Blurred ambient glow tinted to whichever rotating media item is
+ * currently active (--activeAccent, set inline by QuickWins.tsx).
+ * Only background-color transitions — never layout (Rule 17.5). */
+.quickWinsAmbientGlow {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 640px;
+  height: 280px;
+  border-radius: 50%;
+  background: var(--activeAccent, var(--color-accent));
+  opacity: 0.12;
+  filter: blur(100px);
+  transition: background-color var(--transition-slow);
+  pointer-events: none;
+  z-index: var(--z-base);
+}
+
 .quickWinsContainer {
+  position: relative;
+  z-index: var(--z-raised);
   max-width: var(--max-width-content);
   margin: 0 auto;
   display: flex;
@@ -182,12 +274,127 @@
 }
 
 .wordmarkChip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
   font-size: 0.9375rem;
   font-weight: 500;
   color: var(--color-text-muted);
+  background: transparent;
   padding: var(--space-sm) var(--space-md);
   border: 1px solid var(--color-border);
   border-radius: 8px;
+  cursor: pointer;
+  touch-action: manipulation;
+  min-height: 44px;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.wordmarkChip:hover,
+.wordmarkChip:focus-visible {
+  color: var(--color-text-primary);
+  border-color: var(--color-border-hover);
+  background: var(--color-surface-hover);
+}
+
+.wordmarkChipActive {
+  color: var(--color-text-primary);
+  border-color: var(--color-border-hover);
+  background: var(--color-surface-hover);
+}
+
+.wordmarkChipSwatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex: 0 0 auto;
+}
+
+/* ------------------------------------------------------------
+ * QUICK WINS ROTATING MEDIA STRIP
+ * ------------------------------------------------------------ */
+.quickWinsMediaStrip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.quickWinsMediaFrame {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.quickWinsMediaItem {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-active);
+}
+
+.quickWinsMediaItemInner {
+  position: absolute;
+  inset: 0;
+}
+
+.quickWinsMediaItemInner video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.quickWinsMediaCaption {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.quickWinsMediaDots {
+  display: flex;
+  gap: 2px;
+}
+
+/* 44px tap target (Rule 29.1) wrapping a small visual dot, rather than
+ * making the visible dot itself 44px — keeps the compact look from the
+ * mockup while staying accessible on touch devices. */
+.quickWinsMediaDot {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.quickWinsMediaDotVisual {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border-hover);
+  transition: transform var(--transition-fast), background-color var(--transition-slow);
+}
+
+.quickWinsMediaDot:hover .quickWinsMediaDotVisual,
+.quickWinsMediaDot:focus-visible .quickWinsMediaDotVisual {
+  transform: scale(1.3);
+}
+
+.quickWinsMediaDotVisualActive {
+  transform: scale(1.4);
 }
 
 .statGrid {
@@ -267,7 +474,7 @@
 .categoryCard:hover,
 .categoryCard:focus-within {
   background: var(--color-surface-hover);
-  border-color: var(--color-accent);
+  border-color: var(--categoryAccent, var(--color-accent));
 }
 
 .categoryCardIconWrap {
@@ -277,7 +484,7 @@
   width: 64px;
   height: 64px;
   border-radius: 8px;
-  background: var(--color-surface-active);
+  background: color-mix(in srgb, var(--categoryAccent, var(--color-accent)) 16%, var(--color-surface-active));
   transition: transform var(--transition-base);
 }
 
@@ -286,7 +493,7 @@
 }
 
 .categoryCardIcon {
-  color: var(--color-accent);
+  color: var(--categoryAccent, var(--color-accent));
 }
 
 .categoryCardBody {
@@ -324,7 +531,7 @@
 .categoryCardPrice {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--color-accent);
+  color: var(--categoryAccent, var(--color-accent));
 }
 
 .categoryCardDescription {

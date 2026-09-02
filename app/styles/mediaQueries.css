@@ -18,7 +18,8 @@
  * ------------------------------------------------------------ */
 @media (max-width: 767px) {
   .siteNavLinks,
-  .siteNavCta {
+  .siteNavCta,
+  .siteNavThemeToggle {
     display: none;
   }
 
@@ -53,6 +54,46 @@
 
   .heroVisual {
     flex: 1 1 480px;
+  }
+}
+
+/* ------------------------------------------------------------
+ * HOME HERO — layered floating-card arrangement (approved mockup),
+ * desktop/tablet only. Absolute positioning here would overlap badly
+ * on narrow phone widths, so .heroVisual stays a plain stacked column
+ * (home.css base styles) below this breakpoint.
+ * ------------------------------------------------------------ */
+@media (min-width: 768px) {
+  .heroVisual {
+    position: relative;
+    align-items: stretch;
+    min-height: 420px;
+  }
+
+  .heroVisualBadge {
+    position: absolute;
+    top: 0;
+    right: 60px;
+    z-index: var(--z-raised);
+  }
+
+  .heroMediaCardMain {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 300px;
+    max-width: none;
+    z-index: var(--z-dropdown);
+  }
+
+  .heroMediaCardSecondary {
+    position: absolute;
+    bottom: 20px;
+    right: 0;
+    width: 220px;
+    max-width: none;
+    transform: rotate(2.5deg);
+    z-index: var(--z-raised);
   }
 }
 
@@ -232,12 +273,3 @@
 
 
 
-
-/* ------------------------------------------------------------
- * AUTH — glass card width and padding on small phones
- * ------------------------------------------------------------ */
-@media (max-width: 479px) {
-  .authGlassCard {
-    padding: var(--space-lg) var(--space-md);
-  }
-}

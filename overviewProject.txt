@@ -689,118 +689,41 @@ project is done.
   fully checked off - every page in that list exists. npx tsc
   --noEmit passes clean on all new/modified files.
 
-[2026-09-02] Built the forgot-password / reset-password flow flagged
-  as missing from login_and_registration_page.md Section 3.1. New
-  pages app/auth/forgot-password/page.tsx (email-only form) and
-  app/auth/reset-password/page.tsx (new password form), backed by
-  components/auth/ForgotPasswordForm.tsx and ResetPasswordForm.tsx.
-  New API routes: app/api/auth/forgot-password/route.ts (rate-limited
-  3/15min, calls Supabase resetPasswordForEmail, always returns the
-  same generic message so emails can't be enumerated, logs
-  password_reset_requested) and app/api/auth/reset-password/route.ts
-  (logging-only - the actual password update runs client-side via
-  supabaseBrowserClient.auth.updateUser() using the temporary recovery
-  session Supabase's SDK attaches from the email link; this route just
-  records password_reset_completed to SecurityLog). ResetPasswordForm
-  verifies that recovery session on mount and shows an "invalid or
-  expired link" state instead of a form if it's missing. Also fixed a
-  pre-existing bug found while wiring this up: app/(auth)/ was a
-  parenthesized route group, which Next.js strips from the URL, so the
-  login page was actually served at /login while every reference in
-  middleware.ts, SignInForm, and BuyerNav pointed at /auth/login - a
-  404 in production. Renamed the folder to app/auth/ (a real segment)
-  so /auth/login, /auth/forgot-password, and /auth/reset-password all
-  resolve as the rest of the app already assumes. Extended
-  app/styles/auth.css with .authPageHeading/.authPageDescription (for
-  the two new tab-less pages) and an anchor-tag variant of
-  .authSwitchPrompt's link styling. No schema change - reuses the
-  existing SecurityLog and RateLimitAttempt models with new eventType/
-  endpoint string values.
-
-[2026-09-02] Wired the debounced email-uniqueness check into
-  RegisterForm.tsx (previously built but unused) - Section 3.2 of
-  login_and_registration_page.md. On email change, a 500ms debounce
-  (useEffect + setTimeout, guarded by an incrementing request-id ref so
-  a stale response can never overwrite a newer one) calls
-  GET /api/auth/check-email and shows an inline "Checking
-  availability..." hint, then "Email already in use." if taken -
-  never a toast, matching Section 9. validate() now also blocks submit
-  when the check has already resolved to "taken". Added
-  .authFieldHint to app/styles/auth.css for the quiet (non-error)
-  checking state. Also added rate limiting (100/15min, general API
-  tier) to app/api/auth/check-email/route.ts as a backstop, since it's
-  now called on every debounce cycle instead of once per submit -
-  reuses the existing lib/rateLimit.ts helper, same pattern as
-  login/register/forgot-password.
-
-[2026-09-02] Added the Section 10 post-registration onboarding modal
-  (login_and_registration_page.md gap) - new components/buyer/
-  OnboardingModal.tsx client component renders the "Welcome to
-  Matthew Studio Marketplace!" overlay with the 4-item checklist and
-  Get Started button. Triggered via a one-shot sessionStorage flag
-  (mtwOnboarding:justRegistered) set by RegisterForm.tsx immediately
-  before its router.push("/buyer/dashboard") call; OnboardingModal
-  reads and clears the flag on mount so it never reappears on refresh
-  or a later normal sign-in. No Settings page exists yet to host a
-  permanent skip toggle, so dismissing the modal is the only skip
-  path for now. Wired into app/buyer/dashboard/page.tsx; styles added
-  at app/styles/onboardingModal.css, imported from app/buyer/layout.tsx.
-
-[2026-09-02] Added CSRF double-submit cookie protection (Rule 32.2)
-  across the entire auth flow - login_and_registration_page.md Section
-  5 gap. New lib/csrf.ts (isomorphic - Web Crypto API, no Node-only
-  imports, safe in Edge middleware and "use client" alike) exports
-  generateCsrfToken/isValidCsrfRequest (server) and getCsrfHeader
-  (client). middleware.ts now issues a non-HttpOnly csrf_token cookie
-  (SameSite=strict, 4h) on every /auth/* and /buyer/* request that
-  doesn't already have one - matcher widened from ["/buyer/:path*",
-  "/auth/login"] to ["/buyer/:path*", "/auth/:path*"] so
-  forgot-password and reset-password pages get the cookie too. All
-  five state-changing auth endpoints (login, register, forgot-password,
-  reset-password, logout) now call isValidCsrfRequest() first and
-  return 403 on mismatch, before rate limiting runs. All five call
-  sites (SignInForm, RegisterForm, ForgotPasswordForm,
-  ResetPasswordForm, BuyerNav's Sign Out) now spread getCsrfHeader()
-  into their fetch headers. No schema change.
-
-[2026-09-02] Fixed the admin/super-admin redirect mismatch
-  (login_and_registration_page.md Section 12.3 gap) and built the
-  minimal placeholder destinations it needed to point at, since
-  neither /app/admin nor /app/superAdmin existed yet. New
-  lib/roleRouting.ts exports getDashboardPathForRole() as the single
-  source of truth (buyer -> /buyer/dashboard, admin -> /admin/dashboard,
-  superAdmin -> /superAdmin/dashboard) - both middleware.ts's
-  already-signed-in redirect and SignInForm.tsx's post-login redirect
-  now call this instead of each hardcoding their own mapping.
-  middleware.ts also gained real route guards for /admin/* (role
-  "admin" or "superAdmin") and /superAdmin/* (role "superAdmin" only)
-  - previously only /buyer/* and /auth/login were matched. Added
-  app/admin/layout.tsx + app/admin/dashboard/page.tsx and
-  app/superAdmin/layout.tsx + app/superAdmin/dashboard/page.tsx as
-  scoped placeholders (not 404s) - each lists its real planned
-  sections per admin_account_specification.md /
-  super_admin_account_specification.md Section 3, pending the full
-  build. New shared components/shared/RoleAreaHeader.tsx (display
-  name + Sign Out, CSRF-protected) and app/styles/roleAreaDashboard.css
-  back both placeholder shells. No schema change.
-
-[2026-09-02] Added prefers-reduced-motion support site-wide
-  (buyer_homepage_specification.md Section 4/7.5 gap - none of the 14
-  homepage sections respected it before this). Two mechanisms: (1)
-  app/layout.tsx now wraps children in framer-motion's <MotionConfig
-  reducedMotion="user">, which automatically strips transform-based
-  entrance animations (translateY, scale) and keeps only opacity fades
-  for every motion.* component site-wide, not homepage-only - the
-  correct scope since the same accessibility expectation applies
-  everywhere. (2) New lib/hooks/usePrefersReducedMotion.ts (matchMedia,
-  reacts to live changes) covers the plain rAF/IntersectionObserver-
-  driven motion outside framer-motion's reach: FeaturedProducts.tsx and
-  TestimonialsSection.tsx now freeze their auto-scroll carousel loops
-  entirely when set; VideoCarousel.tsx (reused by AI Videos, Templates
-  demo, and T-Shirts gallery) skips its visibility-triggered autoplay,
-  leaving native <video> controls for manual play; ComparisonTable.tsx's
-  AnimatedPrice count-up snaps straight to the final number instead of
-  animating. No schema change. Not yet done from the same review: the
-  count-up stat animation still missing from QuickWins.tsx, missing
-  lib/quickWinsData.ts, missing public/og-home.png, and no session-
-  aware Sign In / Go to Dashboard CTA in NavBar.tsx.
+[2026-09-02] Applied the approved dark-mode/light-mode homepage mockup
+  direction (Rule 46 discovery flow) to HeroSection.tsx, QuickWins.tsx,
+  and CategoryShowcase.tsx. New site-wide light/dark theme toggle:
+  context/ThemeContext.tsx (useSyncExternalStore-backed, persists to
+  localStorage, sets <html data-theme>), components/shared/
+  ThemeToggle.tsx, an anti-flash inline script in app/layout.tsx, and
+  [data-theme="dark"] token overrides in app/styles/globals.css — every
+  existing component already referenced --color-* tokens, so no other
+  component needed changes to support dark mode. Toggle wired into
+  NavBar.tsx (desktop nav row + mobile slide-down panel).
+  HeroSection.tsx's old icon-only mock-browser visual is replaced with
+  a rotating real photo/video showcase (layered floating-card layout
+  from the mockup: badge + main card + secondary "up next" card,
+  stacked on mobile, absolute-positioned overlap from 768px up) driven
+  by new hooks/useMediaCarousel.ts (autoplay, pauses on hover/focus,
+  skips entirely under prefers-reduced-motion) and new
+  lib/mediaShowcaseData.ts (HERO_MEDIA_ITEMS, QUICK_WINS_MEDIA_ITEMS —
+  each item's accentColor tints the section's blurred ambient
+  background glow while it's active). QuickWins.tsx gained a matching
+  rotating category media strip plus color-coded category chips
+  sourced from the new lib/categoryAccentColors.ts (one hex per
+  category, matching the mockup's chip palette) — chips now hover/focus
+  to jump the media strip to that category. CategoryShowcase.tsx cards
+  pick up the same per-category accent for their icon-wrap tint, price
+  color, and hover border, via a --categoryAccent CSS variable, with no
+  other structural change (kept "simple but elegant" per explicit
+  request rather than adding a carousel there too). New
+  public/media/hero/ and public/media/quickwins/ folders with
+  README.txt files listing the exact filenames lib/mediaShowcaseData.ts
+  expects — real photos/videos still need to be dropped in by hand;
+  until then the <img>/<video> requests 404 as expected. npx tsc
+  --noEmit and eslint both pass clean on every new/modified file (two
+  pre-existing NavBar.tsx set-state-in-effect lint findings are on
+  lines this change didn't touch, confirmed via git diff, and were
+  left as-is per Rule 2). `npm run build` currently fails in this
+  sandbox only because fonts.googleapis.com is unreachable here
+  (next/font/google needs it at build time) — unrelated to this
+  change; a normal dev machine with internet access is unaffected.

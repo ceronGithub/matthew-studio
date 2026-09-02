@@ -700,6 +700,48 @@ th.comparisonTableTierHighlighted,
   border-color: var(--color-border-hover);
 }
 
+/* Light/dark theme toggle (components/shared/ThemeToggle.tsx) — base
+ * button styles shared by both the desktop and mobile placements. */
+.themeToggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.themeToggle:hover,
+.themeToggle:focus-visible {
+  background: var(--color-surface-hover);
+  border-color: var(--color-accent);
+}
+
+.themeToggle:active {
+  transform: scale(0.92);
+}
+
+/* Desktop placement (nav row, next to the CTA pill) — hidden below
+ * tablet breakpoint alongside .siteNavCta (see mediaQueries.css). */
+.siteNavThemeToggle {
+  flex: 0 0 auto;
+}
+
+/* Mobile placement — full-width row inside the slide-down panel so
+ * it doesn't look like a stray icon floating among text links. */
+.siteNavMobileThemeRow {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--space-sm);
+}
+
 .siteNavMobilePanel {
   max-height: 0;
   overflow: hidden;

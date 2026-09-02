@@ -11,12 +11,17 @@
  * DATA FLOW:
  * Each card links directly to its own category page (e.g. /tshirts,
  * /ai-videos) — those 6 pages are already built (improvement_1.md
- * Section 4), so cards no longer need to funnel through /shop.
+ * Section 4), so cards no longer need to funnel through /shop. Each
+ * card's icon tint and hover border color come from
+ * lib/categoryAccentColors.ts (same palette as QuickWins' chips and
+ * the homepage mockup) via a --categoryAccent CSS variable, applied
+ * with a plain inline style — no per-category class needed.
  */
 "use client";
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import type { CSSProperties } from "react";
 import {
   LayoutTemplate,
   Shirt,
@@ -28,6 +33,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { CATEGORY_SHOWCASE, type CategoryShowcaseItem } from "@/lib/categoryShowcaseData";
+import { CATEGORY_ACCENT_COLORS } from "@/lib/categoryAccentColors";
 
 const CATEGORY_ICONS: Record<CategoryShowcaseItem["iconName"], LucideIcon> = {
   "layout-template": LayoutTemplate,
@@ -60,6 +66,7 @@ export default function CategoryShowcase() {
               <motion.article
                 key={category.slug}
                 className="categoryCard"
+                style={{ "--categoryAccent": CATEGORY_ACCENT_COLORS[category.slug] } as CSSProperties}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}

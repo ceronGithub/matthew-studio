@@ -13,6 +13,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
+import ThemeToggle from "@/components/shared/ThemeToggle";
 
 /**
  * NAV_LINKS
@@ -183,6 +184,11 @@ export default function NavBar() {
             Browse Marketplace
           </Link>
 
+          {/* Light/dark theme toggle — hidden below tablet breakpoint
+              alongside the rest of the desktop nav row; the mobile
+              equivalent lives inside the slide-down panel below. */}
+          <ThemeToggle className="siteNavThemeToggle" />
+
           {/* Mobile menu toggle — only visible below tablet breakpoint */}
           <button
             type="button"
@@ -227,6 +233,9 @@ export default function NavBar() {
               <Link href="/products" className="siteNavCta siteNavCtaMobile" onClick={() => setIsMenuOpen(false)}>
                 Browse Marketplace
               </Link>
+            </li>
+            <li className="siteNavMobileThemeRow">
+              <ThemeToggle className="siteNavThemeToggleMobile" />
             </li>
           </ul>
         </div>
