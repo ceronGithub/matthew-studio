@@ -8,15 +8,26 @@
  * created as role "buyer" — the API route is the actual enforcement
  * point (Section 13 of login_and_registration_page.md); this form
  * never sends a role field.
+ *
+ * While the user types an email, a debounced call to
+ * /api/auth/check-email reports whether it's already registered —
+ * inline below the field only, never a toast (Section 9 of
+ * login_and_registration_page.md).
  */
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import PasswordStrengthMeter from "./PasswordStrengthMeter";
 import { PASSWORD_REQUIREMENTS_HINT } from "@/lib/authData";
 import type { ToastType } from "@/components/shared/useToast";
+
+// How long to wait after the user stops typing before checking the
+// email — avoids firing a request on every keystroke.
+const EMAIL_CHECK_DEBOUNCE_MS = 500;
+
+type EmailAvailability = "idle" | "checking" | "available" | "taken";
 
 interface RegisterFormProps {
   showToast: (message: string, type: ToastType) => void;
@@ -46,11 +57,56 @@ export default function RegisterForm({ showToast }: RegisterFormProps) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [emailAvailability, setEmailAvailability] = useState<EmailAvailability>("idle");
+
+  // Guards against a slow, stale check-email response landing after a
+  // newer one — only the response matching the latest request is applied.
+  const emailCheckRequestId = useRef(0);
+
+  // Debounced email availability check — fires EMAIL_CHECK_DEBOUNCE_MS
+  // after the user stops typing a validly-formatted email, so we never
+  // hit the API on every keystroke.
+  useEffect(() => {
+    const isValidEmailFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!isValidEmailFormat) {
+      setEmailAvailability("idle");
+      return;
+    }
+
+    setEmailAvailability("checking");
+    const requestId = ++emailCheckRequestId.current;
+
+    const debounceTimer = setTimeout(async () => {
+      try {
+        const response = await fetch(`/api/auth/check-email?email=${encodeURIComponent(email)}`);
+        const result = await response.json();
+
+        // Ignore this response if a newer keystroke already started a
+        // more recent check — prevents an out-of-order network reply
+        // from overwriting the status of what the user is typing now.
+        if (requestId !== emailCheckRequestId.current) return;
+
+        setEmailAvailability(result.success && result.data?.available === false ? "taken" : "available");
+      } catch {
+        if (requestId !== emailCheckRequestId.current) return;
+        // Network hiccup — don't block the user over a check we
+        // couldn't complete; the backend re-validates uniqueness on
+        // actual submit regardless.
+        setEmailAvailability("idle");
+      }
+    }, EMAIL_CHECK_DEBOUNCE_MS);
+
+    return () => clearTimeout(debounceTimer);
+  }, [email]);
 
   function validate(): boolean {
     const errors: Record<string, string> = {};
     if (fullName.trim().length < 2) errors.fullName = "Enter your full name.";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.email = "Enter a valid email address.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.email = "Enter a valid email address.";
+    } else if (emailAvailability === "taken") {
+      errors.email = "Email already in use.";
+    }
     if (!isPasswordStrongEnough(password)) errors.password = PASSWORD_REQUIREMENTS_HINT;
     if (confirmPassword !== password) errors.confirmPassword = "Passwords don't match.";
     if (!acceptedTerms) errors.terms = "You need to accept the Terms of Service.";
@@ -112,8 +168,19 @@ export default function RegisterForm({ showToast }: RegisterFormProps) {
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           placeholder="name@studio.com"
+          aria-invalid={emailAvailability === "taken" || Boolean(fieldErrors.email)}
         />
-        {fieldErrors.email && <span className="authFieldError">{fieldErrors.email}</span>}
+        {/* Field-level error always wins (e.g. invalid format). Otherwise,
+            surface the debounced availability check — checking state is a
+            quiet hint, "taken" is the same wording as the toast list in
+            Section 9, shown inline instead of as a toast. */}
+        {fieldErrors.email ? (
+          <span className="authFieldError">{fieldErrors.email}</span>
+        ) : emailAvailability === "checking" ? (
+          <span className="authFieldHint">Checking availability…</span>
+        ) : emailAvailability === "taken" ? (
+          <span className="authFieldError">Email already in use.</span>
+        ) : null}
       </div>
 
       <div className="authField">

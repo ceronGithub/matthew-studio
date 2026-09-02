@@ -150,6 +150,14 @@
   color: #ffd7d2;
 }
 
+/* Quiet, non-error inline status — e.g. "Checking availability…" while
+ * the debounced email-uniqueness check is in flight. Muted rather than
+ * red so it never reads as a problem before the check has resolved. */
+.authFieldHint {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
 .authForgotLink {
   align-self: flex-end;
   font-size: 0.8rem;

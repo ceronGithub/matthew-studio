@@ -716,3 +716,19 @@ project is done.
   .authSwitchPrompt's link styling. No schema change - reuses the
   existing SecurityLog and RateLimitAttempt models with new eventType/
   endpoint string values.
+
+[2026-09-02] Wired the debounced email-uniqueness check into
+  RegisterForm.tsx (previously built but unused) - Section 3.2 of
+  login_and_registration_page.md. On email change, a 500ms debounce
+  (useEffect + setTimeout, guarded by an incrementing request-id ref so
+  a stale response can never overwrite a newer one) calls
+  GET /api/auth/check-email and shows an inline "Checking
+  availability..." hint, then "Email already in use." if taken -
+  never a toast, matching Section 9. validate() now also blocks submit
+  when the check has already resolved to "taken". Added
+  .authFieldHint to app/styles/auth.css for the quiet (non-error)
+  checking state. Also added rate limiting (100/15min, general API
+  tier) to app/api/auth/check-email/route.ts as a backstop, since it's
+  now called on every debounce cycle instead of once per submit -
+  reuses the existing lib/rateLimit.ts helper, same pattern as
+  login/register/forgot-password.
