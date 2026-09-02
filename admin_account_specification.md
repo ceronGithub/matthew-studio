@@ -13,9 +13,11 @@ The **Admin Account** is a privileged but restricted administrative role. Admins
 ## 2. ACCOUNT CREATION & AUTHENTICATION
 
 ### 2.1 — Account Creation Process
+
 **CRITICAL:** Admin accounts are **NEVER created via public registration**. Registration is ONLY for buyer accounts.
 
 **Admin Account Creation (Super-Admin Only):**
+
 1. **Super-admin navigates to:** `/superAdmin/admin-management/create`
 2. **Super-admin fills form:**
    - Full Name
@@ -29,11 +31,7 @@ The **Admin Account** is a privileged but restricted administrative role. Admins
      ```json
      {
        "role": "admin",
-       "permissions": [
-         "manage-products",
-         "manage-orders",
-         "view-analytics"
-       ]
+       "permissions": ["manage-products", "manage-orders", "view-analytics"]
      }
      ```
 4. **Email sent to new admin:**
@@ -44,6 +42,7 @@ The **Admin Account** is a privileged but restricted administrative role. Admins
 5. **Super-admin sees confirmation:** Toast: ✓ "Admin account created. Credentials sent to [email]."
 
 **NO SELF-SERVICE:** Admin cannot be created by:
+
 - ❌ Public registration form
 - ❌ Another admin (even if admin has "create admin" permission)
 - ❌ Admin themselves
@@ -52,6 +51,7 @@ The **Admin Account** is a privileged but restricted administrative role. Admins
 ---
 
 ### 2.2 — Admin Login
+
 - **Route:** `/auth/login` (shared with buyer/super-admin)
 - **Process:**
   1. Enter email + password
@@ -67,15 +67,16 @@ The **Admin Account** is a privileged but restricted administrative role. Admins
   - Refresh token rotated every 24 hours (Rule 32.3)
 
 ### 2.3 — Middleware Protection (middleware.ts)
+
 ```typescript
 if (pathname.startsWith("/admin")) {
   const userRole = request.auth?.user?.user_metadata?.role;
   if (!["admin", "superAdmin"].includes(userRole)) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
-  
+
   // Optional: permission-level checks per route
-  // e.g., if pathname includes "/admin/settings" and 
+  // e.g., if pathname includes "/admin/settings" and
   // admin doesn't have "manage-settings" permission → 403
 }
 ```
@@ -87,9 +88,11 @@ if (pathname.startsWith("/admin")) {
 ## 3. ADMIN DASHBOARD & PAGES
 
 ### 3.1 — Dashboard Home (/admin/dashboard)
+
 **Purpose:** Daily operations hub for the admin
 
 **Sections:**
+
 1. **Recent Activity**
    - Last 10 orders (status, customer, amount, created date)
    - Last 5 products added/modified
@@ -118,21 +121,25 @@ if (pathname.startsWith("/admin")) {
 ### 3.2 — Product Management (/admin/products)
 
 #### 3.2.1 — Product List Page
+
 **Purpose:** View and manage all marketplace products
 
 **Content:**
+
 - Paginated table (25 per page, newest first)
 - Columns: Product Name, Category, Price, Stock (if applicable), Status (Published/Draft), Created Date, Actions
 - Filters: Category, Status, Date Range, Search by name
 - Export: CSV
 
 **Row Actions:**
+
 - **Edit** → `/admin/products/[productId]/edit`
 - **View** → `/admin/products/[productId]` (read-only preview)
 - **Delete** → Modal confirmation (soft delete, set `deletedAt`)
 - **Duplicate** → Create a copy with "-copy" suffix
 
 **Bulk Actions (if checked):**
+
 - Publish / Unpublish
 - Delete selected
 - Change category
@@ -140,9 +147,11 @@ if (pathname.startsWith("/admin")) {
 ---
 
 #### 3.2.2 — Create/Edit Product (/admin/products/create, /admin/products/[productId]/edit)
+
 **Purpose:** Add or modify product details
 
 **Form Fields:**
+
 - **Product Name** (text, required, max 100 chars)
 - **Category** (dropdown, required, options: Templates, T-Shirts, AI Videos, File Tools, Tutorials, Game Characters)
 - **Description** (textarea, required, max 1000 chars)
@@ -156,6 +165,7 @@ if (pathname.startsWith("/admin")) {
 - **Featured** (checkbox, optional, marks as featured product)
 
 **Process:**
+
 1. Admin fills form and clicks "Save Product"
 2. Frontend validation (required fields, constraints)
 3. Backend validation: unique name (per category), valid category, price > 0
@@ -165,6 +175,7 @@ if (pathname.startsWith("/admin")) {
 7. Redirect to product list or back to edit page (per admin preference)
 
 **Security:**
+
 - Admin can only edit/delete products they created OR products without an owner
 - Audit trail: all changes logged to Rule 6's audit table (who edited what, when)
 
@@ -173,15 +184,18 @@ if (pathname.startsWith("/admin")) {
 ### 3.3 — Order Management (/admin/orders)
 
 #### 3.3.1 — Order List Page
+
 **Purpose:** View and manage buyer orders
 
 **Content:**
+
 - Paginated table (25 per page, newest first)
 - Columns: Order ID, Buyer Email, Total, Status (badge), Created Date, Actions
 - Filters: Status (Pending/Confirmed/Shipped/Delivered/Cancelled), Date Range, Search by order ID or email
 - Export: CSV
 
 **Status Badges:**
+
 - 🟠 Pending — awaiting confirmation
 - 🟡 Confirmed — ready to ship
 - 🟢 Shipped — en route
@@ -189,6 +203,7 @@ if (pathname.startsWith("/admin")) {
 - 🔴 Cancelled — refunded or cancelled
 
 **Row Actions:**
+
 - **View Details** → `/admin/orders/[orderId]`
 - **Update Status** → Modal dropdown, select new status, add note, confirm
 - **Send Email** → Modal, compose custom email to buyer (with preset templates)
@@ -197,9 +212,11 @@ if (pathname.startsWith("/admin")) {
 ---
 
 #### 3.3.2 — Order Details (/admin/orders/[orderId])
+
 **Purpose:** View full order details and manage fulfillment
 
 **Display Sections:**
+
 1. **Order Header**
    - Order ID, created date, last updated
    - Current status (badge)
@@ -224,6 +241,7 @@ if (pathname.startsWith("/admin")) {
    - Delivered → [date] (once marked)
 
 **Actions:**
+
 - **Update Status** dropdown (Pending → Confirmed → Shipped → Delivered)
 - **Send Tracking Email** button (pre-filled template for shipped status)
 - **Issue Refund** button (confirmation modal, refund reason dropdown)
@@ -234,15 +252,18 @@ if (pathname.startsWith("/admin")) {
 ### 3.4 — User Management (/admin/users)
 
 #### 3.4.1 — Buyer List Page
+
 **Purpose:** View and manage buyer accounts
 
 **Content:**
+
 - Paginated table (25 per page, newest first)
 - Columns: Email, Name, Account Created, Last Login, Status (Active/Inactive), Total Orders, Lifetime Value, Actions
 - Filters: Status, Date Range, Search by email/name
 - Export: CSV
 
 **Row Actions:**
+
 - **View Details** → `/admin/users/[buyerId]`
 - **Deactivate/Reactivate** → Toggle status (confirmation modal required)
 - **Reset Password** → Send password reset email (confirmation modal)
@@ -251,9 +272,11 @@ if (pathname.startsWith("/admin")) {
 ---
 
 #### 3.4.2 — Buyer Details (/admin/users/[buyerId])
+
 **Purpose:** View buyer profile and manage account
 
 **Display Sections:**
+
 1. **Account Information**
    - Email, name, phone, account created date
    - Last login date/time + IP + location (city-level)
@@ -267,6 +290,7 @@ if (pathname.startsWith("/admin")) {
    - Last 10 activities (logins, purchases, etc.)
 
 **Actions:**
+
 - **Reset Password** button (send email with reset link)
 - **Deactivate Account** button (red, confirmation modal)
 - **Send Custom Email** button (modal, compose message)
@@ -275,9 +299,11 @@ if (pathname.startsWith("/admin")) {
 ---
 
 ### 3.5 — Analytics Dashboard (/admin/analytics)
+
 **Availability:** Only if admin has `view-analytics` permission
 
 **Sections:**
+
 1. **Time Series Charts**
    - Orders over time (daily/weekly/monthly)
    - Revenue over time
@@ -303,9 +329,11 @@ if (pathname.startsWith("/admin")) {
 ---
 
 ### 3.6 — Security Logs (Conditional Access)
+
 **Availability:** Only if admin has `view-security-logs` permission (granted by super-admin)
 
 **Content:**
+
 - Same as super-admin view (Rule 38), but filtered to non-sensitive events
 - Admins can view: login attempts, their own account activity
 - Admins CANNOT view: vault credentials, other admins' actions, platform-level security
@@ -315,44 +343,49 @@ if (pathname.startsWith("/admin")) {
 ## 4. ADMIN PERMISSIONS & ACCESS CONTROL
 
 ### 4.1 — Available Permissions (Set by Super-Admin)
+
 Each admin can be granted any combination of the following permissions:
 
-| Permission | Description | Page Access |
-|---|---|---|
-| `manage-products` | Create, edit, delete products | `/admin/products` |
-| `manage-orders` | View, update, refund orders | `/admin/orders` |
-| `manage-users` | View, deactivate/reactivate buyers, reset passwords | `/admin/users` |
-| `view-analytics` | Access analytics dashboard | `/admin/analytics` |
-| `view-security-logs` | Access security logs (non-sensitive events) | `/admin/security-logs` |
-| `manage-promotions` | Create, edit, delete promotions/discounts | `/admin/promotions` (future) |
+| Permission           | Description                                         | Page Access                  |
+| -------------------- | --------------------------------------------------- | ---------------------------- |
+| `manage-products`    | Create, edit, delete products                       | `/admin/products`            |
+| `manage-orders`      | View, update, refund orders                         | `/admin/orders`              |
+| `manage-users`       | View, deactivate/reactivate buyers, reset passwords | `/admin/users`               |
+| `view-analytics`     | Access analytics dashboard                          | `/admin/analytics`           |
+| `view-security-logs` | Access security logs (non-sensitive events)         | `/admin/security-logs`       |
+| `manage-promotions`  | Create, edit, delete promotions/discounts           | `/admin/promotions` (future) |
 
 ### 4.2 — What Admins CANNOT Do (Restrictions)
+
 The following are **super-admin only**, never available to regular admins:
 
-| Restricted Action | Why |
-|---|---|
-| Create other admin accounts | Security — admins cannot grant themselves peers |
-| Deactivate other admin accounts | Prevents unauthorized account lockouts |
-| Delete other admin accounts | Prevents unauthorized deletion of peer accounts |
-| Reset other admin passwords | Prevents hijacking of peer accounts |
-| Update admin permissions | Prevents privilege escalation |
-| Access vault / emergency credentials | Requires highest-level trust |
-| View platform health / backups | Platform-level monitoring, not operational |
-| Modify system settings | Prevents configuration tampering |
+| Restricted Action                      | Why                                                                     |
+| -------------------------------------- | ----------------------------------------------------------------------- |
+| Create other admin accounts            | Security — admins cannot grant themselves peers                         |
+| Deactivate other admin accounts        | Prevents unauthorized account lockouts                                  |
+| Delete other admin accounts            | Prevents unauthorized deletion of peer accounts                         |
+| Reset other admin passwords            | Prevents hijacking of peer accounts                                     |
+| Update admin permissions               | Prevents privilege escalation                                           |
+| Access vault / emergency credentials   | Requires highest-level trust                                            |
+| View platform health / backups         | Platform-level monitoring, not operational                              |
+| Modify system settings                 | Prevents configuration tampering                                        |
 | View super-admin actions in audit logs | Separation of concerns — super-admin actions hidden from regular admins |
 
 ### 4.3 — Permission Enforcement (Backend)
+
 Every API endpoint checks permissions before executing:
 
 ```typescript
 // Example: DELETE /api/admin/products/[productId]
 async function deleteProduct(productId, adminId) {
   const admin = await getAdminWithPermissions(adminId);
-  
+
   if (!admin.permissions.includes("manage-products")) {
-    throw new UnauthorizedError("You don't have permission to delete products.");
+    throw new UnauthorizedError(
+      "You don't have permission to delete products.",
+    );
   }
-  
+
   // Proceed with delete...
 }
 ```
@@ -362,6 +395,7 @@ async function deleteProduct(productId, adminId) {
 ## 5. PASSWORD & SESSION MANAGEMENT
 
 ### 5.1 — Password Requirements
+
 - Minimum 12 characters (elevated from standard for admin/super-admin roles)
 - Must include: 1 uppercase, 1 lowercase, 1 number, 1 special character
 - Cannot reuse last 5 passwords
@@ -369,12 +403,14 @@ async function deleteProduct(productId, adminId) {
 - First login must change temporary password (enforced before dashboard access)
 
 ### 5.2 — Session & Token Security
+
 - Access token: 15 minutes (Rule 32.3 — more aggressive than 30-min for buyers)
 - Refresh token: 7 days, stored in HttpOnly cookie
 - Idle session timeout: 15 minutes (Rule 32.5 — auto-logout after 15 min no activity)
 - On logout: Origin-Scoped Session Termination (Rule 44)
 
 ### 5.3 — Failed Login Attempts
+
 - Rate limit: 5 attempts per 15 minutes per IP (Rule 32.1)
 - After 5 failures: account locked for 1 hour (auto-recovery)
 - Super-admin and admin notified of lock (dashboard alert + optional email)
@@ -384,13 +420,16 @@ async function deleteProduct(productId, adminId) {
 ## 6. AUDIT & ACTIVITY LOGGING
 
 ### 6.1 — Rule 6: Audit Trail (Content Changes)
+
 All product/order edits by admin are logged:
+
 - What changed (old value → new value)
 - Who changed it (admin email)
 - When (timestamp)
 - Why (optional note from admin)
 
 Example audit log entry:
+
 ```
 Product: "Resort Template Pro"
 Changed by: john.admin@example.com
@@ -402,14 +441,18 @@ Note: "Price increase for Q4"
 ```
 
 ### 6.2 — Rule 38: Security Logs
+
 Admin actions are logged as `admin_action` events:
+
 - `admin_action` — generic admin operation
 - `product_created`, `product_deleted` — product management
 - `order_refunded` — order management
 - `user_deactivated` — user management
 
 ### 6.3 — Rule 42: Account Activity Log
+
 Admin login/logout and page navigation tracked (unless admin opted out):
+
 - Login/logout timestamps
 - Pages visited
 - IP + device/location (city-level)
@@ -420,13 +463,14 @@ Admin login/logout and page navigation tracked (unless admin opted out):
 
 **CRITICAL PRINCIPLE:** Admin accounts are NEVER created via public registration form.
 
-| Account Type | Creation Method | Registration Available? | Who Can Create? |
-|---|---|---|---|
-| **Buyer** | Public registration form at `/auth/login` | ✅ YES — anyone can self-register | User themselves |
-| **Admin** | Manual creation via super-admin dashboard ONLY | ❌ NO — no public registration, no self-serve | Super-admin ONLY |
-| **Super-Admin** | Manual creation via Supabase console (one-time platform setup) | ❌ NO — no public registration | Platform owner (setup phase) |
+| Account Type    | Creation Method                                                | Registration Available?                       | Who Can Create?              |
+| --------------- | -------------------------------------------------------------- | --------------------------------------------- | ---------------------------- |
+| **Buyer**       | Public registration form at `/auth/login`                      | ✅ YES — anyone can self-register             | User themselves              |
+| **Admin**       | Manual creation via super-admin dashboard ONLY                 | ❌ NO — no public registration, no self-serve | Super-admin ONLY             |
+| **Super-Admin** | Manual creation via Supabase console (one-time platform setup) | ❌ NO — no public registration                | Platform owner (setup phase) |
 
 **Enforcement:**
+
 - Registration form (`/auth/login` "Create Account" tab) only accepts buyer registrations
 - No admin account creation option available anywhere on the site
 - Backend validates: new users registering via form get role = "buyer" (no exceptions)
@@ -434,12 +478,99 @@ Admin login/logout and page navigation tracked (unless admin opted out):
 
 ---
 
-## 8. API ENDPOINTS
+## 8. VAULT & SESSION SLUG SYSTEM
+
+The Admin account includes a **Vault System** for session management and emergency credential backup, similar to super-admin but with a different slug format.
+
+### 8.1 — Session Slug (Auto-Generated)
+
+**What is it:** A unique, auto-generated session identifier created on first login and persists until sign-out.
+
+**Format (Admin):** 21 components total
+
+- 7 random alphanumeric characters (A-Z, a-z, 0-9)
+- 7 random alphaspecialcharacters (!@#$%^&\*-\_+=)
+- 7 random BIP39 words
+
+**Lifecycle:**
+
+1. **First Login** → No slug exists → Auto-generate new slug → Stored in AdminSession table
+2. **Subsequent Logins** → Slug exists & active → Reuse same slug (do NOT regenerate)
+3. **Sign-Out** → Slug marked inactive (isActive = false)
+4. **Next Login** → Generate completely NEW slug (never reuse old one)
+
+**Storage:**
+
+```json
+{
+  "alphanumeric": "Aa1Bb2Cc",
+  "alphaspecial": "a!B@c#D$",
+  "words": ["apple", "beach", "crown", "delta", "eagle", "frost", "guitar"],
+  "isActive": true,
+  "generatedAt": "2026-09-03T10:35:00Z"
+}
+```
+
+**Access:** View slug at `/admin/vault` page
+
+### 8.2 — Vault Credentials (Emergency Access)
+
+**What is it:** Offline emergency backup access codes generated manually within the vault page (same format as super-admin).
+
+**Format:** 30 components total
+
+- 15 random BIP39 words
+- 15 random alphanumeric characters (A-Z, a-z, 0-9)
+
+**How to Generate:**
+
+1. Navigate to `/admin/vault`
+2. Click "Generate Emergency Credentials"
+3. System displays 15 words + 15 alphanumeric
+4. ⚠️ CRITICAL: Copy or screenshot immediately — NOT stored in system
+5. Store offline (password manager, encrypted file, paper safe)
+
+**Security Rules:**
+
+- ✅ Plaintext NOT stored in database
+- ✅ Only generation timestamp logged for audit
+- ✅ Credentials ephemeral — exist only on page load
+- ✅ Never retrievable after page close
+- ✅ Generated new each time (no caching)
+
+**Use Case:** Emergency offline access if primary authentication fails (FUTURE FEATURE)
+
+### 8.3 — Vault Page (`/admin/vault`)
+
+**Route:** `/admin/vault`
+
+**Access:** Admin role only (middleware protected)
+
+**Contents:**
+
+- Current session slug (3 components displayed)
+- Copy buttons for each component
+- "Generate Emergency Credentials" button
+- Credentials generator (displays 15 words + 15 alphanumeric, one-time only)
+- Warning banner: Store credentials offline, never share, never email unencrypted
+
+**Session Info:**
+
+- Slug status: Active/Inactive
+- Generated: [date/time]
+- Expires at: Sign-out (no automatic expiry while logged in)
+- Next regeneration: On next login
+
+---
+
+## 9. API ENDPOINTS
 
 ### GET /api/admin/dashboard
+
 **Permission:** admin (any permission)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -457,11 +588,13 @@ Admin login/logout and page navigation tracked (unless admin opted out):
 ```
 
 ### GET /api/admin/products
+
 **Permission:** manage-products
 
 **Query Params:** page, limit, category, status, search
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -476,20 +609,23 @@ Admin login/logout and page navigation tracked (unless admin opted out):
 ```
 
 ### POST /api/admin/products
+
 **Permission:** manage-products
 
 **Request:**
+
 ```json
 {
   "name": "New Product",
   "category": "templates",
   "description": "...",
-  "price": 299.00,
+  "price": 299.0,
   "status": "published"
 }
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -499,11 +635,13 @@ Admin login/logout and page navigation tracked (unless admin opted out):
 ```
 
 ### PUT /api/admin/products/[productId]
+
 **Permission:** manage-products
 
 **Request:** (same fields as POST)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -513,11 +651,13 @@ Admin login/logout and page navigation tracked (unless admin opted out):
 ```
 
 ### DELETE /api/admin/products/[productId]
+
 **Permission:** manage-products
 
 **Confirmation:** Required (soft delete)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -527,11 +667,13 @@ Admin login/logout and page navigation tracked (unless admin opted out):
 ```
 
 ### GET /api/admin/orders
+
 **Permission:** manage-orders
 
 **Query Params:** page, limit, status, dateFrom, dateTo, search
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -546,9 +688,11 @@ Admin login/logout and page navigation tracked (unless admin opted out):
 ```
 
 ### PUT /api/admin/orders/[orderId]/status
+
 **Permission:** manage-orders
 
 **Request:**
+
 ```json
 {
   "status": "shipped",
@@ -557,6 +701,7 @@ Admin login/logout and page navigation tracked (unless admin opted out):
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -566,17 +711,20 @@ Admin login/logout and page navigation tracked (unless admin opted out):
 ```
 
 ### POST /api/admin/orders/[orderId]/refund
+
 **Permission:** manage-orders
 
 **Request:**
+
 ```json
 {
   "reason": "Customer requested refund",
-  "amount": 299.00
+  "amount": 299.0
 }
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -586,11 +734,13 @@ Admin login/logout and page navigation tracked (unless admin opted out):
 ```
 
 ### GET /api/admin/users
+
 **Permission:** manage-users
 
 **Query Params:** page, limit, status, search
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -605,11 +755,13 @@ Admin login/logout and page navigation tracked (unless admin opted out):
 ```
 
 ### GET /api/admin/analytics
+
 **Permission:** view-analytics
 
 **Query Params:** dateFrom, dateTo, category
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -625,7 +777,7 @@ Admin login/logout and page navigation tracked (unless admin opted out):
 
 ---
 
-## 9. TESTING & VERIFICATION CHECKLIST
+## 10. TESTING & VERIFICATION CHECKLIST
 
 - [ ] Admin can log in at `/auth/login`
 - [ ] Admin is redirected to `/admin/dashboard` after login
@@ -646,11 +798,12 @@ Admin login/logout and page navigation tracked (unless admin opted out):
 
 ---
 
-## 10. CHANGE LOG
+## 11. CHANGE LOG
 
-| Date | Change |
-|------|--------|
-| 2026-09-01 | Initial admin specification created; dashboard, product/order/user management, permissions, and restrictions documented. |
+| Date       | Change                                                                                                                                                                                                                                                                                       |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-09-03 | Added Section 8: Vault & Session Slug System — admin slug format (7 alphanumeric + 7 alphaspecial + 7 words), auto-generation on first login, slug reuse on subsequent logins, new slug on sign-out + next login. Added vault credentials (15 words + 15 alphanumeric) for emergency access. |
+| 2026-09-01 | Initial admin specification created; dashboard, product/order/user management, permissions, and restrictions documented.                                                                                                                                                                     |
 
 ---
 
