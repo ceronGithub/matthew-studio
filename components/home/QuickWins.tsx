@@ -29,6 +29,7 @@ import { CATEGORY_ACCENT_COLORS } from "@/lib/categoryAccentColors";
 import { QUICK_WINS_MEDIA_ITEMS, type MediaShowcaseItem } from "@/lib/mediaShowcaseData";
 import { useMediaCarousel } from "@/hooks/useMediaCarousel";
 import MediaPreviewPlaceholder from "@/components/shared/MediaPreviewPlaceholder";
+import AnimatedCounter from "@/components/shared/AnimatedCounter";
 
 /**
  * QuickWinsMediaVisual
@@ -70,10 +71,13 @@ function QuickWinsMediaVisual({ item }: { item: MediaShowcaseItem }) {
   );
 }
 
+// Split into a numeric `value` + `suffix` (instead of one display
+// string) so AnimatedCounter can count each stat up from 0 on scroll
+// into view, per homepage spec Section 3.2.
 const RESULT_STATS = [
-  { value: "18+", label: "Products across 6 categories" },
-  { value: "6", label: "Creator categories in one marketplace" },
-  { value: "48h", label: "Average delivery time" },
+  { value: 18, suffix: "+", label: "Products across 6 categories" },
+  { value: 6, suffix: "", label: "Creator categories in one marketplace" },
+  { value: 48, suffix: "h", label: "Average delivery time" },
 ];
 
 export default function QuickWins() {
@@ -178,7 +182,9 @@ export default function QuickWins() {
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.45, delay: index * 0.08, ease: "easeOut" }}
             >
-              <p className="statValue">{stat.value}</p>
+              <p className="statValue">
+                <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+              </p>
               <p className="statLabel">{stat.label}</p>
             </motion.article>
           ))}

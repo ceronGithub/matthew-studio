@@ -9,23 +9,24 @@
  *
  * PURPOSE:
  * Validates the incoming { email, subject, message } payload
- * server-side (never trust the client-side check alone) and returns
- * a consistent success/error JSON shape. No email/database delivery
- * is wired up yet — this is the placeholder step; swap the TODO below
- * for EmailJS (services/emailjs.ts) or a Supabase `supportTickets`
- * table once one of those is configured for this project.
+ * server-side (never trust the client-side check alone) and sends it
+ * on via EmailJS (services/emailjs.ts), returning a consistent
+ * success/error JSON shape either way.
  *
  * DATA FLOW:
  * 1. SupportForm (Client Component) POSTs { email, subject, message }
  *    as JSON.
  * 2. This handler validates required fields, email format, and that
  *    subject is one of the dropdown's known values.
- * 3. On success, logs the submission (audit trail placeholder) and
- *    returns { success: true }.
+ * 3. On success, sends the submission via EmailJS's "support_request"
+ *    template (EMAILJS_TEMPLATE_ID_SUPPORT) and returns
+ *    { success: true }. A failed send returns a 502 with a clean
+ *    error message — the submitter's input is never lost silently.
  */
 export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
+import { sendEmail } from "@/services/emailjs";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -63,11 +64,18 @@ export async function POST(request: Request) {
       );
     }
 
-    // TODO: send via EmailJS (services/emailjs.ts) or insert into a
-    // Supabase `supportTickets` table once one is set up for this
-    // project (see Rule 35 in the dev protocol). For now, log
-    // server-side so submissions are visible during development.
-    console.log("[support] New submission:", { email, subject });
+    const result = await sendEmail(process.env.EMAILJS_TEMPLATE_ID_SUPPORT ?? "", {
+      from_email: email,
+      subject,
+      message,
+    });
+
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, data: null, message: result.message ?? "Failed to send your message. Please try again." },
+        { status: 502 }
+      );
+    }
 
     return NextResponse.json({
       success: true,
