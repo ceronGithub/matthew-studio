@@ -32,6 +32,7 @@ import {
   BookOpen,
   Box,
   Star,
+  Eye,
   ChevronLeft,
   ChevronRight,
   type LucideIcon,
@@ -62,6 +63,22 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
     <article className="featuredProductCard">
       <div className="featuredProductThumb">
         <Icon size={40} strokeWidth={1.5} className="featuredProductThumbIcon" aria-hidden="true" />
+
+        {/* Hover/focus-only overlay — darkens the thumb and reveals a
+            centered "Quick View" CTA (spec 3.4). No quick-view modal
+            exists yet, so this routes to the same detail page as
+            "View Details"; swap the href for a modal trigger once one
+            ships, without touching the surrounding card markup. */}
+        <div className="featuredProductThumbOverlay">
+          <Link
+            href={`/${product.categorySlug}/${product.id}`}
+            className="featuredProductQuickViewButton"
+            aria-label={`Quick view ${product.name}`}
+          >
+            <Eye size={16} strokeWidth={1.75} aria-hidden="true" />
+            Quick View
+          </Link>
+        </div>
       </div>
 
       <div className="featuredProductBody">

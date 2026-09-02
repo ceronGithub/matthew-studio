@@ -705,6 +705,7 @@
 }
 
 .featuredProductThumb {
+  position: relative;
   aspect-ratio: 4 / 3;
   display: flex;
   align-items: center;
@@ -720,6 +721,55 @@
 
 .featuredProductCard:hover .featuredProductThumbIcon {
   transform: scale(1.08);
+}
+
+/*
+ * .featuredProductThumbOverlay
+ * Darkening scrim over the thumb, centered "Quick View" CTA inside.
+ * Hidden by default (opacity: 0); revealed on card hover AND
+ * focus-within so keyboard users tabbing to the link inside also see
+ * it appear, per spec 3.4's "Quick View button fades in (centered)".
+ */
+.featuredProductThumbOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.featuredProductCard:hover .featuredProductThumbOverlay,
+.featuredProductCard:focus-within .featuredProductThumbOverlay {
+  opacity: 1;
+}
+
+.featuredProductQuickViewButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 999px;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transform: scale(0.92);
+  transition: transform var(--transition-base), background var(--transition-fast);
+}
+
+.featuredProductCard:hover .featuredProductQuickViewButton,
+.featuredProductCard:focus-within .featuredProductQuickViewButton {
+  transform: scale(1);
+}
+
+.featuredProductQuickViewButton:hover,
+.featuredProductQuickViewButton:focus-visible {
+  background: var(--color-accent);
+  color: var(--color-bg);
 }
 
 .featuredProductBody {
