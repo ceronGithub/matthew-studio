@@ -217,21 +217,13 @@
   border-radius: var(--radius, 12px);
   background: var(--color-surface);
   overflow: hidden;
-  transition:
-    border-color var(--transition-base),
-    background-color var(--transition-base),
-    transform var(--transition-base);
-  will-change: transform;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
 }
 
-/* Lift + border/background brighten on hover — replaces the old
- * box-shadow-only depth cue per Rule 17.7 (shadows are for floating
- * elements only, not the primary depth mechanism on in-flow cards). */
 .productCard:hover,
 .productCard:focus-within {
   border-color: var(--color-border-hover);
-  background: var(--color-surface-hover);
-  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
 .productCardThumb {
@@ -394,6 +386,89 @@ th.comparisonTableTierHighlighted,
 
 .comparisonTableCta {
   width: 100%;
+}
+
+/* ------------------------------------------------------------
+ * COMPARISON ACCORDION — mobile (<768px) replacement for the
+ * comparison table above (components/home/ComparisonTable.tsx's
+ * ComparisonAccordion). One collapsible card per tier instead of a
+ * horizontally-scrolled grid — buyer_homepage_specification.md
+ * Section 5.2: "Mobile: Vertical stack with accordion".
+ * ------------------------------------------------------------ */
+.comparisonAccordion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.comparisonAccordionItem {
+  position: relative;
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+
+.comparisonAccordionItemHighlighted {
+  border-color: var(--color-accent);
+  background: var(--color-surface-hover);
+}
+
+.comparisonAccordionItemHighlighted .comparisonTablePopularPill {
+  position: absolute;
+  top: calc(-1 * var(--space-sm));
+  left: var(--space-lg);
+}
+
+.comparisonAccordionHeader {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  touch-action: manipulation;
+}
+
+.comparisonAccordionHeaderText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.comparisonAccordionChevron {
+  display: flex;
+  flex-shrink: 0;
+  color: var(--color-text-secondary);
+}
+
+.comparisonAccordionFeatureList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin: var(--space-md) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.comparisonAccordionFeatureRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 0.9375rem;
+  color: var(--color-text-primary);
+}
+
+.comparisonAccordionFeatureRowExcluded {
+  color: var(--color-text-muted);
+}
+
+.comparisonAccordionCta {
+  display: block;
+  margin-top: var(--space-lg);
 }
 
 /* ------------------------------------------------------------
