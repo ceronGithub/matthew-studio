@@ -64,6 +64,31 @@
 }
 
 /* ------------------------------------------------------------
+ * PAGE HEADING / DESCRIPTION
+ * Used by the forgot-password and reset-password pages, which don't
+ * have the Sign In / Create Account tabs to introduce the form.
+ * ------------------------------------------------------------ */
+.authPageHeading {
+  margin: 0 0 var(--space-md);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+}
+
+.authPageDescription {
+  margin: 0 0 var(--space-md);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.75);
+  text-align: center;
+}
+
+.authPageDescription strong {
+  color: #fff;
+}
+
+/* ------------------------------------------------------------
  * FORM / FIELDS
  * ------------------------------------------------------------ */
 .authForm {
@@ -193,7 +218,8 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
-.authSwitchPrompt button {
+.authSwitchPrompt button,
+.authSwitchPrompt a {
   background: none;
   border: none;
   color: #fff;
@@ -201,6 +227,14 @@
   text-decoration: underline;
   cursor: pointer;
   padding: 0;
+}
+
+/* Full-width variant of the submit button, used as a plain link
+ * (e.g. "Back to sign in", "Request a new link") rather than a form
+ * submit action — same shape/sizing as .authSubmitButton so it lines
+ * up with the rest of the card, but centers its text as a link. */
+.authSubmitButton--link {
+  text-decoration: none;
 }
 
 /* ------------------------------------------------------------

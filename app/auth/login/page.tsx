@@ -1,5 +1,5 @@
 /**
- * FILE: app/(auth)/login/page.tsx
+ * FILE: app/auth/login/page.tsx
  * ROLE: Public — served at "/auth/login". Handles both sign-in and
  * buyer registration (Mockup 2 design).
  *

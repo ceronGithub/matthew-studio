@@ -688,3 +688,31 @@ project is done.
   orphaned with no inbound link. improvement_1.md Section 4 is now
   fully checked off - every page in that list exists. npx tsc
   --noEmit passes clean on all new/modified files.
+
+[2026-09-02] Built the forgot-password / reset-password flow flagged
+  as missing from login_and_registration_page.md Section 3.1. New
+  pages app/auth/forgot-password/page.tsx (email-only form) and
+  app/auth/reset-password/page.tsx (new password form), backed by
+  components/auth/ForgotPasswordForm.tsx and ResetPasswordForm.tsx.
+  New API routes: app/api/auth/forgot-password/route.ts (rate-limited
+  3/15min, calls Supabase resetPasswordForEmail, always returns the
+  same generic message so emails can't be enumerated, logs
+  password_reset_requested) and app/api/auth/reset-password/route.ts
+  (logging-only - the actual password update runs client-side via
+  supabaseBrowserClient.auth.updateUser() using the temporary recovery
+  session Supabase's SDK attaches from the email link; this route just
+  records password_reset_completed to SecurityLog). ResetPasswordForm
+  verifies that recovery session on mount and shows an "invalid or
+  expired link" state instead of a form if it's missing. Also fixed a
+  pre-existing bug found while wiring this up: app/(auth)/ was a
+  parenthesized route group, which Next.js strips from the URL, so the
+  login page was actually served at /login while every reference in
+  middleware.ts, SignInForm, and BuyerNav pointed at /auth/login - a
+  404 in production. Renamed the folder to app/auth/ (a real segment)
+  so /auth/login, /auth/forgot-password, and /auth/reset-password all
+  resolve as the rest of the app already assumes. Extended
+  app/styles/auth.css with .authPageHeading/.authPageDescription (for
+  the two new tab-less pages) and an anchor-tag variant of
+  .authSwitchPrompt's link styling. No schema change - reuses the
+  existing SecurityLog and RateLimitAttempt models with new eventType/
+  endpoint string values.
