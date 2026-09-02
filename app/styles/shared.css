@@ -7,6 +7,43 @@
  */
 
 /* ------------------------------------------------------------
+ * CARD HOVER — "beating heart" outline pulse
+ * Shared by every card-style hover state across the homepage
+ * (category, why-us, featured product, testimonial, stat cards).
+ * Two quick pulses then a rest, mimicking an actual heartbeat
+ * rhythm — outline/box-shadow only, so it layers cleanly on top of
+ * each card's existing translateY/border-color hover transitions.
+ * ------------------------------------------------------------ */
+@keyframes cardHeartbeatPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--cardHeartbeatColor, var(--color-accent)) 55%, transparent);
+  }
+  14% {
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--cardHeartbeatColor, var(--color-accent)) 0%, transparent);
+  }
+  28% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--cardHeartbeatColor, var(--color-accent)) 55%, transparent);
+  }
+  42% {
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--cardHeartbeatColor, var(--color-accent)) 0%, transparent);
+  }
+  70%,
+  99% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes cardHeartbeatPulse {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 transparent;
+    }
+  }
+}
+
+/* ------------------------------------------------------------
  * PUBLIC MAIN — grows to push the footer to the bottom on short pages
  * ------------------------------------------------------------ */
 .siteMain {
@@ -1050,6 +1087,7 @@ th.comparisonTableTierHighlighted,
 .whyUsItem:hover {
   background: var(--color-surface-hover);
   border-color: var(--color-border-hover);
+  animation: cardHeartbeatPulse 1.2s ease-in-out infinite;
 }
 
 .whyUsHeading {

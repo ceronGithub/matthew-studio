@@ -460,6 +460,7 @@
 .statCard:hover {
   background: var(--color-surface-hover);
   border-color: var(--color-border-hover);
+  animation: cardHeartbeatPulse 1.2s ease-in-out infinite;
 }
 
 .statValue {
@@ -520,6 +521,8 @@
 .categoryCard:focus-within {
   background: var(--color-surface-hover);
   border-color: var(--categoryAccent, var(--color-accent));
+  --cardHeartbeatColor: var(--categoryAccent, var(--color-accent));
+  animation: cardHeartbeatPulse 1.2s ease-in-out infinite;
 }
 
 .categoryCardIconWrap {
@@ -687,6 +690,7 @@
 .featuredProductCard:focus-within {
   border-color: var(--color-accent);
   transform: translateY(-8px);
+  animation: cardHeartbeatPulse 1.2s ease-in-out infinite;
 }
 
 .featuredProductThumb {
@@ -996,6 +1000,7 @@
 .testimonialHomeCard:focus-within {
   border-color: var(--color-accent);
   transform: translateY(-8px);
+  animation: cardHeartbeatPulse 1.2s ease-in-out infinite;
 }
 
 .testimonialHomeStars {
