@@ -187,16 +187,6 @@
 }
 
 /* ------------------------------------------------------------
- * TEMPLATES SECTION — Why Us row layout from tablet up
- * ------------------------------------------------------------ */
-@media (min-width: 768px) {
-  .whyUsGrid {
-    flex-direction: row;
-    align-items: flex-start;
-  }
-}
-
-/* ------------------------------------------------------------
  * T-SHIRTS SECTION — gallery slide narrows to 60% width and
  * centers from tablet up, per spec (full width on mobile).
  * ------------------------------------------------------------ */

@@ -774,3 +774,16 @@ project is done.
   auto-fit (collapses the empty tracks so the 3 items share the row
   evenly) and capped/centered the row with max-width: 780px; margin: 0
   auto so it reads as one centered group on wide screens.
+
+[2026-09-02] Fixed the Templates section "Why Us" row (whyUsGrid/
+  whyUsItem in app/styles/shared.css): items rendered as plain
+  stacked, borderless text instead of 3 centered cards because the
+  row-layout breakpoint for .whyUsGrid lived in mediaQueries.css,
+  which loads before shared.css in the app's CSS import order — so
+  shared.css's unconditional flex-direction: column always won,
+  regardless of viewport width. Replaced the flex-column with a
+  self-responsive CSS grid (auto-fit, no media query needed) and gave
+  each .whyUsItem a real card treatment (border, background, padding,
+  hover state) so the 3 items now show as centered, visible cards.
+  Removed the now-dead .whyUsGrid row-layout rule from
+  mediaQueries.css.

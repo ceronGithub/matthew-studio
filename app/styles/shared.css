@@ -1020,9 +1020,17 @@ th.comparisonTableTierHighlighted,
  * WHY US — 3-column trust builder (Templates section).
  * ------------------------------------------------------------ */
 .whyUsGrid {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xl);
+  /* CSS grid + auto-fit instead of the old flex-column: the
+     mediaQueries.css row-layout breakpoint for this class never
+     actually applied (it loads before shared.css in the cascade, so
+     this file's unconditional rule always won), which is why these
+     items rendered stacked with no visible card boundary. auto-fit
+     is responsive on its own — no media query needed — and
+     justify-content: center keeps the row centered as a group. */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  justify-content: center;
+  gap: var(--space-lg);
   margin: var(--space-xl) 0;
 }
 
@@ -1032,7 +1040,16 @@ th.comparisonTableTierHighlighted,
   align-items: center;
   gap: var(--space-sm);
   text-align: center;
-  flex: 1;
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+
+.whyUsItem:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
 }
 
 .whyUsHeading {
