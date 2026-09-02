@@ -7,6 +7,7 @@
  * shortcut, and copyright. No data fetching.
  */
 import Link from "next/link";
+import Image from "next/image";
 import SocialLinks from "@/components/shared/SocialLinks";
 import { CATEGORY_SHOWCASE } from "@/lib/categoryShowcaseData";
 
@@ -61,7 +62,16 @@ export default function Footer() {
     <footer className="siteFooter">
       <div className="siteFooterInner">
         <div className="siteFooterBrand">
-          <p className="siteFooterLogo">Matthew Studio</p>
+          <p className="siteFooterLogo">
+            <Image
+              src="/logo-icon.png"
+              alt="Matthew Studio logo"
+              width={24}
+              height={24}
+              className="siteFooterLogoMark"
+            />
+            Matthew Studio
+          </p>
           <p className="siteFooterTagline">
             A digital marketplace for website templates, t-shirts, AI videos, file tools,
             tutorials, and game characters — ready to use, built to launch fast.

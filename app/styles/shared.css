@@ -527,12 +527,24 @@ th.comparisonTableTierHighlighted,
 }
 
 .siteLogo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
   font-family: var(--font-mono);
   font-size: 0.95rem;
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--color-text-primary);
   text-decoration: none;
+}
+
+/* .siteLogoMark — the icon badge next to the "Matthew Studio" wordmark
+   in the navbar. Fixed square, never stretched. */
+.siteLogoMark {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  flex-shrink: 0;
 }
 
 .siteNavLinks {
@@ -829,10 +841,22 @@ th.comparisonTableTierHighlighted,
 }
 
 .siteFooterLogo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
   font-family: var(--font-mono);
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--color-text-primary);
+}
+
+/* .siteFooterLogoMark — matches .siteLogoMark in the navbar, sized
+   slightly smaller to fit the footer's brand column. */
+.siteFooterLogoMark {
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+  flex-shrink: 0;
 }
 
 .siteFooterTagline {

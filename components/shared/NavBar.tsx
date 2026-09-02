@@ -10,6 +10,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
@@ -120,6 +121,14 @@ export default function NavBar() {
       <nav className="siteNav" aria-label="Primary">
         <div className="siteNavInner">
           <Link href="/" className="siteLogo" onClick={() => setIsMenuOpen(false)}>
+            <Image
+              src="/logo-icon.png"
+              alt="Matthew Studio logo"
+              width={28}
+              height={28}
+              className="siteLogoMark"
+              priority
+            />
             Matthew Studio
           </Link>
 
