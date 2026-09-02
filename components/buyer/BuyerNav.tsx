@@ -14,6 +14,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LogOut, Loader2 } from "lucide-react";
+import { getCsrfHeader } from "@/lib/csrf";
 
 interface BuyerNavProps {
   displayName: string;
@@ -28,7 +29,7 @@ export default function BuyerNav({ displayName }: BuyerNavProps) {
   async function handleSignOut() {
     setIsSigningOut(true);
     try {
-      await fetch("/api/auth/logout", { method: "POST" });
+      await fetch("/api/auth/logout", { method: "POST", headers: getCsrfHeader() });
     } finally {
       router.push("/auth/login");
     }

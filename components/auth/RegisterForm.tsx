@@ -21,6 +21,7 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import PasswordStrengthMeter from "./PasswordStrengthMeter";
 import { PASSWORD_REQUIREMENTS_HINT } from "@/lib/authData";
+import { getCsrfHeader } from "@/lib/csrf";
 import type { ToastType } from "@/components/shared/useToast";
 
 // How long to wait after the user stops typing before checking the
@@ -122,7 +123,7 @@ export default function RegisterForm({ showToast }: RegisterFormProps) {
     try {
       const response = await fetch("/api/auth/register", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getCsrfHeader() },
         body: JSON.stringify({
           fullName: fullName.trim().replace(FORBIDDEN_CHARACTERS, ""),
           email,

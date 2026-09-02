@@ -732,3 +732,33 @@ project is done.
   now called on every debounce cycle instead of once per submit -
   reuses the existing lib/rateLimit.ts helper, same pattern as
   login/register/forgot-password.
+
+[2026-09-02] Added the Section 10 post-registration onboarding modal
+  (login_and_registration_page.md gap) - new components/buyer/
+  OnboardingModal.tsx client component renders the "Welcome to
+  Matthew Studio Marketplace!" overlay with the 4-item checklist and
+  Get Started button. Triggered via a one-shot sessionStorage flag
+  (mtwOnboarding:justRegistered) set by RegisterForm.tsx immediately
+  before its router.push("/buyer/dashboard") call; OnboardingModal
+  reads and clears the flag on mount so it never reappears on refresh
+  or a later normal sign-in. No Settings page exists yet to host a
+  permanent skip toggle, so dismissing the modal is the only skip
+  path for now. Wired into app/buyer/dashboard/page.tsx; styles added
+  at app/styles/onboardingModal.css, imported from app/buyer/layout.tsx.
+
+[2026-09-02] Added CSRF double-submit cookie protection (Rule 32.2)
+  across the entire auth flow - login_and_registration_page.md Section
+  5 gap. New lib/csrf.ts (isomorphic - Web Crypto API, no Node-only
+  imports, safe in Edge middleware and "use client" alike) exports
+  generateCsrfToken/isValidCsrfRequest (server) and getCsrfHeader
+  (client). middleware.ts now issues a non-HttpOnly csrf_token cookie
+  (SameSite=strict, 4h) on every /auth/* and /buyer/* request that
+  doesn't already have one - matcher widened from ["/buyer/:path*",
+  "/auth/login"] to ["/buyer/:path*", "/auth/:path*"] so
+  forgot-password and reset-password pages get the cookie too. All
+  five state-changing auth endpoints (login, register, forgot-password,
+  reset-password, logout) now call isValidCsrfRequest() first and
+  return 403 on mismatch, before rate limiting runs. All five call
+  sites (SignInForm, RegisterForm, ForgotPasswordForm,
+  ResetPasswordForm, BuyerNav's Sign Out) now spread getCsrfHeader()
+  into their fetch headers. No schema change.

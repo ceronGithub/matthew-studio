@@ -19,6 +19,7 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import PasswordStrengthMeter from "./PasswordStrengthMeter";
 import { PASSWORD_REQUIREMENTS_HINT } from "@/lib/authData";
 import { supabaseBrowserClient } from "@/lib/supabase/browserClient";
+import { getCsrfHeader } from "@/lib/csrf";
 import type { ToastType } from "@/components/shared/useToast";
 
 interface ResetPasswordFormProps {
@@ -81,7 +82,7 @@ export default function ResetPasswordForm({ showToast }: ResetPasswordFormProps)
       // visibility, it never blocks the redirect below.
       fetch("/api/auth/reset-password", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getCsrfHeader() },
         body: JSON.stringify({ email: data.user?.email ?? "" }),
       }).catch(() => {});
 

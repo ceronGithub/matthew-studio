@@ -14,6 +14,7 @@
 import { useState, type FormEvent } from "react";
 import { Loader2 } from "lucide-react";
 import type { ToastType } from "@/components/shared/useToast";
+import { getCsrfHeader } from "@/lib/csrf";
 
 interface ForgotPasswordFormProps {
   showToast: (message: string, type: ToastType) => void;
@@ -39,7 +40,7 @@ export default function ForgotPasswordForm({ showToast }: ForgotPasswordFormProp
     try {
       const response = await fetch("/api/auth/forgot-password", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getCsrfHeader() },
         body: JSON.stringify({ email }),
       });
       const result = await response.json();

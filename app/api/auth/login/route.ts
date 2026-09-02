@@ -13,6 +13,7 @@ import { NextResponse } from "next/server";
 import { supabaseServerClient } from "@/lib/supabase/serverClient";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { logSecurityEvent } from "@/lib/securityLog";
+import { isValidCsrfRequest } from "@/lib/csrf";
 
 const isProduction = process.env.NODE_ENV === "production";
 const LOGIN_MAX_ATTEMPTS = 5;
@@ -20,6 +21,15 @@ const LOGIN_WINDOW_MINUTES = 15;
 
 export async function POST(request: Request) {
   try {
+    // CSRF check first (Rule 32.2) — reject forged cross-origin requests
+    // before they can consume the legitimate rate-limit budget below.
+    if (!isValidCsrfRequest(request)) {
+      return NextResponse.json(
+        { success: false, data: null, message: "Invalid request. Please refresh the page and try again." },
+        { status: 403 }
+      );
+    }
+
     // Rate limit BEFORE touching Supabase — blocks brute-force attempts
     // as cheaply as possible, before any auth call is even made.
     const ipAddress = getClientIp(request);

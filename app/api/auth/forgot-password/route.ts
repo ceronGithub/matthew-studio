@@ -13,6 +13,7 @@ import { NextResponse } from "next/server";
 import { supabaseServerClient } from "@/lib/supabase/serverClient";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { logSecurityEvent } from "@/lib/securityLog";
+import { isValidCsrfRequest } from "@/lib/csrf";
 
 const FORGOT_PASSWORD_MAX_ATTEMPTS = 3;
 const FORGOT_PASSWORD_WINDOW_MINUTES = 15;
@@ -23,6 +24,16 @@ const GENERIC_MESSAGE = "If that email is registered, we've sent a password rese
 
 export async function POST(request: Request) {
   try {
+    // CSRF check first (Rule 32.2). Unlike the generic-message pattern
+    // below, this rejection is safe to be specific — it reveals nothing
+    // about any account, only that the request itself wasn't valid.
+    if (!isValidCsrfRequest(request)) {
+      return NextResponse.json(
+        { success: false, data: null, message: "Invalid request. Please refresh the page and try again." },
+        { status: 403 }
+      );
+    }
+
     // Rate limit BEFORE touching Supabase — 3 attempts per 15 minutes,
     // stricter than login since this endpoint sends an email per hit.
     const ipAddress = getClientIp(request);

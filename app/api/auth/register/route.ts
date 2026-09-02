@@ -13,6 +13,7 @@ import { NextResponse } from "next/server";
 import { supabaseServerClient } from "@/lib/supabase/serverClient";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { logSecurityEvent } from "@/lib/securityLog";
+import { isValidCsrfRequest } from "@/lib/csrf";
 
 const isProduction = process.env.NODE_ENV === "production";
 const FORBIDDEN_CHARACTERS = /[<>{}[\]/\\;'"`=]/g;
@@ -31,6 +32,14 @@ function isPasswordStrongEnough(password: string): boolean {
 
 export async function POST(request: Request) {
   try {
+    // CSRF check first (Rule 32.2) — same reasoning as /api/auth/login.
+    if (!isValidCsrfRequest(request)) {
+      return NextResponse.json(
+        { success: false, data: null, message: "Invalid request. Please refresh the page and try again." },
+        { status: 403 }
+      );
+    }
+
     // Rate limit BEFORE touching Supabase — stricter than login (3 vs 5)
     // since account creation is more expensive to let an attacker spam.
     const ipAddress = getClientIp(request);

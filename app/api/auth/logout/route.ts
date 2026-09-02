@@ -11,11 +11,22 @@
 export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
+import { isValidCsrfRequest } from "@/lib/csrf";
 
 const isProduction = process.env.NODE_ENV === "production";
 
-export async function POST() {
+export async function POST(request: Request) {
   try {
+    // CSRF check (Rule 32.2) — logout is low-stakes if forged (it just
+    // signs the victim out), but every state-changing endpoint gets the
+    // same protection for consistency.
+    if (!isValidCsrfRequest(request)) {
+      return NextResponse.json(
+        { success: false, data: null, message: "Invalid request." },
+        { status: 403 }
+      );
+    }
+
     const response = NextResponse.json({
       success: true,
       data: null,

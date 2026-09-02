@@ -14,9 +14,20 @@ export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 import { logSecurityEvent } from "@/lib/securityLog";
+import { isValidCsrfRequest } from "@/lib/csrf";
 
 export async function POST(request: Request) {
   try {
+    // CSRF check (Rule 32.2). The password change itself already
+    // happened client-side via Supabase before this call — this only
+    // guards the SecurityLog write from being forged/spoofed.
+    if (!isValidCsrfRequest(request)) {
+      return NextResponse.json(
+        { success: false, data: null, message: "Invalid request." },
+        { status: 403 }
+      );
+    }
+
     const body = await request.json();
     const email: string = (body.email ?? "").trim();
 

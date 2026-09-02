@@ -14,6 +14,7 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import type { ToastType } from "@/components/shared/useToast";
+import { getCsrfHeader } from "@/lib/csrf";
 
 interface SignInFormProps {
   showToast: (message: string, type: ToastType) => void;
@@ -48,7 +49,7 @@ export default function SignInForm({ showToast }: SignInFormProps) {
     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getCsrfHeader() },
         body: JSON.stringify({ email, password }),
       });
       const result = await response.json();
