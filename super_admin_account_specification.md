@@ -99,6 +99,7 @@ if (pathname.startsWith("/superAdmin")) {
    - "View Account Activity" → `/superAdmin/account-activity`
    - "View Backups" → `/superAdmin/backups`
    - "Access Vault" → `/superAdmin/vault`
+   - "Manage Device Bans" → `/superAdmin/gatekeeper` (per `gatekeeper_specification.md`)
 
 4. **Analytics Summary**
    - Total products across marketplace
@@ -928,6 +929,7 @@ These are gaps identified on review of Sections 1–8. None of these have been i
 | 2026-09-03 | Added Section 12: Implementation Plan (Phased) — 10-phase, dependency-ordered build sequence covering every page/feature in Sections 3, 7, and 9 (auth/2FA foundation, dashboard + logging, admin management, vault/backups, buyer management, product/order management with approval flow, CMS/announcements/media, task/customer assignment with notifications, analytics, remaining hardening), each with scope, deliverables, and acceptance criteria.                                                                         |
 | 2026-09-03 | Added Section 9: Recommended Improvements & Hardening (proposed, not yet built) — 2FA/MFA, IP allowlist/anomaly-blocking, break-glass recovery, product approval flow, customer-assignment exclusivity check, task notifications/escalation, CMS multi-version history, media library, scoped-by-default admin views, in-app notification center, full Analytics page, per-buyer data export, backup restore runbook. Renumbered Testing checklist to Section 10 and Change Log to Section 11, and added matching checklist items. |
 | 2026-09-03 | Added Sections 3.7–3.14: Content Management/CMS, Buyer Management, Announcements, Product Management, Order Management, Admin Task Assignment, Customer Assignment to Admin, and the Full-Control Principle — super-admin can now manage all visitor content, buyers, products, orders, and admin work assignment, on top of the existing admin-management/security/vault pages. Updated Section 4.1's super-admin-only operations list to match.                                                                                  |
+| 2026-09-04 | Added "Manage Device Bans" quick action link to the dashboard, and folded the new `gatekeeper_specification.md` (device-fingerprint-based ban system, all account types + pre-auth traffic, permanent ban until manual super-admin unban) into Phase 2's scope/deliverables/acceptance criteria, since it depends directly on the `SecurityLog` infrastructure built in that same phase.                                                                                                                                           |
 | 2026-09-04 | Updated Section 3.11 Order Management: added super-admin-only unrestricted Production Stage override, Production Stage filter on the order list, and `order_production_stage_updated` security event. Updated Phase 6 scope/deliverables/acceptance to include the shared `productionStage` pipeline (admin spec Section 3.3.3) and the new companion `buyer_order_tracking_specification.md`.                                                                                                                                     |
 | 2026-09-03 | Added Section 7: Vault & Session Slug System — super-admin slug format (12 words + 12 alphanumeric + 12 alphaspecial), auto-generation on first login, slug reuse on subsequent logins, new slug on sign-out + next login. Added vault credentials (15 words + 15 alphanumeric) for emergency access.                                                                                                                                                                                                                              |
 | 2026-09-01 | Initial super-admin specification created; account creation, dashboard, admin management, security logs sections documented.                                                                                                                                                                                                                                                                                                                                                                                                       |
@@ -983,10 +985,11 @@ Order is dependency-driven, not priority-driven — each phase below only depend
 - Rule 42: `AccountActivityLog` model, `recordAccountActivity()` service
 - Section 3.3 Security Logs page and Section 3.4 Account Activity page — read-only viewers on top of the models above
 - Section 9.1: anomaly-blocking (a `location_anomaly` event blocks the session pending a second-channel confirmation, not just logs it)
+- `gatekeeper_specification.md` in full: `DeviceBan` model, Gatekeeper Fingerprint check in `middleware.ts` (applies to every account type + pre-auth login/register), instant-ban and 3-strike breach logic, `/superAdmin/gatekeeper` page — depends directly on `SecurityLog` existing, so it belongs in this phase alongside it, not later
 
-**Deliverables:** `SecurityLog` + `AccountActivityLog` tables, shared logging helpers, 3 pages (dashboard shell, security logs, account activity).
+**Deliverables:** `SecurityLog` + `AccountActivityLog` + `DeviceBan` tables, shared logging helpers, 4 pages (dashboard shell, security logs, account activity, gatekeeper/device bans), Gatekeeper check wired into `middleware.ts`.
 
-**Acceptance:** every login attempt from Phase 1 appears in Security Logs within this phase; the dashboard renders real counts instead of placeholders; an impossible-travel login is blocked, not just logged.
+**Acceptance:** every login attempt from Phase 1 appears in Security Logs within this phase; the dashboard renders real counts instead of placeholders; an impossible-travel login is blocked, not just logged; a device that trips `sql_injection_attempt` or `location_anomaly` is immediately blocked platform-wide on its next request; a device is banned automatically after 3 `login_failed`/`admin_login_denied`/`registration_abuse`/`rate_limit_hit` events within 24h; only a super-admin can unban, and only with a note.
 
 ---
 
@@ -1086,6 +1089,6 @@ Order is dependency-driven, not priority-driven — each phase below only depend
 
 ---
 
-**Document Version:** 1.4  
+**Document Version:** 1.5  
 **Last Updated:** 2026-09-04  
 **Status:** Specification Complete — Section 9 items proposed pending build; Section 12 is the build sequence for Sections 3, 7, and 9 combined
