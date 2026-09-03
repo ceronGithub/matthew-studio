@@ -16,6 +16,7 @@
 
 import { useState } from "react";
 import { Clock, Coins } from "lucide-react";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 
 const AUTOMATION_RATIO = 0.8;
 
@@ -32,16 +33,16 @@ export default function ROICalculator() {
   return (
     <section className="roiSection">
       <div className="roiSectionInner">
-        <div className="roiCopy">
+        <ScrollReveal className="roiCopy">
           <p className="eyebrow">ROI Calculator</p>
           <h2 className="sectionTitle">See what doing it yourself is really costing you</h2>
           <p className="sectionSubtitle">
             Move the sliders to match your situation. The estimate assumes buying ready-made
             removes about 80% of the time spent building, sourcing, or managing it yourself.
           </p>
-        </div>
+        </ScrollReveal>
 
-        <div className="roiCard">
+        <ScrollReveal className="roiCard" delay={0.1}>
           <div className="roiInputGroup">
             <label htmlFor="manualHours" className="roiLabel">
               Hours/week spent doing it yourself
@@ -88,7 +89,7 @@ export default function ROICalculator() {
               <span className="roiResultLabel">saved per month</span>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

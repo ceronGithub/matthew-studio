@@ -15,14 +15,26 @@
  * 1. This Server Component reads TECH_STACK, INCLUDED_FEATURES, and
  *    COMPARISON_ROWS directly (no fetch needed — static arrays today).
  * 2. Everything below the hero renders server-side except the ROI
- *    calculator, which is a Client Component (needs useState for the
- *    sliders).
+ *    calculator, the included-features list, and the comparison
+ *    table, which are Client Components (useState for the sliders;
+ *    motion.li / motion.tr for per-item/per-row entrance).
+ *
+ * MOTION:
+ * Header, tech stack grid, and the closing note use the shared
+ * ScrollReveal primitive (§3.1/§3.6) directly in this Server
+ * Component. The included-features list and comparison table are
+ * split into their own Client Component files purely so they can
+ * apply motion.li/motion.tr per item — a ScrollReveal div isn't a
+ * valid child of <ul>/<tbody>. This page had zero motion before this
+ * pass.
  */
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Check } from "lucide-react";
 import "../../styles/features.css";
 import ROICalculator from "@/components/features/ROICalculator";
+import IncludedFeaturesList from "@/components/features/IncludedFeaturesList";
+import FeaturesComparisonTable from "@/components/features/FeaturesComparisonTable";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 import { TECH_STACK, INCLUDED_FEATURES, COMPARISON_ROWS } from "@/lib/featuresData";
 
 export const metadata: Metadata = {
@@ -41,7 +53,7 @@ export default function FeaturesPage() {
   return (
     <>
       <header className="featuresPageHeader">
-        <div className="featuresPageHeaderInner">
+        <ScrollReveal className="featuresPageHeaderInner">
           <p className="eyebrow">Why Choose Matthew Studio</p>
           <h1 className="heroTitle" style={{ fontSize: "2.25rem" }}>
             Every category, built on the same solid foundation
@@ -50,7 +62,7 @@ export default function FeaturesPage() {
             A modern tech stack, products that actually work, and no months spent building the
             basics from zero — whatever category you're buying from.
           </p>
-        </div>
+        </ScrollReveal>
       </header>
 
       {/* ------------------------------------------------------------
@@ -61,11 +73,13 @@ export default function FeaturesPage() {
           <p className="eyebrow">Tech Stack</p>
           <h2 className="sectionTitle">Built on tools that scale</h2>
           <div className="techStackGrid">
-            {TECH_STACK.map((item) => (
-              <article key={item.name} className="techStackCard">
-                <h3 className="techStackName">{item.name}</h3>
-                <p className="techStackRole">{item.role}</p>
-              </article>
+            {TECH_STACK.map((item, index) => (
+              <ScrollReveal key={item.name} delay={index * 0.06}>
+                <article className="techStackCard">
+                  <h3 className="techStackName">{item.name}</h3>
+                  <p className="techStackRole">{item.role}</p>
+                </article>
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -78,17 +92,7 @@ export default function FeaturesPage() {
         <div className="featuresSectionInner">
           <p className="eyebrow">Out of the Box</p>
           <h2 className="sectionTitle">What's included, no add-ons required</h2>
-          <ul className="includedGrid">
-            {INCLUDED_FEATURES.map((feature) => (
-              <li key={feature.title} className="includedCard">
-                <Check size={18} strokeWidth={2} className="includedCardIcon" aria-hidden="true" />
-                <div>
-                  <h3 className="includedCardTitle">{feature.title}</h3>
-                  <p className="includedCardDescription">{feature.description}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <IncludedFeaturesList features={INCLUDED_FEATURES} />
         </div>
       </section>
 
@@ -104,42 +108,19 @@ export default function FeaturesPage() {
         <div className="featuresSectionInner">
           <p className="eyebrow">Compare Your Options</p>
           <h2 className="sectionTitle">Matthew Studio vs. doing it yourself</h2>
-          <div className="comparisonTableWrapper">
-            <table className="comparisonTable">
-              <thead>
-                <tr>
-                  <th scope="col">Criteria</th>
-                  <th scope="col" className="comparisonTableHighlightCol">
-                    Matthew Studio
-                  </th>
-                  <th scope="col">DIY / From Scratch</th>
-                  <th scope="col">Generic Marketplace</th>
-                </tr>
-              </thead>
-              <tbody>
-                {COMPARISON_ROWS.map((row) => (
-                  <tr key={row.criteria}>
-                    <th scope="row">{row.criteria}</th>
-                    <td className="comparisonTableHighlightCol">{row.template}</td>
-                    <td>{row.fromScratch}</td>
-                    <td>{row.genericBuilder}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <FeaturesComparisonTable rows={COMPARISON_ROWS} />
         </div>
       </section>
 
       <section className="featuresNoteSection">
-        <div className="featuresNoteInner">
+        <ScrollReveal className="featuresNoteInner">
           <p className="featuresNoteText">
             Ready to see pricing for each tier?
           </p>
           <Link href="/pricing" className="buttonPrimary">
             View Pricing
           </Link>
-        </div>
+        </ScrollReveal>
       </section>
     </>
   );
