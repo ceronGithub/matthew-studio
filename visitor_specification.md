@@ -16,61 +16,55 @@ This is a companion document to `buyer_homepage_specification.md` §13 (which co
 
 All routes under `app/(public)/`:
 
-| Page                            | Path                                                                                                            | Priority                                                  |
-| ------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| Homepage                        | `/`                                                                                                             | Covered in `buyer_homepage_specification.md` §13 (shared) |
-| Products (grid)                 | `/products`                                                                                                     | High                                                      |
-| Shop                            | `/shop`                                                                                                         | High                                                      |
-| Product detail                  | `/products/[slug]` equivalents (tshirts, templates, ai-videos, file-tools, game-characters, tutorials `[slug]`) | High                                                      |
-| About                           | `/about`                                                                                                        | Medium                                                    |
-| Pricing                         | `/pricing`                                                                                                      | High                                                      |
-| How It Works                    | `/how-it-works`                                                                                                 | Medium                                                    |
-| Features                        | `/features`                                                                                                     | Medium                                                    |
-| Compare                         | `/compare`                                                                                                      | Medium                                                    |
-| Testimonials                    | `/testimonials`                                                                                                 | Low                                                       |
-| FAQ                             | `/faq`                                                                                                          | Low                                                       |
-| Blog (list + `[slug]`)          | `/blog`, `/blog/[slug]`                                                                                         | Medium                                                    |
-| Tutorials (list + `[slug]`)     | `/tutorials`, `/tutorials/[slug]`                                                                               | Medium                                                    |
-| Contact                         | `/contact`                                                                                                      | Medium                                                    |
-| Support                         | `/support`                                                                                                      | Low                                                       |
-| Security                        | `/security`                                                                                                     | Low                                                       |
-| Terms / Privacy / Refund Policy | `/terms`, `/privacy`, `/refund-policy`                                                                          | Low (legal — minimal motion)                              |
+| Page | Path | Priority |
+|---|---|---|
+| Homepage | `/` | Covered in `buyer_homepage_specification.md` §13 (shared) |
+| Products (grid) | `/products` | High |
+| Shop | `/shop` | High |
+| Product detail | `/products/[slug]` equivalents (tshirts, templates, ai-videos, file-tools, game-characters, tutorials `[slug]`) | High |
+| About | `/about` | Medium |
+| Pricing | `/pricing` | High |
+| How It Works | `/how-it-works` | Medium |
+| Features | `/features` | Medium |
+| Compare | `/compare` | Medium |
+| Testimonials | `/testimonials` | Low |
+| FAQ | `/faq` | Low |
+| Blog (list + `[slug]`) | `/blog`, `/blog/[slug]` | Medium |
+| Tutorials (list + `[slug]`) | `/tutorials`, `/tutorials/[slug]` | Medium |
+| Contact | `/contact` | Medium |
+| Support | `/support` | Low |
+| Security | `/security` | Low |
+| Terms / Privacy / Refund Policy | `/terms`, `/privacy`, `/refund-policy` | Low (legal — minimal motion) |
 
 ---
 
 ## 3. ANIMATION SYSTEM (shared across all pages)
 
 **3.1 — Scroll entrance (mandatory on every section)**
-
 - `framer-motion` `whileInView`, `viewport={{ once: true, margin: "-80px" }}`
 - Pattern: `opacity: 0 → 1`, `translateY: 24px → 0` (desktop), `12px → 0` (mobile, ≤768px)
 - Duration: `--transition-slow` (0.4s, `cubic-bezier(0.22, 1, 0.36, 1)`)
 - Stagger children (cards, list items) by 60–80ms per index — never animate a grid of cards as one block.
 
 **3.2 — Hover / focus states**
-
 - Cards: lift (`translateY(-4px)`) + border/shadow soften, `--transition-base`
 - Buttons/links: color + background transition on base state (not just `:hover`) so it reverses smoothly — `--transition-fast`
 - All hover states mirrored on `:focus-visible` per Rule 33.3 (keyboard users get the same feedback)
 
 **3.3 — Parallax**
-
 - Background/decorative layers only (hero backgrounds, large section imagery): 0.10–0.20x scroll speed
 - **Never** on readable text or foreground content
 - Disabled entirely on mobile (≤768px) — replaced with a static background
 
 **3.4 — Page transitions**
-
 - Route changes: brief crossfade (150–200ms) via a shared layout transition wrapper — avoid jarring instant swaps between marketing pages
 - Product detail modals/drawers (if used for quick-view): `--transition-slow` transform + opacity, matching the modal pattern already used elsewhere in the app
 
 **3.5 — Carousels (blog, testimonials, media)**
-
 - Reuse `hooks/useMediaCarousel.ts` — extend with crossfade + slight scale (0.98 → 1) between slides instead of a hard cut
 - Swipeable on touch devices, arrow + dot controls on desktop
 
 **3.6 — Reduced motion**
-
 - Respect `prefers-reduced-motion: reduce` globally: drop all translateY/parallax/scale to opacity-only fades. Add this once as a shared `useReducedMotion()`-gated wrapper, not per-component.
 
 **3.7 — Tokens (no new values introduced)**
@@ -112,7 +106,7 @@ All durations/easings/z-index/spacing reference the existing tokens in `app/glob
 
 1. ✅ **Done (2026-09-03)** — Shared motion primitives (scroll-entrance wrapper, reduced-motion hook, card hover mixin)
 2. ✅ **Done (2026-09-03)** — `/products`, `/shop`, category grids: `/products` done; `/shop` is a retired redirect to `/pricing` (nothing to animate there); `tshirts`, `templates`, `ai-videos`, `file-tools`, `game-characters`, `tutorials` category grids all wired to the shared `ScrollReveal` primitive
-3. 🔶 **In progress** — `/pricing` ✅ done (2026-09-03); `/compare`, `/how-it-works` still pending
+3. 🔶 **In progress** — `/pricing` ✅ done (2026-09-03); `/compare` ✅ done (2026-09-03); `/how-it-works` still pending
 4. `/blog`, `/tutorials` (list + detail)
 5. `/about`, `/features`, `/testimonials`, `/faq`, `/contact`, `/support`, `/security`
 6. Legal pages (motion pass only, no structural change)
@@ -138,25 +132,27 @@ Per Rule 8A, each numbered step above ships as its own response/turn with full f
 - **Implemented (2026-09-03):** `tutorials` category grid — `components/home/TutorialsSection.tsx`'s hand-rolled `motion.div` stagger (raw `initial`/`whileInView`/`transition`, no reduced-motion handling) was replaced with `ScrollReveal`, preserving the same "stagger by level group" delay formula (`groupIndex * 0.15 + itemIndex * 0.05`) called for by the section's own design intent — it now also respects `prefers-reduced-motion` for free via the shared primitive. **This completes category-grid coverage for all six categories** — every `productCardsGrid` across the visitor site now uses the same `ScrollReveal` component.
 - **Simplification vs. §3.1:** mobile translateY distance is not yet reduced to 12px separately from desktop's 24px — both currently use 24px. Low-risk, can be tightened in a follow-up pass if it feels heavy on small screens.
 - **Implemented (2026-09-03):** `/pricing` — `app/(public)/pricing/page.tsx` now wraps the header, the six category pricing cards (0.06s stagger via `ScrollReveal`, same cadence as `/products`), and the closing note section in `ScrollReveal`. Card hover-lift (`translateY(-4px)`) already existed in `pricing.css` before this pass and needed no change. This page has no "recommended" plan concept (it's category cards, not plan tiers), so §6's glow/border-accent note doesn't apply here — that note is more relevant if/when a dedicated plan-tier pricing view is built.
+- **Implemented (2026-09-03):** `/compare` — header wrapped in `ScrollReveal` (`app/(public)/compare/page.tsx`); the 3-slot picker grid wrapped in `ScrollReveal` and the comparison table's `<tbody>` rows given a 0.06s-staggered fade+slide-up via `motion.tr` directly (`ScrollReveal`'s `div` wrapper is invalid HTML inside a `<tbody>`, so the same animation values were applied by hand, including the `prefers-reduced-motion` check) — all in `components/compare/ProductCompareTool.tsx`. Per §6's "sticky header row on scroll within the table": `compareTableWrapper` now has `max-height: 60vh` + `overflow: auto` and `thead th` is `position: sticky; top: 0` with an opaque `--color-bg` background, so the header pins within the table's own scroll area rather than guessing at the site nav's pixel height for a page-level sticky offset.
 
 ---
 
 ## 9. CHANGE LOG
 
-| Date       | Change                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 2026-09-03 | Initial visitor front-end modernization specification created — animation system, page scope, responsive/performance guardrails, and implementation order defined.                                                                                                                                                                                                                                                                       |
-| 2026-09-03 | Implemented shared `ScrollReveal` motion primitive + applied scroll-entrance stagger and hover-lift to `/products` grid (`ProductsGrid.tsx`, `ProductCard` via `shared.css`). Step 1 and the first half of Step 2 of the Implementation Order are done.                                                                                                                                                                                  |
+| Date | Change |
+|------|--------|
+| 2026-09-03 | Initial visitor front-end modernization specification created — animation system, page scope, responsive/performance guardrails, and implementation order defined. |
+| 2026-09-03 | Implemented shared `ScrollReveal` motion primitive + applied scroll-entrance stagger and hover-lift to `/products` grid (`ProductsGrid.tsx`, `ProductCard` via `shared.css`). Step 1 and the first half of Step 2 of the Implementation Order are done. |
 | 2026-09-03 | Confirmed `/shop` is a retired redirect (nothing to implement there). Fixed `.productCard` hover in `shared.css` to actually match the translateY-lift pattern (previous entry's claim was stale — it was still box-shadow-only). Wired `ScrollReveal` stagger into the `tshirts` category grid (`TShirtsSection.tsx`). Remaining category grids (`templates`, `ai-videos`, `file-tools`, `game-characters`, `tutorials`) still pending. |
-| 2026-09-03 | Wired `ScrollReveal` stagger into the `templates` category grid (`TemplatesSection.tsx`). Remaining category grids (`ai-videos`, `file-tools`, `game-characters`, `tutorials`) still pending.                                                                                                                                                                                                                                            |
-| 2026-09-03 | Wired `ScrollReveal` stagger into the `ai-videos` category grid (`AIVideosSection.tsx`). Noted that `GameCharactersSection.tsx`/`FileToolsSection.tsx` have no entrance animation yet and `TutorialsSection.tsx` has a one-off hand-rolled stagger that should be normalized to `ScrollReveal`. Remaining: `file-tools`, `game-characters`, `tutorials`.                                                                                 |
-| 2026-09-03 | Wired `ScrollReveal` stagger into the `file-tools` category grid (`FileToolsSection.tsx`). Remaining: `game-characters`, `tutorials`.                                                                                                                                                                                                                                                                                                    |
-| 2026-09-03 | Wired `ScrollReveal` stagger into the `game-characters` category grid's product row (`GameCharactersSection.tsx`) — the character-thumbnail gallery above already had its own entrance and was left as-is. Remaining: `tutorials`.                                                                                                                                                                                                       |
-| 2026-09-03 | Normalized `tutorials` category grid (`TutorialsSection.tsx`) from its hand-rolled `motion.div` stagger to the shared `ScrollReveal` primitive, keeping the same per-level-group delay formula and gaining reduced-motion support. **All six category grids now use `ScrollReveal` — Implementation Order Step 2 is complete.**                                                                                                          |
-| 2026-09-03 | Wired `ScrollReveal` into `/pricing` (`app/(public)/pricing/page.tsx`) — header, 6-card category grid (0.06s stagger), and closing note section. Existing hover-lift in `pricing.css` was already correct. Implementation Order Step 3: `/pricing` done, `/compare` and `/how-it-works` still pending.                                                                                                                                   |
+| 2026-09-03 | Wired `ScrollReveal` stagger into the `templates` category grid (`TemplatesSection.tsx`). Remaining category grids (`ai-videos`, `file-tools`, `game-characters`, `tutorials`) still pending. |
+| 2026-09-03 | Wired `ScrollReveal` stagger into the `ai-videos` category grid (`AIVideosSection.tsx`). Noted that `GameCharactersSection.tsx`/`FileToolsSection.tsx` have no entrance animation yet and `TutorialsSection.tsx` has a one-off hand-rolled stagger that should be normalized to `ScrollReveal`. Remaining: `file-tools`, `game-characters`, `tutorials`. |
+| 2026-09-03 | Wired `ScrollReveal` stagger into the `file-tools` category grid (`FileToolsSection.tsx`). Remaining: `game-characters`, `tutorials`. |
+| 2026-09-03 | Wired `ScrollReveal` stagger into the `game-characters` category grid's product row (`GameCharactersSection.tsx`) — the character-thumbnail gallery above already had its own entrance and was left as-is. Remaining: `tutorials`. |
+| 2026-09-03 | Normalized `tutorials` category grid (`TutorialsSection.tsx`) from its hand-rolled `motion.div` stagger to the shared `ScrollReveal` primitive, keeping the same per-level-group delay formula and gaining reduced-motion support. **All six category grids now use `ScrollReveal` — Implementation Order Step 2 is complete.** |
+| 2026-09-03 | Wired `ScrollReveal` into `/pricing` (`app/(public)/pricing/page.tsx`) — header, 6-card category grid (0.06s stagger), and closing note section. Existing hover-lift in `pricing.css` was already correct. Implementation Order Step 3: `/pricing` done, `/compare` and `/how-it-works` still pending. |
+| 2026-09-03 | Wired motion into `/compare` — header via `ScrollReveal`, slot-picker grid via `ScrollReveal`, comparison table rows via staggered `motion.tr` (0.06s/row, reduced-motion aware), and a sticky `thead` pinned within a newly bounded `max-height: 60vh` scroll area on `compareTableWrapper`. Implementation Order Step 3: `/pricing` and `/compare` done, `/how-it-works` still pending. |
 
 ---
 
-**Document Version:** 1.8
+**Document Version:** 1.9
 **Last Updated:** 2026-09-03
-**Status:** In implementation — Step 2 complete. Step 3 in progress: `/pricing` done, `/compare` and `/how-it-works` still pending.
+**Status:** In implementation — Step 2 complete. Step 3 in progress: `/pricing` and `/compare` done, `/how-it-works` still pending.

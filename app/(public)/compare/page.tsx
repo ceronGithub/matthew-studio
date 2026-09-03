@@ -15,11 +15,18 @@
  * 2. The full product list is passed as a prop into the Client
  *    Component ProductCompareTool, which owns all picker/comparison
  *    state.
+ *
+ * MOTION (visitor_specification.md §3.1, §6, Implementation Order Step 3):
+ * Header fades in on scroll via the shared ScrollReveal primitive.
+ * The slot-picker grid and the comparison table's own row/sticky-header
+ * motion live inside ProductCompareTool.tsx (a Client Component) since
+ * that's where the table is actually rendered.
  */
 import type { Metadata } from "next";
 import "../../styles/compare.css";
 import ProductCompareTool from "@/components/compare/ProductCompareTool";
 import { PRODUCTS } from "@/lib/productsData";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 
 export const metadata: Metadata = {
   title: "Compare Products | Matthew Studio",
@@ -37,7 +44,7 @@ export default function ComparePage() {
   return (
     <>
       <header className="comparePageHeader">
-        <div className="comparePageHeaderInner">
+        <ScrollReveal className="comparePageHeaderInner">
           <p className="eyebrow">Compare</p>
           <h1 className="heroTitle" style={{ fontSize: "2.25rem" }}>
             Compare products side by side
@@ -46,7 +53,7 @@ export default function ComparePage() {
             Add up to 3 products from any category and see price, rating, and variant options
             next to each other.
           </p>
-        </div>
+        </ScrollReveal>
       </header>
 
       <ProductCompareTool products={PRODUCTS} />

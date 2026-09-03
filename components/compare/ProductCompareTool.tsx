@@ -20,13 +20,25 @@
  * picking/removing happens client-side with useState; nothing is
  * persisted or sent anywhere. Each of the 3 slots has its own search
  * query so a visitor can look up all 3 products independently.
+ *
+ * MOTION (visitor_specification.md §3.1, §6):
+ * The slot-picker grid uses the shared ScrollReveal primitive (section-
+ * level entrance, mandatory per §3.1). The comparison table's rows use
+ * `motion.tr` directly (not ScrollReveal's div wrapper, which is invalid
+ * HTML inside a <tbody>) with the same stagger cadence and reduced-motion
+ * handling. Rows animate in once, the moment the table first mounts
+ * (2+ products picked) — not re-triggered by removing/re-adding a slot,
+ * since `viewport={{ once: true }}` only fires while the row is actually
+ * new to the DOM.
  */
 "use client";
 
 import { useMemo, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { Search, X, Star } from "lucide-react";
 import { CATEGORY_ICONS } from "@/lib/categoryIcons";
 import type { Product } from "@/lib/productsData";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 
 const SLOT_COUNT = 3;
 
@@ -117,6 +129,11 @@ function SlotPicker({ slotIndex, products, excludedIds, onPick }: SlotPickerProp
 }
 
 export default function ProductCompareTool({ products }: { products: Product[] }) {
+  // Respect the user's OS-level reduced-motion preference for the table
+  // rows below — same pattern ScrollReveal uses internally, applied
+  // directly here since motion.tr can't be wrapped in ScrollReveal's div.
+  const prefersReducedMotion = useReducedMotion();
+
   // One slot per column — null means that slot is still empty and
   // shows the SlotPicker instead of a filled comparison column.
   const [selected, setSelected] = useState<(Product | null)[]>(
@@ -147,10 +164,25 @@ export default function ProductCompareTool({ products }: { products: Product[] }
   // selected product actually has variants (Templates-only field).
   const hasAnyVariants = filledProducts.some((product) => product.variants && product.variants.length > 0);
 
+  // Assigns each <tr> a fade+slide-up entrance, staggered 0.06s per row
+  // (same cadence as the product grids), dropping the translateY when
+  // the visitor has reduced motion turned on — mirrors ScrollReveal's
+  // own animation values without needing its (invalid-inside-a-table) div.
+  let rowIndex = -1;
+  function nextRowMotion() {
+    rowIndex += 1;
+    return {
+      initial: { opacity: 0, y: prefersReducedMotion ? 0 : 16 },
+      whileInView: { opacity: 1, y: 0 },
+      viewport: { once: true, margin: "-40px" },
+      transition: { duration: 0.4, delay: rowIndex * 0.06, ease: [0.22, 1, 0.36, 1] as const },
+    };
+  }
+
   return (
     <section className="compareSection">
       <div className="compareSectionInner">
-        <div className="compareSlotsGrid">
+        <ScrollReveal className="compareSlotsGrid">
           {selected.map((product, index) =>
             product ? (
               <div key={product.id} className="compareSlot compareSlotFilled">
@@ -179,7 +211,7 @@ export default function ProductCompareTool({ products }: { products: Product[] }
               />
             )
           )}
-        </div>
+        </ScrollReveal>
 
         {filledProducts.length < 2 ? (
           <p className="compareEmptyState">
@@ -201,15 +233,15 @@ export default function ProductCompareTool({ products }: { products: Product[] }
                 </tr>
               </thead>
               <tbody>
-                <tr>
+                <motion.tr {...nextRowMotion()}>
                   <th scope="row" className="compareTableRowLabel">
                     Category
                   </th>
                   {filledProducts.map((product) => (
                     <td key={product.id}>{product.categoryLabel}</td>
                   ))}
-                </tr>
-                <tr>
+                </motion.tr>
+                <motion.tr {...nextRowMotion()}>
                   <th scope="row" className="compareTableRowLabel">
                     Rating
                   </th>
@@ -221,8 +253,8 @@ export default function ProductCompareTool({ products }: { products: Product[] }
                       </span>
                     </td>
                   ))}
-                </tr>
-                <tr>
+                </motion.tr>
+                <motion.tr {...nextRowMotion()}>
                   <th scope="row" className="compareTableRowLabel">
                     Starting Price
                   </th>
@@ -232,8 +264,8 @@ export default function ProductCompareTool({ products }: { products: Product[] }
                       {product.price.managed ? "/mo" : ""}
                     </td>
                   ))}
-                </tr>
-                <tr>
+                </motion.tr>
+                <motion.tr {...nextRowMotion()}>
                   <th scope="row" className="compareTableRowLabel">
                     Badge
                   </th>
@@ -248,8 +280,8 @@ export default function ProductCompareTool({ products }: { products: Product[] }
                       )}
                     </td>
                   ))}
-                </tr>
-                <tr>
+                </motion.tr>
+                <motion.tr {...nextRowMotion()}>
                   <th scope="row" className="compareTableRowLabel">
                     Description
                   </th>
@@ -258,9 +290,9 @@ export default function ProductCompareTool({ products }: { products: Product[] }
                       {product.description}
                     </td>
                   ))}
-                </tr>
+                </motion.tr>
                 {hasAnyVariants && (
-                  <tr>
+                  <motion.tr {...nextRowMotion()}>
                     <th scope="row" className="compareTableRowLabel">
                       Variants
                     </th>
@@ -286,7 +318,7 @@ export default function ProductCompareTool({ products }: { products: Product[] }
                         )}
                       </td>
                     ))}
-                  </tr>
+                  </motion.tr>
                 )}
               </tbody>
             </table>
