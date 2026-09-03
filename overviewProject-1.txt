@@ -79,3 +79,16 @@ that file left off.
   parallax fix. Bumped buyer_homepage_specification_done.md to
   Document Version 1.3 — only personalized recommendations remains
   open against that document.
+
+[2026-09-04] Cart/Checkout Phase 1, step 1/6 (cart_checkout_specification.md
+  Section 9): added CartItem, Order, and OrderItem models to
+  prisma/schema.prisma per the spec's Section 5 data model. Added two
+  things beyond the spec's raw proposal per Rule 6 (sensitive-record
+  handling): Order.updatedAt (optimistic-lock support) and
+  Order.deletedAt (soft delete instead of hard delete), plus a
+  @@unique constraint on Order.paymongoOrderId. No prior Order model
+  existed in the schema, so this is a clean add, not a reconciliation.
+  Schema not yet pushed to a live database — this sandbox has no
+  DATABASE_URL/DIRECT_URL configured; `npx prisma db push` and
+  `npx prisma generate` need to run in the actual dev environment
+  against Supabase. Next: CartItem API (/api/cart) + cart drawer UI.

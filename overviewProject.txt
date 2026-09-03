@@ -244,10 +244,16 @@ Site structure:
     outstanding is sequenced below.
 --------------------------------------------------------
 PHASE 1 — FOUNDATION (blocks everything buyer-facing; build first)
-[ ] 1. cart_checkout_specification.md
-       Cart, Checkout, PayMongo Payment Link + webhook, Order
-       creation. Nothing in Phase 2 has real data to show without
-       this — it's the source of every Order row.
+[~] 1. cart_checkout_specification.md — IN PROGRESS, per its own
+       Section 9 internal order:
+       [DONE] 1a. Order/OrderItem/CartItem schema (prisma/schema.prisma)
+       [ ]    1b. Cart (drawer + CartItem API)
+       [ ]    1c. Checkout page + server-side validation
+       [ ]    1d. PayMongo Payment Link creation
+       [ ]    1e. Webhook + Order status update (Rule 30)
+       [ ]    1f. Order confirmation page + status polling
+       Nothing in Phase 2 has real data to show without this — it's
+       the source of every Order row.
 
 PHASE 2 — CORE BUYER EXPERIENCE (needs Phase 1's Order model to exist)
 [ ] 2. buyer_order_tracking_specification.md
