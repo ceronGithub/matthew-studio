@@ -29,10 +29,19 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
 import ProductCard from "@/components/home/ProductCard";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 import { PRODUCTS } from "@/lib/productsData";
 import { GAME_CHARACTER_GALLERY, GAME_CHARACTER_PRODUCT_TAGS } from "@/lib/gameCharactersSectionData";
 
 const GAME_CHARACTER_PRODUCTS = PRODUCTS.filter((product) => product.category === "game-characters");
+
+// Per-card stagger delay for the product grid's scroll-entrance —
+// same values used across every other category grid so the whole
+// site feels identical (visitor_specification.md §3.1). Separate
+// from the character gallery's own stagger above, which already had
+// its own entrance treatment before this pass.
+const STAGGER_STEP_SECONDS = 0.06;
+const STAGGER_CAP = 8;
 
 // Parent container drives the stagger timing; each thumbnail just fades + scales in
 // (Section 4F: "Entrance: Stagger fade + scale (0.1s between items)").
@@ -145,11 +154,16 @@ export default function GameCharactersSection() {
         </AnimatePresence>
 
         <div className="productCardsGrid">
-          {GAME_CHARACTER_PRODUCTS.map((product) => (
-            <div className="gameCharacterCardWrap" key={product.id}>
-              <span className="characterTagBadge">{GAME_CHARACTER_PRODUCT_TAGS[product.id]}</span>
-              <ProductCard product={product} />
-            </div>
+          {GAME_CHARACTER_PRODUCTS.map((product, index) => (
+            <ScrollReveal
+              key={product.id}
+              delay={Math.min(index, STAGGER_CAP) * STAGGER_STEP_SECONDS}
+            >
+              <div className="gameCharacterCardWrap">
+                <span className="characterTagBadge">{GAME_CHARACTER_PRODUCT_TAGS[product.id]}</span>
+                <ProductCard product={product} />
+              </div>
+            </ScrollReveal>
           ))}
         </div>
 

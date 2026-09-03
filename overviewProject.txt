@@ -856,3 +856,12 @@ project is done.
   productCardsGrid, which powers both the homepage File Tools section
   and the "/file-tools" category page. This grid previously had no
   entrance animation at all. Remaining: game-characters, tutorials.
+
+[2026-09-03] Continued visitor_specification.md Implementation Order
+  Step 2: wired the ScrollReveal scroll-entrance stagger (0.06s step,
+  8-card cap) into components/home/GameCharactersSection.tsx's
+  productCardsGrid (bottom product-card row with Rigged/Modular/
+  Low-poly tags) — each gameCharacterCardWrap (badge + ProductCard)
+  is now the ScrollReveal child so badge and card animate together.
+  The character-thumbnail gallery above already had its own stagger/
+  scale entrance and was left untouched. Remaining: tutorials.
