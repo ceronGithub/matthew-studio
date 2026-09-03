@@ -14,7 +14,14 @@
  * DATA FLOW:
  * This Server Component reads CATEGORY_SHOWCASE and ABOUT_VALUES
  * directly — no fetch needed, both are local static arrays today.
- * Entirely static; no Client Component needed on this page.
+ * Entirely static; no Client Component needed on this page —
+ * ScrollReveal is a Client Component but wraps server-rendered
+ * children without requiring this file itself to opt in.
+ *
+ * MOTION:
+ * Header, both card grids (staggered per §3.1), and the closing note
+ * each get a ScrollReveal entrance (visitor_specification.md §3.1/
+ * §3.6, Step 5). This page had zero motion before this pass.
  */
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -22,6 +29,7 @@ import "../../styles/about.css";
 import { CATEGORY_ICONS } from "@/lib/categoryIcons";
 import { CATEGORY_SHOWCASE } from "@/lib/categoryShowcaseData";
 import { ABOUT_VALUES } from "@/lib/aboutData";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 
 export const metadata: Metadata = {
   title: "About | Matthew Studio",
@@ -39,7 +47,7 @@ export default function AboutPage() {
   return (
     <>
       <header className="aboutPageHeader">
-        <div className="aboutPageHeaderInner">
+        <ScrollReveal className="aboutPageHeaderInner">
           <p className="eyebrow">About Matthew Studio</p>
           <h1 className="heroTitle" style={{ fontSize: "2.25rem" }}>
             One marketplace, six categories, built to launch fast
@@ -49,7 +57,7 @@ export default function AboutPage() {
             tools, tutorials, and game character assets together in one catalog — so you&apos;re
             not piecing together five different vendors to get a project done.
           </p>
-        </div>
+        </ScrollReveal>
       </header>
 
       {/* ------------------------------------------------------------
@@ -61,14 +69,16 @@ export default function AboutPage() {
           <p className="eyebrow">What We Sell</p>
           <h2 className="sectionTitle">Six categories, one checkout</h2>
           <div className="aboutCategoryGrid">
-            {CATEGORY_SHOWCASE.map((category) => {
+            {CATEGORY_SHOWCASE.map((category, index) => {
               const Icon = CATEGORY_ICONS[category.iconName];
               return (
-                <article key={category.slug} className="aboutCategoryCard">
-                  <Icon size={28} strokeWidth={1.5} className="aboutCategoryCardIcon" aria-hidden="true" />
-                  <h3 className="aboutCategoryCardTitle">{category.name}</h3>
-                  <p className="aboutCategoryCardDescription">{category.description}</p>
-                </article>
+                <ScrollReveal key={category.slug} delay={index * 0.06}>
+                  <article className="aboutCategoryCard">
+                    <Icon size={28} strokeWidth={1.5} className="aboutCategoryCardIcon" aria-hidden="true" />
+                    <h3 className="aboutCategoryCardTitle">{category.name}</h3>
+                    <p className="aboutCategoryCardDescription">{category.description}</p>
+                  </article>
+                </ScrollReveal>
               );
             })}
           </div>
@@ -83,23 +93,25 @@ export default function AboutPage() {
           <p className="eyebrow">How We Work</p>
           <h2 className="sectionTitle">What stays the same across every category</h2>
           <div className="aboutValuesGrid">
-            {ABOUT_VALUES.map((value) => (
-              <article key={value.title} className="aboutValueCard">
-                <h3 className="aboutValueCardTitle">{value.title}</h3>
-                <p className="aboutValueCardDescription">{value.description}</p>
-              </article>
+            {ABOUT_VALUES.map((value, index) => (
+              <ScrollReveal key={value.title} delay={index * 0.06}>
+                <article className="aboutValueCard">
+                  <h3 className="aboutValueCardTitle">{value.title}</h3>
+                  <p className="aboutValueCardDescription">{value.description}</p>
+                </article>
+              </ScrollReveal>
             ))}
           </div>
         </div>
       </section>
 
       <section className="aboutNoteSection">
-        <div className="aboutNoteInner">
+        <ScrollReveal className="aboutNoteInner">
           <p className="aboutNoteText">Have a question before you buy?</p>
           <Link href="/contact" className="buttonPrimary">
             Get in Touch
           </Link>
-        </div>
+        </ScrollReveal>
       </section>
     </>
   );
