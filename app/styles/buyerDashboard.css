@@ -158,12 +158,14 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
-  transition: background-color var(--transition-base), border-color var(--transition-base);
+  transition: background-color var(--transition-base), border-color var(--transition-base),
+    transform var(--transition-base);
 }
 .buyerQuickLinkWrapper:hover .buyerQuickLinkCard,
 .buyerQuickLinkWrapper:focus-visible .buyerQuickLinkCard {
   background-color: var(--color-surface-hover);
   border-color: var(--color-accent);
+  transform: translateY(-4px);
 }
 
 .buyerQuickLinkCard--soon {

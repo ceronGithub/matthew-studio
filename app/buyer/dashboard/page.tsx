@@ -11,44 +11,50 @@
  * OnboardingModal (client) additionally renders the Section 10 welcome
  * overlay itself, but only right after registration — see that
  * component's header comment for how it detects a fresh signup.
+ *
+ * Per buyer_homepage_specification.md §13.2, the header and the
+ * quick-link cards below now have a mount-in entrance (fade/scale-in)
+ * instead of a static render — DashboardHeaderReveal and QuickLinkGrid
+ * own that motion so this page itself can stay a Server Component.
  */
 import type { Metadata } from "next";
-import Link from "next/link";
 import { ShoppingBag, GraduationCap, UserRound, CreditCard } from "lucide-react";
 import OnboardingModal from "@/components/buyer/OnboardingModal";
+import DashboardHeaderReveal from "@/components/buyer/DashboardHeaderReveal";
+import QuickLinkGrid, { type QuickLinkItem } from "@/components/buyer/QuickLinkGrid";
 
 export const metadata: Metadata = {
   title: "Dashboard | Matthew Studio",
   description: "Your Matthew Studio buyer account.",
 };
 
-const QUICK_LINKS = [
+const QUICK_LINKS: QuickLinkItem[] = [
   {
     title: "Browse templates",
     description: "See the full catalog of resort booking templates and pricing tiers.",
     href: "/shop",
-    icon: ShoppingBag,
+    icon: "shopping-bag",
     available: true,
   },
   {
     title: "Explore tutorials",
     description: "Guides and walkthroughs for getting the most out of your template.",
     href: "/tutorials",
-    icon: GraduationCap,
+    icon: "graduation-cap",
     available: true,
   },
   {
     title: "Complete your profile",
     description: "Add your details so orders and support requests are pre-filled.",
     href: "#",
-    icon: UserRound,
+    icon: "user-round",
     available: false,
   },
   {
     title: "Add payment method",
     description: "Save a card so checkout is one click next time.",
     href: "#",
-    icon: CreditCard,
+    icon: "credit-card",
     available: false,
   },
 ];
@@ -57,41 +63,17 @@ export default function BuyerDashboardPage() {
   return (
     <section className="buyerDashboard">
       <OnboardingModal />
-      <div className="buyerDashboardHeader">
-        <p className="buyerDashboardEyebrow">Buyer dashboard</p>
-        <h1 className="buyerDashboardTitle">Welcome to Matthew Studio</h1>
-        <p className="buyerDashboardSubtitle">
-          Here&apos;s where to start — pick up any of these whenever you&apos;re ready.
-        </p>
-      </div>
+      <DashboardHeaderReveal>
+        <div className="buyerDashboardHeader">
+          <p className="buyerDashboardEyebrow">Buyer dashboard</p>
+          <h1 className="buyerDashboardTitle">Welcome to Matthew Studio</h1>
+          <p className="buyerDashboardSubtitle">
+            Here&apos;s where to start — pick up any of these whenever you&apos;re ready.
+          </p>
+        </div>
+      </DashboardHeaderReveal>
 
-      <div className="buyerQuickLinkGrid">
-        {QUICK_LINKS.map(({ title, description, href, icon: Icon, available }) => {
-          const card = (
-            <article
-              key={title}
-              className={`buyerQuickLinkCard ${available ? "" : "buyerQuickLinkCard--soon"}`}
-            >
-              <span className="buyerQuickLinkIcon">
-                <Icon size={20} />
-              </span>
-              <h2 className="buyerQuickLinkTitle">{title}</h2>
-              <p className="buyerQuickLinkDescription">{description}</p>
-              {!available && <span className="buyerQuickLinkBadge">Coming soon</span>}
-            </article>
-          );
-
-          return available ? (
-            <Link key={title} href={href} className="buyerQuickLinkWrapper">
-              {card}
-            </Link>
-          ) : (
-            <div key={title} className="buyerQuickLinkWrapper" aria-disabled="true">
-              {card}
-            </div>
-          );
-        })}
-      </div>
+      <QuickLinkGrid links={QUICK_LINKS} />
     </section>
   );
 }
