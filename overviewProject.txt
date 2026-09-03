@@ -220,20 +220,22 @@ Homepage sections (10 total per the plan):
 [DONE] FAQ Accordion
 [DONE] CTA Banner (bottom of homepage)
 
-Site structure (not yet started):
-[ ] /products master grid (filter/sort/search)
-[ ] 6 category pages: /templates, /tshirts, /ai-videos,
-    /file-tools, /tutorials, /game-characters
-[ ] Product detail pages per category ([slug], variant selectors)
+Site structure:
+[DONE] /products master grid (filter/sort/search) — improvement_1_done.md
+[DONE] 6 category pages: /templates, /tshirts, /ai-videos,
+    /file-tools, /tutorials, /game-characters — improvement_1_done.md
+[DONE] Product detail pages per category ([slug], variant selectors)
 [DONE] lib/productsData.ts — unified multi-category product schema
     (Section 5 of the plan); categoryShowcaseData.ts and
     featuredProductsData.ts are still separate placeholder files
-[ ] /pricing (dedicated marketplace pricing — /shop is still the
-    old single-template 3-tier page)
-[ ] /compare (variant comparison tool)
-[ ] /case-studies (rebrand of /portfolio with category tags)
-[ ] /faq, /about
-[ ] /security, /privacy, /terms, /refund-policy
+[DONE] /pricing (dedicated marketplace pricing) — /shop now
+    redirects to /pricing, old single-template 3-tier page retired
+[DONE] /compare (variant comparison tool)
+[ ] /case-studies (rebrand of /portfolio with category tags) —
+    /portfolio still exists as-is, this rebrand has not happened
+[DONE] /faq (intentional redirect to /support's existing FAQ
+    accordion — see app/(public)/faq/page.tsx header comment), /about
+[DONE] /security, /privacy, /terms, /refund-policy
 
 5C. SPEC BUILD SEQUENCE — master order across every specification
     document in this repo, dependency-first. Checked against every
@@ -283,6 +285,15 @@ plumbing; can slot in whenever bandwidth allows)
         File Tools product — bulk/individual conversion + PDF
         invoice renaming.
 
+PHASE 5B — FRONT-END MODERNIZATION (independent of commerce; purely
+visual/motion polish on already-shipped pages — safe filler work)
+[ ] 11B. buyer_homepage_specification_done.md Section 13
+        Scroll-triggered motion, hero parallax, card hover/lift,
+        carousel crossfade, buyer dashboard entrance states,
+        prefers-reduced-motion handling. Delivered one section/page
+        per turn per the doc's own 13.4 delivery approach — starting
+        with Hero + Quick Wins.
+
 PHASE 6 — SITEWIDE POLISH & PLATFORM HARDENING (cheap, mostly
 independent — good filler work between the phases above, but
 additional_platform_gaps' Coupons/Refunds sub-items specifically
@@ -301,9 +312,10 @@ Order.status)
 Already built, excluded from the sequence above:
 [DONE] visitor_specification_done.md
 [DONE] login_and_registration_page_done.md
-[DONE] buyer_homepage_specification_done.md (Phase 1 only — its own
-       Phase 2-3 and Modernization Phase remain unbuilt, not yet
-       resequenced into the phases above)
+[DONE] buyer_homepage_specification_done.md (Phase 1-2 done, Phase 3
+       done except personalized recommendations — its own Section 13
+       Front-End Modernization Enhancement Plan is the only real
+       remaining work; see PHASE 5B below)
 
 6. HOW WE'RE WORKING
 --------------------------------------------------------

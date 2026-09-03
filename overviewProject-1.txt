@@ -31,3 +31,18 @@ that file left off.
   repo as bulk_file_converter_and_pdf_renamer_specification.md so it
   is tracked alongside the others. No feature code built — planning/
   documentation only.
+
+[2026-09-04] Corrected stale tracking discovered during a full doc
+  audit: overviewProject.txt Section 5B and
+  buyer_homepage_specification_done.md Section 12 both still listed
+  /products, the 6 category pages, product detail pages, /pricing,
+  /compare, /faq, and the 4 legal pages as not-yet-built — all
+  verified to already exist in the repo (cross-checked against
+  improvement_1_done.md and live files). Updated both docs' status
+  to reflect reality; only /case-studies (portfolio rebrand) and
+  personalized recommendations are genuinely still open from that
+  spec. Added PHASE 5B to Section 5C's build sequence for the
+  homepage's Section 13 Front-End Modernization Enhancement Plan
+  (the one substantial remaining item), and bumped that spec's
+  Document Version to 1.2. No feature code touched — documentation
+  correction only.

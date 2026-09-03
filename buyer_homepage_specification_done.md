@@ -676,8 +676,14 @@ lib/
 ## 12. NOTES & KNOWN LIMITATIONS
 
 - **Phase 1 Complete:** Homepage structure + all 14 sections built and non-interactive animated
-- **Phase 2 Pending:** `/products` master grid, category detail pages, product detail pages
-- **Phase 3 Pending:** `/faq` full FAQ page, product search/filtering, personalized recommendations
+- **Phase 2 Complete:** `/products` master grid (filter/sort/search), all 6 category detail
+  pages, and product detail pages are built — see `improvement_1_done.md`
+- **Phase 3 — mostly complete:** `/faq` is intentionally a redirect to `/support` (which already
+  has a searchable, category-grouped FAQ accordion) rather than a duplicate page — see the
+  file header comment in `app/(public)/faq/page.tsx`. Product search/filtering is done
+  (`ProductsGrid`). Only **personalized recommendations** remains unbuilt.
+- **Phase 4 — Front-End Modernization (Section 13):** planned, not yet built — this is the only
+  substantial work left against this document
 - **Database:** All data currently static (lib/\*.ts files); will migrate to live database (Supabase) once products table is created
 - **Product Images:** Placeholder tinted gradients; real product photos to be sourced and uploaded to Cloudflare R2
 - **Third-Party Services:** Contact form → EmailJS (Rule 35.5, not yet wired); hero/section CTAs → internal routes only (no external links)
@@ -719,13 +725,14 @@ Following Rule 8A, each section/page is enhanced and delivered as its own turn (
 
 ## 14. CHANGE LOG
 
-| Date       | Change                                                                                                                                                                                                                             |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 2026-09-01 | Initial homepage specification created; all 14 sections documented; component mappings added.                                                                                                                                      |
-| 2026-09-03 | Added Section 13 (Front-End Modernization Enhancement Plan) — scroll-triggered motion, card hover/lift, carousel crossfade, reduced-motion handling, buyer dashboard entrance states. Companion to new `visitor_specification.md`. |
+| Date       | Change                                                                                                                                                                                                                                                                                                                                                        |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-09-01 | Initial homepage specification created; all 14 sections documented; component mappings added.                                                                                                                                                                                                                                                                 |
+| 2026-09-03 | Added Section 13 (Front-End Modernization Enhancement Plan) — scroll-triggered motion, card hover/lift, carousel crossfade, reduced-motion handling, buyer dashboard entrance states. Companion to new `visitor_specification.md`.                                                                                                                            |
+| 2026-09-04 | Corrected Section 12 — Phase 2 (`/products`, category pages, product detail pages) and most of Phase 3 (`/faq` retirement, search/filtering) were already built (verified against `improvement_1_done.md` and live files) but this doc still listed them as pending. Only personalized recommendations (Phase 3) and Section 13's Modernization Phase remain. |
 
 ---
 
-**Document Version:** 1.1  
-**Last Updated:** 2026-09-03  
-**Status:** Specification Complete (Implementation Phase 1 done, Phase 2–3 pending; Modernization Phase — planned, not yet built)
+**Document Version:** 1.2  
+**Last Updated:** 2026-09-04  
+**Status:** Specification Complete (Implementation Phase 1–2 done, Phase 3 done except personalized recommendations; Modernization Phase — planned, not yet built)
