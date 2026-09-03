@@ -19,6 +19,12 @@
  * (headline → subheading → CTAs, staggered by fixed delays) — same as
  * before. The visual additionally tracks page scroll to apply a
  * subtle parallax offset, per the homepage animation spec — unchanged.
+ *
+ * MOTION:
+ * The active-item crossfade added a slight scale (0.98 → 1) alongside
+ * its existing opacity fade (visitor_specification.md §3.5) instead of
+ * a flat opacity-only swap. Gated for free by the root layout's
+ * <MotionConfig reducedMotion="user"> — no extra check needed here.
  */
 "use client";
 
@@ -185,9 +191,9 @@ export default function HeroSection() {
                 <motion.div
                   key={activeItem.id}
                   className="heroMediaCardThumbInner"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.5, ease: "easeOut" }}
                 >
                   <HeroMediaVisual item={activeItem} size="md" />

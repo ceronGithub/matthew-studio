@@ -17,6 +17,12 @@
  * source CategoryShowcase.tsx uses — so the two sections can never
  * list different categories. Media items + accent colors come from
  * lib/mediaShowcaseData.ts, cycled by hooks/useMediaCarousel.ts.
+ *
+ * MOTION:
+ * The active-media crossfade added a slight scale (0.98 → 1) alongside
+ * its existing opacity fade (visitor_specification.md §3.5) instead of
+ * a flat opacity-only swap. Gated for free by the root layout's
+ * <MotionConfig reducedMotion="user"> — no extra check needed here.
  */
 "use client";
 
@@ -137,9 +143,9 @@ export default function QuickWins() {
                 <motion.div
                   key={activeMedia.id}
                   className="quickWinsMediaItemInner"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.5, ease: "easeOut" }}
                 >
                   <QuickWinsMediaVisual item={activeMedia} />

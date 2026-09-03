@@ -15,11 +15,19 @@
  * under the hood via `whileInView`. `useReducedMotion` reads the
  * user's OS-level `prefers-reduced-motion` setting and, when set,
  * drops the translateY so only the opacity fade plays.
+ *
+ * MOTION:
+ * §3.1 also calls for a lighter translateY on mobile (12px) than on
+ * desktop/tablet (24px) — previously both used the same 24px value.
+ * `useIsMobileViewport` (lib/hooks/useIsMobileViewport.ts) picks the
+ * distance at ≤768px; reduced-motion still wins over both and drops
+ * to 0.
  */
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
+import { useIsMobileViewport } from "@/lib/hooks/useIsMobileViewport";
 
 interface ScrollRevealProps {
   children: ReactNode;
@@ -32,11 +40,14 @@ export default function ScrollReveal({ children, delay = 0, className }: ScrollR
   // Respect the user's OS-level reduced-motion preference — when set,
   // skip the translateY entirely and keep only the opacity fade.
   const prefersReducedMotion = useReducedMotion();
+  // §3.1: mobile gets a lighter 12px slide-up than desktop/tablet's 24px.
+  const isMobileViewport = useIsMobileViewport();
+  const translateDistance = prefersReducedMotion ? 0 : isMobileViewport ? 12 : 24;
 
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 24 }}
+      initial={{ opacity: 0, y: translateDistance }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.4, delay, ease: [0.22, 1, 0.36, 1] }}
