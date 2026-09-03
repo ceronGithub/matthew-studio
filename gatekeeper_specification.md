@@ -13,6 +13,7 @@ It is built entirely on top of infrastructure that already exists in this projec
 The Gatekeeper does not replace any of these — it is a consumer of the events they already produce. When a breach-eligible `SecurityLog` event is written, the Gatekeeper decides whether that device has now earned a ban, and if so, writes a `DeviceBan` row that every future request checks against.
 
 **Why device, not account or IP:**
+
 - **Account-only bans** are useless against an attacker who just creates a new account or tries a different one.
 - **IP-only bans** are unreliable — IPs are shared (school/office networks, mobile carriers) or dynamic (home ISPs rotate them), causing both false positives (banning innocent people on the same network) and easy evasion (attacker just switches networks/VPN).
 - **Device fingerprint** persists across accounts and across IP changes as long as the attacker keeps using the same browser/device, making it a meaningfully harder wall to route around than either alone.
@@ -71,19 +72,20 @@ Two tiers. Severe breaches ban on the first occurrence. Everything else needs a 
 
 ### 4.1 — Instant Ban (1 occurrence = ban)
 
-| Event | eventType (Rule 38 table) | Why instant |
-|---|---|---|
-| SQL Injection attempt | `sql_injection_attempt` | A single attempt is already an attack signature, not a mistake — Rule 39's scanner only fires on actual malicious query patterns |
-| Impossible-travel / location anomaly | `location_anomaly` | Rule 38.8's great-circle-distance check already requires a physically impossible jump (e.g. 13,000km in 5 hours) — this is never a false positive from normal behavior |
+| Event                                | eventType (Rule 38 table) | Why instant                                                                                                                                                            |
+| ------------------------------------ | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| SQL Injection attempt                | `sql_injection_attempt`   | A single attempt is already an attack signature, not a mistake — Rule 39's scanner only fires on actual malicious query patterns                                       |
+| Impossible-travel / location anomaly | `location_anomaly`        | Rule 38.8's great-circle-distance check already requires a physically impossible jump (e.g. 13,000km in 5 hours) — this is never a false positive from normal behavior |
 
 ### 4.2 — Strike-Based Ban (3 occurrences within a rolling 24-hour window = ban)
 
-| Event | eventType | Why strikes, not instant |
-|---|---|---|
-| Brute-force login | `login_failed` (beyond Rule 32.1's 5-attempts/15-min throttle) | A buyer can genuinely fumble their own password a few times |
-| Wrong-role route access | `admin_login_denied` | Could be an authenticated buyer clicking a stale bookmarked admin link, not necessarily malicious the first time |
-| Registration abuse | `registration_abuse` (**new eventType**, added by this spec) | Multiple accounts created from the same device in a short window — could be a household/shared computer once, but a pattern signals bot/spam signups |
-| Repeated rate-limit hits | `rate_limit_hit` on Rule 32.1's priority endpoints (login, forgot-password, contact form, payment) | One rate-limit hit is normal traffic; hitting it 3 separate times signals sustained pressure on the endpoint |
+| Event                           | eventType                                                                                                                         | Why strikes, not instant                                                                                                                             |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Brute-force login               | `login_failed` (beyond Rule 32.1's 5-attempts/15-min throttle)                                                                    | A buyer can genuinely fumble their own password a few times                                                                                          |
+| Wrong-role route access         | `admin_login_denied`                                                                                                              | Could be an authenticated buyer clicking a stale bookmarked admin link, not necessarily malicious the first time                                     |
+| Registration abuse              | `registration_abuse` (**new eventType**, added by this spec)                                                                      | Multiple accounts created from the same device in a short window — could be a household/shared computer once, but a pattern signals bot/spam signups |
+| Repeated rate-limit hits        | `rate_limit_hit` on Rule 32.1's priority endpoints (login, forgot-password, contact form, payment)                                | One rate-limit hit is normal traffic; hitting it 3 separate times signals sustained pressure on the endpoint                                         |
+| Failed account recovery attempt | `password_recovery_failed` (wrong Telegram OTP or wrong security-question answer, per `buyer_password_recovery_specification.md`) | Security question answers have low entropy — a device repeatedly guessing wrong is the same pattern as brute-force login, treated identically        |
 
 **Strike counting logic:** on every write of a strike-eligible event, count `SecurityLog` rows matching `{ deviceFingerprint, eventType, createdAt: { gte: now - 24h } }`. If the count reaches 3, ban immediately. No separate counter table is needed — `SecurityLog` (Rule 38) is already the source of truth, and it's already indexed on `deviceFingerprint` and `createdAt`.
 
@@ -212,7 +214,10 @@ Checking a database on every single request would add latency to every page load
 **Request:**
 
 ```json
-{ "deviceFingerprint": "sha256-hash", "reason": "Repeated probing of /admin routes just under the strike threshold." }
+{
+  "deviceFingerprint": "sha256-hash",
+  "reason": "Repeated probing of /admin routes just under the strike threshold."
+}
 ```
 
 ### PUT /api/superadmin/gatekeeper/bans/[banId]/unban
@@ -222,7 +227,9 @@ Checking a database on every single request would add latency to every page load
 **Request:**
 
 ```json
-{ "unbanNote": "Confirmed with buyer via support email — was their own repeated login typos, not an attack." }
+{
+  "unbanNote": "Confirmed with buyer via support email — was their own repeated login typos, not an attack."
+}
 ```
 
 **Response:**
@@ -266,12 +273,13 @@ Checking a database on every single request would add latency to every page load
 
 ## 12. CHANGE LOG
 
-| Date       | Change                                                                                                                                                                                                                                                                                                                                                                                                    |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Date       | Change                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 2026-09-04 | Added `password_recovery_failed` (wrong Telegram OTP / wrong security-question answer) as a strike-eligible breach trigger, cross-referenced from the new `buyer_password_recovery_specification.md`.                                                                                                                                                                                                                                                                                                  |
 | 2026-09-04 | Initial specification created. Two-tier breach model (instant ban: SQL injection, location anomaly; 3-strike ban: brute-force login, wrong-role access, registration abuse, repeated rate-limit hits). Permanent ban until manual super-admin unban. Header-only Gatekeeper Fingerprint distinct from Rule 38.4's client-info fingerprint. `DeviceBan` model, `/superAdmin/gatekeeper` page, API endpoints, middleware integration. Applies to all account types plus pre-auth login/register traffic. |
 
 ---
 
-**Document Version:** 1.0  
+**Document Version:** 1.1  
 **Last Updated:** 2026-09-04  
 **Status:** Specification Complete — not yet built (`middleware.ts` does not yet include this check; `DeviceBan` table does not yet exist)

@@ -158,9 +158,9 @@ if (pathname.startsWith("/admin")) {
 - **Price** (number, required, min 0.01)
 - **Stock** (number, optional, if inventory system exists)
 - **Status** (radio: Draft / Published, required)
-- **Image/Thumbnail** (file upload, optional, max 5MB)
-  - Uploading triggers `POST /api/upload` (Cloudflare R2, Rule 35.6)
-  - Replaces existing image if update
+- **Media** (Cover Image, up to 8 Gallery Images, optional Preview Video — per `product_media_upload_specification.md`, all stored in Cloudflare R2)
+  - Uploading triggers `POST /api/upload` with `mediaType: "image"` or `"video"` (Cloudflare R2, Rule 35.6, extended per the media spec above)
+  - Replaces existing media if update; deletes old R2 object first
 - **Tags** (comma-separated text, optional, for search)
 - **Featured** (checkbox, optional, marks as featured product)
 
@@ -1094,6 +1094,7 @@ The Admin account includes a **Vault System** for session management and emergen
 
 | Date       | Change                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-09-04 | Section 3.2.2's product image field expanded to full Media upload (Cover Image, up to 8 Gallery Images, optional Preview Video) per new `product_media_upload_specification.md` — all stored in Cloudflare R2.                                                                                                                                                                                                                                                                                                                                                                                                        |
 | 2026-09-04 | Added Section 3.3.3 T-Shirt Production Tracking — 6-stage `productionStage` pipeline (design_review → design_approved → printing → quality_check → packed → shipped) embedded in Order Details for `tshirts`-category orders only; digital orders skip this and go straight Confirmed → Delivered. Added `PUT /api/admin/orders/[orderId]/production-stage` endpoint, revert-with-required-note rule, and `order_production_stage_updated` security log event. Companion to the new buyer-facing `buyer_order_tracking_specification.md` and Super-Admin spec Section 3.11 update, same shared field.                 |
 | 2026-09-03 | Aligned with Super-Admin spec: expanded Section 3.6 into a full Security Logs page spec (self-scoped, Rule 38.9 pattern); added Section 3.7 Account Activity Log (self-scoped, Rule 42); added Section 3.8 My Profile & Account Settings (RECOMMENDED — self-service name/avatar/password/notification prefs, previously missing); added bulk actions to Order List and Buyer List for parity with Product List; added matching API endpoints (`GET /api/admin/security-logs`, `GET /api/admin/account-activity`, `GET`/`PUT /api/admin/profile`, `PUT /api/admin/profile/password`); updated verification checklist. |
 | 2026-09-03 | Added Section 8: Vault & Session Slug System — admin slug format (7 alphanumeric + 7 alphaspecial + 7 words), auto-generation on first login, slug reuse on subsequent logins, new slug on sign-out + next login. Added vault credentials (15 words + 15 alphanumeric) for emergency access.                                                                                                                                                                                                                                                                                                                          |
@@ -1101,6 +1102,6 @@ The Admin account includes a **Vault System** for session management and emergen
 
 ---
 
-**Document Version:** 1.2  
+**Document Version:** 1.3  
 **Last Updated:** 2026-09-04  
 **Status:** Specification Complete

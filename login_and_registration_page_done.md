@@ -110,7 +110,7 @@ This page enables new buyers to register an account and existing buyers to log i
 - Create new Supabase user (`auth.users` table) with role = "buyer" in `user_metadata`
 - Auto-login the new user (session token issued immediately)
 - Toast: ✓ "Account created successfully! Welcome…"
-- Redirect to `/buyer/dashboard` with onboarding modal (first-time buyer setup)
+- Redirect to `/auth/register/recovery-setup` — **mandatory step, per `buyer_password_recovery_specification.md`**, blocks access to `/buyer/dashboard` until Telegram linking + 2 security questions are completed. Only after that does the buyer reach the First-Time Buyer Onboarding modal (Section 10) and `/buyer/dashboard`.
 
 **On Failure:**
 
@@ -355,3 +355,17 @@ The following are **NEVER permitted** through public registration:
 - ❌ Any permission flags or elevated access (all granted via super-admin only)
 
 If any such attempt is detected, the registration is rejected with HTTP 403 Forbidden.
+
+---
+
+## 14. CHANGE LOG
+
+| Date       | Change                                                                                                                                                                                                                                                            |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-09-04 | Section 3.2's "On Success" now redirects to `/auth/register/recovery-setup` (mandatory Telegram linking + 2 security questions, per new `buyer_password_recovery_specification.md`) before the existing First-Time Buyer Onboarding modal and `/buyer/dashboard`. |
+
+---
+
+**Document Version:** 1.1  
+**Last Updated:** 2026-09-04  
+**Status:** Specification Complete

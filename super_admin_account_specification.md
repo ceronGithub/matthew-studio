@@ -430,7 +430,7 @@ POST /api/admin/create-admin
 
 **Create/Edit Form:**
 
-- Name, Category (dropdown, 6 marketplace categories), Description, Price (or 3-tier pricing for Templates category), Images (uploaded to Cloudflare R2 per Rule 35.6), Status
+- Name, Category (dropdown, 6 marketplace categories), Description, Price (or 3-tier pricing for Templates category), Media (Cover Image, up to 8 Gallery Images, optional Preview Video — per `product_media_upload_specification.md`, all stored in Cloudflare R2 per Rule 35.6), Status
 
 **Row Actions:** Edit, Duplicate, Archive, Delete (confirmation modal)
 
@@ -929,6 +929,7 @@ These are gaps identified on review of Sections 1–8. None of these have been i
 | 2026-09-03 | Added Section 12: Implementation Plan (Phased) — 10-phase, dependency-ordered build sequence covering every page/feature in Sections 3, 7, and 9 (auth/2FA foundation, dashboard + logging, admin management, vault/backups, buyer management, product/order management with approval flow, CMS/announcements/media, task/customer assignment with notifications, analytics, remaining hardening), each with scope, deliverables, and acceptance criteria.                                                                         |
 | 2026-09-03 | Added Section 9: Recommended Improvements & Hardening (proposed, not yet built) — 2FA/MFA, IP allowlist/anomaly-blocking, break-glass recovery, product approval flow, customer-assignment exclusivity check, task notifications/escalation, CMS multi-version history, media library, scoped-by-default admin views, in-app notification center, full Analytics page, per-buyer data export, backup restore runbook. Renumbered Testing checklist to Section 10 and Change Log to Section 11, and added matching checklist items. |
 | 2026-09-03 | Added Sections 3.7–3.14: Content Management/CMS, Buyer Management, Announcements, Product Management, Order Management, Admin Task Assignment, Customer Assignment to Admin, and the Full-Control Principle — super-admin can now manage all visitor content, buyers, products, orders, and admin work assignment, on top of the existing admin-management/security/vault pages. Updated Section 4.1's super-admin-only operations list to match.                                                                                  |
+| 2026-09-04 | Section 3.10's product Media field expanded from single image to Cover Image + up to 8 Gallery Images + optional Preview Video, per new `product_media_upload_specification.md` — all stored in Cloudflare R2, same component shared with `/admin/products`.                                                                                                                                                                                                                                                                       |
 | 2026-09-04 | Added "Manage Device Bans" quick action link to the dashboard, and folded the new `gatekeeper_specification.md` (device-fingerprint-based ban system, all account types + pre-auth traffic, permanent ban until manual super-admin unban) into Phase 2's scope/deliverables/acceptance criteria, since it depends directly on the `SecurityLog` infrastructure built in that same phase.                                                                                                                                           |
 | 2026-09-04 | Updated Section 3.11 Order Management: added super-admin-only unrestricted Production Stage override, Production Stage filter on the order list, and `order_production_stage_updated` security event. Updated Phase 6 scope/deliverables/acceptance to include the shared `productionStage` pipeline (admin spec Section 3.3.3) and the new companion `buyer_order_tracking_specification.md`.                                                                                                                                     |
 | 2026-09-03 | Added Section 7: Vault & Session Slug System — super-admin slug format (12 words + 12 alphanumeric + 12 alphaspecial), auto-generation on first login, slug reuse on subsequent logins, new slug on sign-out + next login. Added vault credentials (15 words + 15 alphanumeric) for emergency access.                                                                                                                                                                                                                              |
@@ -1089,6 +1090,6 @@ Order is dependency-driven, not priority-driven — each phase below only depend
 
 ---
 
-**Document Version:** 1.5  
+**Document Version:** 1.6  
 **Last Updated:** 2026-09-04  
 **Status:** Specification Complete — Section 9 items proposed pending build; Section 12 is the build sequence for Sections 3, 7, and 9 combined
