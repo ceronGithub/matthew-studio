@@ -933,3 +933,10 @@ project is done.
   buyer_account_specification.md, and
   sitewide_technical_seo_specification.md. Spec-only — no code built
   yet.
+
+[2026-09-03] Added infra_ops_specification.md (new file) — CI/CD
+  pipeline (.github/workflows/ci.yml), error tracking/monitoring
+  (Sentry), security headers/CSP config for next.config.mjs, and
+  Blog CMS admin write access. Third-pass gap audit beyond
+  cart_checkout, buyer_account, sitewide_technical_seo, and
+  additional_platform_gaps specs. Spec-only — no code built yet.
