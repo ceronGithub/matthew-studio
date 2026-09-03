@@ -914,3 +914,12 @@ project is done.
   not-found.tsx/error.tsx), idle session timeout (Rule 32.5), and
   anonymized traffic analytics (Rule 41). No prior spec existed for
   any of these four items. Spec-only — no code built yet.
+
+[2026-09-03] Added cart_checkout_specification.md (new file) — Cart
+  (guest cookie + buyer-persisted), Checkout (digital vs physical
+  shipping paths), PayMongo Payment Link + webhook integration per
+  Rule 30, and Order/OrderItem creation. Verified as completely
+  missing from the repo (no cart/checkout/paymongo files found
+  anywhere) — this is the dependency every other buyer-facing spec
+  (order tracking, buyer account) relies on. Spec-only — no code
+  built yet.
