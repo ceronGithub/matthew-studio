@@ -682,8 +682,15 @@ lib/
   has a searchable, category-grouped FAQ accordion) rather than a duplicate page — see the
   file header comment in `app/(public)/faq/page.tsx`. Product search/filtering is done
   (`ProductsGrid`). Only **personalized recommendations** remains unbuilt.
-- **Phase 4 — Front-End Modernization (Section 13):** planned, not yet built — this is the only
-  substantial work left against this document
+- **Phase 4 — Front-End Modernization (Section 13): Complete.** Full section-by-section audit
+  against §13.2 (2026-09-04) found every homepage section already compliant (scroll-triggered
+  `whileInView`/`ScrollReveal` entrances, mobile-reduced translate distances, card hover lift,
+  crossfade+scale on media, autoplay carousels gated on `prefers-reduced-motion`) except Hero's
+  scroll-linked parallax, which bypassed both the mobile-disable and reduced-motion rules since
+  it's a raw `useTransform` value outside `<MotionConfig>`'s reach — fixed. Buyer dashboard
+  skeleton-in states are deferred, not a gap: the dashboard has no async data yet (Phase 2 of
+  this doc / buyer_account_specification.md), so there's nothing to skeleton for yet; it already
+  has its mount-in fade/scale entrance via `DashboardHeaderReveal`/`QuickLinkGrid`.
 - **Database:** All data currently static (lib/\*.ts files); will migrate to live database (Supabase) once products table is created
 - **Product Images:** Placeholder tinted gradients; real product photos to be sourced and uploaded to Cloudflare R2
 - **Third-Party Services:** Contact form → EmailJS (Rule 35.5, not yet wired); hero/section CTAs → internal routes only (no external links)
@@ -730,9 +737,10 @@ Following Rule 8A, each section/page is enhanced and delivered as its own turn (
 | 2026-09-01 | Initial homepage specification created; all 14 sections documented; component mappings added.                                                                                                                                                                                                                                                                 |
 | 2026-09-03 | Added Section 13 (Front-End Modernization Enhancement Plan) — scroll-triggered motion, card hover/lift, carousel crossfade, reduced-motion handling, buyer dashboard entrance states. Companion to new `visitor_specification.md`.                                                                                                                            |
 | 2026-09-04 | Corrected Section 12 — Phase 2 (`/products`, category pages, product detail pages) and most of Phase 3 (`/faq` retirement, search/filtering) were already built (verified against `improvement_1_done.md` and live files) but this doc still listed them as pending. Only personalized recommendations (Phase 3) and Section 13's Modernization Phase remain. |
+| 2026-09-04 | Full Section 13 audit: fixed Hero's parallax (mobile + reduced-motion disable). Every other section (Quick Wins, Category Showcase, How It Works, Featured Products, all 6 category sections, Testimonials, FAQ, CTA Banner, buyer dashboard) verified already compliant with §13.2 — no further code changes needed. Modernization Phase is now complete.    |
 
 ---
 
-**Document Version:** 1.2  
+**Document Version:** 1.3  
 **Last Updated:** 2026-09-04  
-**Status:** Specification Complete (Implementation Phase 1–2 done, Phase 3 done except personalized recommendations; Modernization Phase — planned, not yet built)
+**Status:** Specification Complete (Implementation Phase 1–2 done, Phase 3 done except personalized recommendations, Phase 4/Modernization done). Only personalized recommendations remains open against this document.

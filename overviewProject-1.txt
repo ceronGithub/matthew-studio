@@ -64,3 +64,18 @@ that file left off.
   unrelated error in services/prisma.ts — @prisma/client has not been
   generated in this environment, needs `npx prisma generate` against a
   live DATABASE_URL).
+
+[2026-09-04] PHASE 5B closed out — audited every remaining homepage
+  section (How It Works, Testimonials, FAQ Accordion, CTA Banner, all
+  6 category sections, FeatureGrid, buyer dashboard) against
+  buyer_homepage_specification_done.md §13.2. All already compliant:
+  most category sections use the shared ScrollReveal primitive
+  (components/shared/ScrollReveal.tsx) which already handles
+  whileInView + mobile-reduced distance + reduced-motion; the two
+  carousels (Featured Products, Testimonials) already gate their
+  autoplay loop on prefers-reduced-motion and stack on mobile; buyer
+  dashboard already has mount-in entrance and has no async data yet
+  to skeleton. No further code changes needed beyond the earlier Hero
+  parallax fix. Bumped buyer_homepage_specification_done.md to
+  Document Version 1.3 — only personalized recommendations remains
+  open against that document.

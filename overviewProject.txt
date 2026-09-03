@@ -287,12 +287,10 @@ plumbing; can slot in whenever bandwidth allows)
 
 PHASE 5B — FRONT-END MODERNIZATION (independent of commerce; purely
 visual/motion polish on already-shipped pages — safe filler work)
-[ ] 11B. buyer_homepage_specification_done.md Section 13
-        Scroll-triggered motion, hero parallax, card hover/lift,
-        carousel crossfade, buyer dashboard entrance states,
-        prefers-reduced-motion handling. Delivered one section/page
-        per turn per the doc's own 13.4 delivery approach — starting
-        with Hero + Quick Wins.
+[DONE] 11B. buyer_homepage_specification_done.md Section 13 — full
+        audit (2026-09-04) found every section already compliant
+        except Hero's parallax (fixed: mobile + reduced-motion
+        disable). Nothing else needed code changes.
 
 PHASE 6 — SITEWIDE POLISH & PLATFORM HARDENING (cheap, mostly
 independent — good filler work between the phases above, but
