@@ -16,8 +16,14 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useIsMobileViewport } from "@/lib/hooks/useIsMobileViewport";
 
 export default function CTABanner() {
+  // Standardized scroll-entrance distance per buyer_homepage_specification.md
+  // §13.2 — 24px on desktop/tablet, a lighter 12px on mobile.
+  const isMobileViewport = useIsMobileViewport();
+  const entranceDistance = isMobileViewport ? 12 : 24;
+
   return (
     <section className="ctaBannerSection">
       <motion.div
@@ -29,7 +35,7 @@ export default function CTABanner() {
       >
         <motion.div
           className="ctaBannerText"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: entranceDistance }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.8 }}
           transition={{ duration: 0.6, ease: "easeOut" }}

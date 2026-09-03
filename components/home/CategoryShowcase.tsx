@@ -22,6 +22,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import type { CSSProperties } from "react";
+import { useIsMobileViewport } from "@/lib/hooks/useIsMobileViewport";
 import {
   LayoutTemplate,
   Shirt,
@@ -45,12 +46,19 @@ const CATEGORY_ICONS: Record<CategoryShowcaseItem["iconName"], LucideIcon> = {
 };
 
 export default function CategoryShowcase() {
+  // Standardized scroll-entrance distance per buyer_homepage_specification.md
+  // §13.2 — 24px on desktop/tablet, a lighter 12px on mobile so the
+  // slide-up doesn't feel heavy on small screens (same convention as
+  // components/shared/ScrollReveal.tsx used on the visitor pages).
+  const isMobileViewport = useIsMobileViewport();
+  const entranceDistance = isMobileViewport ? 12 : 24;
+
   return (
     <section className="categoryShowcaseSection">
       <div className="categoryShowcaseContainer">
         <motion.div
           className="categoryShowcaseHeader"
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: entranceDistance }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5, ease: "easeOut" }}
@@ -67,7 +75,7 @@ export default function CategoryShowcase() {
                 key={category.slug}
                 className="categoryCard"
                 style={{ "--categoryAccent": CATEGORY_ACCENT_COLORS[category.slug] } as CSSProperties}
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: entranceDistance }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.5, delay: index * 0.08, ease: "easeOut" }}

@@ -28,6 +28,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Search, Check, Rocket, type LucideIcon } from "lucide-react";
 import { HOW_IT_WORKS_HOME_STEPS, type HowItWorksHomeStep } from "@/lib/howItWorksHomeData";
+import { useIsMobileViewport } from "@/lib/hooks/useIsMobileViewport";
 
 const STEP_ICONS: Record<HowItWorksHomeStep["iconName"], LucideIcon> = {
   search: Search,
@@ -36,12 +37,19 @@ const STEP_ICONS: Record<HowItWorksHomeStep["iconName"], LucideIcon> = {
 };
 
 export default function HowItWorksSection() {
+  // Standardized scroll-entrance distance per buyer_homepage_specification.md
+  // §13.2 — 24px on desktop/tablet, a lighter 12px on mobile. Only applies
+  // to this header's vertical slide-up; the per-step cards below animate
+  // on a horizontal x-axis (alternating left/right) and are unaffected.
+  const isMobileViewport = useIsMobileViewport();
+  const entranceDistance = isMobileViewport ? 12 : 24;
+
   return (
     <section id="how-it-works-section" className="howItWorksHomeSection">
       <div className="howItWorksHomeContainer">
         <motion.div
           className="howItWorksHomeHeader"
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: entranceDistance }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5, ease: "easeOut" }}

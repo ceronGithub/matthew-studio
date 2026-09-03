@@ -28,6 +28,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { useIsMobileViewport } from "@/lib/hooks/useIsMobileViewport";
 import { useState } from "react";
 import type { CSSProperties } from "react";
 import { CATEGORY_SHOWCASE } from "@/lib/categoryShowcaseData";
@@ -93,6 +94,11 @@ export default function QuickWins() {
   );
   const activeMedia = QUICK_WINS_MEDIA_ITEMS[activeIndex];
 
+  // Standardized scroll-entrance distance per buyer_homepage_specification.md
+  // §13.2 — 24px on desktop/tablet, a lighter 12px on mobile.
+  const isMobileViewport = useIsMobileViewport();
+  const entranceDistance = isMobileViewport ? 12 : 24;
+
   return (
     <section
       className="quickWinsSection"
@@ -109,7 +115,7 @@ export default function QuickWins() {
               key={category.slug}
               type="button"
               className={index === activeIndex ? "wordmarkChip wordmarkChipActive" : "wordmarkChip"}
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: entranceDistance }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.4, delay: index * 0.06, ease: "easeOut" }}
@@ -183,7 +189,7 @@ export default function QuickWins() {
             <motion.article
               key={stat.label}
               className="statCard"
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: entranceDistance }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.45, delay: index * 0.08, ease: "easeOut" }}

@@ -22,8 +22,14 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { HOME_FAQ_ITEMS } from "@/lib/homeFaqData";
+import { useIsMobileViewport } from "@/lib/hooks/useIsMobileViewport";
 
 export default function FAQAccordion() {
+  // Standardized scroll-entrance distance per buyer_homepage_specification.md
+  // §13.2 — 24px on desktop/tablet, a lighter 12px on mobile.
+  const isMobileViewport = useIsMobileViewport();
+  const entranceDistance = isMobileViewport ? 12 : 24;
+
   // Tracks the single open item's id — null means every item is
   // collapsed. Opening a new item closes whichever was previously open.
   const [openId, setOpenId] = useState<string | null>(null);
@@ -59,7 +65,7 @@ export default function FAQAccordion() {
       <div className="faqHomeContainer">
         <motion.div
           className="faqHomeHeader"
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: entranceDistance }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5, ease: "easeOut" }}
@@ -75,7 +81,7 @@ export default function FAQAccordion() {
               <motion.div
                 key={item.id}
                 className={`faqHomeItem${isOpen ? " faqHomeItemOpen" : ""}`}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: entranceDistance }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.4, ease: "easeOut", delay: index * 0.06 }}

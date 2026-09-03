@@ -28,6 +28,7 @@ import { motion } from "framer-motion";
 import SectionHeader from "@/components/shared/SectionHeader";
 import ComparisonTable, { type ComparisonTier } from "@/components/home/ComparisonTable";
 import FeatureGrid from "@/components/home/FeatureGrid";
+import { useIsMobileViewport } from "@/lib/hooks/useIsMobileViewport";
 import VideoCarousel from "@/components/home/VideoCarousel";
 import ProductCard from "@/components/home/ProductCard";
 import ScrollReveal from "@/components/shared/ScrollReveal";
@@ -60,6 +61,11 @@ const COMPARISON_TIERS: ComparisonTier[] = PRICING_TIERS.map((tier) => ({
 const COMPARISON_FEATURE_ROWS = Array.from(new Set(PRICING_TIERS.flatMap((tier) => tier.features)));
 
 export default function TemplatesSection() {
+  // Standardized scroll-entrance distance per buyer_homepage_specification.md
+  // §13.2 — 24px on desktop/tablet, a lighter 12px on mobile.
+  const isMobileViewport = useIsMobileViewport();
+  const entranceDistance = isMobileViewport ? 12 : 24;
+
   return (
     <section className="categorySection">
       <div className="sectionContainer">
@@ -78,7 +84,7 @@ export default function TemplatesSection() {
             <motion.div
               className="whyUsItem"
               key={point.heading}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: entranceDistance }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}

@@ -19,6 +19,7 @@
 
 import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
+import { useIsMobileViewport } from "@/lib/hooks/useIsMobileViewport";
 
 export interface FeatureGridItem {
   icon: LucideIcon;
@@ -45,12 +46,18 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
-
 export default function FeatureGrid({ items, enableHover = true }: FeatureGridProps) {
+  // Standardized scroll-entrance distance per buyer_homepage_specification.md
+  // §13.2 — 24px on desktop/tablet, a lighter 12px on mobile. Computed
+  // per-render (rather than as a module-level constant) so it can react
+  // to the viewport, since this grid is shared across sections.
+  const isMobileViewport = useIsMobileViewport();
+  const entranceDistance = isMobileViewport ? 12 : 24;
+  const itemVariants = {
+    hidden: { opacity: 0, y: entranceDistance },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
   return (
     <motion.div
       className="featureGrid"
