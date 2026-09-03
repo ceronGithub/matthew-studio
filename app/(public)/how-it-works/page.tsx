@@ -20,12 +20,19 @@
  * 2. ONBOARDING_FLOWS and the resolved initial slug are passed as
  *    props into the Client Component OnboardingFlow, which owns the
  *    tab-switching state.
+ *
+ * MOTION (visitor_specification.md §3.1, Implementation Order Step 3):
+ * Header and closing note fade in on scroll via the shared ScrollReveal
+ * primitive. OnboardingFlow.tsx (a Client Component) handles its own
+ * scroll-entrance for the tab list/timeline plus a per-step stagger on
+ * tab switch — see that file for details.
  */
 import type { Metadata } from "next";
 import Link from "next/link";
 import "../../styles/how-it-works.css";
 import OnboardingFlow from "@/components/how-it-works/OnboardingFlow";
 import { ONBOARDING_FLOWS } from "@/lib/howItWorksData";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 
 export const metadata: Metadata = {
   title: "How It Works — Templates | Matthew Studio",
@@ -49,7 +56,7 @@ export default async function HowItWorksPage({
   return (
     <>
       <header className="howItWorksPageHeader">
-        <div className="howItWorksPageHeaderInner">
+        <ScrollReveal className="howItWorksPageHeaderInner">
           <p className="eyebrow">How It Works — Templates</p>
           <h1 className="heroTitle" style={{ fontSize: "2.25rem" }}>
             From sign-up to a live booking site
@@ -63,18 +70,18 @@ export default async function HowItWorksPage({
             <Link href="/#how-it-works-section">3-step marketplace flow</Link> instead — this
             page covers Templates only.
           </p>
-        </div>
+        </ScrollReveal>
       </header>
 
       <OnboardingFlow flows={ONBOARDING_FLOWS} initialSlug={tier} />
 
       <section className="howItWorksNoteSection">
-        <div className="howItWorksNoteInner">
+        <ScrollReveal className="howItWorksNoteInner">
           <p className="howItWorksNoteText">Ready to see what each tier costs?</p>
           <Link href="/pricing" className="buttonPrimary">
             View Pricing
           </Link>
-        </div>
+        </ScrollReveal>
       </section>
     </>
   );

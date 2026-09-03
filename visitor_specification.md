@@ -106,7 +106,7 @@ All durations/easings/z-index/spacing reference the existing tokens in `app/glob
 
 1. ✅ **Done (2026-09-03)** — Shared motion primitives (scroll-entrance wrapper, reduced-motion hook, card hover mixin)
 2. ✅ **Done (2026-09-03)** — `/products`, `/shop`, category grids: `/products` done; `/shop` is a retired redirect to `/pricing` (nothing to animate there); `tshirts`, `templates`, `ai-videos`, `file-tools`, `game-characters`, `tutorials` category grids all wired to the shared `ScrollReveal` primitive
-3. 🔶 **In progress** — `/pricing` ✅ done (2026-09-03); `/compare` ✅ done (2026-09-03); `/how-it-works` still pending
+3. ✅ **Done (2026-09-03)** — `/pricing`, `/compare`, `/how-it-works` all wired. **Implementation Order Step 3 complete.**
 4. `/blog`, `/tutorials` (list + detail)
 5. `/about`, `/features`, `/testimonials`, `/faq`, `/contact`, `/support`, `/security`
 6. Legal pages (motion pass only, no structural change)
@@ -133,6 +133,7 @@ Per Rule 8A, each numbered step above ships as its own response/turn with full f
 - **Simplification vs. §3.1:** mobile translateY distance is not yet reduced to 12px separately from desktop's 24px — both currently use 24px. Low-risk, can be tightened in a follow-up pass if it feels heavy on small screens.
 - **Implemented (2026-09-03):** `/pricing` — `app/(public)/pricing/page.tsx` now wraps the header, the six category pricing cards (0.06s stagger via `ScrollReveal`, same cadence as `/products`), and the closing note section in `ScrollReveal`. Card hover-lift (`translateY(-4px)`) already existed in `pricing.css` before this pass and needed no change. This page has no "recommended" plan concept (it's category cards, not plan tiers), so §6's glow/border-accent note doesn't apply here — that note is more relevant if/when a dedicated plan-tier pricing view is built.
 - **Implemented (2026-09-03):** `/compare` — header wrapped in `ScrollReveal` (`app/(public)/compare/page.tsx`); the 3-slot picker grid wrapped in `ScrollReveal` and the comparison table's `<tbody>` rows given a 0.06s-staggered fade+slide-up via `motion.tr` directly (`ScrollReveal`'s `div` wrapper is invalid HTML inside a `<tbody>`, so the same animation values were applied by hand, including the `prefers-reduced-motion` check) — all in `components/compare/ProductCompareTool.tsx`. Per §6's "sticky header row on scroll within the table": `compareTableWrapper` now has `max-height: 60vh` + `overflow: auto` and `thead th` is `position: sticky; top: 0` with an opaque `--color-bg` background, so the header pins within the table's own scroll area rather than guessing at the site nav's pixel height for a page-level sticky offset.
+- **Implemented (2026-09-03):** `/how-it-works` — header and closing note wrapped in `ScrollReveal` (`app/(public)/how-it-works/page.tsx`). In `components/how-it-works/OnboardingFlow.tsx`, the tab list + timeline section (`.onboardingSectionInner`, kept nested inside the real `<section>` tag rather than replaced by it, per Rule 23.1) now gets a scroll-entrance via `ScrollReveal`. Separately, the per-tier step list — which already had a tab-switch crossfade via `AnimatePresence` — previously animated all its `<li>` steps as one flat opacity block; converted to `framer-motion` `variants` with `staggerChildren: 0.06` so each step now fades+slides in individually on tab switch, matching §3.1's "never animate a list as one block" rule, with `useReducedMotion` respected on the per-step slide distance. **Implementation Order Step 3 (`/pricing`, `/compare`, `/how-it-works`) is now complete.**
 
 ---
 
@@ -150,9 +151,10 @@ Per Rule 8A, each numbered step above ships as its own response/turn with full f
 | 2026-09-03 | Normalized `tutorials` category grid (`TutorialsSection.tsx`) from its hand-rolled `motion.div` stagger to the shared `ScrollReveal` primitive, keeping the same per-level-group delay formula and gaining reduced-motion support. **All six category grids now use `ScrollReveal` — Implementation Order Step 2 is complete.** |
 | 2026-09-03 | Wired `ScrollReveal` into `/pricing` (`app/(public)/pricing/page.tsx`) — header, 6-card category grid (0.06s stagger), and closing note section. Existing hover-lift in `pricing.css` was already correct. Implementation Order Step 3: `/pricing` done, `/compare` and `/how-it-works` still pending. |
 | 2026-09-03 | Wired motion into `/compare` — header via `ScrollReveal`, slot-picker grid via `ScrollReveal`, comparison table rows via staggered `motion.tr` (0.06s/row, reduced-motion aware), and a sticky `thead` pinned within a newly bounded `max-height: 60vh` scroll area on `compareTableWrapper`. Implementation Order Step 3: `/pricing` and `/compare` done, `/how-it-works` still pending. |
+| 2026-09-03 | Wired motion into `/how-it-works` — header + closing note via `ScrollReveal` (`page.tsx`); `OnboardingFlow.tsx`'s tab list/timeline section via `ScrollReveal`, and its per-tier step list converted from a flat single-block fade to a `staggerChildren`-based per-step fade+slide on tab switch. **Implementation Order Step 3 is now fully complete** (`/pricing`, `/compare`, `/how-it-works`). |
 
 ---
 
-**Document Version:** 1.9
+**Document Version:** 2.0
 **Last Updated:** 2026-09-03
-**Status:** In implementation — Step 2 complete. Step 3 in progress: `/pricing` and `/compare` done, `/how-it-works` still pending.
+**Status:** In implementation — Steps 1–3 complete (motion primitives, all category grids + `/products`, and `/pricing` / `/compare` / `/how-it-works`). Next: Step 4 — `/blog`, `/tutorials` (list + detail).
