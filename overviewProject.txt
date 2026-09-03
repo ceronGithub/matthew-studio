@@ -903,3 +903,14 @@ project is done.
   full — Phase 1 auth/2FA foundation through Phase 10 remaining
   hardening — each phase with scope, deliverables, and acceptance
   criteria. Spec-only change — no code built yet.
+[2026-09-03] Added buyer_account_specification.md (new file) — Downloads/
+  License Delivery, Profile, Payment Methods, Subscription Management,
+  Support Tickets, Notifications. Companion to buyer_order_tracking_
+  specification.md, covers everything else in the buyer dashboard
+  recommendation review. Spec-only — no code built yet.
+
+[2026-09-03] Added sitewide_technical_seo_specification.md (new file) —
+  SEO infra (sitemap.ts/robots.ts), global error handling (root
+  not-found.tsx/error.tsx), idle session timeout (Rule 32.5), and
+  anonymized traffic analytics (Rule 41). No prior spec existed for
+  any of these four items. Spec-only — no code built yet.
