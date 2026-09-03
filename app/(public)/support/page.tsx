@@ -13,6 +13,13 @@
  * DATA FLOW:
  * Both sections are self-contained Client Components; this page
  * itself stays a Server Component so it can export static metadata.
+ *
+ * MOTION:
+ * Page header gets a ScrollReveal entrance (visitor_specification.md
+ * §3.1/§3.6, Step 5). SupportFaqAccordion already had its own entrance
+ * motion, normalized to ScrollReveal in the same pass — see that
+ * component. SupportForm's own field states are left untouched, same
+ * "minimal/functional, not decorative" treatment as /contact.
  */
 import type { Metadata } from "next";
 import "../../styles/contact.css";
@@ -20,6 +27,7 @@ import "../../styles/home.css";
 import "../../styles/support.css";
 import SupportForm from "@/components/support/SupportForm";
 import SupportFaqAccordion from "@/components/support/SupportFaqAccordion";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 
 export const metadata: Metadata = {
   title: "Support & FAQ | Matthew Studio",
@@ -35,7 +43,7 @@ export default function SupportPage() {
   return (
     <>
       <header className="supportPageHeader">
-        <div className="supportPageHeaderInner">
+        <ScrollReveal className="supportPageHeaderInner">
           <p className="eyebrow">We&apos;re here to help</p>
           <h1 className="heroTitle" style={{ fontSize: "2.25rem" }}>
             Support &amp; FAQ
@@ -43,7 +51,7 @@ export default function SupportPage() {
           <p className="heroSubtitle">
             Send us a message, or check the answers below — most questions are covered already.
           </p>
-        </div>
+        </ScrollReveal>
       </header>
 
       <section className="supportContactSection">

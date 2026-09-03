@@ -12,9 +12,19 @@
  * DATA FLOW:
  * No data fetching — receives a single LegalDocument via props from
  * its Server Component page. Entirely static; no Client Component
- * needed.
+ * needed — ScrollReveal is a Client Component but wraps server-
+ * rendered children without requiring this file itself to opt in.
+ *
+ * MOTION:
+ * A single fade-only ScrollReveal entrance around the whole document
+ * (visitor_specification.md §6 — "Legal pages: entrance fade only —
+ * no card motion, these are read-heavy"). Because all 4 legal pages
+ * (/security, /terms, /privacy, /refund-policy) share this component,
+ * this one change completes both Step 5's /security item and all of
+ * Step 6 (legal pages) at once.
  */
 import type { LegalDocument as LegalDocumentType } from "@/lib/legalData";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 
 interface LegalDocumentProps {
   document: LegalDocumentType;
@@ -22,7 +32,7 @@ interface LegalDocumentProps {
 
 export default function LegalDocument({ document }: LegalDocumentProps) {
   return (
-    <div className="legalPage">
+    <ScrollReveal className="legalPage">
       <div className="legalPageInner">
         <header className="legalPageHeader">
           <p className="eyebrow">Legal</p>
@@ -46,6 +56,6 @@ export default function LegalDocument({ document }: LegalDocumentProps) {
           ))}
         </div>
       </div>
-    </div>
+    </ScrollReveal>
   );
 }

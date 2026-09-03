@@ -16,6 +16,13 @@
  * ContactForm is a Client Component (needs useState + useSearchParams
  * for the ?tier=/?category= prefill) — everything else on this page
  * is static.
+ *
+ * MOTION:
+ * Header and the calendar-booking block each get a single ScrollReveal
+ * entrance fade (visitor_specification.md §3.1/§3.6, §6 — "motion here
+ * stays minimal/functional, not decorative"). ContactForm's own field
+ * focus/validation states are left untouched — no stagger or card
+ * motion added to the form itself, per §6's explicit note for this page.
  */
 import type { Metadata } from "next";
 import { Suspense } from "react";
@@ -23,6 +30,7 @@ import { CalendarDays } from "lucide-react";
 import "../../styles/contact.css";
 import ContactForm from "@/components/contact/ContactForm";
 import { CALENDAR_BOOKING_URL } from "@/lib/contactData";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 
 export const metadata: Metadata = {
   title: "Contact | Matthew Studio",
@@ -38,7 +46,7 @@ export default function ContactPage() {
   return (
     <>
       <header className="contactPageHeader">
-        <div className="contactPageHeaderInner">
+        <ScrollReveal className="contactPageHeaderInner">
           <p className="eyebrow">Get in Touch</p>
           <h1 className="heroTitle" style={{ fontSize: "2.25rem" }}>
             Let&apos;s talk about what you need
@@ -47,12 +55,12 @@ export default function ContactPage() {
             Send a message with what you&apos;re looking for, or book a live walkthrough call if
             you&apos;d rather talk it through.
           </p>
-        </div>
+        </ScrollReveal>
       </header>
 
       <section className="contactSection">
         <div className="contactSectionInner">
-          <div className="contactCalendarBlock">
+          <ScrollReveal className="contactCalendarBlock">
             <CalendarDays size={22} strokeWidth={1.75} aria-hidden="true" />
             <div>
               <p className="contactCalendarTitle">Prefer to talk it through?</p>
@@ -69,7 +77,7 @@ export default function ContactPage() {
             >
               Book a call
             </a>
-          </div>
+          </ScrollReveal>
 
           {/* useSearchParams requires a Suspense boundary around the Client Component */}
           <Suspense fallback={null}>

@@ -18,12 +18,21 @@
  *    needed — it's a local static array today).
  * 2. Testimonials are passed as props into the Client Component
  *    TestimonialGrid, which handles the entrance animations.
+ *
+ * MOTION:
+ * Header and closing note each get a ScrollReveal entrance
+ * (visitor_specification.md §3.1/§3.6, Step 5). The card grid itself
+ * was already staggered before this pass — see TestimonialGrid.tsx,
+ * normalized in the same pass to use the shared ScrollReveal
+ * primitive instead of its prior hand-rolled motion.article so it
+ * also respects prefers-reduced-motion.
  */
 import type { Metadata } from "next";
 import Link from "next/link";
 import "../../styles/testimonials.css";
 import TestimonialGrid from "@/components/testimonials/TestimonialGrid";
 import { TESTIMONIALS } from "@/lib/testimonialsData";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 
 export const metadata: Metadata = {
   title: "Testimonials — Templates | Matthew Studio",
@@ -41,7 +50,7 @@ export default function TestimonialsPage() {
   return (
     <>
       <header className="testimonialsPageHeader">
-        <div className="testimonialsPageHeaderInner">
+        <ScrollReveal className="testimonialsPageHeaderInner">
           <p className="eyebrow">Testimonials — Templates</p>
           <h1 className="heroTitle" style={{ fontSize: "2.25rem" }}>
             What our template owners are saying
@@ -55,18 +64,18 @@ export default function TestimonialsPage() {
             <Link href="/#testimonials-section">quotes from every category</Link> on the
             homepage instead.
           </p>
-        </div>
+        </ScrollReveal>
       </header>
 
       <TestimonialGrid testimonials={TESTIMONIALS} />
 
       <section className="testimonialsNoteSection">
-        <div className="testimonialsNoteInner">
+        <ScrollReveal className="testimonialsNoteInner">
           <p className="testimonialsNoteText">Want to see the full story behind these results?</p>
           <Link href="/case-studies" className="buttonSecondary">
             View Case Studies
           </Link>
-        </div>
+        </ScrollReveal>
       </section>
     </>
   );

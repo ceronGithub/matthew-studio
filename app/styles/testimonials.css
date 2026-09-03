@@ -58,12 +58,17 @@
   border: 1px solid var(--color-border);
   border-radius: 14px;
   background: var(--color-surface);
-  transition: background-color var(--transition-base), border-color var(--transition-base);
+  transition: background-color var(--transition-base), border-color var(--transition-base),
+    transform var(--transition-base);
 }
 
-.testimonialCard:hover {
+/* Hover lift matches the shared card pattern (§3.2) — same treatment
+   as .productCard: translateY lift + border/background soften. */
+.testimonialCard:hover,
+.testimonialCard:focus-within {
   background: var(--color-surface-hover);
   border-color: var(--color-border-hover);
+  transform: translateY(-4px);
 }
 
 .testimonialCardQuoteIcon {

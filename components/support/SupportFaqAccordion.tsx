@@ -14,12 +14,23 @@
  * DATA FLOW:
  * Reads SUPPORT_FAQ_ITEMS (static, lib/supportFaqData.ts). Filtering
  * and open/closed state are both local — no fetching.
+ *
+ * MOTION:
+ * The section heading and per-item stagger were previously hand-rolled
+ * motion.div entrances with no prefers-reduced-motion handling.
+ * Normalized to the shared ScrollReveal primitive (visitor_
+ * specification.md §3.1/§3.6, Step 5), same fix already applied to
+ * TutorialsSection.tsx and TestimonialGrid.tsx. The expand/collapse
+ * answer animation and chevron rotate are untouched — those are
+ * interaction motion, not scroll entrance, and stay as raw
+ * AnimatePresence/motion.span.
  */
 "use client";
 
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, ChevronDown } from "lucide-react";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 import { SUPPORT_FAQ_ITEMS, type SupportFaqCategory } from "@/lib/supportFaqData";
 
 const CATEGORY_ORDER: SupportFaqCategory[] = ["General", "Templates", "Products"];
@@ -63,15 +74,9 @@ export default function SupportFaqAccordion() {
   return (
     <section className="supportFaqSection">
       <div className="supportFaqContainer">
-        <motion.div
-          className="supportFaqHeader"
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-        >
+        <ScrollReveal className="supportFaqHeader">
           <h2 className="sectionTitle">Frequently Asked Questions</h2>
-        </motion.div>
+        </ScrollReveal>
 
         <div className="supportFaqSearchBar">
           <Search size={18} strokeWidth={1.75} aria-hidden="true" />
@@ -97,13 +102,10 @@ export default function SupportFaqAccordion() {
                 const isOpen = openIds.has(item.id);
 
                 return (
-                  <motion.div
+                  <ScrollReveal
                     key={item.id}
                     className={`faqHomeItem${isOpen ? " faqHomeItemOpen" : ""}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-80px" }}
-                    transition={{ duration: 0.4, ease: "easeOut", delay: index * 0.06 }}
+                    delay={index * 0.06}
                   >
                     <button
                       type="button"
@@ -137,7 +139,7 @@ export default function SupportFaqAccordion() {
                         </motion.div>
                       )}
                     </AnimatePresence>
-                  </motion.div>
+                  </ScrollReveal>
                 );
               })}
             </div>
