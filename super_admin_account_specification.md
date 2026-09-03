@@ -455,10 +455,13 @@ POST /api/admin/create-admin
 - Update Order Status (dropdown: Processing / Shipped-or-Delivered-equivalent for digital delivery / Completed / Cancelled/Refunded)
 - Issue Refund (confirmation modal, integrates with PayMongo refund API)
 - Reassign to Admin (see 3.13 — ties an order/customer inquiry to a specific admin for handling)
+- **Override Production Stage** (super-admin only) — same 6-stage `productionStage` pipeline admins use (design_review → design_approved → printing → quality_check → packed → shipped, per admin spec Section 3.3.3), but with no restriction on reverting stages or skipping the required note — an escalation path for disputes an admin can't resolve alone
 
-**Note:** Regular admins can view/update order status per their existing permission; refunds and permanent order actions stay super-admin-only.
+**Note:** Regular admins can view/update order status and production stage per their existing permission; refunds, permanent order actions, and unrestricted production-stage overrides stay super-admin-only.
 
-**Security Logs:** Event `order_status_updated` / `order_refunded`.
+**Filters (added):** Order List filters also include Production Stage (for `tshirts`-category orders) alongside Payment Status and Order Status — lets super-admin spot every order stuck at `printing` or `quality_check` platform-wide, not just per-admin.
+
+**Security Logs:** Event `order_status_updated` / `order_refunded` / `order_production_stage_updated`.
 
 ---
 
@@ -925,6 +928,7 @@ These are gaps identified on review of Sections 1–8. None of these have been i
 | 2026-09-03 | Added Section 12: Implementation Plan (Phased) — 10-phase, dependency-ordered build sequence covering every page/feature in Sections 3, 7, and 9 (auth/2FA foundation, dashboard + logging, admin management, vault/backups, buyer management, product/order management with approval flow, CMS/announcements/media, task/customer assignment with notifications, analytics, remaining hardening), each with scope, deliverables, and acceptance criteria.                                                                         |
 | 2026-09-03 | Added Section 9: Recommended Improvements & Hardening (proposed, not yet built) — 2FA/MFA, IP allowlist/anomaly-blocking, break-glass recovery, product approval flow, customer-assignment exclusivity check, task notifications/escalation, CMS multi-version history, media library, scoped-by-default admin views, in-app notification center, full Analytics page, per-buyer data export, backup restore runbook. Renumbered Testing checklist to Section 10 and Change Log to Section 11, and added matching checklist items. |
 | 2026-09-03 | Added Sections 3.7–3.14: Content Management/CMS, Buyer Management, Announcements, Product Management, Order Management, Admin Task Assignment, Customer Assignment to Admin, and the Full-Control Principle — super-admin can now manage all visitor content, buyers, products, orders, and admin work assignment, on top of the existing admin-management/security/vault pages. Updated Section 4.1's super-admin-only operations list to match.                                                                                  |
+| 2026-09-04 | Updated Section 3.11 Order Management: added super-admin-only unrestricted Production Stage override, Production Stage filter on the order list, and `order_production_stage_updated` security event. Updated Phase 6 scope/deliverables/acceptance to include the shared `productionStage` pipeline (admin spec Section 3.3.3) and the new companion `buyer_order_tracking_specification.md`.                                                                                                                                     |
 | 2026-09-03 | Added Section 7: Vault & Session Slug System — super-admin slug format (12 words + 12 alphanumeric + 12 alphaspecial), auto-generation on first login, slug reuse on subsequent logins, new slug on sign-out + next login. Added vault credentials (15 words + 15 alphanumeric) for emergency access.                                                                                                                                                                                                                              |
 | 2026-09-01 | Initial super-admin specification created; account creation, dashboard, admin management, security logs sections documented.                                                                                                                                                                                                                                                                                                                                                                                                       |
 
@@ -1026,11 +1030,11 @@ Order is dependency-driven, not priority-driven — each phase below only depend
 
 **Goal:** the platform's actual commerce content — high business value, but sequenced after Phase 3 so admin permissions can gate it correctly from day one.
 
-**Scope:** Section 3.10 Product Management, Section 3.11 Order Management, Section 9.2's product approval flow (`pending-review` status, super-admin approve/reject), Rule 30's PayMongo payment capture pattern wired into the Order Management refund action.
+**Scope:** Section 3.10 Product Management, Section 3.11 Order Management (including the `productionStage` override for `tshirts`-category orders), Section 9.2's product approval flow (`pending-review` status, super-admin approve/reject), Rule 30's PayMongo payment capture pattern wired into the Order Management refund action, admin spec Section 3.3.3's production-stage pipeline (built once, shared by admin and super-admin views), and the companion buyer-facing read-only tracker in `buyer_order_tracking_specification.md`.
 
-**Deliverables:** `/superAdmin/products/*`, `/superAdmin/orders/*`, a Pending Review filter with approve/reject actions, a refund action wired to PayMongo.
+**Deliverables:** `/superAdmin/products/*`, `/superAdmin/orders/*`, a Pending Review filter with approve/reject actions, a refund action wired to PayMongo, the shared `productionStage` field + stepper component (used by admin, super-admin, and buyer views), `/buyer/orders` and `/buyer/orders/[orderId]`.
 
-**Acceptance:** a product created by a regular admin shows as pending-review and is invisible on the storefront until super-admin approves it; issuing a refund updates the order's status and payment record.
+**Acceptance:** a product created by a regular admin shows as pending-review and is invisible on the storefront until super-admin approves it; issuing a refund updates the order's status and payment record; advancing a t-shirt order's production stage as an admin is immediately visible on the buyer's tracking page and in super-admin's order list filter.
 
 ---
 
@@ -1082,6 +1086,6 @@ Order is dependency-driven, not priority-driven — each phase below only depend
 
 ---
 
-**Document Version:** 1.3  
-**Last Updated:** 2026-09-03  
+**Document Version:** 1.4  
+**Last Updated:** 2026-09-04  
 **Status:** Specification Complete — Section 9 items proposed pending build; Section 12 is the build sequence for Sections 3, 7, and 9 combined

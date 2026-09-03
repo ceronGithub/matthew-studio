@@ -202,6 +202,8 @@ if (pathname.startsWith("/admin")) {
 - 🔵 Delivered — completed
 - 🔴 Cancelled — refunded or cancelled
 
+**Note — Digital vs Physical Order Flow:** the badges above are the top-level `status` field and apply to every order regardless of category. Orders containing a `tshirts`-category item ALSO carry a separate `productionStage` field (Section 3.3.3) that tracks the physical fulfillment work happening _underneath_ "Confirmed" — a t-shirt order can sit in "Confirmed" for days while it moves through design → printing → QC before it's ready to mark "Shipped". Digital-only orders (Templates, AI Videos, File Tools, Tutorials, Game Characters) skip straight from Confirmed to Delivered on payment success and never populate `productionStage`.
+
 **Row Actions:**
 
 - **View Details** → `/admin/orders/[orderId]`
@@ -252,6 +254,37 @@ if (pathname.startsWith("/admin")) {
 - **Send Tracking Email** button (pre-filled template for shipped status)
 - **Issue Refund** button (confirmation modal, refund reason dropdown)
 - **Add Note** (internal note, visible to other admins, not shown to buyer)
+
+---
+
+#### 3.3.3 — T-Shirt Production Tracking (embedded in Order Details, `tshirts`-category orders only)
+
+**Purpose:** Give the admin a way to move a physical t-shirt order through its real production steps, and give the buyer (Section 3.3 of the buyer order-tracking spec) a matching read-only timeline — same `productionStage` field, two different views.
+
+**Only rendered when:** the order contains at least one item with `category = "tshirts"`. Digital-only orders never show this block.
+
+**Production Stages (`productionStage` field, in order):**
+
+1. `design_review` — buyer's design/mockup is being checked for print feasibility (file resolution, color count, placement)
+2. `design_approved` — design signed off, queued for printing
+3. `printing` — actively on the print floor
+4. `quality_check` — post-print inspection (stitching, print alignment, sizing)
+5. `packed` — folded, bagged, ready for courier pickup
+6. `shipped` — matches the top-level `status = "shipped"`; setting this stage auto-syncs the top-level status
+
+**Content:**
+
+- Horizontal stepper (same visual pattern as Section 3.3.2's Timeline, extended with the 6 stages above)
+- Each stage shows: who advanced it (admin name), timestamp, optional note (e.g. "Reprint needed — misaligned logo, restarted at printing")
+- **Revert allowed:** admin can move a stage backward (e.g. `quality_check` → `printing` for a reprint) — this must log a note explaining why (required field when reverting)
+
+**Actions:**
+
+- **Advance Stage** button — moves to the next stage in sequence, opens a modal for an optional note
+- **Revert Stage** button — moves back one stage, note is REQUIRED (not optional) explaining the reprint/rework reason
+- **Attach Proof Photo** (optional) — upload a photo at `quality_check` or `packed` stage via Cloudflare R2 (Rule 35.6), visible to the buyer on their tracking page
+
+**Security Logs:** Event `order_production_stage_updated` — logs old stage, new stage, order ID, admin.
 
 ---
 
@@ -799,6 +832,35 @@ The Admin account includes a **Vault System** for session management and emergen
 }
 ```
 
+### PUT /api/admin/orders/[orderId]/production-stage
+
+**Permission:** manage-orders
+
+**Applies only to:** orders containing a `tshirts`-category item.
+
+**Request:**
+
+```json
+{
+  "productionStage": "quality_check",
+  "note": "Passed inspection, no defects found.",
+  "isRevert": false
+}
+```
+
+- `note` is required when `isRevert: true`; optional otherwise.
+- Setting `productionStage: "shipped"` also updates the top-level `status` to `"shipped"` in the same transaction.
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": { "orderId": "uuid", "productionStage": "quality_check" },
+  "message": "Production stage updated."
+}
+```
+
 ### POST /api/admin/orders/[orderId]/refund
 
 **Permission:** manage-orders
@@ -1021,6 +1083,9 @@ The Admin account includes a **Vault System** for session management and emergen
 - [ ] Admin can update their name/avatar/notification preferences at `/admin/profile`
 - [ ] Admin cannot change password without correctly entering their current password
 - [ ] Bulk actions on Orders and Buyers lists require confirmation before executing (Rule 34.4)
+- [ ] `tshirts`-category orders show the Production Stage stepper; digital-only orders never show it
+- [ ] Advancing a production stage logs `order_production_stage_updated`; reverting a stage requires a note
+- [ ] Setting production stage to `shipped` also updates the order's top-level `status` to `shipped`
 - [ ] All tests pass with `npx tsc --noEmit`
 
 ---
@@ -1029,12 +1094,13 @@ The Admin account includes a **Vault System** for session management and emergen
 
 | Date       | Change                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-09-04 | Added Section 3.3.3 T-Shirt Production Tracking — 6-stage `productionStage` pipeline (design_review → design_approved → printing → quality_check → packed → shipped) embedded in Order Details for `tshirts`-category orders only; digital orders skip this and go straight Confirmed → Delivered. Added `PUT /api/admin/orders/[orderId]/production-stage` endpoint, revert-with-required-note rule, and `order_production_stage_updated` security log event. Companion to the new buyer-facing `buyer_order_tracking_specification.md` and Super-Admin spec Section 3.11 update, same shared field.                 |
 | 2026-09-03 | Aligned with Super-Admin spec: expanded Section 3.6 into a full Security Logs page spec (self-scoped, Rule 38.9 pattern); added Section 3.7 Account Activity Log (self-scoped, Rule 42); added Section 3.8 My Profile & Account Settings (RECOMMENDED — self-service name/avatar/password/notification prefs, previously missing); added bulk actions to Order List and Buyer List for parity with Product List; added matching API endpoints (`GET /api/admin/security-logs`, `GET /api/admin/account-activity`, `GET`/`PUT /api/admin/profile`, `PUT /api/admin/profile/password`); updated verification checklist. |
 | 2026-09-03 | Added Section 8: Vault & Session Slug System — admin slug format (7 alphanumeric + 7 alphaspecial + 7 words), auto-generation on first login, slug reuse on subsequent logins, new slug on sign-out + next login. Added vault credentials (15 words + 15 alphanumeric) for emergency access.                                                                                                                                                                                                                                                                                                                          |
 | 2026-09-01 | Initial admin specification created; dashboard, product/order/user management, permissions, and restrictions documented.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 
 ---
 
-**Document Version:** 1.1  
-**Last Updated:** 2026-09-03  
+**Document Version:** 1.2  
+**Last Updated:** 2026-09-04  
 **Status:** Specification Complete
