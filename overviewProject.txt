@@ -235,6 +235,76 @@ Site structure (not yet started):
 [ ] /faq, /about
 [ ] /security, /privacy, /terms, /refund-policy
 
+5C. SPEC BUILD SEQUENCE — master order across every specification
+    document in this repo, dependency-first. Checked against every
+    *_specification.md file's own Status line as of 2026-09-03.
+    Docs already built ([DONE]) are excluded — only what's still
+    outstanding is sequenced below.
+--------------------------------------------------------
+PHASE 1 — FOUNDATION (blocks everything buyer-facing; build first)
+[ ] 1. cart_checkout_specification.md
+       Cart, Checkout, PayMongo Payment Link + webhook, Order
+       creation. Nothing in Phase 2 has real data to show without
+       this — it's the source of every Order row.
+
+PHASE 2 — CORE BUYER EXPERIENCE (needs Phase 1's Order model to exist)
+[ ] 2. buyer_order_tracking_specification.md
+       /buyer/orders list + /buyer/orders/[orderId] tracking detail.
+[ ] 3. buyer_account_specification.md
+       Downloads/License, Profile, Payment Methods, Subscription
+       Management, Support Tickets, Notifications.
+
+PHASE 3 — ADMIN & OVERSIGHT (needs real orders from Phase 1-2 to
+manage against; building admin UI before there's data to manage
+means testing against fixtures instead of the real flow)
+[ ] 4. admin_account_specification.md
+[ ] 5. super_admin_account_specification.md
+       Has its own internal phased build plan (see its Section 12)
+       covering Sections 3, 7, and 9 of that document.
+
+PHASE 4 — SECURITY & ACCESS HARDENING (independent of commerce;
+sequenced after core buyer flow so login/vault hardening doesn't
+block revenue-generating pages from shipping first)
+[ ] 6. login_vault_page_secret_key_generation.md
+[ ] 7. vault_specification.md
+       Front-end mockup already done (Section 13) — this phase is
+       the real backend (Sections 4/5/7/9/12.7-12.8).
+[ ] 8. gatekeeper_specification.md
+       Device-ban check in middleware.ts + DeviceBan table.
+[ ] 9. buyer_password_recovery_specification.md
+       Telegram bot recovery flow; buyer registration currently
+       ends at the onboarding modal with no recovery path set up.
+
+PHASE 5 — CATALOG & PRODUCT FEATURES (independent of commerce
+plumbing; can slot in whenever bandwidth allows)
+[ ] 10. product_media_upload_specification.md
+        Gallery + video support (current form is single 5MB image).
+[ ] 11. bulk_file_converter_and_pdf_renamer_specification.md
+        File Tools product — bulk/individual conversion + PDF
+        invoice renaming.
+
+PHASE 6 — SITEWIDE POLISH & PLATFORM HARDENING (cheap, mostly
+independent — good filler work between the phases above, but
+additional_platform_gaps' Coupons/Refunds sub-items specifically
+need Phase 1 done first since they hook into checkout totals and
+Order.status)
+[ ] 12. sitewide_technical_seo_specification.md
+        Sitemap/robots, global 404/error boundaries, idle session
+        timeout, anonymized traffic analytics.
+[ ] 13. additional_platform_gaps_specification.md
+        Coupons, Refund processing, OAuth login, Buyer 2FA,
+        transactional emails, shop filtering, dev env setup.
+[ ] 14. infra_ops_specification.md
+        CI/CD, error tracking (Sentry), security headers/CSP,
+        Blog CMS admin.
+
+Already built, excluded from the sequence above:
+[DONE] visitor_specification_done.md
+[DONE] login_and_registration_page_done.md
+[DONE] buyer_homepage_specification_done.md (Phase 1 only — its own
+       Phase 2-3 and Modernization Phase remain unbuilt, not yet
+       resequenced into the phases above)
+
 6. HOW WE'RE WORKING
 --------------------------------------------------------
 One page/feature is built per turn, delivered as a ZIP (or
@@ -924,19 +994,5 @@ project is done.
   (order tracking, buyer account) relies on. Spec-only — no code
   built yet.
 
-[2026-09-03] Added additional_platform_gaps_specification.md (new
-  file) — Coupon/Discount codes, Refund Request & Processing,
-  Social/OAuth login (Google), Buyer 2FA (opt-in), Transactional
-  email templates (Rule 35.5 wiring), Shop catalog filtering/sorting,
-  and Developer environment setup (.env.example + testing baseline).
-  Second-pass gap audit beyond cart_checkout_specification.md,
-  buyer_account_specification.md, and
-  sitewide_technical_seo_specification.md. Spec-only — no code built
-  yet.
-
-[2026-09-03] Added infra_ops_specification.md (new file) — CI/CD
-  pipeline (.github/workflows/ci.yml), error tracking/monitoring
-  (Sentry), security headers/CSP config for next.config.mjs, and
-  Blog CMS admin write access. Third-pass gap audit beyond
-  cart_checkout, buyer_account, sitewide_technical_seo, and
-  additional_platform_gaps specs. Spec-only — no code built yet.
+[FILE CLOSED at 1000-line cap — Rule 45.3. Change log continues in
+  overviewProject-1.txt.]
