@@ -877,3 +877,29 @@ project is done.
   confirmed as a retired redirect with nothing to animate. Next step
   in the spec's Implementation Order: /pricing, /compare,
   /how-it-works.
+
+[2026-09-03] Expanded super_admin_account_specification.md (now v1.1)
+  with Sections 3.7-3.14: Content Management/CMS, Buyer Management,
+  Announcements, Product Management, Order Management, Admin Task
+  Assignment, Customer Assignment to Admin, and the Full-Control
+  Principle. Establishes that super-admin manages all visitor content,
+  buyers, products, orders, and admin work assignment, on top of the
+  existing admin-management/security-logs/account-activity/backups/
+  vault pages. Spec-only change — no code built yet.
+
+[2026-09-03] Added Section 9 (Recommended Improvements & Hardening,
+  proposed/not yet built) to super_admin_account_specification.md
+  (now v1.2): 2FA/MFA, IP allowlist + anomaly-blocking, break-glass
+  recovery, product approval flow, customer-assignment exclusivity
+  check, task notifications/escalation, CMS multi-version history,
+  media library, scoped-by-default admin views, in-app notification
+  center, full Analytics page, per-buyer data export, backup restore
+  runbook. Testing checklist renumbered to Section 10, Change Log to
+  Section 11. Spec-only change — no code built yet.
+
+[2026-09-03] Added Section 12 (Implementation Plan, Phased) to
+  super_admin_account_specification.md (now v1.3): 10-phase,
+  dependency-ordered build sequence covering Sections 3, 7, and 9 in
+  full — Phase 1 auth/2FA foundation through Phase 10 remaining
+  hardening — each phase with scope, deliverables, and acceptance
+  criteria. Spec-only change — no code built yet.

@@ -9,6 +9,10 @@ The **Super-Admin Account** is a privileged administrative role with the highest
 - Access to the admin vault (emergency credentials)
 - Full audit and security log access
 - Platform health and analytics dashboard
+- Full editorial control over all visitor-facing content (Section 3.7)
+- Management of buyer accounts, products, and orders (Sections 3.8, 3.10, 3.11)
+- Publishing site-wide announcements (Section 3.9)
+- Assigning tasks and customers to specific admins (Sections 3.12, 3.13)
 
 **Target User:** Platform owner / system administrator
 
@@ -341,6 +345,181 @@ POST /api/admin/create-admin
 
 ---
 
+### 3.7 — Content Management / CMS (/superAdmin/content)
+
+**Purpose:** Super-admin can edit all visitor-facing content without a code deployment.
+
+**Editable sections:**
+
+- Homepage: Hero copy/CTAs, QuickWins stats, per-category showcase blurbs, How It Works steps, Testimonials carousel entries, FAQ accordion entries, CTA banner copy
+- Shop/pricing: tier names, pricing, feature bullets
+- Standalone pages: Features page copy, Testimonials page quotes, Blog posts (create/edit/delete)
+- Site-wide: Footer text, social links, NavBar links
+
+**Content:**
+
+- Left panel: section tree (Homepage > Hero, Homepage > FAQ, Shop > Pricing Tiers, Blog, etc.)
+- Right panel: form fields matching the selected section's data shape (matches the existing `lib/*Data.ts` static data structure per section)
+- "Preview" button — opens the live page in a new tab
+- "Publish" button (disabled during submission) — writes to DB, visitor pages read from DB going forward instead of static `lib/*Data.ts` files
+- "Revert to last published" option per section (keeps 1 prior version)
+
+**Access:** Super-admin only. Regular admin has no CMS access unless explicitly granted via `manage-content` permission (added to the permissions list in 3.2.2).
+
+**Security Logs:** Event `content_updated`, details: section name + which fields changed.
+
+---
+
+### 3.8 — Buyer Management (/superAdmin/buyer-management)
+
+**Purpose:** Super-admin has the same level of control over buyer accounts that they have over admin accounts.
+
+**Content:**
+
+- Paginated table (25 per page, newest first): Email, Name, Signup Date, Last Login, Status (Active/Inactive/Locked), Total Orders, Actions
+- Filters: Status, signup date range, search by email/name
+- Export: CSV
+
+**Row Actions:**
+
+- View Details → order history, saved addresses, activity log (Rule 42)
+- Deactivate/Reactivate (confirmation modal)
+- Reset Password (sends reset email, confirmation modal)
+- Delete Account (permanent, confirmation modal with 5-second delay — same pattern as admin delete)
+
+**Note:** Regular admins can already view/deactivate/reset buyers per Section 4.2 — this page gives super-admin the same actions plus permanent delete, which stays super-admin-only.
+
+**Security Logs:** Events `buyer_deactivated`, `buyer_reactivated`, `buyer_deleted`, `buyer_password_reset`.
+
+---
+
+### 3.9 — Announcements (/superAdmin/announcements)
+
+**Purpose:** Super-admin publishes site-wide announcements (promos, downtime notices, new product drops).
+
+**Content:**
+
+- List of announcements: Title, Status (Draft/Scheduled/Live/Expired), Publish Date, Expiry Date, Placement, Actions
+- "Create Announcement" button
+
+**Create/Edit Form:**
+
+- Title (text, required)
+- Message body (textarea, required, character counter)
+- Placement (dropdown, required): Homepage banner, Shop page banner, Site-wide toast on login
+- Publish at (datetime, required — "now" or scheduled)
+- Expires at (datetime, optional — blank = manual dismiss only)
+- Status toggle: Draft / Scheduled / Live
+
+**Actions:** Edit, Duplicate, Deactivate early, Delete (confirmation modal)
+
+**Security Logs:** Event `announcement_published` / `announcement_deactivated`, details: title + placement.
+
+---
+
+### 3.10 — Product Management (/superAdmin/products)
+
+**Purpose:** Super-admin has full CRUD over the product catalog (`lib/productsData.ts` today, moving to DB-backed per 3.7's CMS pattern).
+
+**Content:**
+
+- Paginated table: Product Name, Category, Price, Status (Active/Draft/Archived), Created Date, Actions
+- Filters: Category (6 categories), Status, search by name
+- "Add Product" button
+
+**Create/Edit Form:**
+
+- Name, Category (dropdown, 6 marketplace categories), Description, Price (or 3-tier pricing for Templates category), Images (uploaded to Cloudflare R2 per Rule 35.6), Status
+
+**Row Actions:** Edit, Duplicate, Archive, Delete (confirmation modal)
+
+**Note:** Regular admin already has `manage-products` permission per Section 4.2 — this page is the same feature set, always available to super-admin regardless of granted permissions.
+
+**Security Logs:** Event `product_created` / `product_updated` / `product_deleted`.
+
+---
+
+### 3.11 — Order Management (/superAdmin/orders)
+
+**Purpose:** Super-admin has full visibility and control over every order on the platform.
+
+**Content:**
+
+- Paginated table (25 per page, newest first): Order ID, Buyer, Product(s), Total, Payment Status, Order Status, Date, Actions
+- Filters: Payment Status, Order Status, date range, search by buyer email or order ID
+- Export: CSV
+
+**Row Actions:**
+
+- View Details → full order breakdown, payment record (`paymongoPaymentId`, `paidAt` per Rule 30), buyer info
+- Update Order Status (dropdown: Processing / Shipped-or-Delivered-equivalent for digital delivery / Completed / Cancelled/Refunded)
+- Issue Refund (confirmation modal, integrates with PayMongo refund API)
+- Reassign to Admin (see 3.13 — ties an order/customer inquiry to a specific admin for handling)
+
+**Note:** Regular admins can view/update order status per their existing permission; refunds and permanent order actions stay super-admin-only.
+
+**Security Logs:** Event `order_status_updated` / `order_refunded`.
+
+---
+
+### 3.12 — Admin Task Assignment (/superAdmin/admin-management/[adminId]/tasks or /superAdmin/tasks)
+
+**Purpose:** Super-admin assigns work items to specific admins and tracks completion.
+
+**Content:**
+
+- Board or list view, filterable by Admin (dropdown or "All"), Status (Pending/In Progress/Done/Overdue)
+- "Assign Task" button
+
+**Create Task Form:**
+
+- Title (text, required)
+- Description (textarea)
+- Assign to (dropdown of active admins, required)
+- Due date (date, required)
+- Priority (Low/Medium/High)
+- Related record (optional link: order ID, buyer ID, or product ID — see 3.13)
+
+**Row Actions:** Edit, Mark Complete, Reassign, Delete (confirmation modal)
+
+**Admin-side view:** Each admin sees only their own assigned tasks under their dashboard (e.g. `/admin/tasks`) — never other admins' tasks.
+
+**Toast (per Rule 22):** `✓ Task assigned to [admin name].`
+
+**Security Logs:** Event `task_assigned` / `task_reassigned`.
+
+---
+
+### 3.13 — Customer Assignment to Admin (/superAdmin/customer-assignment)
+
+**Purpose:** Super-admin routes a specific buyer/customer or inquiry to a specific admin for ongoing handling (support case, custom order negotiation, VIP account, etc.).
+
+**Content:**
+
+- Table: Buyer/Customer, Reason for assignment, Assigned Admin, Assigned Date, Status (Active/Resolved), Actions
+- "Assign Customer" button
+
+**Assign Form:**
+
+- Buyer (searchable dropdown, required)
+- Assign to Admin (dropdown of active admins, required)
+- Reason/Notes (textarea, optional)
+- Status: Active / Resolved
+
+**Effect:** The assigned admin sees this buyer flagged in their own Buyer/Order views (e.g. a "My Assigned Customers" filter) so they know which accounts are theirs to handle.
+
+**Row Actions:** Reassign to a different admin, Mark Resolved, Remove assignment (confirmation modal)
+
+**Security Logs:** Event `customer_assigned` / `customer_reassigned`.
+
+---
+
+### 3.14 — Full-Control Principle
+
+Every capability available to a regular admin (products, orders, buyers, security-log viewing if granted) is also available to super-admin without needing the permission explicitly granted — super-admin's permission set is always the full set (Section 3.2.2 already notes this: "Super-admin has all permissions by default, non-editable"). Sections 3.7–3.13 above are the concrete pages that make this true for content, buyers, announcements, products, orders, task assignment, and customer assignment, on top of the admin-management, security-logs, account-activity, backups, and vault pages already specified in 3.2–3.6.
+
+---
+
 ## 4. SECURITY & RESTRICTIONS
 
 ### 4.1 — Super-Admin-Only Operations
@@ -358,6 +537,12 @@ The following operations **can ONLY be performed by super-admin**, never by regu
 - ✓ Generate new vault credentials
 - ✓ Access platform health dashboard
 - ✓ Modify system settings (future)
+- ✓ Edit all visitor-facing content (CMS, Section 3.7)
+- ✓ Permanently delete buyer accounts (Section 3.8)
+- ✓ Publish site-wide announcements (Section 3.9)
+- ✓ Issue refunds (Section 3.11)
+- ✓ Assign tasks to admins (Section 3.12)
+- ✓ Assign customers/orders to a specific admin (Section 3.13)
 
 ### 4.2 — Admin-Only Operations
 
@@ -662,7 +847,44 @@ The Super-Admin account includes an advanced **Vault System** for session manage
 
 ---
 
-## 9. TESTING & VERIFICATION CHECKLIST
+## 9. RECOMMENDED IMPROVEMENTS & HARDENING (STATUS: PROPOSED — NOT YET BUILT)
+
+These are gaps identified on review of Sections 1–8. None of these have been implemented yet; each needs its own build pass.
+
+### 9.1 — Security
+
+- **2FA/MFA on super-admin login.** TOTP (authenticator app) required in addition to password before reaching `/superAdmin/*`. Password alone is not enough for the highest-privilege account.
+- **IP allowlist / stricter geo response.** Rule 38 already logs `location_anomaly`, but for super-admin specifically, an anomaly should be able to block the session (not just log it) until confirmed via a second channel (email link or TOTP re-entry) — configurable allowlist of known IPs/VPN ranges is the stronger version of this.
+- **Super-admin break-glass recovery.** Documented procedure for when the platform owner loses access to both password and 2FA device (e.g. a pre-registered recovery email + identity-verification step + manual Supabase console reset by a secondary trusted contact). Currently undocumented.
+
+### 9.2 — Product & Order Workflow
+
+- **Product approval flow.** When a regular admin creates/edits a product, it saves as `status: "pending-review"` instead of going live immediately. Super-admin approves or rejects from `/superAdmin/products` (filter: Pending Review). Keeps the Section 3.14 full-control principle meaningful — nothing goes live without super-admin's implicit or explicit sign-off.
+- **Customer Assignment exclusivity check.** Before assigning a buyer to an admin (Section 3.13), check if that buyer already has an active assignment to a different admin. If so, show a warning and require either "Reassign (unassigns the previous admin)" or "Cancel" — never silently allow two active assignments on the same buyer.
+- **Task notifications + overdue escalation.** When a task is assigned (Section 3.12), the admin gets an email + in-app toast/notification (not just a row appearing in their list). If a task passes its due date unresolved, super-admin gets an escalation notice (dashboard alert + email).
+
+### 9.3 — Content/CMS
+
+- **Version history beyond 1 revert.** Section 3.7's "revert to last published" keeps only 1 prior version. Raise to a timestamped history (e.g. last 5 versions per section) so a bad edit from several saves ago can still be recovered.
+- **Media/asset library.** A `/superAdmin/media` page listing everything already uploaded to Cloudflare R2 (Rule 35.6), with search/filter and a "copy URL" / "insert into CMS field" action — avoids re-uploading the same image for multiple products or content sections.
+
+### 9.4 — Visibility & Team Management
+
+- **Scoped-by-default admin views.** Regular admins see only their own assigned tasks (Section 3.12) and assigned customers (Section 3.13) by default when they open Orders/Buyers — a toggle or filter lets super-admin (and only super-admin) view "All admins" instead of one admin's own scope.
+- **In-app notification center.** A bell icon in the super-admin (and admin) header showing unread events relevant to that account — task assigned to you, customer assigned to you, product pending your approval — distinct from the full Security/Account Activity logs, which stay as the audit trail rather than the alert mechanism.
+
+### 9.5 — Analytics & Reporting
+
+- **Full Analytics page.** Expand the Dashboard's 3-number "Analytics Summary" (Section 3.1) into a dedicated `/superAdmin/analytics` page: traffic trends (Rule 41's aggregate page-view data), revenue-over-time chart, top products, top referrers.
+- **Per-buyer data export.** From a buyer's detail view (Section 3.8), a "Export buyer data" action (orders, account info, activity) — useful for support requests or a data-access request from the buyer.
+
+### 9.6 — Backup & Recovery
+
+- **Documented restore procedure.** The Backups page (Section 3.5) is read-only by design (Rule 40.6) — but the spec should still document, as an operational runbook (not a UI feature), the exact steps to restore from a Google Drive/R2 snapshot or Supabase PITR if the platform owner ever needs to, referencing Rule 40's backup architecture.
+
+---
+
+## 10. TESTING & VERIFICATION CHECKLIST
 
 - [ ] Super-admin can log in at `/auth/login`
 - [ ] Super-admin is redirected to `/superAdmin/dashboard` after login
@@ -680,18 +902,186 @@ The Super-Admin account includes an advanced **Vault System** for session manage
 - [ ] Password change required within 90 days (reminder email at day 75)
 - [ ] Failed login attempts locked account after 5 failures (1-hour lockout)
 - [ ] All tests pass with `npx tsc --noEmit`
+- [ ] (Proposed, Section 9) Super-admin login requires 2FA/TOTP in addition to password
+- [ ] (Proposed, Section 9) Location anomaly on super-admin login blocks session pending second-channel confirmation
+- [ ] (Proposed, Section 9) Admin-created/edited products save as pending-review, not live, until super-admin approves
+- [ ] (Proposed, Section 9) Assigning an already-assigned buyer to a new admin shows a reassignment warning
+- [ ] (Proposed, Section 9) Task assignment triggers email + in-app notification to the assigned admin
+- [ ] (Proposed, Section 9) Overdue task triggers escalation alert to super-admin
+- [ ] (Proposed, Section 9) CMS section history keeps at least 5 prior versions, not just 1
+- [ ] (Proposed, Section 9) Media library page lists all Cloudflare R2 uploads with copy/reuse action
+- [ ] (Proposed, Section 9) Admin views (Orders/Buyers) default to "my assigned only" with a super-admin-only "view all" toggle
+- [ ] (Proposed, Section 9) In-app notification bell shows unread task/assignment/approval events
+- [ ] (Proposed, Section 9) `/superAdmin/analytics` page shows traffic trend, revenue-over-time, top products/referrers
+- [ ] (Proposed, Section 9) Buyer detail view has an "Export buyer data" action
+- [ ] (Proposed, Section 9) Backup restore runbook is documented (steps, not a UI feature)
 
 ---
 
-## 10. CHANGE LOG
+## 11. CHANGE LOG
 
-| Date       | Change                                                                                                                                                                                                                                                                                                |
-| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 2026-09-03 | Added Section 7: Vault & Session Slug System — super-admin slug format (12 words + 12 alphanumeric + 12 alphaspecial), auto-generation on first login, slug reuse on subsequent logins, new slug on sign-out + next login. Added vault credentials (15 words + 15 alphanumeric) for emergency access. |
-| 2026-09-01 | Initial super-admin specification created; account creation, dashboard, admin management, security logs sections documented.                                                                                                                                                                          |
+| Date       | Change                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-09-03 | Added Section 12: Implementation Plan (Phased) — 10-phase, dependency-ordered build sequence covering every page/feature in Sections 3, 7, and 9 (auth/2FA foundation, dashboard + logging, admin management, vault/backups, buyer management, product/order management with approval flow, CMS/announcements/media, task/customer assignment with notifications, analytics, remaining hardening), each with scope, deliverables, and acceptance criteria.                                                                         |
+| 2026-09-03 | Added Section 9: Recommended Improvements & Hardening (proposed, not yet built) — 2FA/MFA, IP allowlist/anomaly-blocking, break-glass recovery, product approval flow, customer-assignment exclusivity check, task notifications/escalation, CMS multi-version history, media library, scoped-by-default admin views, in-app notification center, full Analytics page, per-buyer data export, backup restore runbook. Renumbered Testing checklist to Section 10 and Change Log to Section 11, and added matching checklist items. |
+| 2026-09-03 | Added Sections 3.7–3.14: Content Management/CMS, Buyer Management, Announcements, Product Management, Order Management, Admin Task Assignment, Customer Assignment to Admin, and the Full-Control Principle — super-admin can now manage all visitor content, buyers, products, orders, and admin work assignment, on top of the existing admin-management/security/vault pages. Updated Section 4.1's super-admin-only operations list to match.                                                                                  |
+| 2026-09-03 | Added Section 7: Vault & Session Slug System — super-admin slug format (12 words + 12 alphanumeric + 12 alphaspecial), auto-generation on first login, slug reuse on subsequent logins, new slug on sign-out + next login. Added vault credentials (15 words + 15 alphanumeric) for emergency access.                                                                                                                                                                                                                              |
+| 2026-09-01 | Initial super-admin specification created; account creation, dashboard, admin management, security logs sections documented.                                                                                                                                                                                                                                                                                                                                                                                                       |
 
 ---
 
-**Document Version:** 1.0  
-**Last Updated:** 2026-09-01  
-**Status:** Specification Complete
+## 12. IMPLEMENTATION PLAN (PHASED)
+
+Order is dependency-driven, not priority-driven — each phase below only depends on phases listed before it, so building in this order never leaves a page half-functional waiting on something not built yet. Every "Scope" line references the section that already specifies the feature in detail; this section adds sequencing, deliverables, and per-phase acceptance criteria on top.
+
+### Phase summary
+
+| Phase | Focus                                               | Depends on    |
+| ----- | --------------------------------------------------- | ------------- |
+| 1     | Foundation, auth, session security, 2FA             | —             |
+| 2     | Dashboard shell + security/activity logging         | Phase 1       |
+| 3     | Admin management                                    | Phase 1, 2    |
+| 4     | Vault & backups                                     | Phase 1, 2    |
+| 5     | Buyer management                                    | Phase 1, 2, 3 |
+| 6     | Product & order management (with approval flow)     | Phase 1, 2, 3 |
+| 7     | Content management (CMS), announcements, media lib  | Phase 1, 2    |
+| 8     | Task assignment, customer assignment, notifications | Phase 3, 5, 6 |
+| 9     | Analytics & reporting                               | Phase 2, 5, 6 |
+| 10    | Remaining hardening (IP allowlist, leftovers)       | Phase 1       |
+
+---
+
+### Phase 1 — Foundation, Auth & Session Security
+
+**Goal:** nothing else in this spec works without this — build first.
+
+**Scope:**
+
+- Section 2 in full: Supabase account init, shared `/auth/login` route, `middleware.ts` role check, HttpOnly session cookie, refresh token rotation (Rule 32.3)
+- Section 5: password policy (12+ chars, complexity, 90-day expiry reminder, last-5-reuse block), rate limiting (5 attempts/15 min), account lockout (1 hour)
+- Section 9.1: 2FA/TOTP enrollment + verification — built here since it changes the login flow itself, not bolted on later
+- Section 44: origin-scoped logout (`Clear-Site-Data` + HttpOnly cookie expiry)
+
+**Deliverables:** working `/auth/login`, `middleware.ts`, session + refresh cookie flow, TOTP enrollment screen and verification step, lockout logic, logout endpoint.
+
+**Acceptance:** super-admin logs in with password + TOTP and lands on `/superAdmin/dashboard`; a buyer or no-role session gets 401 on any `/superAdmin/*` route; 5 failed attempts locks the account for 1 hour; logout clears the session cookie and fires `Clear-Site-Data`.
+
+---
+
+### Phase 2 — Dashboard Shell + Security/Activity Logging Infrastructure
+
+**Goal:** every later feature needs a place to log to and a shell to render inside — build the plumbing once, here.
+
+**Scope:**
+
+- Section 3.1: Dashboard Home (health widget, recent activity, quick actions, analytics summary — can start as a stub, filled in by later phases)
+- Rule 38: `SecurityLog` model, `logSecurityEvent()` service, device fingerprinting, geolocation, anomaly detection
+- Rule 42: `AccountActivityLog` model, `recordAccountActivity()` service
+- Section 3.3 Security Logs page and Section 3.4 Account Activity page — read-only viewers on top of the models above
+- Section 9.1: anomaly-blocking (a `location_anomaly` event blocks the session pending a second-channel confirmation, not just logs it)
+
+**Deliverables:** `SecurityLog` + `AccountActivityLog` tables, shared logging helpers, 3 pages (dashboard shell, security logs, account activity).
+
+**Acceptance:** every login attempt from Phase 1 appears in Security Logs within this phase; the dashboard renders real counts instead of placeholders; an impossible-travel login is blocked, not just logged.
+
+---
+
+### Phase 3 — Admin Management
+
+**Goal:** super-admin's first real administrative power — creates the team the rest of the system is built for.
+
+**Scope:** Section 3.2 in full (admin list, create, edit/deactivate/delete), Section 6's admin API endpoints, permission-checkbox groundwork (stored now, enforced per-feature as each feature is built in later phases).
+
+**Deliverables:** `/superAdmin/admin-management/*` pages and API routes.
+
+**Acceptance:** super-admin creates an admin who receives a temp-password email, logs in successfully, and is correctly blocked by middleware from every super-admin-only route.
+
+---
+
+### Phase 4 — Vault & Backups
+
+**Goal:** the emergency-access and disaster-recovery layer — built early so it's protecting the system by the time there's real data worth protecting.
+
+**Scope:** Section 7 (session slug + vault credentials), Section 3.6 Vault page, Section 3.5 Backups page (read-only viewer), Rule 40's backup script + `BackupLog` model, Section 9.1's break-glass recovery runbook, Section 9.6's restore runbook.
+
+**Deliverables:** vault generate/revoke flow, session slug lifecycle, scheduled backup script wired to the Backups page, written recovery and restore runbooks (docs, not UI).
+
+**Acceptance:** a generated vault credential is shown once and is unrecoverable after the page closes; the nightly backup job produces a `BackupLog` row; both runbooks exist as reviewable documents.
+
+---
+
+### Phase 5 — Buyer Management
+
+**Goal:** extend the same list/detail/action pattern from Phase 3 to buyer accounts, which already exist from Day 1 public registration.
+
+**Scope:** Section 3.8 in full (list, deactivate/reactivate, reset password, permanent delete).
+
+**Deliverables:** `/superAdmin/buyer-management/*` pages and API routes.
+
+**Acceptance:** deactivating a buyer immediately blocks that buyer's login; permanent delete requires the 5-second confirmation delay.
+
+---
+
+### Phase 6 — Product & Order Management (with Approval Flow)
+
+**Goal:** the platform's actual commerce content — high business value, but sequenced after Phase 3 so admin permissions can gate it correctly from day one.
+
+**Scope:** Section 3.10 Product Management, Section 3.11 Order Management, Section 9.2's product approval flow (`pending-review` status, super-admin approve/reject), Rule 30's PayMongo payment capture pattern wired into the Order Management refund action.
+
+**Deliverables:** `/superAdmin/products/*`, `/superAdmin/orders/*`, a Pending Review filter with approve/reject actions, a refund action wired to PayMongo.
+
+**Acceptance:** a product created by a regular admin shows as pending-review and is invisible on the storefront until super-admin approves it; issuing a refund updates the order's status and payment record.
+
+---
+
+### Phase 7 — Content Management (CMS), Announcements, Media Library
+
+**Goal:** move visitor-facing content off static `lib/*Data.ts` files and onto a super-admin-editable DB — grouped with announcements and the media library since all three share the same publish/preview pattern. Independent of Phases 3–6, so it can be built in parallel with them if needed.
+
+**Scope:** Section 3.7 CMS (all listed sections), Section 3.9 Announcements, Section 9.3 (media library + multi-version history, raised from 1 to 5 versions).
+
+**Deliverables:** `/superAdmin/content/*`, `/superAdmin/announcements/*`, `/superAdmin/media`, a DB migration moving static data into content tables, a version-history table.
+
+**Acceptance:** editing the homepage hero in the CMS and publishing updates the live homepage with no deploy; reverting can pick any of the last 5 versions, not just the immediately prior one.
+
+---
+
+### Phase 8 — Task Assignment, Customer Assignment & Notifications
+
+**Goal:** the internal workflow layer tying admins to the work created in Phases 3–6 — needs admins, buyers, and orders/products to already exist so there's something to assign.
+
+**Scope:** Section 3.12 Task Assignment, Section 3.13 Customer Assignment, Section 9.2's task notifications + overdue escalation + assignment-exclusivity check, Section 9.4's scoped-by-default admin views and in-app notification bell.
+
+**Deliverables:** `/superAdmin/tasks` (or nested under admin-management), `/superAdmin/customer-assignment`, a notification bell component with an unread-count API, email notification on assignment.
+
+**Acceptance:** assigning a task emails the admin and appears in their notification bell; assigning an already-assigned buyer shows the reassignment warning instead of silently double-assigning; an admin's own Orders/Buyers view defaults to "mine only" with a super-admin-only "view all" toggle.
+
+---
+
+### Phase 9 — Analytics & Reporting
+
+**Goal:** built last since it reports on data generated by every earlier phase — the further along the other phases are, the more meaningful this one is.
+
+**Scope:** Section 9.5's full `/superAdmin/analytics` page (traffic trend, revenue-over-time, top products/referrers), Rule 41's aggregate `PageViewDaily` table, the per-buyer data export action.
+
+**Deliverables:** `/superAdmin/analytics`, a `PageViewDaily` aggregation job, a CSV/JSON export endpoint for a single buyer's data.
+
+**Acceptance:** the analytics page shows real traffic and revenue trend lines (not placeholder numbers); exporting a buyer produces a downloadable file containing their orders and activity.
+
+---
+
+### Phase 10 — Remaining Hardening
+
+**Goal:** sweep up anything from Section 9 not already folded into an earlier phase.
+
+**Scope:** Section 9.1's IP allowlist (if not already done alongside Phase 1's 2FA work), any other Section 9 item not explicitly placed in Phases 1–9.
+
+**Deliverables:** IP allowlist configuration and enforcement in `middleware.ts`.
+
+**Acceptance:** a login attempt from outside the configured allowlist (when one is set) is blocked or requires extra verification.
+
+---
+
+**Document Version:** 1.3  
+**Last Updated:** 2026-09-03  
+**Status:** Specification Complete — Section 9 items proposed pending build; Section 12 is the build sequence for Sections 3, 7, and 9 combined

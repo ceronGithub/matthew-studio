@@ -209,6 +209,12 @@ if (pathname.startsWith("/admin")) {
 - **Send Email** → Modal, compose custom email to buyer (with preset templates)
 - **Refund** → Modal confirmation, mark refunded, trigger notification
 
+**Bulk Actions (if checked) — RECOMMENDED ENHANCEMENT:**
+
+- Update status for selected orders (single modal, applies to all checked rows)
+- Export selected to CSV
+- _Added for parity with Product List's bulk actions (3.2.1) — processing daily order batches one-by-one doesn't scale for an ops admin._
+
 ---
 
 #### 3.3.2 — Order Details (/admin/orders/[orderId])
@@ -269,6 +275,12 @@ if (pathname.startsWith("/admin")) {
 - **Reset Password** → Send password reset email (confirmation modal)
 - **Send Email** → Modal, compose and send to buyer
 
+**Bulk Actions (if checked) — RECOMMENDED ENHANCEMENT:**
+
+- Deactivate/Reactivate selected accounts
+- Export selected to CSV
+- _Added for parity with Product List's bulk actions (3.2.1)._
+
 ---
 
 #### 3.4.2 — Buyer Details (/admin/users/[buyerId])
@@ -328,15 +340,92 @@ if (pathname.startsWith("/admin")) {
 
 ---
 
-### 3.6 — Security Logs (Conditional Access)
+### 3.6 — Security Logs (/admin/security-logs)
 
 **Availability:** Only if admin has `view-security-logs` permission (granted by super-admin)
 
+**Purpose:** Let a permitted admin monitor login/security events relevant to their own scope, without exposing platform-wide or other-admin data (Rule 38, scoped down from the super-admin view).
+
 **Content:**
 
-- Same as super-admin view (Rule 38), but filtered to non-sensitive events
-- Admins can view: login attempts, their own account activity
-- Admins CANNOT view: vault credentials, other admins' actions, platform-level security
+- Paginated DataTable (25 per page, newest first) — same visual pattern as super-admin's Security Logs page (Rule 38.9)
+- Columns: Event Type (badge), Device/Location, IP, Timestamp
+- Expandable rows: device fingerprint, geolocation (city-level), browser/OS
+
+**Filters:**
+
+- Event type (login_success, login_failed, rate_limit_hit — admin-relevant events only)
+- Date range
+
+**Scope restrictions (enforced server-side, never just hidden in the UI):**
+
+- Admins can view: **only their own** login attempts and security events
+- Admins CANNOT view: vault credentials, other admins' or super-admin's events, platform-level events (`sql_injection_attempt`, `location_anomaly` on other accounts, etc.)
+- API must filter `WHERE actor = currentAdmin.email` — never rely on frontend filtering alone
+
+---
+
+### 3.7 — Account Activity Log (/admin/account-activity)
+
+**Purpose:** Lets the admin review their own navigation and action history (Rule 42) — for self-audit and to confirm nothing unexpected happened on their account.
+
+**Availability:** All admins, no special permission required (this is the admin's own data).
+
+**Content:**
+
+- Paginated DataTable (25 per page, newest first)
+- Columns: Action (page visited OR discrete action, e.g. "product_updated"), IP, Device, When
+- Expandable rows: full user-agent, geolocation (city-level)
+
+**Filters:**
+
+- Action type (page visit, product-updated, order-refunded, etc.)
+- Date range
+
+**Scope restrictions:**
+
+- Always filtered to `WHERE accountId = currentAdmin.id` — an admin can never see another admin's or the super-admin's activity trail (super-admin's `/superAdmin/account-activity` page is the only place that cross-account view exists)
+
+---
+
+### 3.8 — My Profile & Account Settings (/admin/profile) — RECOMMENDED ENHANCEMENT
+
+**Why this is being added:** Neither spec previously gave the admin a self-service way to update their own name, avatar, or password — every change required emailing the super-admin or using the "Reset Password" email flow. A basic profile/settings page is standard for any admin-facing dashboard and reduces avoidable super-admin workload.
+
+**Purpose:** Let the admin manage their own account details without super-admin involvement.
+
+**Display Sections:**
+
+1. **Profile Information**
+   - Full name (editable)
+   - Email (read-only — changing email requires super-admin action, since it's the login identifier)
+   - Avatar/photo upload (optional, max 5MB, uploaded via `POST /api/upload` per Rule 35.6)
+   - Role badge (read-only: "Admin")
+   - Permissions list (read-only — view only, editing permissions is super-admin-only per Rule 4.2)
+
+2. **Change Password**
+   - Current password (required)
+   - New password (required, must meet Rule 5.1's 12-char/complexity policy)
+   - Confirm new password (required, must match)
+   - "Update Password" button (disabled during submission)
+   - On success: toast ✓ "Password updated successfully." + forces re-login on other active sessions (Rule 44's origin-scoped termination applied to all other sessions, current session stays active)
+
+3. **Notification Preferences**
+   - Toggle: Email me when a new order is placed
+   - Toggle: Email me when inventory/stock is low (if inventory feature exists)
+   - Toggle: Email me a weekly activity summary
+   - Saved immediately on toggle (no separate "Save" button), each toggle fires its own toast
+
+**Actions:**
+
+- "Save Profile" button (name/avatar changes, disabled during submission)
+- "Update Password" button (separate form, see above)
+
+**Security:**
+
+- Changing password requires current password re-entry — never allow password change from a stale/unverified session
+- Avatar upload follows the same validation as product images (Rule 35.6: type/size checks, processed through `processImage()`, stored in Cloudflare R2 under `avatars/`)
+- All profile changes logged to Rule 42's Account Activity Log (`action: "profile_updated"`)
 
 ---
 
@@ -775,6 +864,139 @@ The Admin account includes a **Vault System** for session management and emergen
 }
 ```
 
+### GET /api/admin/security-logs
+
+**Permission:** `view-security-logs`
+
+**Query Params:** page, limit, eventType, dateFrom, dateTo
+
+**Scope:** Server always applies `WHERE actor = currentAdmin.email` regardless of query params — an admin can never request another account's events.
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "logs": [...],
+    "totalCount": 18,
+    "totalPages": 1,
+    "page": 1
+  },
+  "message": "Security logs retrieved."
+}
+```
+
+### GET /api/admin/account-activity
+
+**Permission:** admin (any — self-scoped, no special permission required)
+
+**Query Params:** page, limit, actionType, dateFrom, dateTo
+
+**Scope:** Server always applies `WHERE accountId = currentAdmin.id`.
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "activities": [...],
+    "totalCount": 132,
+    "totalPages": 6,
+    "page": 1
+  },
+  "message": "Account activity retrieved."
+}
+```
+
+### GET /api/admin/profile
+
+**Permission:** admin (any — self only)
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "adminId": "uuid",
+    "fullName": "John Admin",
+    "email": "john.admin@example.com",
+    "avatarUrl": "https://cdn.example.com/avatars/john.webp",
+    "permissions": ["manage-products", "manage-orders"],
+    "notificationPreferences": {
+      "newOrderEmail": true,
+      "lowStockEmail": false,
+      "weeklySummaryEmail": true
+    }
+  },
+  "message": "Profile retrieved."
+}
+```
+
+### PUT /api/admin/profile
+
+**Permission:** admin (any — self only)
+
+**Request:**
+
+```json
+{
+  "fullName": "John A. Admin",
+  "avatarUrl": "https://cdn.example.com/avatars/john-new.webp",
+  "notificationPreferences": {
+    "newOrderEmail": true,
+    "lowStockEmail": true,
+    "weeklySummaryEmail": false
+  }
+}
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": { "adminId": "uuid" },
+  "message": "Profile updated successfully."
+}
+```
+
+### PUT /api/admin/profile/password
+
+**Permission:** admin (any — self only)
+
+**Request:**
+
+```json
+{
+  "currentPassword": "OldPass123!",
+  "newPassword": "NewSecurePass456!"
+}
+```
+
+**Response (success):**
+
+```json
+{
+  "success": true,
+  "data": null,
+  "message": "Password updated successfully."
+}
+```
+
+**Response (wrong current password):**
+
+```json
+{
+  "success": false,
+  "data": null,
+  "message": "Current password is incorrect.",
+  "error": "INVALID_CURRENT_PASSWORD"
+}
+```
+
 ---
 
 ## 10. TESTING & VERIFICATION CHECKLIST
@@ -794,19 +1016,25 @@ The Admin account includes a **Vault System** for session management and emergen
 - [ ] Session timeout after 15 minutes of inactivity
 - [ ] Permission check enforced on every API endpoint
 - [ ] Admin cannot create another admin (403 if attempted)
+- [ ] Admin with `view-security-logs` permission only sees their own events at `/admin/security-logs` (never another account's)
+- [ ] Admin can view their own activity trail at `/admin/account-activity` without any special permission
+- [ ] Admin can update their name/avatar/notification preferences at `/admin/profile`
+- [ ] Admin cannot change password without correctly entering their current password
+- [ ] Bulk actions on Orders and Buyers lists require confirmation before executing (Rule 34.4)
 - [ ] All tests pass with `npx tsc --noEmit`
 
 ---
 
 ## 11. CHANGE LOG
 
-| Date       | Change                                                                                                                                                                                                                                                                                       |
-| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 2026-09-03 | Added Section 8: Vault & Session Slug System — admin slug format (7 alphanumeric + 7 alphaspecial + 7 words), auto-generation on first login, slug reuse on subsequent logins, new slug on sign-out + next login. Added vault credentials (15 words + 15 alphanumeric) for emergency access. |
-| 2026-09-01 | Initial admin specification created; dashboard, product/order/user management, permissions, and restrictions documented.                                                                                                                                                                     |
+| Date       | Change                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-09-03 | Aligned with Super-Admin spec: expanded Section 3.6 into a full Security Logs page spec (self-scoped, Rule 38.9 pattern); added Section 3.7 Account Activity Log (self-scoped, Rule 42); added Section 3.8 My Profile & Account Settings (RECOMMENDED — self-service name/avatar/password/notification prefs, previously missing); added bulk actions to Order List and Buyer List for parity with Product List; added matching API endpoints (`GET /api/admin/security-logs`, `GET /api/admin/account-activity`, `GET`/`PUT /api/admin/profile`, `PUT /api/admin/profile/password`); updated verification checklist. |
+| 2026-09-03 | Added Section 8: Vault & Session Slug System — admin slug format (7 alphanumeric + 7 alphaspecial + 7 words), auto-generation on first login, slug reuse on subsequent logins, new slug on sign-out + next login. Added vault credentials (15 words + 15 alphanumeric) for emergency access.                                                                                                                                                                                                                                                                                                                          |
+| 2026-09-01 | Initial admin specification created; dashboard, product/order/user management, permissions, and restrictions documented.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 
 ---
 
-**Document Version:** 1.0  
-**Last Updated:** 2026-09-01  
+**Document Version:** 1.1  
+**Last Updated:** 2026-09-03  
 **Status:** Specification Complete
