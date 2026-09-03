@@ -25,6 +25,15 @@
  * its existing opacity fade (visitor_specification.md §3.5) instead of
  * a flat opacity-only swap. Gated for free by the root layout's
  * <MotionConfig reducedMotion="user"> — no extra check needed here.
+ *
+ * The scroll-linked parallax (parallaxY below) is a different case:
+ * it's a raw useTransform MotionValue piped straight into style.y, not
+ * an animate/transition prop, so MotionConfig's reducedMotion="user"
+ * never touches it. Per buyer_homepage_specification_done.md §13.2 row
+ * "Mobile ... disable parallax entirely" and "Reduced motion ... no
+ * translate/parallax", it's explicitly zeroed on mobile viewports and
+ * under prefers-reduced-motion via the same two hooks every other
+ * homepage section already uses for this.
  */
 "use client";
 
@@ -36,6 +45,8 @@ import { useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { HERO_MEDIA_ITEMS, type MediaShowcaseItem } from "@/lib/mediaShowcaseData";
 import { useMediaCarousel } from "@/hooks/useMediaCarousel";
+import { useIsMobileViewport } from "@/lib/hooks/useIsMobileViewport";
+import { usePrefersReducedMotion } from "@/lib/hooks/usePrefersReducedMotion";
 import MediaPreviewPlaceholder from "@/components/shared/MediaPreviewPlaceholder";
 
 /**
@@ -96,6 +107,13 @@ export default function HeroSection() {
   });
   // 0.1x scroll speed: moves at most 40px over the section's scroll range.
   const parallaxY = useTransform(scrollYProgress, [0, 1], [0, 40]);
+
+  // Per §13.2: parallax is disabled entirely on mobile viewports and for
+  // visitors who've asked for reduced motion — neither is served by a
+  // scroll-linked transform on the visual.
+  const isMobileViewport = useIsMobileViewport();
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const disableParallax = isMobileViewport || prefersReducedMotion;
 
   const { activeIndex, pause, resume } = useMediaCarousel(HERO_MEDIA_ITEMS.length, 5000);
   const activeItem = HERO_MEDIA_ITEMS[activeIndex];
@@ -162,7 +180,7 @@ export default function HeroSection() {
 
         <motion.div
           className="heroVisual"
-          style={{ y: parallaxY }}
+          style={{ y: disableParallax ? 0 : parallaxY }}
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}

@@ -46,3 +46,21 @@ that file left off.
   (the one substantial remaining item), and bumped that spec's
   Document Version to 1.2. No feature code touched — documentation
   correction only.
+
+[2026-09-04] Phase 5B (Front-End Modernization, Hero + Quick Wins)
+  audited against buyer_homepage_specification_done.md §13.2: both
+  sections were already almost fully compliant (scroll-triggered
+  whileInView entrances, crossfade+scale media transitions, mobile-
+  reduced entrance distances, card hover lift via CSS, autoplay
+  carousels already gated on prefers-reduced-motion via
+  useMediaCarousel.ts) — Quick Wins needed no changes. HeroSection.tsx
+  was the one gap: its scroll-linked parallax (a raw useTransform
+  MotionValue piped into style.y) bypassed the root layout's
+  <MotionConfig reducedMotion="user"> entirely, since that only gates
+  animate/transition props, not live scroll values. Fixed by wiring in
+  useIsMobileViewport + usePrefersReducedMotion (same hooks already
+  used elsewhere on the homepage) and zeroing parallaxY when either
+  applies. npx tsc --noEmit clean against this file (one pre-existing,
+  unrelated error in services/prisma.ts — @prisma/client has not been
+  generated in this environment, needs `npx prisma generate` against a
+  live DATABASE_URL).
