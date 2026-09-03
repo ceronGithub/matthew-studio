@@ -18,6 +18,13 @@
  *    no fetch needed today).
  * 2. Each card links to its own category page (e.g. /templates,
  *    /tshirts) where the actual product list + per-item pricing lives.
+ *
+ * MOTION (visitor_specification.md §3.1, §6, Implementation Order Step 3):
+ * Header and closing note fade in on scroll via the shared ScrollReveal
+ * primitive; the six category cards stagger in by 0.06s per index,
+ * same cadence as /products and the homepage category grids. Card
+ * hover-lift (translateY(-4px)) already lived in pricing.css before
+ * this pass — only the entrance motion was missing.
  */
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -33,6 +40,7 @@ import {
 } from "lucide-react";
 import "../../styles/pricing.css";
 import { CATEGORY_SHOWCASE, type CategoryShowcaseItem } from "@/lib/categoryShowcaseData";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 
 export const metadata: Metadata = {
   title: "Pricing | Matthew Studio",
@@ -59,7 +67,7 @@ export default function PricingPage() {
   return (
     <>
       <header className="pricingPageHeader">
-        <div className="pricingPageHeaderInner">
+        <ScrollReveal className="pricingPageHeaderInner">
           <p className="eyebrow">Pricing</p>
           <h1 className="heroTitle" style={{ fontSize: "2.25rem" }}>
             One marketplace, six starting prices
@@ -68,35 +76,37 @@ export default function PricingPage() {
             Every category is priced on its own terms — pick a category below to see the full
             product list and exact pricing per item.
           </p>
-        </div>
+        </ScrollReveal>
       </header>
 
       <section className="categoryPricingSection">
         <div className="categoryPricingGrid">
-          {CATEGORY_SHOWCASE.map((category) => {
+          {CATEGORY_SHOWCASE.map((category, index) => {
             const Icon = CATEGORY_ICONS[category.iconName];
             return (
-              <article key={category.slug} className="categoryPricingCard">
-                <span className="categoryPricingIconWrap">
-                  <Icon size={32} strokeWidth={1.75} aria-hidden="true" />
-                </span>
-                <div className="categoryPricingBody">
-                  <h2 className="categoryPricingName">{category.name}</h2>
-                  <p className="categoryPricingPrice">{category.startingPrice}</p>
-                  <p className="categoryPricingDescription">{category.description}</p>
-                </div>
-                <Link href={`/${category.slug}`} className="categoryPricingLink">
-                  See {category.name} pricing
-                  <ArrowRight size={16} strokeWidth={1.75} aria-hidden="true" />
-                </Link>
-              </article>
+              <ScrollReveal key={category.slug} delay={index * 0.06}>
+                <article className="categoryPricingCard">
+                  <span className="categoryPricingIconWrap">
+                    <Icon size={32} strokeWidth={1.75} aria-hidden="true" />
+                  </span>
+                  <div className="categoryPricingBody">
+                    <h2 className="categoryPricingName">{category.name}</h2>
+                    <p className="categoryPricingPrice">{category.startingPrice}</p>
+                    <p className="categoryPricingDescription">{category.description}</p>
+                  </div>
+                  <Link href={`/${category.slug}`} className="categoryPricingLink">
+                    See {category.name} pricing
+                    <ArrowRight size={16} strokeWidth={1.75} aria-hidden="true" />
+                  </Link>
+                </article>
+              </ScrollReveal>
             );
           })}
         </div>
       </section>
 
       <section className="pricingNoteSection">
-        <div className="pricingNoteInner">
+        <ScrollReveal className="pricingNoteInner">
           <p className="pricingNoteText">
             Need Templates with a managed hosting plan, or a fully custom build? Templates has its
             own deeper Managed / Self-Hosted / Custom tier comparison.
@@ -104,7 +114,7 @@ export default function PricingPage() {
           <Link href="/features" className="buttonSecondary">
             Compare Template Tiers
           </Link>
-        </div>
+        </ScrollReveal>
       </section>
     </>
   );
