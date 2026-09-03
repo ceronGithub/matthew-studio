@@ -923,3 +923,13 @@ project is done.
   anywhere) — this is the dependency every other buyer-facing spec
   (order tracking, buyer account) relies on. Spec-only — no code
   built yet.
+
+[2026-09-03] Added additional_platform_gaps_specification.md (new
+  file) — Coupon/Discount codes, Refund Request & Processing,
+  Social/OAuth login (Google), Buyer 2FA (opt-in), Transactional
+  email templates (Rule 35.5 wiring), Shop catalog filtering/sorting,
+  and Developer environment setup (.env.example + testing baseline).
+  Second-pass gap audit beyond cart_checkout_specification.md,
+  buyer_account_specification.md, and
+  sitewide_technical_seo_specification.md. Spec-only — no code built
+  yet.
