@@ -18,6 +18,7 @@ import type { Metadata } from "next";
 import "../../styles/blog.css";
 import BlogGrid from "@/components/blog/BlogGrid";
 import SocialLinks from "@/components/shared/SocialLinks";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 import { BLOG_POSTS } from "@/lib/blogData";
 
 export const metadata: Metadata = {
@@ -34,7 +35,7 @@ export default function BlogPage() {
   return (
     <>
       <header className="blogPageHeader">
-        <div className="blogPageHeaderInner">
+        <ScrollReveal className="blogPageHeaderInner">
           <p className="eyebrow">Blog</p>
           <h1 className="heroTitle" style={{ fontSize: "2.25rem" }}>
             Programming tutorials
@@ -43,7 +44,7 @@ export default function BlogPage() {
             Notes and walkthroughs from building this template — Next.js, TypeScript, and Supabase.
           </p>
           <SocialLinks />
-        </div>
+        </ScrollReveal>
       </header>
 
       <BlogGrid posts={BLOG_POSTS} />

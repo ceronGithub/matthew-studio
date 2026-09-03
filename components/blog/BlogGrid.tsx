@@ -5,14 +5,18 @@
  * PURPOSE:
  * Renders every tutorial as a card in a responsive grid. Each card
  * links to its own tutorial page at /blog/[slug]. Entrance animation
- * is staggered per card via framer-motion, same pattern as
- * PortfolioGrid.
+ * uses the shared ScrollReveal primitive (visitor_specification.md
+ * §3.1/§3.6) with the same 0.06s/card stagger as /products and the
+ * six category grids — this replaces a prior hand-rolled motion.div
+ * stagger that had no prefers-reduced-motion handling, the same
+ * normalization TutorialsSection.tsx got in Implementation Order
+ * Step 2.
  */
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 import type { BlogPost } from "@/lib/blogData";
 
 export default function BlogGrid({ posts }: { posts: BlogPost[] }) {
@@ -20,13 +24,7 @@ export default function BlogGrid({ posts }: { posts: BlogPost[] }) {
     <section className="blogGridSection">
       <div className="blogGrid">
         {posts.map((post, index) => (
-          <motion.div
-            key={post.slug}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.45, delay: index * 0.06, ease: "easeOut" }}
-          >
+          <ScrollReveal key={post.slug} delay={index * 0.06}>
             <Link href={`/blog/${post.slug}`} className="blogCard">
               <p className="blogCardCategory">{post.category}</p>
               <h2 className="blogCardTitle">{post.title}</h2>
@@ -43,7 +41,7 @@ export default function BlogGrid({ posts }: { posts: BlogPost[] }) {
                 <ArrowRight size={16} strokeWidth={1.75} aria-hidden="true" />
               </div>
             </Link>
-          </motion.div>
+          </ScrollReveal>
         ))}
       </div>
     </section>
