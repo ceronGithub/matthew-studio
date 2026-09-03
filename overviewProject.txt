@@ -865,3 +865,15 @@ project is done.
   is now the ScrollReveal child so badge and card animate together.
   The character-thumbnail gallery above already had its own stagger/
   scale entrance and was left untouched. Remaining: tutorials.
+
+[2026-09-03] Completed visitor_specification.md Implementation Order
+  Step 2: normalized components/home/TutorialsSection.tsx's product
+  grid from a hand-rolled motion.div stagger (raw initial/whileInView/
+  transition, no reduced-motion handling) to the shared ScrollReveal
+  primitive, preserving the same per-level-group delay formula
+  (groupIndex * 0.15 + itemIndex * 0.05). All six category grids
+  (tshirts, templates, ai-videos, file-tools, game-characters,
+  tutorials) plus /products now use ScrollReveal consistently; /shop
+  confirmed as a retired redirect with nothing to animate. Next step
+  in the spec's Implementation Order: /pricing, /compare,
+  /how-it-works.

@@ -30,10 +30,10 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
 import SectionHeader from "@/components/shared/SectionHeader";
 import FeatureGrid from "@/components/home/FeatureGrid";
 import ProductCard from "@/components/home/ProductCard";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 import { PRODUCTS } from "@/lib/productsData";
 import { TUTORIAL_PERSONAS, TUTORIAL_COURSE_META, COURSE_LEVEL_LABELS, type CourseLevel } from "@/lib/tutorialsSectionData";
 
@@ -52,12 +52,9 @@ export default function TutorialsSection() {
         <div className="productCardsGrid">
           {LEVEL_ORDER.flatMap((level, groupIndex) =>
             TUTORIAL_PRODUCTS.filter((product) => TUTORIAL_COURSE_META[product.id]?.level === level).map((product, itemIndex) => (
-              <motion.div
+              <ScrollReveal
                 key={product.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.5, delay: groupIndex * 0.15 + itemIndex * 0.05, ease: "easeOut" }}
+                delay={groupIndex * 0.15 + itemIndex * 0.05}
               >
                 <ProductCard
                   product={product}
@@ -70,7 +67,7 @@ export default function TutorialsSection() {
                     <span className="tutorialCardDuration">{TUTORIAL_COURSE_META[product.id]?.duration}</span>
                   }
                 />
-              </motion.div>
+              </ScrollReveal>
             ))
           )}
         </div>
