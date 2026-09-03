@@ -572,7 +572,12 @@ th.comparisonTableTierHighlighted,
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
-  margin: var(--space-xl) 0;
+  margin: var(--space-xl) auto;
+  /* Slightly smaller than full section width so the player doesn't
+     dominate the section — capped and centered, same pattern as
+     Rule 23.3's page-wrapper max-width exception. */
+  width: 100%;
+  max-width: 640px;
 }
 
 .videoCarouselStage {
