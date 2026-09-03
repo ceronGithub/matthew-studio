@@ -105,7 +105,7 @@ All durations/easings/z-index/spacing reference the existing tokens in `app/glob
 ## 7. IMPLEMENTATION ORDER
 
 1. ✅ **Done (2026-09-03)** — Shared motion primitives (scroll-entrance wrapper, reduced-motion hook, card hover mixin)
-2. 🔶 **In progress** — `/products`, `/shop`, category grids (highest traffic) — `/products` done; `/shop` is a retired redirect to `/pricing` (no grid there, nothing to do); `tshirts`, `templates`, `ai-videos` category grids done; `file-tools`, `game-characters`, `tutorials` `[slug]` grids pending
+2. 🔶 **In progress** — `/products`, `/shop`, category grids (highest traffic) — `/products` done; `/shop` is a retired redirect to `/pricing` (no grid there, nothing to do); `tshirts` and `templates` category grids done; `ai-videos`, `file-tools`, `game-characters`, `tutorials` `[slug]` grids pending
 3. `/pricing`, `/compare`, `/how-it-works`
 4. `/blog`, `/tutorials` (list + detail)
 5. `/about`, `/features`, `/testimonials`, `/faq`, `/contact`, `/support`, `/security`
@@ -125,8 +125,6 @@ Per Rule 8A, each numbered step above ships as its own response/turn with full f
 - **Implemented (2026-09-03):** `/shop` was checked and confirmed to be a retired route (`redirect("/pricing")`, no grid rendered there) — nothing to animate, spec's page list is stale on this entry.
 - **Implemented (2026-09-03):** `tshirts` category grid — `components/home/TShirtsSection.tsx` (powers both the homepage T-Shirts section and `/tshirts`) now wraps its `productCardsGrid` in `ScrollReveal` with the same 0.06s/8-card stagger as `/products`.
 - **Implemented (2026-09-03):** `templates` category grid — `components/home/TemplatesSection.tsx` (powers both the homepage Templates section and `/templates`) now wraps its `productCardsGrid` in the same `ScrollReveal` stagger. The section's comparison table, feature grid, "why us" cards, and demo video carousel already had their own entrance motion from before this pass — only the trailing product grid was missing it.
-- **Implemented (2026-09-03):** `ai-videos` category grid — `components/home/AIVideosSection.tsx` (powers both the homepage AI Videos section and `/ai-videos`) now wraps its `productCardsGrid` in the same `ScrollReveal` stagger.
-- **Note on remaining grids:** `GameCharactersSection.tsx` and `FileToolsSection.tsx` currently have no scroll-entrance animation on their product cards at all. `TutorialsSection.tsx` already has its own hand-rolled stagger (raw `motion.div`, grouped by course level) but doesn't check `prefers-reduced-motion` the way `ScrollReveal` does — worth normalizing to the shared primitive rather than leaving it as a one-off, per this doc's own "never a one-off animation per component" rule (§3.1).
 - **Simplification vs. §3.1:** mobile translateY distance is not yet reduced to 12px separately from desktop's 24px — both currently use 24px. Low-risk, can be tightened in a follow-up pass if it feels heavy on small screens.
 
 ---
@@ -139,10 +137,9 @@ Per Rule 8A, each numbered step above ships as its own response/turn with full f
 | 2026-09-03 | Implemented shared `ScrollReveal` motion primitive + applied scroll-entrance stagger and hover-lift to `/products` grid (`ProductsGrid.tsx`, `ProductCard` via `shared.css`). Step 1 and the first half of Step 2 of the Implementation Order are done. |
 | 2026-09-03 | Confirmed `/shop` is a retired redirect (nothing to implement there). Fixed `.productCard` hover in `shared.css` to actually match the translateY-lift pattern (previous entry's claim was stale — it was still box-shadow-only). Wired `ScrollReveal` stagger into the `tshirts` category grid (`TShirtsSection.tsx`). Remaining category grids (`templates`, `ai-videos`, `file-tools`, `game-characters`, `tutorials`) still pending. |
 | 2026-09-03 | Wired `ScrollReveal` stagger into the `templates` category grid (`TemplatesSection.tsx`). Remaining category grids (`ai-videos`, `file-tools`, `game-characters`, `tutorials`) still pending. |
-| 2026-09-03 | Wired `ScrollReveal` stagger into the `ai-videos` category grid (`AIVideosSection.tsx`). Noted that `GameCharactersSection.tsx`/`FileToolsSection.tsx` have no entrance animation yet and `TutorialsSection.tsx` has a one-off hand-rolled stagger that should be normalized to `ScrollReveal`. Remaining: `file-tools`, `game-characters`, `tutorials`. |
 
 ---
 
-**Document Version:** 1.4
+**Document Version:** 1.3
 **Last Updated:** 2026-09-03
-**Status:** In implementation — `/products`, `tshirts`, `templates`, `ai-videos` category grids done; `/shop` confirmed N/A; `file-tools`, `game-characters`, `tutorials` grids, `/pricing`, `/compare` and remaining pages pending
+**Status:** In implementation — `/products`, `tshirts`, and `templates` category grids done; `/shop` confirmed N/A; `ai-videos`, `file-tools`, `game-characters`, `tutorials` grids, `/pricing`, `/compare` and remaining pages pending

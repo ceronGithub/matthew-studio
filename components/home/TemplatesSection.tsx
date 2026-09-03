@@ -30,11 +30,18 @@ import ComparisonTable, { type ComparisonTier } from "@/components/home/Comparis
 import FeatureGrid from "@/components/home/FeatureGrid";
 import VideoCarousel from "@/components/home/VideoCarousel";
 import ProductCard from "@/components/home/ProductCard";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 import { PRICING_TIERS } from "@/lib/pricingData";
 import { PRODUCTS } from "@/lib/productsData";
 import { TEMPLATE_BENEFITS, TEMPLATE_WHY_US, TEMPLATE_DEMO_VIDEOS } from "@/lib/templatesSectionData";
 
 const TEMPLATE_PRODUCTS = PRODUCTS.filter((product) => product.category === "templates");
+
+// Per-card stagger delay for the scroll-entrance animation — same
+// values as ProductsGrid.tsx/TShirtsSection.tsx so every card grid
+// across the site feels identical (visitor_specification.md §3.1).
+const STAGGER_STEP_SECONDS = 0.06;
+const STAGGER_CAP = 8;
 
 const COMPARISON_TIERS: ComparisonTier[] = PRICING_TIERS.map((tier) => ({
   slug: tier.slug,
@@ -85,8 +92,13 @@ export default function TemplatesSection() {
         <VideoCarousel videos={TEMPLATE_DEMO_VIDEOS} />
 
         <div className="productCardsGrid">
-          {TEMPLATE_PRODUCTS.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {TEMPLATE_PRODUCTS.map((product, index) => (
+            <ScrollReveal
+              key={product.id}
+              delay={Math.min(index, STAGGER_CAP) * STAGGER_STEP_SECONDS}
+            >
+              <ProductCard product={product} />
+            </ScrollReveal>
           ))}
         </div>
 
