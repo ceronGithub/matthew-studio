@@ -23,8 +23,16 @@ import { motion } from "framer-motion";
 import SectionHeader from "@/components/shared/SectionHeader";
 import VideoCarousel from "@/components/home/VideoCarousel";
 import ProductCard from "@/components/home/ProductCard";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 import { PRODUCTS } from "@/lib/productsData";
 import { AI_VIDEO_SAMPLES, AI_VIDEO_CUSTOM_CALLOUT } from "@/lib/aiVideosSectionData";
+
+// Per-card stagger delay for the scroll-entrance animation — same
+// values as ProductsGrid.tsx/TShirtsSection.tsx/TemplatesSection.tsx
+// so every card grid across the site feels identical
+// (visitor_specification.md §3.1).
+const STAGGER_STEP_SECONDS = 0.06;
+const STAGGER_CAP = 8;
 
 const AI_VIDEO_PRODUCTS = PRODUCTS.filter((product) => product.category === "ai-videos");
 
@@ -57,8 +65,13 @@ export default function AIVideosSection() {
         </motion.div>
 
         <div className="productCardsGrid">
-          {AI_VIDEO_PRODUCTS.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {AI_VIDEO_PRODUCTS.map((product, index) => (
+            <ScrollReveal
+              key={product.id}
+              delay={Math.min(index, STAGGER_CAP) * STAGGER_STEP_SECONDS}
+            >
+              <ProductCard product={product} />
+            </ScrollReveal>
           ))}
         </div>
 

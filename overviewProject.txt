@@ -831,3 +831,21 @@ project is done.
   grid, which powers both the homepage T-Shirts section and the
   "/tshirts" category page. Remaining category grids (templates,
   ai-videos, file-tools, game-characters, tutorials) still pending.
+
+[2026-09-03] Continued visitor_specification.md Implementation Order
+  Step 2: wired the ScrollReveal scroll-entrance stagger (0.06s step,
+  8-card cap) into components/home/TemplatesSection.tsx's
+  productCardsGrid, which powers both the homepage Templates section
+  and the "/templates" category page. Remaining category grids
+  (ai-videos, file-tools, game-characters, tutorials) still pending.
+
+[2026-09-03] Continued visitor_specification.md Implementation Order
+  Step 2: wired the ScrollReveal scroll-entrance stagger (0.06s step,
+  8-card cap) into components/home/AIVideosSection.tsx's
+  productCardsGrid, which powers both the homepage AI Videos section
+  and the "/ai-videos" category page. Noted for follow-up:
+  GameCharactersSection.tsx and FileToolsSection.tsx have no entrance
+  animation on their product grids yet; TutorialsSection.tsx has its
+  own hand-rolled stagger that should eventually be normalized to
+  ScrollReveal (currently skips the prefers-reduced-motion check).
+  Remaining: file-tools, game-characters, tutorials.
