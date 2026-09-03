@@ -21,13 +21,28 @@
  * pattern as ProductsGrid/ProductCompareTool). Variant selection is
  * local useState only; nothing is persisted or sent anywhere yet —
  * there's no cart/checkout flow in this project.
+ *
+ * MOTION:
+ * Main content and the "More in this category" strip each get a
+ * ScrollReveal entrance (visitor_specification.md §3.1/§3.6). This
+ * component is shared by all six category [slug] pages (tshirts,
+ * templates, ai-videos, file-tools, game-characters, tutorials), so
+ * this fix applies site-wide — Implementation Order Step 4 surfaced
+ * this gap via /tutorials/[slug], but the component itself isn't
+ * tutorials-specific. Sibling pills stagger individually per §3.1
+ * ("never animate a list as one block"); applied via motion.li
+ * directly rather than ScrollReveal's div wrapper, since a div isn't
+ * a valid direct child of <ul> — same fix already used for the
+ * /compare table's motion.tr rows.
  */
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, Star } from "lucide-react";
 import { CATEGORY_ICONS } from "@/lib/categoryIcons";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 import type { Product } from "@/lib/productsData";
 
 interface ProductDetailProps {
@@ -46,6 +61,11 @@ export default function ProductDetail({ product, siblings }: ProductDetailProps)
   const Icon = CATEGORY_ICONS[product.iconName];
   const hasVariants = Boolean(product.variants && product.variants.length > 0);
 
+  // Respect OS-level reduced-motion preference for the hand-rolled
+  // motion.li sibling pills (ScrollReveal handles this internally
+  // for everything else in this file).
+  const prefersReducedMotion = useReducedMotion();
+
   // Only Templates products carry a variants breakdown — default to
   // the first one (usually the entry-level option) when present.
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
@@ -61,7 +81,7 @@ export default function ProductDetail({ product, siblings }: ProductDetailProps)
   return (
     <>
       <div className="productDetailPage">
-        <div className="productDetailInner">
+        <ScrollReveal className="productDetailInner">
           <Link href={`/${product.category}`} className="productDetailBackLink">
             <ArrowLeft size={16} strokeWidth={1.75} aria-hidden="true" />
             Back to {product.categoryLabel}
@@ -155,28 +175,34 @@ export default function ProductDetail({ product, siblings }: ProductDetailProps)
               </div>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
 
       {siblings.length > 0 && (
         <div className="productDetailSiblings">
-          <div className="productDetailSiblingsInner">
+          <ScrollReveal className="productDetailSiblingsInner">
             <p className="sectionTitle productDetailSiblingsTitle">
               More in {product.categoryLabel}
             </p>
             <ul className="productDetailSiblingsList">
-              {siblings.map((sibling) => (
-                <li key={sibling.id}>
+              {siblings.map((sibling, index) => (
+                <motion.li
+                  key={sibling.id}
+                  initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={{ duration: 0.4, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
+                >
                   <Link
                     href={`/${sibling.category}/${sibling.slug}`}
                     className="productDetailSiblingLink"
                   >
                     {sibling.name}
                   </Link>
-                </li>
+                </motion.li>
               ))}
             </ul>
-          </div>
+          </ScrollReveal>
         </div>
       )}
     </>
