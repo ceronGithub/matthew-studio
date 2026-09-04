@@ -5,17 +5,22 @@
  * app/superAdmin — that area defines its own shell in its own layout.
  *
  * PURPOSE:
- * Renders the site-wide NavBar and Footer around the page content.
- * Kept out of the true root layout (app/layout.tsx) so the admin
- * area doesn't inherit public marketing chrome.
+ * Renders the site-wide NavBar and Footer around the page content,
+ * wrapped in CartProvider so the cart drawer, its badge count, and
+ * every "Add to Cart" button across the public tree share one cart
+ * state (context/CartContext.tsx). Kept out of the true root layout
+ * (app/layout.tsx) so the admin area doesn't inherit public marketing
+ * chrome or a shopping cart it has no use for.
  */
 import "../styles/shared.css";
 import NavBar from "@/components/shared/NavBar";
 import Footer from "@/components/shared/Footer";
+import CartDrawer from "@/components/cart/CartDrawer";
+import { CartProvider } from "@/context/CartContext";
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <CartProvider>
       {/*
         Skip-to-content link (Rule 17.6 / IMPROVEMENTS.md Section 13
         accessibility checklist). Visually hidden by default via the
@@ -32,6 +37,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         {children}
       </main>
       <Footer />
-    </>
+      <CartDrawer />
+    </CartProvider>
   );
 }

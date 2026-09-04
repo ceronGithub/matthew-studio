@@ -40,9 +40,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowLeft, Star } from "lucide-react";
+import { ArrowLeft, ShoppingBag, Star } from "lucide-react";
 import { CATEGORY_ICONS } from "@/lib/categoryIcons";
 import ScrollReveal from "@/components/shared/ScrollReveal";
+import { useCart } from "@/context/CartContext";
 import type { Product } from "@/lib/productsData";
 
 interface ProductDetailProps {
@@ -60,6 +61,7 @@ const BADGE_LABELS: Record<NonNullable<Product["badge"]>, string> = {
 export default function ProductDetail({ product, siblings }: ProductDetailProps) {
   const Icon = CATEGORY_ICONS[product.iconName];
   const hasVariants = Boolean(product.variants && product.variants.length > 0);
+  const { addItem } = useCart();
 
   // Respect OS-level reduced-motion preference for the hand-rolled
   // motion.li sibling pills (ScrollReveal handles this internally
@@ -163,9 +165,17 @@ export default function ProductDetail({ product, siblings }: ProductDetailProps)
               </div>
 
               <div className="productDetailCtaRow">
+                <button
+                  type="button"
+                  className="buttonPrimary"
+                  onClick={() => addItem(product.id, selectedVariant?.name ?? null, 1)}
+                >
+                  <ShoppingBag size={16} strokeWidth={1.75} aria-hidden="true" />
+                  Add to Cart
+                </button>
                 <Link
                   href={`/contact?category=${product.category}`}
-                  className="buttonPrimary"
+                  className="buttonSecondary"
                 >
                   Get Started
                 </Link>

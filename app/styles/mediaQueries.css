@@ -20,12 +20,21 @@
   .siteNavLinks,
   .siteNavCta,
   .siteNavSignUp,
-  .siteNavThemeToggle {
+  .siteNavThemeToggle,
+  .siteNavCartButton {
     display: none;
   }
 
   .siteNavToggle {
     display: flex;
+  }
+
+  /* Mobile cart button (inside the slide-down panel) shares its base
+   * class with the desktop one hidden just above — re-declare display
+   * here so it isn't accidentally hidden by that rule regardless of
+   * CSS source order. */
+  .siteNavCartButtonMobile {
+    display: inline-flex;
   }
 }
 

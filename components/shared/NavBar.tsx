@@ -13,8 +13,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, Menu, ShoppingBag, X } from "lucide-react";
 import ThemeToggle from "@/components/shared/ThemeToggle";
+import { useCart } from "@/context/CartContext";
 
 /**
  * NAV_LINKS
@@ -47,6 +48,7 @@ const LEGAL_LINKS = [
 
 export default function NavBar() {
   const pathname = usePathname();
+  const { itemCount, toggleDrawer } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // Desktop "Legal" dropdown open/closed state.
   const [isLegalMenuOpen, setIsLegalMenuOpen] = useState(false);
@@ -202,6 +204,18 @@ export default function NavBar() {
               equivalent lives inside the slide-down panel below. */}
           <ThemeToggle className="siteNavThemeToggle" />
 
+          {/* Cart icon — badge shows total item count, click opens
+              CartDrawer.tsx (shared cart state via CartContext). */}
+          <button
+            type="button"
+            className="siteNavCartButton"
+            onClick={toggleDrawer}
+            aria-label={itemCount > 0 ? `Open cart, ${itemCount} items` : "Open cart"}
+          >
+            <ShoppingBag size={20} strokeWidth={1.75} aria-hidden="true" />
+            {itemCount > 0 && <span className="siteNavCartBadge">{itemCount > 99 ? "99+" : itemCount}</span>}
+          </button>
+
           {/* Mobile menu toggle — only visible below tablet breakpoint */}
           <button
             type="button"
@@ -254,6 +268,18 @@ export default function NavBar() {
             </li>
             <li className="siteNavMobileThemeRow">
               <ThemeToggle className="siteNavThemeToggleMobile" />
+              <button
+                type="button"
+                className="siteNavCartButton siteNavCartButtonMobile"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  toggleDrawer();
+                }}
+                aria-label={itemCount > 0 ? `Open cart, ${itemCount} items` : "Open cart"}
+              >
+                <ShoppingBag size={20} strokeWidth={1.75} aria-hidden="true" />
+                {itemCount > 0 && <span className="siteNavCartBadge">{itemCount > 99 ? "99+" : itemCount}</span>}
+              </button>
             </li>
           </ul>
         </div>

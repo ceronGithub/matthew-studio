@@ -92,3 +92,27 @@ that file left off.
   DATABASE_URL/DIRECT_URL configured; `npx prisma db push` and
   `npx prisma generate` need to run in the actual dev environment
   against Supabase. Next: CartItem API (/api/cart) + cart drawer UI.
+
+[2026-09-04] Cart/Checkout Phase 1, step 1b (cart_checkout_specification.md
+  Section 9): built the cart drawer + CartItem API. New: lib/cartSession.ts
+  (guest cart_token cookie vs buyer session identity, plus guest->buyer
+  merge on first cart read after login), app/api/cart/route.ts (GET/POST/
+  PUT/DELETE, ownership-checked, rate-limited via the existing
+  lib/rateLimit.ts at 100/15min), context/CartContext.tsx (site-wide cart
+  state + its own ToastStack, wraps every public page in
+  app/(public)/layout.tsx), components/cart/CartDrawer.tsx + app/styles/
+  cart.css (line items, quantity stepper, remove, subtotal, "Proceed to
+  Checkout" link -- /checkout itself is step 1c, not built yet). Updated
+  lib/productsData.ts (added getProductById()), components/shared/NavBar.tsx
+  (cart icon + item-count badge, desktop + mobile), components/products/
+  ProductDetail.tsx (Add to Cart button, variant-aware). No CSRF check on
+  the cart endpoints -- matches this repo's existing convention (only auth
+  endpoints enforce it per lib/csrf.ts's own header comment; app/api/
+  contact/route.ts has none either), relying on SameSite=strict + rate
+  limiting instead. Verified via `npx tsc --noEmit` and `npx eslint` against
+  every new/changed file -- zero new errors, only the same pre-existing
+  services/prisma.ts error (unGenerated Prisma client, needs a live
+  DATABASE_URL) already noted in earlier entries; `npx prisma generate`
+  itself could not be run in this sandbox either (binaries.prisma.sh is
+  outside the allowed network egress list). Next: checkout page + server-
+  side validation (step 1c).

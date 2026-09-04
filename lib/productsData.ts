@@ -355,3 +355,16 @@ export const PRODUCTS: Product[] = [
     trendingScore: 68,
   },
 ];
+
+/**
+ * getProductById
+ * Looks up a single product by its `id` field. Used by the cart API
+ * (app/api/cart/route.ts) to enrich stored CartItem rows — which only
+ * persist a productId — with the display data (name, price, icon)
+ * needed to render the cart drawer. Returns undefined if the id
+ * doesn't match anything currently in the static catalog (e.g. a
+ * product that was removed after being added to someone's cart).
+ */
+export function getProductById(productId: string): Product | undefined {
+  return PRODUCTS.find((product) => product.id === productId);
+}

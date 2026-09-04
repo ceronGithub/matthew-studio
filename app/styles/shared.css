@@ -945,11 +945,62 @@ th.comparisonTableTierHighlighted,
 }
 
 /* Mobile placement — full-width row inside the slide-down panel so
- * it doesn't look like a stray icon floating among text links. */
+ * it doesn't look like a stray icon floating among text links. Holds
+ * both the theme toggle and the cart button, centered together. */
 .siteNavMobileThemeRow {
   display: flex;
+  align-items: center;
   justify-content: center;
+  gap: var(--space-md);
   padding-top: var(--space-sm);
+}
+
+/* Cart icon button (components/shared/NavBar.tsx) — desktop nav row
+ * placement next to the theme toggle; badge shows total item count
+ * from context/CartContext.tsx. */
+.siteNavCartButton {
+  position: relative;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.siteNavCartButton:hover,
+.siteNavCartButton:focus-visible {
+  background: var(--color-surface-hover);
+  border-color: var(--color-accent);
+}
+
+.siteNavCartBadge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: var(--background);
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+
+/* Mobile placement — hidden on desktop alongside .siteNavCartButton's
+ * desktop-row sibling (see mediaQueries.css); both use the same base
+ * class so the badge styling is shared. */
+.siteNavCartButtonMobile {
+  display: inline-flex;
 }
 
 .siteNavMobilePanel {

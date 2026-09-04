@@ -143,6 +143,25 @@ components/products/ProductDetail.tsx       Shared product detail body (icon,
                                               rating, price, variant selector,
                                               "More in this category" strip)
 app/styles/productDetail.css                 Product detail page styles
+lib/cartSession.ts              Resolves guest (cart_token cookie) vs buyer (Supabase
+                                 session) cart identity; merges a guest cart into the
+                                 buyer's on first cart read after login
+app/api/cart/route.ts           GET/POST/PUT/DELETE CartItem API — enriches stored rows
+                                 with live product data from productsData.ts, ownership-
+                                 checked, rate-limited (100/15min)
+context/CartContext.tsx         Site-wide cart state (items, count, subtotal, drawer
+                                 open/closed) + its own ToastStack instance; wraps every
+                                 public page via app/(public)/layout.tsx
+components/cart/CartDrawer.tsx  Slide-in cart drawer — line items, quantity stepper,
+                                 remove, subtotal, "Proceed to Checkout" (link only,
+                                 /checkout not built yet — Phase 1 step 1c)
+app/styles/cart.css             Cart drawer styles
+lib/productsData.ts             (updated) added getProductById() lookup helper, used by
+                                 the cart API to join CartItem rows against the catalog
+components/shared/NavBar.tsx    (updated) added cart icon + item-count badge (desktop
+                                 nav row + mobile panel), opens CartDrawer
+components/products/ProductDetail.tsx  (updated) added "Add to Cart" button, wired to
+                                 CartContext.addItem with the selected variant
 app/(public)/templates/[slug]/page.tsx       Templates product detail (/templates/[slug])
 app/(public)/templates/[slug]/not-found.tsx  Invalid-slug 404 state
 app/(public)/tshirts/[slug]/page.tsx         T-Shirts product detail (/tshirts/[slug])
@@ -247,7 +266,7 @@ PHASE 1 — FOUNDATION (blocks everything buyer-facing; build first)
 [~] 1. cart_checkout_specification.md — IN PROGRESS, per its own
        Section 9 internal order:
        [DONE] 1a. Order/OrderItem/CartItem schema (prisma/schema.prisma)
-       [ ]    1b. Cart (drawer + CartItem API)
+       [DONE] 1b. Cart (drawer + CartItem API)
        [ ]    1c. Checkout page + server-side validation
        [ ]    1d. PayMongo Payment Link creation
        [ ]    1e. Webhook + Order status update (Rule 30)

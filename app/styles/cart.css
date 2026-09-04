@@ -1,0 +1,223 @@
+/*
+ * FILE: app/styles/cart.css
+ * PURPOSE: components/cart/CartDrawer.tsx and the NavBar cart
+ * icon/badge (shared.css hosts the badge's own small rule instead,
+ * since it lives inside NavBar's existing nav-row styles).
+ * Responsive breakpoints live in mediaQueries.css only, per Rule 9.
+ */
+
+.cartDrawerBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(27, 27, 24, 0.45);
+  z-index: var(--z-modal-backdrop);
+}
+
+.cartDrawerPanel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 420px;
+  background: var(--color-bg);
+  border-left: 1px solid var(--color-border);
+  z-index: var(--z-drawer);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.cartDrawerHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.cartDrawerTitle {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.cartDrawerClose {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+.cartDrawerClose:hover,
+.cartDrawerClose:focus-visible {
+  background: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+
+/* Empty state — icon + headline + hint, never a blank area (Rule 25.3) */
+.cartDrawerEmpty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: var(--space-2xl) var(--space-lg);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+.cartDrawerEmpty p {
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+}
+
+.cartDrawerItems {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  overflow-y: auto;
+}
+
+.cartDrawerItem {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+
+.cartDrawerItemThumb {
+  flex: 0 0 auto;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: var(--color-surface-active);
+  color: var(--color-accent);
+}
+
+.cartDrawerItemBody {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.cartDrawerItemName {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-size: 0.95rem;
+}
+
+.cartDrawerItemVariant {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.cartDrawerItemPrice {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+.cartDrawerItemFooter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+}
+
+.cartDrawerQuantityStepper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 0.2rem 0.5rem;
+}
+.cartDrawerQuantityStepper button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.cartDrawerQuantityStepper button:hover:not(:disabled),
+.cartDrawerQuantityStepper button:focus-visible:not(:disabled) {
+  background: var(--color-surface-hover);
+}
+.cartDrawerQuantityStepper button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.cartDrawerQuantityStepper span {
+  min-width: 1.25rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+}
+
+.cartDrawerRemoveButton {
+  background: transparent;
+  border: none;
+  color: var(--color-error);
+  font-size: 0.8rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  padding: 0.4rem;
+  transition: opacity var(--transition-fast);
+}
+.cartDrawerRemoveButton:hover,
+.cartDrawerRemoveButton:focus-visible {
+  opacity: 0.7;
+}
+
+.cartDrawerFooter {
+  padding: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.cartDrawerSubtotalRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-size: 1.05rem;
+}
+
+.cartDrawerCheckoutButton {
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+}
