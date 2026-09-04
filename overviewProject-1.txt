@@ -147,3 +147,28 @@ that file left off.
   Fonts fetch, which this sandbox's network allowlist blocks
   (fonts.googleapis.com) -- expected to build fine in the real dev
   environment. Next: PayMongo Payment Link + real Order creation (1d).
+
+[2026-09-04] Revised villa-azure-agreement-v8-DRAFT-with-trial.txt's Tier 1
+  Free Trial Program: replaced the fee-free onboarding gap with a ₱5,000
+  non-refundable Trial Onboarding Fee (credited against the ₱25,000
+  Trial Conversion Fee on convert; forfeited on non-conversion). Added
+  new Section 6A (Feature Exclusivity Options — Criteria 1 Shared,
+  Criteria 2 Permanent Exclusivity flat ₱25k/month, Criteria 3
+  Time-Limited 6-month exclusivity at ₱20k/month) to Section 6. Updated
+  tier1_free_trial_subscription_specification.md to match (Open
+  Question 1 resolved, Business Rules 3.1/3.3/3.4 updated, new 3.6
+  added). One new [ASSUMPTION — CONFIRM] introduced re: Criteria 2/3
+  stacking when both are active simultaneously. Contract-only change —
+  not reviewed by a lawyer, no technical build touched.
+
+[2026-09-04] Added Criteria 4 (Blanket Exclusivity Buyout, one-time
+  ₱180,000) to Section 6A of villa-azure-agreement-v8-DRAFT-with-trial.txt
+  -- one payment makes ALL future feature requests exclusive by default,
+  Monthly Fee stays flat ₱15,000/month regardless of feature count.
+  Clarified that the ₱15,000 Feature Fee across all four Criteria is a
+  minimum only and scales per Section 6's existing complexity table
+  (Simple/Moderate/Complex), not a flat rate. Buyout drafted as
+  prospective-only (doesn't retroactively reduce Monthly Fee for
+  features already under an active Criteria 2/3 election) -- flagged as
+  a new [ASSUMPTION -- CONFIRM]. tier1_free_trial_subscription_
+  specification.md's 3.6 updated to match. Contract-only change.

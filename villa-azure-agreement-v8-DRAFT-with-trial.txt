@@ -165,11 +165,16 @@ block). [ASSUMPTION — CONFIRM: available to new Tier 1 clients only, once
 per Client/business/resort, at Service Provider's discretion to verify.]
 
 TRIAL PERIOD (DAYS 1–30):
-• Deployment, branding, and content population proceed as normal Tier 1
-  onboarding (Client provides content per Section 1/Tier 1 base terms)
+• Trial Onboarding Fee: ₱5,000 (one-time, non-refundable, due at signing
+  before deployment work begins). This fee covers standard Tier 1
+  onboarding — deployment, branding (logo, colors, resort name), and
+  content population (Client provides content per Section 1/Tier 1 base
+  terms). Once onboarding is complete and the site is live, this fee is
+  fully earned regardless of the Client's later conversion decision.
 • Full admin dashboard access, security monitoring, and support hours
   (Section 3A) apply during the trial exactly as in a paid month
-• No Setup Fee and no Monthly Service Fee are charged during Days 1–30
+• No Setup Fee (Section 4A) and no Monthly Service Fee are charged
+  during Days 1–30 — only the Trial Onboarding Fee above applies
 • [ASSUMPTION — CONFIRM: the Trial site is the live, production booking
   platform (real guests may book real reservations), not a staging/demo
   copy. If real guest bookings occur during the Trial and the Trial is
@@ -181,13 +186,14 @@ of their decision to subscribe, AND submit the Trial Conversion Fee
 (below), no later than Day 29 of the Trial Period.
 
 TRIAL CONVERSION — IF CLIENT SUBSCRIBES:
-• Trial Conversion Fee: ₱25,000 (one-time, due upon written notice of
-  intent to subscribe, no later than Day 29)
-  [ASSUMPTION — CONFIRM: this REPLACES the standard ₱15,000 Setup Fee +
-  ₱15,000 Month 1 Fee combination described in Section 2/4A (₱30,000
-  combined) — i.e., a ₱5,000 discount for converting from the Trial. If
-  instead the ₱25,000 is meant to be charged IN ADDITION to a separate
-  Setup Fee, or does not include Month 1's service, revise this line.]
+• Trial Conversion Fee: ₱25,000 total (one-time, due upon written notice
+  of intent to subscribe, no later than Day 29). The ₱5,000 Trial
+  Onboarding Fee already paid at trial start is credited in full against
+  this amount — Client pays the remaining ₱20,000 balance at conversion.
+  This replaces the standard ₱15,000 Setup Fee + ₱15,000 Month 1 Fee
+  combination described in Section 2/4A (₱30,000 combined). Total cost
+  to a converting Trial client is ₱25,000 (₱5,000 + ₱20,000) — a ₱5,000
+  savings versus the standard non-Trial path.
 • Beginning Month 2, the standard Tier 1 Monthly Service Fee applies in
   full — ₱15,000/month, per Section 2/4A, with no further discount
 • The 3-month Minimum Commitment (Section 2/8A) begins counting from the
@@ -209,7 +215,9 @@ NON-CONVERSION — IF CLIENT DOES NOT SUBSCRIBE BY DAY 30:
   no charge [ASSUMPTION — CONFIRM: matching Section 8A's standard export
   window, rather than the ₱2,000/hour rate Section 4A applies to a paid
   client's 30+ day non-payment export.]
-• No fees are owed by Client for the Trial Period itself
+• Aside from the non-refundable ₱5,000 Trial Onboarding Fee already paid
+  at trial start, no further fees are owed by Client for the Trial
+  Period itself
 • Client may request a new Trial only with the Service Provider's
   written consent (prevents repeated free trials on the same project)
 
@@ -1000,6 +1008,80 @@ Process:
 Payment:
 • For Tier 1: billed to next month's invoice (or per-incident fee)
 • For Tier 2/3/4: due upon delivery (one-time projects)
+
+================================================================================
+6A. FEATURE EXCLUSIVITY OPTIONS (TIER 1 ONLY)
+================================================================================
+
+Tier 1 uses a resellable template (Section 10). When a Tier 1 Client
+requests a new feature (Section 6 above), the Client selects ONE of the
+following four options for how that feature is treated going forward.
+
+Feature Fee (all Criteria): billed per Section 6's complexity pricing
+table — ₱15,000 minimum for Simple features, scaling up to ₱20k–40k for
+Moderate and ₱40k–65k+ for Complex features. The Criteria below govern
+exclusivity/Monthly Service Fee treatment only, never the feature's
+own development cost.
+
+CRITERIA 1 — SHARED (Standard, Default):
+• The completed feature IS folded into the shared resellable template
+  and may appear on other Tier 1 clients' sites in future deployments
+• Client's Monthly Service Fee remains ₱15,000/month — no increase
+
+CRITERIA 2 — PERMANENT EXCLUSIVITY:
+• The completed feature is NOT added to the shared resellable template
+  — it remains exclusive to this Client indefinitely
+• Client's Monthly Service Fee increases to a FLAT ₱25,000/month,
+  effective the billing cycle following feature delivery
+• This flat ₱25,000/month rate applies regardless of how many Criteria 2
+  features the Client requests over time — it does not stack per
+  feature; requesting additional exclusive features under Criteria 2
+  does not raise the Monthly Service Fee further
+
+CRITERIA 3 — TIME-LIMITED EXCLUSIVITY:
+• The completed feature is exclusive to this Client for 6 months from
+  delivery. During this window, Client's Monthly Service Fee is
+  ₱20,000/month
+• At the end of the 6-month exclusivity window:
+  - The feature is automatically folded into the shared resellable
+    template, and
+  - Client's Monthly Service Fee reverts to the standard ₱15,000/month
+• Before the 6-month window expires, Client may elect to:
+  - Renew exclusivity for another 6 months at a ₱7,500 renewal fee
+    (50% of the feature's minimum Feature Fee), continuing at
+    ₱20,000/month, OR
+  - Upgrade to Criteria 2 (permanent exclusivity) — Monthly Service Fee
+    moves to the flat ₱25,000/month rate going forward
+
+CRITERIA 4 — BLANKET EXCLUSIVITY BUYOUT:
+• Buyout Fee: ₱180,000 (one-time, non-refundable, due upon election —
+  separate from and in addition to each feature's own Feature Fee above)
+• Upon payment, ALL future feature requests from this Client are
+  automatically treated as exclusive (not added to the shared
+  resellable template) going forward — no per-feature Criteria election
+  needed for any feature requested after the Buyout date
+• Client's Monthly Service Fee remains ₱15,000/month — no increase,
+  regardless of how many exclusive features accumulate after the Buyout
+• This is a one-time, standalone election. It applies prospectively
+  only: features already under an active Criteria 2 or Criteria 3
+  election at the time of Buyout continue on their existing Monthly
+  Service Fee premium (₱25,000 or ₱20,000 respectively) unless the
+  Client separately negotiates to fold them into the Buyout
+• [ASSUMPTION — CONFIRM: Buyout is prospective-only as drafted above —
+  confirm this is the intended handling for Clients who already hold
+  Criteria 2/3 features before electing the Buyout.]
+
+GENERAL RULES:
+• Criteria selection is made in writing (email sufficient) at the time
+  the feature is requested and approved (Section 6, Steps 2–3), except
+  Criteria 4 which is elected once and applies to all subsequent
+  requests automatically
+• If no Criteria is selected, Criteria 1 (Shared) applies by default
+• [ASSUMPTION — CONFIRM: if a Client holds an active Criteria 2 feature
+  AND a separate active Criteria 3 feature at the same time, Criteria
+  2's flat ₱25,000/month is intended to supersede/absorb Criteria 3's
+  ₱20,000/month — Client pays ₱25,000/month total, not ₱45,000. Revise
+  if a different stacking rule is intended.]
 
 ================================================================================
 7. DATA BACKUP & DISASTER RECOVERY
