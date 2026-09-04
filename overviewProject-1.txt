@@ -116,3 +116,34 @@ that file left off.
   itself could not be run in this sandbox either (binaries.prisma.sh is
   outside the allowed network egress list). Next: checkout page + server-
   side validation (step 1c).
+
+[2026-09-04] Cart/Checkout Phase 1, step 1c (cart_checkout_specification.md
+  Section 9): built the checkout page + server-side order-summary
+  validation. New: app/api/checkout/validate/route.ts (GET; server-
+  computed subtotal/shipping/total, drops any cart row whose product was
+  retired and reports it back for a warning toast -- does NOT create an
+  Order yet, that's step 1d, paired with the actual PayMongo Payment Link
+  per spec Section 4.4's "before redirecting to PayMongo" wording),
+  app/(public)/checkout/page.tsx + components/checkout/CheckoutForm.tsx +
+  app/styles/checkout.css (contact info pre-filled for signed-in buyers,
+  shipping address section only rendered when the cart has a physical
+  item -- i.e. a t-shirts category product -- order summary sidebar,
+  empty/loading/error states per Rule 25). Refactored the CartItem-to-
+  catalog enrichment logic (previously only in app/api/cart/route.ts) out
+  into lib/cartPricing.ts so both /api/cart and the new validate route
+  share one subtotal/shipping calculation instead of drifting apart;
+  app/api/cart/route.ts now re-exports CartItemView as an alias of
+  cartPricing's CartLineItem so CartContext/CartDrawer's existing imports
+  didn't need to change. lib/cartSession.ts's resolveCartIdentity() now
+  also returns the signed-in buyer's email (same Supabase getUser() call,
+  no extra request) for the checkout email prefill. The "Pay with
+  PayMongo" button is intentionally disabled with an explanatory hint --
+  wiring a fake submit here would leave a buyer thinking they paid when
+  they didn't, worse than an honest "coming soon." Verified via
+  `npx tsc --noEmit` and `npx eslint` against every new/changed file --
+  zero new errors, only the same pre-existing services/prisma.ts error
+  (unGenerated Prisma client). Also ran `npx next build`: it compiled
+  cleanly past all routes/types and only failed at next/font's Google
+  Fonts fetch, which this sandbox's network allowlist blocks
+  (fonts.googleapis.com) -- expected to build fine in the real dev
+  environment. Next: PayMongo Payment Link + real Order creation (1d).

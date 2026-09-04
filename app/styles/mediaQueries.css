@@ -290,10 +290,31 @@
 }
 
 /* ------------------------------------------------------------
- * PRODUCT DETAIL PAGE — mobile default is a single stacked
- * column (base CSS); thumb + body sit side by side from tablet
- * up, and the thumb drops its mobile-only max-width cap.
+ * CHECKOUT PAGE — mobile default is a single stacked column
+ * (base CSS); form + summary sidebar sit side by side from
+ * tablet up, with the summary sticking to the viewport as the
+ * form scrolls.
  * ------------------------------------------------------------ */
+@media (min-width: 768px) {
+  .checkoutLayout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .checkoutForm {
+    flex: 1 1 60%;
+    width: auto;
+  }
+
+  .checkoutSummary {
+    flex: 1 1 35%;
+    width: auto;
+    position: sticky;
+    top: var(--space-lg);
+  }
+}
+
+
 @media (min-width: 768px) {
   .productDetailGrid {
     grid-template-columns: minmax(240px, 360px) 1fr;

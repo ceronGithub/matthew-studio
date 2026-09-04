@@ -31,6 +31,9 @@ const isProduction = process.env.NODE_ENV === "production";
 
 export interface CartIdentity {
   userId: string | null;
+  /** Signed-in buyer's email, or null for a guest. Checkout pre-fills
+   * the contact-info email field with this when present. */
+  email: string | null;
   /** Null when the request has neither a session nor an existing guest cookie. */
   cartToken: string | null;
 }
@@ -64,11 +67,11 @@ export async function resolveCartIdentity(request: Request): Promise<CartIdentit
   const cartToken = getCookieValue(request, CART_TOKEN_COOKIE_NAME);
 
   if (!accessToken) {
-    return { userId: null, cartToken };
+    return { userId: null, email: null, cartToken };
   }
 
   const { data } = await supabaseAdminClient.auth.getUser(accessToken);
-  return { userId: data.user?.id ?? null, cartToken };
+  return { userId: data.user?.id ?? null, email: data.user?.email ?? null, cartToken };
 }
 
 /**

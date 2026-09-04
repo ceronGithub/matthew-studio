@@ -162,6 +162,20 @@ components/shared/NavBar.tsx    (updated) added cart icon + item-count badge (de
                                  nav row + mobile panel), opens CartDrawer
 components/products/ProductDetail.tsx  (updated) added "Add to Cart" button, wired to
                                  CartContext.addItem with the selected variant
+lib/cartPricing.ts              Shared CartItem-to-catalog enrichment + subtotal/shipping
+                                 logic, used by both /api/cart and /api/checkout/validate
+                                 so the two never compute totals two different ways
+lib/cartSession.ts              (updated) resolveCartIdentity() now also returns the
+                                 signed-in buyer's email, for checkout's contact-info prefill
+app/api/checkout/validate/route.ts  Server-computed order summary (subtotal, shipping fee,
+                                 total, removed-item warnings) for the checkout page —
+                                 does NOT create an Order yet, that's step 1d
+app/(public)/checkout/page.tsx  Checkout page (/checkout) — contact info, conditional
+                                 shipping section (physical items only), order summary.
+                                 "Pay with PayMongo" button is intentionally disabled
+                                 until step 1d wires real order creation + payment
+components/checkout/CheckoutForm.tsx  Checkout page's form + summary sidebar
+app/styles/checkout.css         Checkout page styles
 app/(public)/templates/[slug]/page.tsx       Templates product detail (/templates/[slug])
 app/(public)/templates/[slug]/not-found.tsx  Invalid-slug 404 state
 app/(public)/tshirts/[slug]/page.tsx         T-Shirts product detail (/tshirts/[slug])
@@ -267,7 +281,8 @@ PHASE 1 — FOUNDATION (blocks everything buyer-facing; build first)
        Section 9 internal order:
        [DONE] 1a. Order/OrderItem/CartItem schema (prisma/schema.prisma)
        [DONE] 1b. Cart (drawer + CartItem API)
-       [ ]    1c. Checkout page + server-side validation
+       [DONE] 1c. Checkout page + server-side validation (payment button
+              intentionally disabled — that's 1d, PayMongo Payment Link)
        [ ]    1d. PayMongo Payment Link creation
        [ ]    1e. Webhook + Order status update (Rule 30)
        [ ]    1f. Order confirmation page + status polling

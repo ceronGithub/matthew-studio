@@ -26,8 +26,9 @@ export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 import { prisma } from "@/services/prisma";
-import { getProductById, type Product } from "@/lib/productsData";
+import { getProductById } from "@/lib/productsData";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
+import { loadCartLineItems, type CartLineItem } from "@/lib/cartPricing";
 import {
   attachCartTokenCookie,
   generateCartToken,
@@ -39,19 +40,10 @@ const CART_MUTATION_MAX_ATTEMPTS = 100;
 const CART_MUTATION_WINDOW_MINUTES = 15;
 const MAX_QUANTITY_PER_LINE = 20;
 
-export interface CartItemView {
-  id: string;
-  productId: string;
-  variant: string | null;
-  quantity: number;
-  name: string;
-  category: string;
-  categoryLabel: string;
-  slug: string;
-  iconName: Product["iconName"];
-  unitPrice: number;
-  lineTotal: number;
-}
+/** Re-exported so existing client-side imports (CartContext, CartDrawer)
+ * keep working unchanged — the enrichment logic itself now lives in
+ * lib/cartPricing.ts, shared with the checkout validate route. */
+export type CartItemView = CartLineItem;
 
 interface CartResponseData {
   items: CartItemView[];
@@ -61,43 +53,13 @@ interface CartResponseData {
 
 /**
  * buildCartResponseData
- * Loads every CartItem row for the resolved identity and joins each
- * one against the static product catalog. Rows whose productId no
- * longer matches anything in the catalog are dropped rather than
- * rendered broken — this can only happen if a product is retired
- * after being added to someone's cart.
+ * Thin wrapper around lib/cartPricing.ts's loadCartLineItems — adds
+ * the itemCount total the cart drawer/badge need, which checkout's
+ * own summary doesn't.
  */
 async function buildCartResponseData(userId: string | null, cartToken: string | null): Promise<CartResponseData> {
-  const cartItems = userId
-    ? await prisma.cartItem.findMany({ where: { userId }, orderBy: { createdAt: "asc" } })
-    : cartToken
-      ? await prisma.cartItem.findMany({ where: { cartToken }, orderBy: { createdAt: "asc" } })
-      : [];
-
-  const items: CartItemView[] = [];
-  for (const cartItem of cartItems) {
-    const product = getProductById(cartItem.productId);
-    if (!product) continue; // retired product — silently excluded, never shown broken
-
-    const unitPrice = product.price.startingPrice;
-    items.push({
-      id: cartItem.id,
-      productId: cartItem.productId,
-      variant: cartItem.variant,
-      quantity: cartItem.quantity,
-      name: product.name,
-      category: product.category,
-      categoryLabel: product.categoryLabel,
-      slug: product.slug,
-      iconName: product.iconName,
-      unitPrice,
-      lineTotal: unitPrice * cartItem.quantity,
-    });
-  }
-
+  const { items, subtotal } = await loadCartLineItems(userId, cartToken);
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-  const subtotal = items.reduce((sum, item) => sum + item.lineTotal, 0);
-
   return { items, itemCount, subtotal };
 }
 
