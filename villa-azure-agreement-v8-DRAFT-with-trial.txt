@@ -69,13 +69,12 @@ TIER 1 — MANAGED RENTAL (Monthly, Resellable Template)
 OVERVIEW:
 Vic (Developer) owns and operates all infrastructure. Client receives fully
 customized access to manage the resort via the admin dashboard. This is a
-RENTAL MODEL with month-to-month flexibility after initial lock-in.
+RENTAL MODEL with month-to-month flexibility — no minimum commitment.
 
 BASE PRICING:
 • Setup Fee: ₱15,000 (one-time) OR ₱5,000 × 3 months (installment option)
 • Monthly Service Fee: ₱15,000/month (due 1st of month, via bank transfer)
-• Minimum Commitment: First 3 months locked-in
-• After 3 months: Cancel anytime with 1 month written notice
+• No minimum commitment — cancel anytime with 1 month written notice
 
 WHAT'S INCLUDED:
 ✓ Deployment & hosting (Vercel, Supabase, R2, Google Drive, EmailJS)
@@ -93,22 +92,35 @@ WHAT'S NOT INCLUDED:
 ✗ Backup/disaster recovery (Client can enable Supabase PITR separately)
 ✗ Photo/content management (Client manages via dashboard)
 ✗ Infrastructure changes or account updates
+✗ Source code / GitHub repository access (remains Service Provider's
+  exclusive property throughout and after the contract — see Section 0
+  and Section 9)
 
-INFRASTRUCTURE COSTS (CLIENT'S RESPONSIBILITY — Separate Bills):
-The Client must create and maintain their own Vercel Pro account (₱1,150/month).
-Vic bills the Client for Tier 1 service (₱15,000/month) separately.
+INFRASTRUCTURE (ALL-INCLUSIVE — SERVICE PROVIDER PAYS):
+The Service Provider creates and maintains a dedicated business email
+address for the Client's exclusive use (not the Client's personal
+email), for infrastructure accounts only — this dedicated email is
+never used for GitHub/code repository access, which the Client is
+never given (see WHAT'S NOT INCLUDED above and Section 9). All Tier 1
+infrastructure accounts — Vercel, Supabase, Cloudflare R2, Google
+Drive, EmailJS — are registered and controlled by the Service Provider
+under this dedicated email, per Section 0 (Service Provider owns and
+maintains all infrastructure).
+The ₱15,000/month Tier 1 Monthly Service Fee is ALL-INCLUSIVE — the
+Service Provider pays the underlying infrastructure costs below out of
+this fee. The Client is not separately billed for infrastructure and
+has no direct account access or control.
 
-Typical Client Infrastructure Costs:
-• Vercel Pro: ~₱1,150/month (Client's own account)
+Typical Infrastructure Costs (absorbed by Service Provider):
+• Vercel Pro: ~₱1,150/month
 • Supabase overages: ₱0–1,500/month (if any)
 • Cloudflare R2 egress: ₱200–500/month (if high image traffic)
 • Google Drive storage: ₱0–150/month (if exceeded)
 • EmailJS: ₱0–200/month (overage only)
 
-TOTAL TYPICAL MONTHLY COST TO CLIENT:
-Tier 1 (Vic): ₱15,000
-Client Infrastructure: ₱1,500–2,500
-TOTAL: ~₱16,500–17,500/month
+TOTAL MONTHLY COST TO CLIENT:
+Tier 1 (all-inclusive, infrastructure absorbed by Service Provider):
+₱15,000/month flat — no separate infrastructure billing
 
 INCLUDED SUPPORT (10 Hours/Week):
 The Service Provider provides up to 10 billable hours of support per week,
@@ -134,7 +146,7 @@ Examples of billable overage:
 Overage charges are billed monthly and due with the Tier 1 service fee.
 
 TERMINATION & CANCELLATION:
-• After 3-month lock-in: Cancel anytime with 1 month written notice
+• Cancel anytime with 1 month written notice
 • No refunds for remaining period
 • Upon cancellation: Client loses dashboard access within 24 hours
 • Data export: Client may request CSV/SQL export (provided within 48 hours)
@@ -161,8 +173,23 @@ TIER 1 SPECIAL NOTE — FREE TRIAL PROGRAM (OPTIONAL)
 
 Tier 1 may optionally begin with a 30-CALENDAR-DAY FREE TRIAL instead of
 immediate paid enrollment, at Client's election (see Section 19 signature
-block). [ASSUMPTION — CONFIRM: available to new Tier 1 clients only, once
-per Client/business/resort, at Service Provider's discretion to verify.]
+block). Free Trial eligibility — confirmed:
+• Available only to NEW Tier 1 clients for this specific template
+  product (the resort template used for Villa Azure). A Client who has
+  previously held a Tier 1 contract — Free Trial or paid — for this
+  template is not eligible for a new Free Trial on the same template,
+  even if that prior engagement was cancelled
+• The limit is PER TEMPLATE, not a lifetime limit across all of the
+  Service Provider's template products (resort, inventory, photography,
+  and others). A Client who already used their Free Trial (or is a
+  returning/lapsed paid client) on one template remains separately
+  eligible for a Free Trial on a different template product
+• Eligibility is determined objectively: a NEW Client (no prior Tier 1
+  history — Trial or paid — on this template) has one Free Trial
+  available; an OLD/returning Client (any prior history on this
+  template) has none. The Service Provider checks its own records to
+  confirm this status — there is no separate subjective approval step
+  beyond that check
 
 TRIAL PERIOD (DAYS 1–30):
 • Trial Onboarding Fee: ₱5,000 (one-time, non-refundable, due at signing
@@ -195,14 +222,12 @@ TRIAL CONVERSION — IF CLIENT SUBSCRIBES:
   to a converting Trial client is ₱25,000 (₱5,000 + ₱20,000) — a ₱5,000
   savings versus the standard non-Trial path.
 • Beginning Month 2, the standard Tier 1 Monthly Service Fee applies in
-  full — ₱15,000/month, per Section 2/4A, with no further discount
-• The 3-month Minimum Commitment (Section 2/8A) begins counting from the
-  Trial Conversion Fee payment (i.e., that payment counts as Month 1 of
-  the 3-month lock-in; the free Trial month itself is not counted)
-  [ASSUMPTION — CONFIRM this is the intended lock-in start point.]
-• Client Infrastructure Costs (Section 9 — Client's own Vercel account,
-  etc.) become the Client's responsibility starting Month 2, the first
-  fully paid month, not during the free Trial
+  full — ₱15,000/month, per Section 2/4A, with no further discount.
+  This fee is all-inclusive (infrastructure absorbed by Service
+  Provider, per Section 2/9) starting Month 2, same as any paid Tier 1
+  client — not charged separately, and not during the free Trial
+• No minimum commitment applies at any point — Client may cancel from
+  Month 2 onward with 1 month written notice, per Section 2/8A
 
 NON-CONVERSION — IF CLIENT DOES NOT SUBSCRIBE BY DAY 30:
 • This Agreement AUTOMATICALLY TERMINATES at 11:59 PM (PHT) on Day 30 of
@@ -747,7 +772,7 @@ the Trial Conversion Fee and modified Month 1 terms.
 
 Setup Fee:
 • Option A: ₱15,000 (one-time, due at signing)
-• Option B: ₱5,000 × 3 months (installment during lock-in period)
+• Option B: ₱5,000 × 3 months (installment option)
 
 Monthly Fee:
 • ₱15,000/month (recurring, due 1st of each month)
@@ -755,8 +780,7 @@ Monthly Fee:
 • Invoice issued via email on 25th of previous month
 
 Minimum Commitment:
-• First 3 months are locked-in (non-cancelable)
-• After month 3: cancel anytime with 1 month written notice
+• None — cancel anytime with 1 month written notice
 
 Late Payment Consequences:
 • If payment not received by 5th business day of month:
@@ -1173,16 +1197,11 @@ Free Trial Non-Conversion:
   This is separate from — and does not require — the 1-month written
   notice below, which applies only to a Client already on paid service.
 
-After 3-Month Lock-In:
+Cancellation (No Minimum Commitment):
 • Client may cancel anytime with 1 month written notice
 • No refunds for remaining period
 • Upon cancellation: dashboard access disabled within 24 hours
 • Data export available (requested within 48 hours)
-
-Early Termination (Before 3 Months):
-• Client may not cancel (lock-in period)
-• If Client insists: early termination fee = ₱15,000 (1 month's fee)
-• Plus: cost of work already performed
 
 By Service Provider (Tier 1):
 • If Client fails to pay: deployment suspended
@@ -1230,44 +1249,55 @@ After Final Delivery:
 9. INFRAST RUCTURE COSTS & BILLING (TIER 1 ONLY)
 ================================================================================
 
-Vic owns and maintains all infrastructure. Client creates and pays for their
-own Vercel Pro account (separate billing).
+The Service Provider owns, controls, and maintains all Tier 1
+infrastructure (Vercel, Supabase, Cloudflare R2, Google Drive, EmailJS)
+under a dedicated business email created exclusively for the Client —
+consistent with Section 0. The Client does not create, log into, or
+control these accounts. This dedicated email is used for
+infrastructure accounts only — it is never used for, and never grants,
+GitHub/code repository access. Source code and the GitHub repository
+remain the Service Provider's exclusive property at all times under
+Tier 1 — never transferred to the Client (unlike Tier 2/3/4 — see
+Sections listed there), because the Client has not purchased the code
+itself, only the service.
 
-CLIENT INFRASTRUCTURE COSTS (Separate Bills, Not from Vic):
+The ₱15,000/month Tier 1 platform fee is ALL-INCLUSIVE. The Service
+Provider pays the infrastructure costs below directly out of this fee
+— the Client is never separately billed for infrastructure and never
+pays any provider (Vercel, Supabase, Cloudflare, Google, EmailJS)
+directly.
 
-• Vercel Pro: ~₱1,150–1,500/month (Client's own account)
+TYPICAL INFRASTRUCTURE COSTS (absorbed by Service Provider — informational only):
+
+• Vercel Pro: ~₱1,150–1,500/month
   - Required for Tier 1 production hosting
-  - Client creates account at vercel.com, upgrades to Pro
-  - Billed directly by Vercel
+  - Account created and managed by the Service Provider under the
+    Client's dedicated business email
+  - Paid by the Service Provider directly — not billed to the Client
 • Supabase overages: ₱0–1,500/month (if beyond free tier)
   - Typically no cost for small resorts
-  - Billed directly by Supabase
+  - Same dedicated-email/Service-Provider-managed model as above
 • Cloudflare R2: ₱200–500/month (if high image traffic)
-  - Billed directly by Cloudflare
   - Vic optimizes usage to minimize costs
 • Google Drive: ₱0–150/month (if storage exceeded)
-  - Billed directly by Google
   - Typically free for resorts
 • EmailJS: ₱0–200/month (overage only)
-  - Billed directly by EmailJS
 
 Vic's Role:
-• Manages accounts and infrastructure (but Client owns their Vercel account)
+• Creates, exclusively manages, and PAYS FOR all infrastructure
+  accounts under the Client's dedicated business email — the Client
+  has no direct account access, control, or billing exposure
 • Monitors usage and optimizes costs
 • Provides monthly infrastructure report
 
-CLIENT BILLING FLOW:
-1. Client pays Vic: ₱15,000/month (platform fee)
-2. Client pays Vercel directly: ~₱1,150/month (Pro account)
-3. Client pays Supabase directly: overages only (if any)
-4. Client pays Cloudflare directly: overages only (if any)
-5. Client pays Google: overages only (if any)
+CLIENT BILLING:
+The Client pays only the flat ₱15,000/month Tier 1 platform fee. There
+is no separate infrastructure invoice, reimbursement, or pass-through
+— all provider costs (Vercel, Supabase, R2, Google, EmailJS) are the
+Service Provider's own expense, covered by the platform fee.
 
-TOTAL TYPICAL MONTHLY COST TO CLIENT:
-Vic's platform fee: ₱15,000
-Vercel Pro (Client's): ~₱1,150
-Supabase/R2/Google overages: ₱200–800
-TOTAL: ~₱16,500–17,000/month
+TOTAL MONTHLY COST TO CLIENT:
+₱15,000/month flat — infrastructure fully absorbed by Service Provider
 
 Vic provides monthly transparency report showing all infrastructure usage.
 
@@ -1515,7 +1545,7 @@ By Developer:
 • Developer may halt work (Tier 2/3/4) or suspend deployment (Tier 1)
 
 By Client:
-• Tier 1: After 3 months, anytime with 1 month notice
+• Tier 1: Anytime with 1 month notice
 • Tier 2: Not applicable (independent after handover)
 • Tier 3: Anytime, but forfeits infrastructure until final payment
 • Tier 4: Not applicable (independent after handover)

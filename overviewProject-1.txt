@@ -172,3 +172,87 @@ that file left off.
   features already under an active Criteria 2/3 election) -- flagged as
   a new [ASSUMPTION -- CONFIRM]. tier1_free_trial_subscription_
   specification.md's 3.6 updated to match. Contract-only change.
+[2026-09-04] Rewrote villa-azure-agreement-v8-DRAFT-with-trial.txt
+  Section 6A from a per-feature Criteria election model to an
+  account-wide single-Criteria model: Client holds exactly one active
+  Criteria for the whole account, not per feature. Electing a new
+  Criteria auto-terminates the previous one (no more stacking
+  ambiguity between Criteria 2 and 3). Added AUTO-REVERT ON
+  SWITCH-DOWN rule: features that gained exclusivity under a
+  terminated Criteria 2/3 automatically fold back into the shared
+  template. Carved out Criteria 4 (Buyout) as the exception: down-
+  switch forfeits the non-refundable P180,000 fee without reverting
+  features, and up-switch into Criteria 4 retroactively makes all
+  existing features (including prior Shared ones) exclusive --
+  resolves the old prospective-only Buyout [ASSUMPTION -- CONFIRM].
+  Left one new [ASSUMPTION -- CONFIRM] on Criteria 3's account-wide
+  6-month clock behavior for features added mid-window. Contract-only
+  change.
+
+[2026-09-04] Removed the Tier 1 3-month Minimum Commitment / lock-in
+  from villa-azure-agreement-v8-DRAFT-with-trial.txt entirely (Section
+  2 base pricing + termination summary, Section 4A payment terms,
+  Section 8A termination -- merged its two blocks into one lock-in-free
+  cancellation policy and dropped the P15,000 early-termination fee,
+  Section 17 termination table, and the Trial Conversion clause's now-
+  moot lock-in-start-point bullet/assumption). Tier 1 clients can now
+  cancel anytime with 1 month written notice, no minimum period. Also
+  resolved part of the Free Trial eligibility [ASSUMPTION -- CONFIRM]:
+  confirmed once-per-Client/business/resort; left open whether it's
+  new-clients-only and whether Service Provider retains discretion to
+  verify eligibility. Contract-only change.
+
+[2026-09-04] Resolved the remaining Free Trial eligibility
+  [ASSUMPTION -- CONFIRM] in villa-azure-agreement-v8-DRAFT-with-trial.txt
+  (Section 2, Tier 1 Special Note): confirmed new-clients-only (Option
+  A -- a Client with any prior Tier 1 history, Trial or paid, on this
+  specific template is not eligible for a new Trial on that same
+  template even if cancelled), and clarified the once-per-Client limit
+  is scoped PER TEMPLATE PRODUCT (resort, inventory, photography, etc.)
+  rather than a lifetime limit across all of the Service Provider's
+  templates -- a Client who used their Trial on one template can still
+  Trial a different template. Left one narrower [ASSUMPTION -- CONFIRM]
+  open: whether the Service Provider retains discretion to verify
+  eligibility before approving, or approval is automatic. Contract-only
+  change.
+
+[2026-09-04] Resolved a pre-existing internal contradiction in
+  villa-azure-agreement-v8-DRAFT-with-trial.txt between Section 0
+  ("Service Provider owns and maintains ALL infrastructure") and
+  Sections 2/9 (which said "Client must create and maintain their own
+  Vercel Pro account"). Per Client clarification: Service Provider
+  creates a dedicated business email exclusively for each Tier 1
+  Client, registers all infra accounts (Vercel, Supabase, R2, Google
+  Drive, EmailJS) under that email, and retains sole control -- Client
+  never creates/logs into these accounts but remains financially
+  responsible for the pass-through costs, billed via Vic rather than
+  paid directly to each provider. Rewrote Section 2's infrastructure
+  cost block, the Trial Conversion clause's infra reference, and fully
+  rewrote Section 9 (Vic's Role, Client Billing Flow) to match. Added
+  an explicit "source code / GitHub repository access" exclusion to
+  Tier 1's WHAT'S NOT INCLUDED list, confirming code never transfers
+  to Tier 1 clients (unlike Tier 2/3/4). Left one new
+  [ASSUMPTION -- CONFIRM] on the exact pass-through billing mechanism
+  (combined single invoice vs. itemized). Contract-only change.
+
+[2026-09-04] Made Tier 1's Monthly Service Fee fully all-inclusive in
+  villa-azure-agreement-v8-DRAFT-with-trial.txt: Client confirmed Vic
+  pays infrastructure costs (Vercel Pro, Supabase/R2/Google/EmailJS
+  overages) directly out of the flat P15,000/month fee -- no more
+  separate Client Infrastructure Costs line item, no pass-through
+  billing/reimbursement. Removed the ~P16,500-17,500/month combined
+  total throughout (Section 2 and Section 9) and replaced with a flat
+  P15,000/month total; resolved the prior billing-mechanism
+  [ASSUMPTION -- CONFIRM]. Also reinforced (per Client confirmation)
+  that the dedicated business email is infra-accounts-only and never
+  grants GitHub/code access, since the Client has not purchased the
+  code itself. Contract-only change.
+
+[2026-09-04] Resolved the final piece of item #1 (Free Trial
+  eligibility) in villa-azure-agreement-v8-DRAFT-with-trial.txt: Client
+  confirmed eligibility is purely objective (new client = one Free
+  Trial available; old/returning client on that template = none), no
+  subjective Service-Provider discretion/approval step beyond checking
+  its own records. Item #1 is now fully resolved -- no remaining
+  [ASSUMPTION -- CONFIRM] tags on Free Trial eligibility. Contract-only
+  change.
