@@ -1013,9 +1013,13 @@ Payment:
 6A. FEATURE EXCLUSIVITY OPTIONS (TIER 1 ONLY)
 ================================================================================
 
-Tier 1 uses a resellable template (Section 10). When a Tier 1 Client
-requests a new feature (Section 6 above), the Client selects ONE of the
-following four options for how that feature is treated going forward.
+Tier 1 uses a resellable template (Section 10). The Client selects ONE
+account-wide Criteria (below) that governs how ALL of the Client's
+Tier 1 features — current and future — are treated for exclusivity
+and Monthly Service Fee purposes. Criteria is elected at the account
+level, not per individual feature request, and the Client may hold
+only one active Criteria at a time (see GENERAL RULES — SWITCHING
+BETWEEN CRITERIA, below).
 
 Feature Fee (all Criteria): billed per Section 6's complexity pricing
 table — ₱15,000 minimum for Simple features, scaling up to ₱20k–40k for
@@ -1024,64 +1028,90 @@ exclusivity/Monthly Service Fee treatment only, never the feature's
 own development cost.
 
 CRITERIA 1 — SHARED (Standard, Default):
-• The completed feature IS folded into the shared resellable template
-  and may appear on other Tier 1 clients' sites in future deployments
+• All of the Client's completed features ARE folded into the shared
+  resellable template and may appear on other Tier 1 clients' sites in
+  future deployments
 • Client's Monthly Service Fee remains ₱15,000/month — no increase
 
 CRITERIA 2 — PERMANENT EXCLUSIVITY:
-• The completed feature is NOT added to the shared resellable template
-  — it remains exclusive to this Client indefinitely
+• ALL of the Client's features — current and any requested while this
+  Criteria remains active — are NOT added to the shared resellable
+  template and remain exclusive to this Client for as long as Criteria
+  2 stays active
 • Client's Monthly Service Fee increases to a FLAT ₱25,000/month,
-  effective the billing cycle following feature delivery
-• This flat ₱25,000/month rate applies regardless of how many Criteria 2
-  features the Client requests over time — it does not stack per
-  feature; requesting additional exclusive features under Criteria 2
-  does not raise the Monthly Service Fee further
+  effective the billing cycle following election
+• This flat ₱25,000/month rate is the Client's entire account-wide
+  Monthly Service Fee while Criteria 2 is active — it does not stack
+  with Criteria 3 or increase further no matter how many exclusive
+  features the Client accumulates
 
 CRITERIA 3 — TIME-LIMITED EXCLUSIVITY:
-• The completed feature is exclusive to this Client for 6 months from
-  delivery. During this window, Client's Monthly Service Fee is
+• ALL of the Client's features — current and any requested while this
+  Criteria remains active — are exclusive to this Client for 6 months
+  from election. During this window, Client's Monthly Service Fee is
   ₱20,000/month
+• [ASSUMPTION — CONFIRM: if a new feature is requested partway through
+  an already-active 6-month window, this feature is drafted as sharing
+  the account's existing window (its exclusivity ends when the
+  account-wide window ends), rather than restarting/extending the
+  window. Confirm or revise.]
 • At the end of the 6-month exclusivity window:
-  - The feature is automatically folded into the shared resellable
+  - All features are automatically folded into the shared resellable
     template, and
   - Client's Monthly Service Fee reverts to the standard ₱15,000/month
+    (Criteria 1 applies by default)
 • Before the 6-month window expires, Client may elect to:
   - Renew exclusivity for another 6 months at a ₱7,500 renewal fee
-    (50% of the feature's minimum Feature Fee), continuing at
-    ₱20,000/month, OR
+    (50% of the minimum Feature Fee), continuing at ₱20,000/month, OR
   - Upgrade to Criteria 2 (permanent exclusivity) — Monthly Service Fee
     moves to the flat ₱25,000/month rate going forward
 
 CRITERIA 4 — BLANKET EXCLUSIVITY BUYOUT:
 • Buyout Fee: ₱180,000 (one-time, non-refundable, due upon election —
-  separate from and in addition to each feature's own Feature Fee above)
-• Upon payment, ALL future feature requests from this Client are
-  automatically treated as exclusive (not added to the shared
-  resellable template) going forward — no per-feature Criteria election
-  needed for any feature requested after the Buyout date
+  separate from and in addition to each feature's own Feature Fee)
+• Upon payment, ALL of the Client's features — including any feature
+  previously under Criteria 1 (Shared) — immediately become exclusive
+  (removed from/never added to the shared resellable template), per
+  the SWITCHING UP INTO CRITERIA 4 rule below
 • Client's Monthly Service Fee remains ₱15,000/month — no increase,
-  regardless of how many exclusive features accumulate after the Buyout
-• This is a one-time, standalone election. It applies prospectively
-  only: features already under an active Criteria 2 or Criteria 3
-  election at the time of Buyout continue on their existing Monthly
-  Service Fee premium (₱25,000 or ₱20,000 respectively) unless the
-  Client separately negotiates to fold them into the Buyout
-• [ASSUMPTION — CONFIRM: Buyout is prospective-only as drafted above —
-  confirm this is the intended handling for Clients who already hold
-  Criteria 2/3 features before electing the Buyout.]
+  regardless of how many exclusive features accumulate after the
+  Buyout
+• Because electing Criteria 4 makes prior Shared features exclusive as
+  part of the Buyout, switching AWAY from Criteria 4 to any other
+  Criteria does not entitle the Client to a refund of the ₱180,000
+  Buyout Fee (see GENERAL RULES — SWITCHING BETWEEN CRITERIA, below)
 
-GENERAL RULES:
-• Criteria selection is made in writing (email sufficient) at the time
-  the feature is requested and approved (Section 6, Steps 2–3), except
-  Criteria 4 which is elected once and applies to all subsequent
-  requests automatically
+GENERAL RULES — SWITCHING BETWEEN CRITERIA:
+• The Client may hold only ONE active Criteria for the account at any
+  time. Electing a new Criteria automatically terminates the Client's
+  previously active Criteria — there is no stacking (e.g. an active
+  Criteria 2 and an active Criteria 3 at the same time is not
+  possible; the Client pays one Monthly Service Fee, never a combined
+  total)
+• Criteria election/switch is made in writing (email sufficient),
+  effective the billing cycle following the request, except Criteria 4
+  which is elected once and, once active, is left only by the
+  Client's own written election to switch to a different Criteria
 • If no Criteria is selected, Criteria 1 (Shared) applies by default
-• [ASSUMPTION — CONFIRM: if a Client holds an active Criteria 2 feature
-  AND a separate active Criteria 3 feature at the same time, Criteria
-  2's flat ₱25,000/month is intended to supersede/absorb Criteria 3's
-  ₱20,000/month — Client pays ₱25,000/month total, not ₱45,000. Revise
-  if a different stacking rule is intended.]
+• AUTO-REVERT ON SWITCH-DOWN: when the Client switches away from
+  Criteria 2 or Criteria 3 to a Criteria with a lower Monthly Service
+  Fee (including reverting to Criteria 1), any feature that became
+  exclusive ONLY because of the terminated Criteria automatically
+  reverts to the shared resellable template, effective the same
+  billing cycle the switch takes effect. The Client does not retain
+  free, indefinite exclusivity on features gained under a Criteria
+  they are no longer paying for
+• CRITERIA 4 IS THE EXCEPTION to the auto-revert rule above: switching
+  DOWN away from Criteria 4 does NOT revert previously-exclusive
+  features back to shared, and does NOT refund the ₱180,000 Buyout
+  Fee. The Client made a one-time, non-refundable purchase of blanket
+  exclusivity and, by switching away, elected to give up the ongoing
+  ₱15,000/month-only benefit — the features remain exclusive, the fee
+  remains forfeited
+• SWITCHING UP INTO CRITERIA 4: electing Criteria 4 while holding any
+  other Criteria (including Criteria 1 Shared) immediately makes ALL
+  of the Client's existing features exclusive, per Criteria 4's terms
+  above — there is no partial or feature-by-feature Buyout
 
 ================================================================================
 7. DATA BACKUP & DISASTER RECOVERY
