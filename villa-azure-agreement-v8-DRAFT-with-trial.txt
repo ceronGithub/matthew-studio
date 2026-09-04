@@ -1,0 +1,1487 @@
+================================================================================
+SERVICE AGREEMENT — VILLA AZURE RESORT BOOKING PLATFORM
+Version 7 — Four-Tier Model with Infrastructure Ownership & Detailed Terms
+================================================================================
+
+Date: August 4, 2026
+Effective: [Signing Date]
+
+SERVICE PROVIDER (Developer):
+Name: Ceron Matthew P. Calsena
+Email: developerceron@gmail.com
+Phone: 09668829302
+Business Address: [Developer Business Address]
+
+CLIENT (Resort Owner):
+Name: [Client Full Name]
+Email: [Client Email]
+Phone: [Client Phone]
+Address: [Client Resort/Business Address]
+
+================================================================================
+0. CRITICAL INFRASTRUCTURE OWNERSHIP STATEMENT
+================================================================================
+
+SERVICE PROVIDER OWNS AND MAINTAINS ALL INFRASTRUCTURE.
+
+The Service Provider owns, controls, and maintains all hosting infrastructure
+including but not limited to: Vercel (hosting), Supabase (database), Cloudflare
+R2 (storage), Google Drive (documents), EmailJS (email service), and all
+associated accounts, credentials, and access keys.
+
+Client receives LOGIN ACCESS ONLY to the admin dashboard and specified accounts
+during the contract period. Client does NOT own the underlying infrastructure
+unless explicitly stated in the selected Tier (see Tier 2, Tier 4 below).
+
+Upon contract termination or breach, the Service Provider retains full rights
+to all infrastructure, code, and data (subject to client data export rights).
+
+================================================================================
+1. PROJECT OVERVIEW
+================================================================================
+
+The Service Provider agrees to deploy and customize the Villa Azure Resort
+Booking Platform for the Client. Villa Azure is a production-ready resort
+booking system featuring:
+
+• Guest-facing booking interface with real-time availability
+• Automatic invoice generation and email delivery
+• Comprehensive admin dashboard for reservations, analytics, and operations
+• Enterprise-grade security monitoring (rate limiting, intrusion detection,
+  device fingerprinting, geo-anomaly tracking, automated breach alerts)
+• Full email management and booking confirmation system
+• Security event logging and audit trails
+• Role-based access control (super-admin, staff roles)
+• Analytics and reporting dashboards
+• Backup and disaster recovery capabilities
+
+================================================================================
+2. TIER SELECTION — CLIENT CHOOSES ONE
+================================================================================
+
+Villa Azure is offered under FOUR distinct service models.
+The Client must select ONE tier below.
+
+================================================================================
+TIER 1 — MANAGED RENTAL (Monthly, Resellable Template)
+================================================================================
+
+OVERVIEW:
+Vic (Developer) owns and operates all infrastructure. Client receives fully
+customized access to manage the resort via the admin dashboard. This is a
+RENTAL MODEL with month-to-month flexibility after initial lock-in.
+
+BASE PRICING:
+• Setup Fee: ₱15,000 (one-time) OR ₱5,000 × 3 months (installment option)
+• Monthly Service Fee: ₱15,000/month (due 1st of month, via bank transfer)
+• Minimum Commitment: First 3 months locked-in
+• After 3 months: Cancel anytime with 1 month written notice
+
+WHAT'S INCLUDED:
+✓ Deployment & hosting (Vercel, Supabase, R2, Google Drive, EmailJS)
+✓ Custom branding (logo, colors, resort name)
+✓ Content population (rooms, images, pricing — Client provides content)
+✓ Full admin dashboard access with all features (see Section 2A below)
+✓ 24/7 automated security monitoring (intrusion detection, alerts)
+✓ Platform maintenance and security patches
+✓ Uptime monitoring (99% SLA target, see Section 6)
+✓ 10 hours/week of developer support (see Section 3 below)
+
+WHAT'S NOT INCLUDED:
+✗ Support beyond 10 hours/week (charged at ₱2,000/hour, see Section 3A)
+✗ Feature development (new features cost extra, see Section 9)
+✗ Backup/disaster recovery (Client can enable Supabase PITR separately)
+✗ Photo/content management (Client manages via dashboard)
+✗ Infrastructure changes or account updates
+
+INFRASTRUCTURE COSTS (CLIENT'S RESPONSIBILITY — Separate Bills):
+The Client must create and maintain their own Vercel Pro account (₱1,150/month).
+Vic bills the Client for Tier 1 service (₱15,000/month) separately.
+
+Typical Client Infrastructure Costs:
+• Vercel Pro: ~₱1,150/month (Client's own account)
+• Supabase overages: ₱0–1,500/month (if any)
+• Cloudflare R2 egress: ₱200–500/month (if high image traffic)
+• Google Drive storage: ₱0–150/month (if exceeded)
+• EmailJS: ₱0–200/month (overage only)
+
+TOTAL TYPICAL MONTHLY COST TO CLIENT:
+Tier 1 (Vic): ₱15,000
+Client Infrastructure: ₱1,500–2,500
+TOTAL: ~₱16,500–17,500/month
+
+INCLUDED SUPPORT (10 Hours/Week):
+The Service Provider provides up to 10 billable hours of support per week,
+including:
+• Bug fixes and error corrections
+• Minor feature adjustments
+• Admin dashboard training and guidance
+• Performance troubleshooting
+• Security incident response
+• Email template updates
+
+Support Hours: 9 AM–5 PM, Monday–Friday (Philippine Time / UTC+8)
+
+OVERAGE SUPPORT (₱2,000/Hour):
+Any support exceeding 10 hours/week is billed at ₱2,000/hour.
+Examples of billable overage:
+• Feature development or customization requests
+• Complex integrations or third-party setup
+• Server-side code changes
+• Database optimization or restructuring
+• Training beyond basic guidance
+
+Overage charges are billed monthly and due with the Tier 1 service fee.
+
+TERMINATION & CANCELLATION:
+• After 3-month lock-in: Cancel anytime with 1 month written notice
+• No refunds for remaining period
+• Upon cancellation: Client loses dashboard access within 24 hours
+• Data export: Client may request CSV/SQL export (provided within 48 hours)
+
+TIER 1 SPECIAL NOTE — RESELLABLE TEMPLATE:
+The design, layout, and user interface of Villa Azure are RESELLABLE TEMPLATES.
+This means:
+
+✓ The same visual design and functionality may appear on other resort websites
+✓ Other Tier 1 clients will have identical UI/UX
+✓ Differences are only in: resort name, colors, room content, booking flows
+
+CLIENT'S DATA IS ALWAYS PRIVATE:
+✓ Your bookings, guest information, and business data are 100% isolated
+✓ No other resort can see your data
+✓ Data security and confidentiality are guaranteed
+
+If the Client wishes a UNIQUE, NON-RESELLABLE design, they should select
+Tier 2, Tier 3, or Tier 4 (see below).
+
+================================================================================
+TIER 1 SPECIAL NOTE — FREE TRIAL PROGRAM (OPTIONAL)
+================================================================================
+
+Tier 1 may optionally begin with a 30-CALENDAR-DAY FREE TRIAL instead of
+immediate paid enrollment, at Client's election (see Section 19 signature
+block). [ASSUMPTION — CONFIRM: available to new Tier 1 clients only, once
+per Client/business/resort, at Service Provider's discretion to verify.]
+
+TRIAL PERIOD (DAYS 1–30):
+• Deployment, branding, and content population proceed as normal Tier 1
+  onboarding (Client provides content per Section 1/Tier 1 base terms)
+• Full admin dashboard access, security monitoring, and support hours
+  (Section 3A) apply during the trial exactly as in a paid month
+• No Setup Fee and no Monthly Service Fee are charged during Days 1–30
+• [ASSUMPTION — CONFIRM: the Trial site is the live, production booking
+  platform (real guests may book real reservations), not a staging/demo
+  copy. If real guest bookings occur during the Trial and the Trial is
+  NOT converted, see "GUEST BOOKINGS MADE DURING TRIAL" below.]
+
+CLIENT'S DECISION WINDOW (DAYS 1–29):
+Client must notify the Service Provider in writing (email is sufficient)
+of their decision to subscribe, AND submit the Trial Conversion Fee
+(below), no later than Day 29 of the Trial Period.
+
+TRIAL CONVERSION — IF CLIENT SUBSCRIBES:
+• Trial Conversion Fee: ₱25,000 (one-time, due upon written notice of
+  intent to subscribe, no later than Day 29)
+  [ASSUMPTION — CONFIRM: this REPLACES the standard ₱15,000 Setup Fee +
+  ₱15,000 Month 1 Fee combination described in Section 2/4A (₱30,000
+  combined) — i.e., a ₱5,000 discount for converting from the Trial. If
+  instead the ₱25,000 is meant to be charged IN ADDITION to a separate
+  Setup Fee, or does not include Month 1's service, revise this line.]
+• Beginning Month 2, the standard Tier 1 Monthly Service Fee applies in
+  full — ₱15,000/month, per Section 2/4A, with no further discount
+• The 3-month Minimum Commitment (Section 2/8A) begins counting from the
+  Trial Conversion Fee payment (i.e., that payment counts as Month 1 of
+  the 3-month lock-in; the free Trial month itself is not counted)
+  [ASSUMPTION — CONFIRM this is the intended lock-in start point.]
+• Client Infrastructure Costs (Section 9 — Client's own Vercel account,
+  etc.) become the Client's responsibility starting Month 2, the first
+  fully paid month, not during the free Trial
+
+NON-CONVERSION — IF CLIENT DOES NOT SUBSCRIBE BY DAY 30:
+• This Agreement AUTOMATICALLY TERMINATES at 11:59 PM (PHT) on Day 30 of
+  the Trial Period — no further notice from either party is required
+• The public-facing website and admin dashboard are taken offline
+  [ASSUMPTION — CONFIRM: within 24 hours of termination, consistent with
+  Section 8A's standard Tier 1 access-disable timeline, rather than
+  immediately at the Day 30 cutoff.]
+• Data export: available on request within 48 hours of termination, at
+  no charge [ASSUMPTION — CONFIRM: matching Section 8A's standard export
+  window, rather than the ₱2,000/hour rate Section 4A applies to a paid
+  client's 30+ day non-payment export.]
+• No fees are owed by Client for the Trial Period itself
+• Client may request a new Trial only with the Service Provider's
+  written consent (prevents repeated free trials on the same project)
+
+GUEST BOOKINGS MADE DURING TRIAL:
+[NEEDS CLIENT/DEVELOPER DECISION — NOT YET DEFINED] If the Trial site is
+live to the public and accepts real guest reservations, and the Trial is
+NOT converted, the Client (resort owner) — not the Service Provider — is
+solely responsible for honoring, relocating, or refunding any guest
+bookings made during the Trial before the site is taken offline. The
+Client is strongly encouraged to notify guests and export booking data
+before Day 30, or to disable live public bookings during the Trial and
+use it for internal/staff evaluation only. The Service Provider is not
+liable for guest-facing disruption caused by Trial non-conversion (see
+Section 13, Limitation of Liability).
+
+FEATURE REQUESTS & OVERAGE DURING TRIAL:
+Section 3A (10 hrs/week included support) and Section 6 (feature-request
+pricing) apply unchanged during the Trial — the Trial waives the Setup
+and Monthly Fees only, not billable overage support or custom feature
+development.
+
+================================================================================
+TIER 2 — FULL BUYOUT (One-Time Purchase, Custom Build)
+================================================================================
+
+OVERVIEW:
+Vic builds a fully customized resort booking platform based on the Villa Azure
+template. Client receives complete ownership of GitHub repository, Vercel
+account, Supabase instance, Cloudflare R2 bucket, and all credentials. This is
+a FULL HANDOVER after launch.
+
+BASE PRICING:
+• Total Investment: ₱350,000 (one-time payment)
+• Deposit: ₱175,000 (at signing / project kickoff)
+• Final Payment: ₱175,000 (after 2-week review period)
+
+TIMELINE:
+• Standard deployment: 2–4 weeks from deposit + complete content handover
+• Rush deployment available (see Section 5 below)
+
+WHAT'S INCLUDED:
+✓ Complete customization (logo, colors, fonts, resort branding)
+✓ Content population (rooms, images, pricing, amenities — Client provides)
+✓ Full admin dashboard (all features in Section 2A)
+✓ Enterprise security features (rate limiting, intrusion detection, etc.)
+✓ Email automation and invoice generation
+✓ Supabase database setup with Row Level Security (RLS)
+✓ Vercel deployment with production optimization
+✓ Complete documentation and client guides
+✓ GitHub repository with full source code
+✓ Transfer of Vercel, Supabase, R2, and all hosting accounts to Client
+✓ 2-week FREE post-launch support period (see Section 7 below)
+
+WHAT'S NOT INCLUDED:
+✗ Payment gateway integration (PayMongo, Stripe) — separate project
+✗ SMS/WhatsApp notifications — separate project
+✗ New feature development beyond base package — see Section 9
+✗ Support beyond 2-week period — Client is now independent owner
+✗ Ongoing hosting cost management — Client's responsibility
+
+INFRASTRUCTURE HANDOVER:
+Upon final payment and Client approval, the Service Provider transfers:
+• GitHub repository ownership (Client becomes repo owner)
+• Vercel project transfer (Client owns the Vercel account)
+• Supabase organization/project (Client owns the database)
+• Cloudflare R2 bucket (Client owns the storage)
+• Google Drive folder (Client receives shareable access)
+• EmailJS account setup (Client can maintain or transfer)
+
+TRANSFER TIMELINE:
+Within 2 business days of final payment, all accounts and credentials are
+transferred to the Client. The Service Provider provides:
+• Step-by-step account transfer guides
+• New login credentials for all services
+• Admin dashboard documentation
+• FAQ guide for common operations
+
+POST-LAUNCH SUPPORT (2 Weeks, FREE):
+Following deployment, the Client receives 14 calendar days of complimentary
+support for:
+• Bug fixes and error corrections
+• Performance optimization
+• Minor functionality adjustments
+• Security patches
+• Up to 2 rounds of feedback/revisions (max 5 discrete requests per round)
+
+After the 2-week period: NO support included. Client is independent owner.
+
+TIER 2 SPECIAL NOTE — NOT RESELLABLE:
+Unlike Tier 1, the Client receives:
+✓ Unique, custom design specific to their resort
+✓ Full code ownership (can fork, modify, resell if they choose)
+✓ Exclusive access to all customizations made for them
+✓ No other resort will have the same codebase or design
+
+The Service Provider retains NO claims on the code after final payment.
+
+RUSH DEPLOYMENT (Tier 2 Only):
+
+Timeline      | Surcharge      | Total
+3 weeks       | +₱87,500 (+25%)| ₱437,500
+2 weeks       | +₱175,000 (+50%)| ₱525,000
+1 week        | +₱350,000 (+100%)| ₱700,000
+
+Conditions:
+• Rush fee is NON-REFUNDABLE
+• Client must have ALL content ready at project start
+• No delays allowed during development
+• Testing is minimal; post-launch bugs are covered in free 2-week period
+
+================================================================================
+TIER 3 — BUILD-TO-OWN (Custom Build with Payment Plan)
+================================================================================
+
+OVERVIEW:
+Client wants a fully custom resort booking platform but lacks upfront capital.
+Vic builds the site to Client's specifications over 3-5 months, while Client
+makes monthly payments over 36 months. After final payment, Client owns
+everything (GitHub, Vercel, Supabase, code).
+
+PRICING & PAYMENT STRUCTURE:
+• Total Project Cost: ₱400,000+ (scales with complexity, see details below)
+• Monthly Installment: ₱20,000/month for 36 months
+• Total paid over 3 years: ₱720,000 (₱400k project value)
+
+COMPLEXITY-BASED PRICING:
+
+Complexity      | Examples                           | Price Range
+Simple          | Basic booking, simple dashboard    | ₱400k–450k
+Moderate        | Seasonal pricing, multi-room types | ₱450k–600k
+Complex         | Payment integration, SMS alerts    | ₱600k–800k
+Advanced        | Multi-property, AI features        | ₱800k–1M+
+
+EXAMPLE: Client requests moderate complexity → ₱500k total project cost
+Monthly: ₱500k ÷ 25 months ≈ ₱20k/month
+
+Actual project cost and timeline are confirmed in a separate Scope Document
+before development begins.
+
+TIMELINE:
+• Development Phase: 3–5 months (design + development + testing)
+• Payment Phase: 36 months (₱20k/month)
+• Total Relationship: ~42–41 months (5 months dev + 36 months payment)
+
+WHAT'S INCLUDED:
+✓ Fully custom design (NOT a resellable template)
+✓ All features developed to Client's specifications
+✓ Admin dashboard fully customized for Client's workflow
+✓ Content population (rooms, images, pricing, etc.)
+✓ Email automation and invoice system
+✓ Security monitoring and intrusion detection
+✓ Supabase setup with RLS policies
+✓ Vercel deployment and optimization
+✓ Complete source code documentation
+✓ 2-week FREE post-launch support (bug fixes, optimization)
+
+WHAT'S NOT INCLUDED:
+✗ Changes to agreed-upon scope (change requests are billable)
+✗ Payment gateway or SMS integration (separate projects)
+✗ Support beyond 2-week period (Client is independent owner)
+✗ Ongoing hosting management
+
+PAYMENT ENFORCEMENT (THE CRITICAL PART):
+
+REGULAR PAYMENT:
+Monthly ₱20,000 is due on the 1st of each month via bank transfer.
+
+LATE PAYMENT SCENARIO:
+If the ₱20k payment is NOT received by the 5th business day of the month:
+
+WEEK 1 (Days 1–10):
+• Development HALTS immediately
+• Service Provider waits for payment (no work is done)
+• Client is notified of payment delay
+
+WEEK 2 (Days 11–20):
+• If payment is still not received after 10 days:
+  • Contract is BREACHED
+  • Project is NOT deleted, but reverts to Service Provider's ownership
+  • Project may be converted to a RESELLABLE TEMPLATE
+    (Service Provider can sell the design/code to other resorts)
+  • OR the project may be DELETED at Service Provider's discretion
+  • Client LOSES all claims to the code and work completed
+
+TO RESTART THE CONTRACT:
+If Client wishes to continue after breach, they must:
+1. Pay ₱50,000 PENALTY (breach recovery fee)
+2. Resume monthly ₱20,000 installments from that point forward
+3. Reset the 36-month payment clock (new start date)
+4. Accept updated terms and sign amended agreement
+
+EXAMPLE:
+• Client misses month 12 payment
+• Project halts for 10 days
+• If still unpaid, project becomes resellable template / deleted
+• Client can restart by paying ₱50k penalty + resuming ₱20k/month
+• New 36-month clock starts from restart date
+
+DEVELOPER DECISION ON BREACH:
+Upon contract breach, the Service Provider decides whether to:
+A) Convert project to RESELLABLE TEMPLATE (sell to other resorts)
+B) DELETE the project entirely (if Client refuses to restart)
+
+This protects the Service Provider's IP and work.
+
+INFRASTRUCTURE OWNERSHIP:
+• During development & payment phase: Service Provider owns all infrastructure
+• After final payment (month 36): Full handover to Client
+  • GitHub repository ownership
+  • Vercel account transfer
+  • Supabase instance transfer
+  • Cloudflare R2 bucket transfer
+  • All credentials and access
+
+TIER 3 EARLY PAYOFF:
+If Client pays off the remaining balance early (before month 36), handover
+occurs immediately upon receipt of final payment. No penalty for early payoff.
+
+TERMINATION MID-PAYMENT:
+If Client terminates the contract before month 36:
+• All work completed to date remains Client's property (no resale)
+• Client must settle any remaining partial month charges
+• Infrastructure remains with Service Provider until final payment
+• Client may request data export (within 48 hours)
+
+CLIENT FAILURE TO RESTART AFTER BREACH:
+If Client does NOT pay the ₱50k restart fee within 30 days of breach:
+• Project is deleted or converted to resellable template
+• Client's rights to the code terminate
+• No refund for partial payments already made
+
+================================================================================
+TIER 4 — FULL CUSTOM FROM SCRATCH (Complete Independence)
+================================================================================
+
+OVERVIEW:
+Client wants a fully custom resort booking platform built from the ground up
+(not based on Villa Azure template). Vic builds to Client's exact
+specifications, then transfers complete ownership. This is the most expensive
+and most customizable tier.
+
+PRICING:
+• Starting Price: ₱400,000+
+• Price scales with complexity and feature set (see below)
+• One-time payment upon completion
+• Payment structure: 50% deposit, 50% upon final delivery (see Section 4A below)
+
+COMPLEXITY-BASED PRICING:
+
+Complexity      | Examples                                      | Price Range
+Simple          | Basic booking, simple UI                      | ₱400k–500k
+Moderate        | Seasonal pricing, reports, multi-room types   | ₱500k–750k
+Complex         | Payment gateways, SMS, Google Calendar sync   | ₱750k–1.2M
+Advanced        | Multi-property, AI recommendations, mobile app| ₱1.2M–2M+
+
+TIMELINE:
+• 3–5 months (full lifecycle: design + development + testing)
+• Exact timeline confirmed in Scope Document before kickoff
+
+WHAT'S INCLUDED:
+✓ Fully custom design (zero template code, built from scratch)
+✓ Custom database design and schema
+✓ All features requested in Scope Document
+✓ Mobile-responsive design
+✓ Admin dashboard (completely custom layout)
+✓ Guest-facing booking interface (custom design)
+✓ Email system and automation
+✓ Security monitoring and compliance features
+✓ Supabase/database setup with RLS
+✓ Vercel deployment and optimization
+✓ Complete source code and documentation
+✓ 2-week FREE post-launch support (bug fixes, optimization only)
+✓ Full ownership transfer (GitHub, Vercel, Supabase, R2)
+
+WHAT'S NOT INCLUDED:
+✗ Changes to agreed-upon scope (change requests are billed separately)
+✗ Support beyond 2-week period (Client is independent owner)
+✗ Ongoing hosting management or infrastructure maintenance
+✗ Third-party integrations not agreed in Scope (payment APIs, etc.)
+
+PAYMENT TERMS (Tier 4):
+• Deposit: 50% upon signing and project kickoff
+  Example: ₱600k total → ₱300k due at start
+• Final Payment: 50% upon final delivery and Client approval
+  Example: ₱600k total → ₱300k due after 2-week review
+• Payment method: In-person bank transfer (both parties present — Tier 2 model)
+
+REVIEW PERIOD:
+Client has 2 weeks after delivery to review the platform and request minor
+fixes (included in final payment). Major revisions are not included.
+
+OWNERSHIP & INDEPENDENCE:
+Upon final payment, Client receives complete ownership:
+✓ GitHub repository (Client becomes sole owner)
+✓ Vercel account (transferred to Client or Client creates new account)
+✓ Supabase instance (transferred to Client or Client creates new instance)
+✓ Cloudflare R2 bucket (transferred to Client)
+✓ All source code, documentation, and credentials
+✓ Zero dependencies on Service Provider
+
+POST-LAUNCH SUPPORT (2 Weeks, FREE):
+• Bug fixes (critical issues only)
+• Performance optimization
+• Minor adjustments to approved features
+• Security patches
+
+After 2-week period: Contract is complete. Service Provider has no further
+obligations or liability.
+
+DEVELOPER NOT LIABLE AFTER CONTRACT:
+Once the 2-week post-launch support period ends:
+✓ Service Provider is not responsible for bugs, errors, or outages
+✓ Service Provider is not liable for data loss or security breaches
+✓ Service Provider is not obligated to maintain the code
+✓ Client owns and operates the platform independently
+
+This is clearly stated in the final handover documentation.
+
+ONGOING COSTS (CLIENT'S RESPONSIBILITY):
+After handover, Client pays for infrastructure directly:
+• Vercel: ~₱1,150–2,000/month (depending on usage)
+• Supabase: ₱0–2,000/month (depending on storage/bandwidth)
+• Cloudflare R2: ₱200–1,000/month (depending on traffic)
+• Email service: ₱0–500/month (if needed)
+
+Service Provider is NOT responsible for these costs.
+
+TIER 4 EARLY DELIVERY BONUS:
+If Client approves the platform and wants to go live BEFORE the 2-week review
+window ends, handover happens immediately. Client saves time but forfeits the
+remaining free support period.
+
+SCOPE LOCK & CHANGE REQUESTS:
+The Scope Document defines exactly what will be built. Any changes or additions
+after development begins are billed separately:
+• Minor changes (UI tweaks, text updates): ₱5,000–₱15,000
+• Moderate features (new dashboard widgets, reports): ₱20,000–₱50,000
+• Major features (new booking type, integration): ₱50,000+
+
+Change Request Process:
+1. Client requests change
+2. Service Provider provides estimate (within 48 hours)
+3. Client approves in writing
+4. Work begins
+5. Feature delivered
+6. Final invoice issued (due upon delivery)
+
+================================================================================
+2A. ADMIN DASHBOARD FEATURES (INCLUDED IN ALL TIERS)
+================================================================================
+
+BOOKINGS MANAGEMENT:
+✓ View all bookings (dates, guest names, status)
+✓ Create, edit, cancel bookings manually
+✓ Filter by date range, status, room type
+✓ Blackout dates and unavailable dates management
+✓ Booking hold/release system
+✓ Export bookings to CSV
+✓ Booking confirmation and invoice resend
+
+ROOMS & VILLAS:
+✓ Add/edit/delete rooms with images (via Cloudflare R2)
+✓ Set pricing per room (base price, nightly rates)
+✓ Manage room capacity, amenities, descriptions
+✓ Toggle room active/inactive status
+✓ Sort and reorder room display
+✓ Photo gallery management with EXIF data
+
+AMENITIES & SERVICES:
+✓ Add/edit/delete amenities (pool, WiFi, AC, kitchen, etc.)
+✓ Upload amenity icons
+✓ Description and sorting management
+✓ Link amenities to specific rooms
+
+PRICING & BOOKING RULES:
+✓ Seasonal pricing (set date ranges with custom rates)
+✓ Booking rules (min/max stay, check-in/checkout times)
+✓ Promo dates and discount periods
+✓ Automatic availability calculator
+✓ Dynamic pricing based on occupancy (if enabled)
+
+ANALYTICS & REPORTING:
+✓ Dashboard KPIs (total bookings, occupancy rate, revenue YTD)
+✓ Booking trends (daily/weekly/monthly breakdown)
+✓ Revenue charts and room popularity tracking
+✓ Guest demographics and booking sources
+✓ Custom date range reporting
+
+EMAIL MANAGEMENT:
+✓ View invoice delivery history
+✓ Resend invoices to guests
+✓ Email template preview and customization (limited)
+✓ Booking confirmation log
+
+SECURITY & ADMIN FEATURES:
+✓ Security Events Log (login attempts, geo anomalies, new devices)
+✓ Filter logs by event type, date range, IP, country
+✓ Export security logs to CSV
+✓ Account activity timeline
+✓ Staff role management (if enabled)
+✓ Vault Passphrase rotation (emergency recovery access)
+
+================================================================================
+2B. ENTERPRISE SECURITY FEATURES (AUTOMATIC, ALL TIERS)
+================================================================================
+
+RATE LIMITING (Gatekeeper 1):
+• Max 5 login attempts per IP per 15 minutes (prevents brute force)
+• Max 10 API requests per IP per 15 minutes (prevents bot attacks)
+• If 10 failed logins in 5 minutes → IP blocked for 1 hour automatically
+• Automatic unblock after time window expires
+
+DEVICE FINGERPRINTING & NEW DEVICE ALERTS:
+• Tracks browser, OS, device type on each login
+• Creates SHA-256 device fingerprint (not personally identifiable)
+• Alerts owner when login occurs from unfamiliar device
+• Logs device change for security review
+• Helps detect account compromises
+
+GEO-ANOMALY DETECTION:
+• Flags impossible travel (e.g., Manila → Singapore in 1 hour)
+• Calculates distance between last login and current login
+• Uses city-level geolocation (MaxMind GeoIP2, self-hosted)
+• Automatic email alert to owner within 2 minutes
+• Can trigger temporary account freeze (optional)
+
+SQL INJECTION DETECTION:
+• Scans all inputs for SQL attack patterns
+• Blocks suspicious input patterns at request level
+• Logs all attempted injections
+• Owner receives alert for each attempt
+• Database is protected regardless (Prisma ORM + prepared statements)
+
+AUTOMATED BREACH ALERTS:
+• Any security anomaly triggers immediate email to owner
+• Alert includes: event type, timestamp, IP, location, device info
+• Owner can review Security Logs in dashboard
+• Optional integration with mobile alerting (SMS extra)
+
+INTRUSION DETECTION SUMMARY:
+✓ Real-time monitoring 24/7
+✓ Email alerts within 2 minutes of suspicious activity
+✓ No manual setup required (automatic on all tiers)
+✓ Zero performance impact (async monitoring)
+
+================================================================================
+3. SUPPORT TIERS & TERMS
+================================================================================
+
+3A. TIER 1 SUPPORT — 10 HOURS/WEEK INCLUDED, ₱2,000/HOUR OVERAGE
+
+Included Support (10 hours/week):
+• Bug fixes and error corrections
+• Minor feature adjustments and improvements
+• Admin dashboard training and guidance
+• Performance troubleshooting and optimization
+• Security incident response (if breach detected)
+• Email template customization
+• Booking system troubleshooting
+• Integration support (limited, for included features)
+
+Support Hours:
+• 9 AM–5 PM, Monday–Friday (Philippine Time / UTC+8)
+• Outside these hours: requests logged, addressed next business day
+• Emergency security issues: 24/7 (breach alerts, IP blocks)
+
+Overage Support (Beyond 10 hours/week):
+• Rate: ₱2,000/hour (billed in 15-minute increments)
+• Examples of billable work:
+  - Feature development or customization
+  - Complex server-side code changes
+  - Database restructuring or optimization
+  - Third-party integration setup
+  - Custom report building
+  - Advanced training or consulting
+
+Overage Billing:
+• Monthly summary of overage hours provided by 5th of following month
+• Invoiced separately from monthly Tier 1 fee
+• Due within 7 days of invoice date
+• Overage charges accumulate; no reset at month-end
+
+Time Tracking:
+• Developer logs time in real-time during support sessions
+• Client can request weekly time report
+• All time tracked and documented (30-minute minimum per session)
+
+3B. TIER 2 SUPPORT — 2 WEEKS FREE POST-LAUNCH
+
+2-Week Free Support Period:
+• Begins on launch date (goes live to production)
+• Ends 14 calendar days later
+• Includes: bug fixes, performance optimization, minor adjustments
+• Up to 2 rounds of feedback/revisions (max 5 requests per round)
+• Outside support hours: requests logged, addressed next business day
+
+After 2 Weeks:
+• Support ends completely
+• Client is independent owner
+• No ongoing support included
+• Client can hire external developers if needed
+
+3C. TIER 3 SUPPORT — 2 WEEKS FREE POST-LAUNCH
+
+Same as Tier 2:
+• 2-week free support period after development is complete
+• Bug fixes, optimization, minor adjustments
+• After 2 weeks: no support (Client is independent owner after month 36)
+
+3D. TIER 4 SUPPORT — 2 WEEKS FREE POST-LAUNCH
+
+Same as Tier 2 & 3:
+• 2-week free support period after final delivery
+• Bug fixes and optimization only
+• After 2 weeks: Service Provider has no further obligations
+
+================================================================================
+4. PAYMENT TERMS — DETAILED
+================================================================================
+
+4A. TIER 1 PAYMENT TERMS (Monthly Rental)
+
+If Client elected the FREE TRIAL PROGRAM (see Section 2, Tier 1 Special
+Note), Days 1–30 are fee-free and the terms below begin at Trial
+Conversion (Month 2 onward) instead of at signing — see that section for
+the Trial Conversion Fee and modified Month 1 terms.
+
+Setup Fee:
+• Option A: ₱15,000 (one-time, due at signing)
+• Option B: ₱5,000 × 3 months (installment during lock-in period)
+
+Monthly Fee:
+• ₱15,000/month (recurring, due 1st of each month)
+• Payment method: Bank transfer (account details provided)
+• Invoice issued via email on 25th of previous month
+
+Minimum Commitment:
+• First 3 months are locked-in (non-cancelable)
+• After month 3: cancel anytime with 1 month written notice
+
+Late Payment Consequences:
+• If payment not received by 5th business day of month:
+  • Deployment SUSPENDED (dashboard access disabled)
+  • Service Provider sends payment reminder
+  • If payment still not received by 10th business day:
+    • Suspension continues without further notice
+    • Client may lose data access (read-only mode activated)
+• Reconnection fee: ₱1,000 (if suspended, to reactivate)
+
+Non-Payment Clause:
+If payment is 30+ days overdue (a full month late):
+  • Contract is terminated
+  • Dashboard access is permanently disabled
+  • Data export (if requested) charged at ₱2,000/hour
+
+Overage Support Billing:
+• Monthly: hours exceeding 10 hours/week tracked and billed
+• Invoice issued with monthly fee (combined invoice)
+• Rate: ₱2,000/hour (15-minute increments)
+• Payment due with monthly fee (same due date)
+
+4B. TIER 2 PAYMENT TERMS (Full Buyout)
+
+Base Price: ₱350,000 (one-time)
+
+Payment Schedule:
+• Deposit: ₱175,000 (at signing, project kickoff)
+• Final Payment: ₱175,000 (after 2-week review period)
+• Payment method: In-person bank transfer (both parties present)
+
+Deposit:
+• Due upon signing of this agreement
+• Activates project development
+• Non-refundable (developer begins work immediately)
+
+Final Payment Process:
+1. Development completes (2–4 weeks)
+2. Platform goes live to production
+3. Client has 2 weeks to review and test
+4. Client approves (or requests minor fixes included in 2-week support)
+5. Client and Service Provider meet at bank
+6. Final ₱175k transferred in-person
+7. Within 2 business days: all accounts, credentials, GitHub transferred
+
+Refund Policy:
+• Deposit is NON-REFUNDABLE (work begins immediately)
+• If Client terminates mid-development:
+  - Client pays for work completed to date (hourly + deliverables)
+  - Remaining balance is credited against future project (if any)
+  - No refund issued
+
+Rush Deployment Surcharge:
+If Client requests faster timeline:
+
+Timeline      | Surcharge      | Total
+3 weeks       | +₱87,500 (+25%)| ₱437,500
+2 weeks       | +₱175,000 (+50%)| ₱525,000
+1 week        | +₱350,000 (+100%)| ₱700,000
+
+• Rush fee is NON-REFUNDABLE
+• Client must have all content ready before kickoff (no delays)
+• Testing is minimal; post-launch fixes included in 2-week support
+
+4C. TIER 3 PAYMENT TERMS (Build-to-Own)
+
+Project Cost: ₱400,000+ (varies by complexity)
+
+Payment Structure:
+• Monthly installment: ₱20,000/month for 36 months
+• Total paid over 3 years: ₱720,000
+• Due date: 1st of each month via bank transfer
+• Invoice issued 25th of previous month
+
+Deposit:
+• NO upfront deposit required
+• First payment (Month 1) is ₱20,000 due 1st of month
+• Development begins after first payment received
+
+Development Timeline:
+• Starts after Month 1 payment received
+• 3–5 months (design + development + testing)
+• Target go-live: 4–6 months into payment schedule
+
+Late Payment Protocol:
+
+WEEK 1 (Days 1–10 after due date):
+• If payment not received by 5th business day:
+  • Development HALTS immediately (no work done)
+  • Client notified via email
+  • Grace period: wait 10 days for payment
+
+WEEK 2 (Days 11–20 after due date):
+• If payment still not received:
+  • Contract is BREACHED
+  • Project reverts to Service Provider
+  • Project may be converted to RESELLABLE TEMPLATE
+  • OR project may be DELETED (Service Provider's discretion)
+  • Client loses all claims to code and work
+
+RESTART AFTER BREACH:
+If Client wants to continue:
+1. Pay ₱50,000 PENALTY (recovery/restart fee)
+2. Resume ₱20,000/month from that point forward
+3. Sign amended agreement with new terms
+4. New 36-month payment clock starts
+
+Example Timeline:
+• Months 1–12: Payments on-time, development ongoing
+• Month 13: Payment missed (client hit financial hardship)
+• Days 1–10: Development halts, client notified
+• Days 11–20: Payment still not received, contract breached
+• Option A: Client pays ₱50k + resumes ₱20k/month (36 new months)
+• Option B: Project deleted/resold, Client loses all rights
+
+Handover Upon Final Payment:
+• Once final ₱20k payment received (month 36):
+  • All infrastructure transferred to Client
+  • GitHub repo ownership → Client
+  • Vercel account → Client
+  • Supabase instance → Client
+  • Cloudflare R2 → Client
+  • Transfer completed within 2 business days
+
+Early Payoff:
+• Client can pay remaining balance anytime
+• Handover occurs immediately upon receipt
+• No early payoff penalty
+
+Mid-Contract Termination:
+• If Client terminates before month 36:
+  • Client keeps all work completed to date (not resellable)
+  • Client pays any partial-month charges
+  • Infrastructure remains with Service Provider until full payment
+  • Data export available within 48 hours
+
+4D. TIER 4 PAYMENT TERMS (Full Custom from Scratch)
+
+Project Cost: ₱400,000+ (varies by complexity)
+
+Payment Schedule:
+• 50% Deposit (upon signing)
+  Example: ₱600k project → ₱300k due at kickoff
+• 50% Final Payment (upon delivery & approval)
+  Example: ₱600k project → ₱300k due after review
+
+Example Breakdown:
+• Total Project: ₱750,000 (moderate complexity)
+• Deposit: ₱375,000 (due at signing)
+• Final: ₱375,000 (due after 2-week review, upon approval)
+• Payment method: In-person bank transfer (both parties present)
+
+Payment Milestones (Optional, per agreement):
+For projects over ₱1,000,000, payment can be split into more milestones:
+• 30% at kickoff (design phase)
+• 40% at mid-development (core features complete)
+• 30% at final delivery (all features + testing)
+
+Deposit:
+• Due upon signing
+• Activates project development (design begins immediately)
+• NON-REFUNDABLE (work begins right away)
+
+Final Payment:
+• Due within 2 weeks of final delivery
+• Client reviews platform (2-week review period)
+• Upon Client approval:
+  - Final ₱ transferred in-person at bank
+  - All ownership transferred within 2 business days
+
+Refund Policy:
+• Deposit is NON-REFUNDABLE (work begins immediately)
+• If Client terminates mid-development:
+  - Client pays for work completed to date (hourly rate ₱2,000/hr)
+  - Partial payments credited against invoice
+  - No refund issued
+  - Service Provider retains IP rights to completed work
+
+Scope Lock & Change Requests:
+• Scope Document defines what's built (signed before kickoff)
+• Changes after development begins are billed separately:
+  - Minor changes: ₱5,000–₱15,000
+  - Moderate features: ₱20,000–₱50,000
+  - Major features: ₱50,000+
+• Change request process: quote → approval → build → invoice
+
+================================================================================
+5. UPTIME & AVAILABILITY SLA (TIER 1 ONLY)
+================================================================================
+
+Monthly Uptime Target: 99%
+Allowed Downtime: ~43 minutes per month
+
+If Client is in the FREE TRIAL PROGRAM (Section 2), this same 99% target
+and response-time table apply during Days 1–30 — the Trial is the live
+production platform, not a reduced-monitoring demo.
+
+Service Credits (if below target):
+• 99–98% uptime: ₱500 credit
+• 98–97% uptime: ₱1,000 credit
+• 97–96% uptime: ₱1,500 credit
+• Below 96%: ₱2,000 credit (applied to next month's bill)
+
+Response Times:
+• Critical (website down): Response 30 mins, fix within 2 hours
+• High (major feature broken): Response 1 hour, fix within 4 hours
+• Medium (UI broken, slow): Response 4 hours, fix within 8 hours
+
+Scheduled Maintenance:
+• Supabase/Vercel updates ~1x/month on Sunday 2–3 AM PHT
+• Announced 48 hours in advance
+• Does NOT count toward 99% SLA
+
+Note: Tiers 2, 3, 4 do not have SLA (Client is independent owner)
+
+================================================================================
+6. FEATURE REQUESTS & NEW FUNCTIONALITY
+================================================================================
+
+All feature requests start at ₱10,000 MINIMUM.
+
+Pricing Structure:
+
+Complexity      | Examples                                    | Price Range
+Simple          | New admin widget, email template, FAQ       | ₱10k–20k
+Moderate        | Spa booking module, staff management        | ₱20k–40k
+Complex         | PayMongo integration, SMS system            | ₱40k–65k+
+
+Common Feature Requests with Pricing:
+• PayMongo integration (online payment during booking): ₱45k–65k
+• SMS/WhatsApp notifications: ₱25k–45k
+• Spa & Wellness booking module: ₱30k–45k
+• Loyalty program (points, referrals): ₱35k–50k
+• Multi-property management: ₱40k–60k
+• Google Calendar sync: ₱20k–30k
+• AI-powered room recommendations: ₱50k–80k
+• Mobile app (iOS/Android): ₱100k–200k+
+
+Process:
+1. Client requests feature
+2. Service Provider provides estimate within 48 hours
+3. Client approves in writing
+4. Work begins only after approval
+5. Feature delivered
+6. Client has 5 days to approve
+7. Up to 2 revisions included
+8. Additional revisions: ₱5,000 each
+
+Payment:
+• For Tier 1: billed to next month's invoice (or per-incident fee)
+• For Tier 2/3/4: due upon delivery (one-time projects)
+
+================================================================================
+7. DATA BACKUP & DISASTER RECOVERY
+================================================================================
+
+7A. TIER 1 — CLIENT RESPONSIBILITY
+
+The Client is responsible for their own data backups.
+Service Provider does NOT maintain backups.
+
+If Client needs backup assistance:
+• Contact Service Provider: ₱2,000–₱5,000 per-incident fee
+  (to help set up or restore from backup)
+
+Recommendation:
+• Enable Supabase Point-in-Time Recovery (PITR, ₱500+/month)
+• Client sets up and maintains (separate from Service Provider)
+• Automatic daily backups retained for 7–30 days
+
+7B. TIER 2 — PRE-HANDOVER ONLY
+
+Service Provider maintains daily automatic backups for first 2 weeks
+post-launch only.
+
+After final payment and handover:
+• Client assumes full responsibility for backups
+• Client can set up Supabase PITR, manual pg_dump, or other strategy
+• Service Provider is not responsible for data recovery after handover
+
+7C. TIER 3 — CLIENT RESPONSIBILITY
+
+Client is responsible for backups during 36-month payment period.
+Service Provider does NOT maintain backups (separate from development work).
+
+Backup assistance: ₱2,000–₱5,000 per-incident (same as Tier 1)
+
+After handover (month 36):
+• Client assumes full responsibility
+
+7D. TIER 4 — PRE-DELIVERY ONLY
+
+Service Provider maintains backups during development phase (3–5 months).
+
+After final delivery:
+• Client assumes full responsibility (now independent owner)
+• Service Provider not responsible after 2-week support period ends
+
+================================================================================
+8. TERMINATION & CANCELLATION
+================================================================================
+
+8A. TIER 1 TERMINATION
+
+Free Trial Non-Conversion:
+• If Client elected the Free Trial Program (Section 2) and does not
+  subscribe by Day 29/pay by Day 30, this Agreement automatically
+  terminates with no penalty to Client — see Section 2's Tier 1 Special
+  Note for the full mechanics (site takedown timing, data export terms).
+  This is separate from — and does not require — the 1-month written
+  notice below, which applies only to a Client already on paid service.
+
+After 3-Month Lock-In:
+• Client may cancel anytime with 1 month written notice
+• No refunds for remaining period
+• Upon cancellation: dashboard access disabled within 24 hours
+• Data export available (requested within 48 hours)
+
+Early Termination (Before 3 Months):
+• Client may not cancel (lock-in period)
+• If Client insists: early termination fee = ₱15,000 (1 month's fee)
+• Plus: cost of work already performed
+
+By Service Provider (Tier 1):
+• If Client fails to pay: deployment suspended
+• If payment 30+ days overdue: contract terminated, access permanently disabled
+
+8B. TIER 2 TERMINATION
+
+After Final Payment:
+• Client is independent owner; no termination needed (Client owns everything)
+• Contract is complete
+
+Before Final Payment:
+• If Client terminates mid-development:
+  - Client pays for work completed to date
+  - Deposit is non-refundable
+  - Service Provider retains IP for any incomplete work
+
+8C. TIER 3 TERMINATION
+
+Before Month 36:
+• If Client terminates: Client keeps work completed (not resellable)
+• Client pays for partial-month work
+• Infrastructure remains with Service Provider
+
+After Contract Breach (missed payment):
+• If Client fails to restart within 30 days: project deleted/resold
+• Client's rights to code terminate
+
+After Month 36 (Final Payment):
+• Contract is complete; Client is independent owner
+
+8D. TIER 4 TERMINATION
+
+Before Final Delivery:
+• If Client terminates mid-development:
+  - Client pays for work completed to date (hourly rate: ₱2,000/hr)
+  - Deposit is non-refundable
+  - Service Provider retains IP for incomplete work
+
+After Final Delivery:
+• Client is independent owner; contract complete
+• Service Provider has no further obligations (after 2-week support ends)
+
+================================================================================
+9. INFRAST RUCTURE COSTS & BILLING (TIER 1 ONLY)
+================================================================================
+
+Vic owns and maintains all infrastructure. Client creates and pays for their
+own Vercel Pro account (separate billing).
+
+CLIENT INFRASTRUCTURE COSTS (Separate Bills, Not from Vic):
+
+• Vercel Pro: ~₱1,150–1,500/month (Client's own account)
+  - Required for Tier 1 production hosting
+  - Client creates account at vercel.com, upgrades to Pro
+  - Billed directly by Vercel
+• Supabase overages: ₱0–1,500/month (if beyond free tier)
+  - Typically no cost for small resorts
+  - Billed directly by Supabase
+• Cloudflare R2: ₱200–500/month (if high image traffic)
+  - Billed directly by Cloudflare
+  - Vic optimizes usage to minimize costs
+• Google Drive: ₱0–150/month (if storage exceeded)
+  - Billed directly by Google
+  - Typically free for resorts
+• EmailJS: ₱0–200/month (overage only)
+  - Billed directly by EmailJS
+
+Vic's Role:
+• Manages accounts and infrastructure (but Client owns their Vercel account)
+• Monitors usage and optimizes costs
+• Provides monthly infrastructure report
+
+CLIENT BILLING FLOW:
+1. Client pays Vic: ₱15,000/month (platform fee)
+2. Client pays Vercel directly: ~₱1,150/month (Pro account)
+3. Client pays Supabase directly: overages only (if any)
+4. Client pays Cloudflare directly: overages only (if any)
+5. Client pays Google: overages only (if any)
+
+TOTAL TYPICAL MONTHLY COST TO CLIENT:
+Vic's platform fee: ₱15,000
+Vercel Pro (Client's): ~₱1,150
+Supabase/R2/Google overages: ₱200–800
+TOTAL: ~₱16,500–17,000/month
+
+Vic provides monthly transparency report showing all infrastructure usage.
+
+================================================================================
+10. RESELLABLE TEMPLATE DISCLOSURE (TIER 1 ONLY)
+================================================================================
+
+TIER 1 USES A RESELLABLE TEMPLATE.
+
+What This Means:
+✓ The design, layout, and functionality are reused on other resort websites
+✓ Other Tier 1 clients will have the same visual design and interface
+✓ The only differences between resorts: name, colors, room content
+
+YOUR DATA IS ALWAYS PRIVATE:
+✓ Your bookings, guests, prices, and business data are 100% isolated
+✓ No other resort can see or access your data
+✓ Data security and confidentiality are guaranteed
+✓ Each resort has separate database and credentials
+
+WHY RESELLABLE TEMPLATE?
+• Lower cost (shared development cost across clients)
+• Faster deployment (pre-built and tested)
+• Proven reliability (used by multiple businesses)
+
+IF YOU WANT A UNIQUE DESIGN:
+• Tier 2: Full buyout with custom design (₱350,000)
+• Tier 3: Build-to-own with custom design (₱20k/month × 36)
+• Tier 4: Full custom from scratch (₱400k+)
+
+TIER 2, 3, 4 ARE NOT RESELLABLE:
+These tiers provide unique, custom designs specific to your resort.
+The Service Provider does not resell your codebase to other clients.
+
+================================================================================
+11. SECURITY & PRIVACY
+================================================================================
+
+DATA OWNERSHIP:
+• All Client data (bookings, guests, prices, images) belongs 100% to Client
+• Service Provider is a steward/host, not owner
+• Client may export all data anytime (CSV, JSON, SQL)
+
+DATA CONFIDENTIALITY:
+• Client's business strategy, resort details, pricing, guest info kept private
+• Service Provider does not share data with third parties
+• Data is not used for marketing or promotional purposes
+• Exceptions: legal requirements, breach response, law enforcement
+
+DATA SECURITY:
+• Database: Supabase Postgres with Row Level Security (RLS)
+• Encryption: TLS in-transit, encrypted at rest
+• Backups: encrypted daily (Tier 2 pre-handover only)
+• Access: role-based, credentials not shared
+• Monitoring: 24/7 automated security monitoring
+
+GDPR/DPA COMPLIANCE (if applicable):
+• Service Provider acts as a "Processor" (if Client is the "Controller")
+• Data processing agreements available upon request
+• PII is handled per Data Privacy Act 2012 (Philippines)
+• Client retains right to export/delete guest data anytime
+
+================================================================================
+12. INTELLECTUAL PROPERTY & CODE OWNERSHIP
+================================================================================
+
+12A. TIER 1
+
+• Design & UI: Owned by Service Provider (resellable template)
+• Client's content: Owned by Client (room photos, descriptions, pricing)
+• Database schema: Owned by Service Provider
+• Codebase: Owned by Service Provider
+• Client's data (bookings, guests): Owned by Client
+
+Client's Rights:
+✓ Use the platform for unlimited time (monthly rental)
+✓ Access to admin dashboard and all features
+✓ Export own data anytime
+✗ No access to source code
+✗ No right to resell or rebrand the platform
+✗ No right to modify the code
+
+Upon Cancellation:
+• Client loses access to platform and all data (within 24 hours)
+• Client may request data export before access is disabled
+
+12B. TIER 2
+
+• Full codebase: Owned by Client (upon final payment)
+• GitHub repository: Owned by Client
+• Design & UI: Owned by Client
+• Database schema: Owned by Client
+• All customizations: Owned by Client
+• Client's data: Owned by Client
+
+Client's Rights:
+✓ Full code ownership and modification rights
+✓ Right to fork, resell, or rebrand the platform
+✓ Right to hire other developers to modify code
+✓ Right to deploy on alternative hosting
+✗ Service Provider retains no IP rights after handover
+
+Service Provider's Rights:
+✗ No rights to Client's code after handover
+✗ Cannot resell Client's custom code or design
+✗ Cannot use Client's code for marketing or case studies (unless Client permits)
+
+12C. TIER 3
+
+During Payment Period (Months 1–36):
+• Code: Owned by Service Provider
+• Design: Owned by Service Provider
+• Database: Owned by Service Provider
+• Client's data: Owned by Client
+
+Upon Final Payment (Month 36):
+• Code: Transfers to Client
+• Design: Transfers to Client
+• Database/Supabase: Transfers to Client
+• All IP rights: Owned by Client
+
+Client's Rights (After Month 36):
+✓ Full code ownership and modification rights
+✓ Right to hire other developers to modify
+✓ Right to deploy on alternative hosting
+✗ Until final payment: no code access or modification rights
+
+Service Provider's Rights (During Payment):
+✓ Code ownership and right to resell (if payment default)
+✓ If breach: project becomes resellable template or is deleted
+✗ After month 36: no IP rights
+
+12D. TIER 4
+
+• Full codebase: Owned by Client (upon final payment)
+• All customizations: Owned by Client
+• Design & UI: Owned by Client
+• Database schema: Owned by Client
+• GitHub repo: Owned by Client (Client becomes sole owner)
+
+Client's Rights:
+✓ Complete code ownership from day 1 of handover
+✓ Right to modify, resell, rebrand, deploy anywhere
+✓ Right to hire other developers
+✓ Right to use code for commercial purposes
+
+Service Provider's Rights:
+✗ No IP rights after handover
+✗ Cannot resell or reuse Client's code
+✗ Cannot use Client's design or customizations for other projects
+
+PORTFOLIO & PUBLICITY USE:
+At signing, Client selects:
+☐ Developer MAY use this project in portfolio/case studies (anonymized if requested)
+☐ Developer may NOT use this project publicly (confidential)
+
+================================================================================
+13. LIABILITY & INDEMNIFICATION
+================================================================================
+
+LIMITATION OF LIABILITY:
+Developer is NOT liable for:
+• Data loss from Client negligence or improper backup procedures
+• Breaches resulting from shared credentials or weak passwords
+• Client misuse, unauthorized access, or third-party attacks
+• Third-party service outages (Vercel, Supabase, etc.)
+• Cost fluctuations beyond normal range (inflation, market changes)
+• Bugs discovered post-support period (Tiers 2/3/4: after 2 weeks)
+• Issues without active paid support (Tier 1: without current ₱15k fee)
+• Client business losses, lost revenue, or consequential damages
+
+MAXIMUM LIABILITY:
+Developer's total liability is capped at the amount Client has paid to date:
+• Tier 1: 12 months of fees = ₱180,000 maximum
+• Tier 2: ₱350,000 (total paid)
+• Tier 3: 36 months of fees = ₱720,000 (if any breach occurs)
+• Tier 4: ₱400,000+ (total project cost)
+
+CLIENT INDEMNIFICATION:
+Client agrees to indemnify Developer for:
+• Claims related to Client's content (room photos, descriptions, etc.)
+• Unauthorized use of Client credentials
+• Client's violation of applicable laws
+• Third-party claims related to Client's business
+
+================================================================================
+14. CONFIDENTIALITY
+================================================================================
+
+DEVELOPER'S CONFIDENTIALITY OBLIGATIONS:
+Service Provider keeps Client's data, pricing, strategy, and business info
+strictly confidential. Information will NOT be disclosed to third parties except:
+• Legal requirements or court order
+• Service Provider's legal counsel (for contract disputes)
+• Necessary third parties (hosting providers, payment processors)
+• With Client's explicit written consent
+
+CLIENT'S CONFIDENTIALITY OBLIGATIONS:
+Client should not publicly disclose Developer's pricing or proprietary processes
+without permission (for Tier 2/3/4 custom work).
+
+EXCEPTIONS:
+• Public knowledge (general platform features, not Client-specific)
+• Business recommendations to friends/colleagues (encouraged!)
+
+================================================================================
+15. AMENDMENT & MODIFICATION
+================================================================================
+
+Any changes to this agreement must be in writing and signed by both parties.
+Email confirmation is acceptable if both parties confirm via email.
+
+Minor amendments (fee adjustments, deadline changes) may be documented via
+email exchange with "AMENDED" in subject line and explicit confirmation.
+
+Major amendments (tier changes, liability clauses) require formal signature
+on amended agreement.
+
+================================================================================
+16. GOVERNING LAW & DISPUTE RESOLUTION
+================================================================================
+
+Governing Law:
+This agreement is governed by the laws of the Republic of the Philippines.
+
+Dispute Resolution:
+1. Both parties attempt good-faith negotiation within 14 days
+2. If unresolved: binding arbitration per Philippine Arbitration Law
+3. Arbitrator mutually selected by both parties
+4. Arbitration held in Manila, Philippines
+5. Decision is final and binding
+
+Litigation:
+If arbitration is declined, either party may file suit in Philippine courts.
+Venue: Regional Trial Court (RTC) of Metro Manila.
+
+================================================================================
+17. TERMINATION CLAUSE
+================================================================================
+
+By Developer:
+• If Client fails to pay by 10th business day of month (Tier 1)
+• If Client breaches terms and fails to cure within 30 days
+• If Client becomes insolvent or files for bankruptcy
+• Developer may halt work (Tier 2/3/4) or suspend deployment (Tier 1)
+
+By Client:
+• Tier 1: After 3 months, anytime with 1 month notice
+• Tier 2: Not applicable (independent after handover)
+• Tier 3: Anytime, but forfeits infrastructure until final payment
+• Tier 4: Not applicable (independent after handover)
+
+Upon Termination:
+• Tier 1: access disabled within 24 hours
+• Client's data: available for export (48 hours)
+• Tier 3 (breach): project resold or deleted
+• Refunds: only per payment terms (no refund for future work)
+
+================================================================================
+18. SPECIAL PROVISIONS
+================================================================================
+
+TIMEZONE & SUPPORT HOURS:
+All times in Philippine Time (PHT / UTC+8).
+Support hours: 9 AM–5 PM, Monday–Friday.
+Emergency security issues: 24/7 monitoring, alerts within 2 minutes.
+
+FORCE MAJEURE:
+Neither party is liable for delays/failures due to unforeseen events
+(natural disasters, war, government action, pandemics, etc.).
+Reasonable accommodation made; timeline may be extended.
+
+PAYMENT CURRENCY:
+All fees in Philippine Pesos (₱). Bank transfer rate used for international
+clients (if applicable).
+
+NO WAIVER:
+Failure to enforce any provision does not waive the right to enforce it
+in the future.
+
+SEVERABILITY:
+If any clause is invalid, remaining clauses remain in effect.
+
+================================================================================
+19. SIGNATURES & AGREEMENT
+================================================================================
+
+SELECTED TIER (Select One):
+
+☐ TIER 1 — Managed Rental (Monthly, ₱15,000/month + ₱2,000/hr overage)
+☐ TIER 2 — Full Buyout (One-Time, ₱350,000)
+☐ TIER 3 — Build-to-Own (Custom, ₱20,000/month × 36)
+☐ TIER 4 — Full Custom from Scratch (₱400,000+)
+
+IF TIER 1 SELECTED — TRIAL ELECTION (Optional, see Section 2):
+☐ Client elects to begin with the 30-day FREE TRIAL PROGRAM
+   (Trial Conversion Fee ₱25,000 due by Day 29 to continue as paid Tier 1)
+☐ Client elects to begin as standard paid Tier 1 (no trial; Setup Fee +
+   Month 1 due at signing, per Section 4A)
+
+PORTFOLIO USE:
+
+☐ Developer MAY use this project in portfolio/case studies (name anonymized if requested)
+☐ Developer may NOT use this project publicly (confidential)
+
+SERVICE PROVIDER:
+Name: Ceron Matthew P. Calsena
+Email: developerceron@gmail.com
+Phone: 09668829302
+
+Signature: ____________________________     Date: _________________
+
+CLIENT:
+Name: _________________________________
+Email: _________________________________
+Phone: _________________________________
+
+Signature: ____________________________     Date: _________________
+
+================================================================================
+By signing this agreement, both parties agree to all terms outlined above.
+
+This Service Agreement is binding and enforceable per Philippine law.
+
+For questions or amendments, contact: developerceron@gmail.com
+
+================================================================================
+END OF SERVICE AGREEMENT — VERSION 7 COMPREHENSIVE
+================================================================================
