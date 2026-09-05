@@ -370,3 +370,198 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* ============================================================
+ * TICKET DETAIL THREAD (Task 10)
+ * ============================================================ */
+.ticketThreadBackLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  margin-bottom: var(--space-lg);
+  transition: color var(--transition-fast);
+}
+.ticketThreadBackLink:hover,
+.ticketThreadBackLink:focus-visible {
+  color: var(--color-text-primary);
+}
+
+.ticketThreadHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding-bottom: var(--space-lg);
+  margin-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.ticketThreadSubject {
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+.ticketThreadOrderNote {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+}
+
+.ticketThreadHeaderRight {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.ticketThreadReopenButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.ticketThreadReopenButton:hover:not(:disabled) {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+.ticketThreadReopenButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ticketThreadMessages {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.ticketThreadMessage {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-sm);
+  max-width: 640px;
+}
+.ticketThreadMessage--admin {
+  align-self: flex-start;
+}
+.ticketThreadMessage--buyer {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.ticketThreadMessageIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: var(--color-surface-active);
+  color: var(--color-text-secondary);
+}
+
+.ticketThreadMessageBubble {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+}
+.ticketThreadMessage--buyer .ticketThreadMessageBubble {
+  background-color: var(--color-surface-active);
+}
+
+.ticketThreadMessageSender {
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.ticketThreadMessageBody {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.ticketThreadMessageTime {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+}
+
+.ticketThreadReplyForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+}
+
+.ticketThreadReplyLabel {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+.ticketThreadReplyForm textarea {
+  width: 100%;
+  font-size: 1rem;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface-active);
+  color: var(--color-text-primary);
+  font-family: inherit;
+  resize: vertical;
+}
+
+.ticketThreadReplyActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+/* Skeleton loading state (Rule 25.2). */
+.ticketThreadSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.ticketThreadSkeletonLine {
+  height: 28px;
+  width: 60%;
+  border-radius: 4px;
+}
+.ticketThreadSkeletonBubble {
+  height: 64px;
+  width: 80%;
+  border-radius: 12px;
+}
+.ticketThreadSkeletonBubble--short {
+  width: 50%;
+  align-self: flex-end;
+}

@@ -973,3 +973,26 @@ restriction as before; schema block manually reviewed for syntax.
   fixing OrderTrackingDetail.tsx's "Contact Support" button to link
   into /buyer/support?orderId=... instead of the public /support
   contact form).
+[2026-09-06] Task 10 complete: built the /buyer/support/[ticketId]
+  thread UI per docs/tasks/task-10-ui-support-ticket-detail-page.md --
+  app/buyer/support/[ticketId]/page.tsx (Server Component),
+  SupportTicketThread.tsx (full message thread, buyer messages
+  right-aligned vs admin left-aligned per senderRole, reply box that
+  works on any status since the reply route itself auto-reopens a
+  closed ticket, standalone "Reopen" button shown only when status is
+  "closed", Rule 25 loading/not-found states), and
+  lib/hooks/useBuyerSupportTicketDetail.ts (fetch + sendReply +
+  reopenTicket, re-fetches after each mutation rather than optimistic
+  local state so status flips always reflect the server). Also fixed
+  OrderTrackingDetail.tsx's "Contact Support" button (flagged in the
+  Task 07/08 entries above) -- it now links to
+  /buyer/support?orderId=... instead of the public /support contact
+  form, completing the pre-fill path SupportTicketsList.tsx (Task 09)
+  already supported. This completes buyer_account_specification.md
+  Section 4.5 end to end (Tasks 07-10); Section 5C's 4.5 line should
+  be flipped to [DONE] on next audit. npx tsc --noEmit clean on all
+  new/changed files -- only the same 16 pre-existing, unrelated
+  errors from the ungenerated Prisma client remain; npx prisma
+  generate still blocked by the binaries.prisma.sh sandbox
+  restriction -- run npx prisma db push && npx prisma generate
+  locally before deploying.

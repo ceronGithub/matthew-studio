@@ -14,9 +14,11 @@
  *
  * Actions: Cancel Order (behind ConfirmationModal per Rule 34.4, only
  * shown while canCancel is true), Reorder (only on Delivered/Cancelled),
- * Contact Support (links to /support with the order id in the query
- * string — /support doesn't read it yet, that's Section 4.5's
- * not-yet-built Support Tickets work).
+ * Contact Support (links into the buyer's own Support Tickets system
+ * at /buyer/support with the order id in the query string — Section
+ * 4.5's Task 10; previously linked to the public /support contact
+ * form, which had no way to associate a reply with this order or
+ * this buyer's account).
  */
 "use client";
 
@@ -176,7 +178,7 @@ export default function OrderTrackingDetail({ orderId }: { orderId: string }) {
       )}
 
       <section className="orderDetailActions">
-        <Link href={`/support?orderId=${order.orderId}`} className="orderDetailActionButton orderDetailActionButton--secondary">
+        <Link href={`/buyer/support?orderId=${order.orderId}`} className="orderDetailActionButton orderDetailActionButton--secondary">
           <LifeBuoy size={16} /> Contact Support
         </Link>
         {order.canCancel && (
