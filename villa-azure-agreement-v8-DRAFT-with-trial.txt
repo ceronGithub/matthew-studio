@@ -1070,25 +1070,32 @@ CRITERIA 2 — PERMANENT EXCLUSIVITY:
   features the Client accumulates
 
 CRITERIA 3 — TIME-LIMITED EXCLUSIVITY:
-• ALL of the Client's features — current and any requested while this
-  Criteria remains active — are exclusive to this Client for 6 months
-  from election. During this window, Client's Monthly Service Fee is
+• Each of the Client's features — whether requested at election or at
+  any point while this Criteria remains active — is exclusive to this
+  Client for its own independent 6 months, counted from that feature's
+  individual request/completion date, not from a single account-wide
+  window. Features requested at different times will therefore expire
+  from exclusivity on different dates
+• While Criteria 3 is active (i.e. at least one feature still within
+  its individual 6-month window), Client's Monthly Service Fee is
   ₱20,000/month
-• [ASSUMPTION — CONFIRM: if a new feature is requested partway through
-  an already-active 6-month window, this feature is drafted as sharing
-  the account's existing window (its exclusivity ends when the
-  account-wide window ends), rather than restarting/extending the
-  window. Confirm or revise.]
-• At the end of the 6-month exclusivity window:
-  - All features are automatically folded into the shared resellable
-    template, and
-  - Client's Monthly Service Fee reverts to the standard ₱15,000/month
-    (Criteria 1 applies by default)
-• Before the 6-month window expires, Client may elect to:
-  - Renew exclusivity for another 6 months at a ₱7,500 renewal fee
-    (50% of the minimum Feature Fee), continuing at ₱20,000/month, OR
-  - Upgrade to Criteria 2 (permanent exclusivity) — Monthly Service Fee
-    moves to the flat ₱25,000/month rate going forward
+• Each feature is automatically folded into the shared resellable
+  template the moment its own 6-month window ends — independently of
+  any other feature's window
+• Once every feature under Criteria 3 has had its window end (no
+  feature remains within its 6-month period) and the Client has not
+  elected a different Criteria, the account automatically reverts to
+  Criteria 1 (Shared) and the Monthly Service Fee reverts to the
+  standard ₱15,000/month
+• Before an individual feature's 6-month window expires, Client may
+  elect, on a per-feature basis, to:
+  - Renew that feature's exclusivity for another 6 months at a ₱7,500
+    renewal fee (50% of the minimum Feature Fee) per feature renewed,
+    with that feature continuing to count toward the ₱20,000/month
+    fee under Criteria 3, OR
+  - Upgrade the entire account to Criteria 2 (permanent exclusivity)
+    — Monthly Service Fee moves to the flat ₱25,000/month rate going
+    forward and all per-feature windows stop applying
 
 CRITERIA 4 — BLANKET EXCLUSIVITY BUYOUT:
 • Buyout Fee: ₱180,000 (one-time, non-refundable, due upon election —

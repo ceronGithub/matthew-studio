@@ -126,9 +126,16 @@ features):
 - **Criteria 2 (Permanent exclusivity):** feature never shared, Monthly
   Fee becomes a flat ₱25,000 — does not stack across multiple Criteria
   2 features.
-- **Criteria 3 (6-month exclusivity):** Monthly Fee is ₱20,000 for 6
-  months, then feature auto-shares and fee reverts to ₱15,000;
-  renewable for ₱7,500/6mo, or upgradable to Criteria 2.
+- **Criteria 3 (6-month exclusivity):** Monthly Fee is ₱20,000/month
+  while at least one feature is within its window. Each feature gets
+  its own independent 6-month clock counted from that feature's own
+  request/completion date — not one shared account-wide window — so
+  features requested at different times expire from exclusivity on
+  different dates. Each feature auto-shares (and fee reverts to
+  ₱15,000 once none remain active) independently; renewable per
+  feature for ₱7,500/6mo, or the whole account can upgrade to
+  Criteria 2. [RESOLVED 2026-09-05 — was previously an open
+  assumption in the contract.]
 - **Criteria 4 (Blanket buyout, one-time ₱180,000):** all future
   features automatically exclusive going forward, Monthly Fee stays
   ₱15,000 regardless of how many accumulate. Prospective only — doesn't

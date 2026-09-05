@@ -256,3 +256,38 @@ that file left off.
   its own records. Item #1 is now fully resolved -- no remaining
   [ASSUMPTION -- CONFIRM] tags on Free Trial eligibility. Contract-only
   change.
+
+[2026-09-05] Resolved the Criteria 3 (Time-Limited Exclusivity)
+  stacking [ASSUMPTION -- CONFIRM] in
+  villa-azure-agreement-v8-DRAFT-with-trial.txt: a new feature
+  requested partway through an active Criteria 3 window now gets its
+  own independent 6-month clock (from that feature's own
+  request/completion date) instead of sharing one account-wide window
+  -- so features under Criteria 3 can expire from exclusivity on
+  different dates. Updated the expiry, per-feature auto-share, and
+  per-feature renewal/upgrade bullets to match. Updated
+  tier1_free_trial_subscription_specification.md Section 3.6's
+  Criteria 3 bullet to match and marked it RESOLVED. Note: this is
+  separate from the still-open item re: a client holding both an
+  active Criteria 2 and Criteria 3 feature simultaneously (Section
+  3.6's other Open item / contract's General Rules "only ONE active
+  Criteria per account" language) -- that stacking question remains
+  unresolved. Contract-only change -- not reviewed by a lawyer, no
+  technical build touched.
+
+[2026-09-05] Added trial_tracking_and_developer_notifications_specification.md
+  (new file) -- extends the Tier 1 Free Trial Program with operational
+  automation: trial day tracker, developer Telegram setup during the
+  wizard, daily Telegram reminders to the developer (Day 20-30), a
+  T-minus-8-hour auto-lockdown + PDF booking invoice (pending/booked/
+  cancelled) auto-emailed to the resort owner on non-conversion, and
+  late-conversion reversal (site/dashboard restored, invoice cancelled
+  if not yet sent). Feature builds into the deployed client template
+  itself (e.g. small-time-resort-template), not Matthew Studio, since
+  booking data and the First-Run Setup Wizard already live there per
+  deployment. Access control resolved as Telegram-confirmed conversion:
+  clicking "Mark as Converted" in the super-admin dashboard only sends a
+  one-time 6-digit code to the developer's Telegram -- the action can't
+  finalize without that code, so the Client (who holds the super_admin
+  role on their own site) can never self-convert. Spec-only -- no code
+  built yet.
