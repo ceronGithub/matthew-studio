@@ -1,18 +1,21 @@
 /**
  * FILE: lib/securityLog.ts
  * PURPOSE:
- * Central logging service for auth security events (login_success,
- * login_failed, registration_failed). Writes to the SecurityLog table
- * via Prisma. Logging must never break the request it's attached to —
- * every write is wrapped in try/catch and failures are only
- * console.error'd, never re-thrown.
+ * Central logging service for security events across the whole app
+ * (auth, orders, webhooks, Gatekeeper). Writes to the SecurityLog
+ * table via Prisma. Logging must never break the request it's
+ * attached to — every write is wrapped in try/catch and failures are
+ * only console.error'd, never re-thrown.
  *
- * This is the basic version: event + actor + IP + parsed user agent.
- * No geolocation yet (would need a MaxMind GeoLite2 database file) —
- * can be added later without changing this function's signature.
+ * Phase 2 upgrade: now also computes a device fingerprint (reused by
+ * middleware.ts's Gatekeeper check, via lib/deviceFingerprint.ts) and
+ * a city-level geolocation lookup (services/geoip.ts), so
+ * lib/anomalyDetection.ts has data to compare each new login against.
  */
 import { prisma } from "@/services/prisma";
 import { UAParser } from "ua-parser-js";
+import { generateDeviceFingerprint } from "@/lib/deviceFingerprint";
+import { getGeolocationFromIP } from "@/services/geoip";
 
 interface LogSecurityEventInput {
   eventType: string;
@@ -32,6 +35,12 @@ export async function logSecurityEvent({
     const userAgent = request?.headers.get("user-agent") ?? null;
 
     const parsed = userAgent ? new UAParser(userAgent).getResult() : null;
+    const deviceFingerprint = request ? generateDeviceFingerprint(request.headers) : null;
+
+    // Geolocation is looked up on every write — getGeolocationFromIP
+    // never throws, so this is safe even when the .mmdb file hasn't
+    // been downloaded yet (Rule 38.5's fail-safe behavior).
+    const geo = await getGeolocationFromIP(ipAddress);
 
     await prisma.securityLog.create({
       data: {
@@ -40,11 +49,17 @@ export async function logSecurityEvent({
         details,
         ipAddress,
         userAgent,
+        deviceFingerprint,
         deviceType: parsed?.device.type ?? "desktop",
         browserName: parsed?.browser.name ?? null,
         browserVersion: parsed?.browser.version ?? null,
         osName: parsed?.os.name ?? null,
         osVersion: parsed?.os.version ?? null,
+        geoCountry: geo.geoCountry,
+        geoCity: geo.geoCity,
+        geoLatitude: geo.geoLatitude,
+        geoLongitude: geo.geoLongitude,
+        geoAccuracy: geo.geoAccuracy,
       },
     });
   } catch (error) {

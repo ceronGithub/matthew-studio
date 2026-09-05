@@ -35,27 +35,69 @@ model RateLimitAttempt {
 
 /// SecurityLog
 /// Append-only record of auth-related security events — separate from
-/// RateLimitAttempt (which only tracks request counts). Basic version:
-/// event + actor + request metadata (IP, user agent, parsed
-/// browser/OS). Geolocation fields are left out for now since they'd
-/// require a MaxMind GeoLite2 database that has to be downloaded
-/// manually — can be added later without breaking this shape.
+/// RateLimitAttempt (which only tracks request counts). Now carries
+/// device fingerprinting (SHA-256 hash of UA + headers, used by
+/// Gatekeeper's 3-strike/instant-ban logic) and city-level geolocation
+/// (MaxMind GeoLite2, 2-decimal rounding only — never a precise
+/// address, per Rule 38.5's privacy rule) so Phase 2's anomaly
+/// detection (impossible-travel, new-device) has data to compare
+/// against.
 model SecurityLog {
   id             String   @id @default(cuid())
-  eventType      String // login_success | login_failed | registration_failed
+  eventType      String // login_success | login_failed | registration_failed | admin_login_denied | rate_limit_hit | location_anomaly | device_change | sql_injection_attempt
   actor          String? // email, nullable when the attempt never resolved to one
   details        String? // human-readable one-liner
   ipAddress      String?
   userAgent      String?
-  deviceType     String? // mobile | tablet | desktop
-  browserName    String?
-  browserVersion String?
-  osName         String?
-  osVersion      String?
-  createdAt      DateTime @default(now())
+
+  // Device fingerprinting — SHA-256 hash of UA + headers, compared
+  // against past logins for the same actor to flag a device_change.
+  deviceFingerprint String?
+  deviceType        String? // mobile | tablet | desktop
+  browserName       String?
+  browserVersion    String?
+  osName            String?
+  osVersion         String?
+
+  // Geolocation — city-level only. Latitude/longitude are always
+  // rounded to 2 decimals before being written (Rule 38.5) — never
+  // store a precise GPS coordinate here.
+  geoCountry  String? // ISO 3166-1 alpha-2, e.g. "PH"
+  geoCity     String?
+  geoLatitude  Float?
+  geoLongitude Float?
+  geoAccuracy  Int? // accuracy radius in km, from the GeoIP lookup
+
+  createdAt DateTime @default(now())
 
   @@index([eventType])
   @@index([actor])
+  @@index([createdAt])
+  @@index([deviceFingerprint])
+  @@index([geoCountry])
+}
+
+/// AccountActivityLog
+/// Per-account activity trail (Rule 42) — separate from SecurityLog
+/// (login attempts/attacks) and from any future customer-facing audit
+/// trail. Scope for this project: superAdmin/admin accounts only,
+/// since they're the only account types that exist so far. Records
+/// page views and discrete actions taken inside /superAdmin and
+/// /admin, for oversight — never covers anonymous public traffic
+/// (that's Rule 41 territory, out of scope for Phase 2).
+model AccountActivityLog {
+  id         String @id @default(cuid())
+  accountId  String // the authenticated user's ID — never null
+  action     String // a page path (e.g. "/superAdmin/dashboard") or a named action (e.g. "cancelled_order")
+  ipAddress  String?
+  geoCity    String?
+  geoCountry String?
+  deviceType String?
+  userAgent  String?
+
+  createdAt DateTime @default(now())
+
+  @@index([accountId])
   @@index([createdAt])
 }
 
