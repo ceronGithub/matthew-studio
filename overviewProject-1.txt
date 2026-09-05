@@ -475,3 +475,24 @@ that file left off.
   order-confirmation/[orderId] route also doesn't exist yet (1f) --
   PayMongo's success_url points at it already, so it 404s today until
   1f is built.
+
+[2026-09-05] Built cart_checkout_specification.md Phase 1 step 1e
+  (webhook, Rule 30): app/api/paymongo/webhook/route.ts -- verifies
+  PayMongo's Paymongo-Signature header (HMAC-SHA256 over the raw
+  request body, constant-time compare against both test/live values)
+  before trusting anything in the payload, matches the event to an
+  Order by paymongoOrderId (the Checkout Session id from step 1d),
+  and on a checkout_session.payment.paid event sets Order.status =
+  "PAID" + paymongoPaymentId/paymentStatus/paidAt per Rule 30.1/30.2.
+  Every outcome (missing/invalid signature, unhandled event type,
+  successful payment) logs to SecurityLog via the existing
+  logSecurityEvent helper. Added PAYMONGO_WEBHOOK_SECRET to the env
+  vars list. Known gap, documented in the file header rather than
+  silently worked around: a checkout_session.payment.failed event is
+  acknowledged but doesn't change Order.status, since the Order model
+  (Section 5) has no failed/cancelled-by-provider status distinct
+  from "pending" -- needs a spec decision before a real fix. npx tsc
+  --noEmit and npx eslint both pass clean (tsc's one error is the
+  same pre-existing "PrismaClient has no exported member" -- prisma
+  generate has never been run in this sandbox against the current
+  schema; run it locally before testing this route).

@@ -288,7 +288,8 @@ PHASE 1 — FOUNDATION (blocks everything buyer-facing; build first)
        [DONE] 1d. PayMongo Checkout Session creation (services/paymongo.ts
               + app/api/checkout/route.ts) -- built 2026-09-05, product
               choice is Checkout Session not Payment Link, see file header
-       [ ]    1e. Webhook + Order status update (Rule 30)
+       [DONE] 1e. Webhook + Order status update (Rule 30) --
+              app/api/paymongo/webhook/route.ts, built 2026-09-05
        [ ]    1f. Order confirmation page + status polling -- success_url
               already points at /order-confirmation/[orderId] from 1d,
               but that route doesn't exist yet
@@ -428,6 +429,7 @@ referenced in the codebase today (grep-verified) is added below.
   EMAILJS_TEMPLATE_ID_CONTACT=
   EMAILJS_TEMPLATE_ID_SUPPORT=
   PAYMONGO_SECRET_KEY=       # server-only, no NEXT_PUBLIC_ prefix (Rule 18.5) -- services/paymongo.ts, added 2026-09-05
+  PAYMONGO_WEBHOOK_SECRET=   # server-only -- app/api/paymongo/webhook/route.ts, added 2026-09-05
 
 .env (Prisma CLI -- generate/db push/migrate, read via prisma.config.mjs):
   DATABASE_URL=
