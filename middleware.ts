@@ -89,7 +89,13 @@ export async function middleware(request: NextRequest) {
     // a single shared destination.
     response = NextResponse.redirect(new URL(getDashboardPathForRole(role), request.url));
   } else {
-    response = NextResponse.next();
+    // Forward the matched pathname to Server Components via a request
+    // header (next/headers has no direct "current path" API) — used
+    // by app/superAdmin/layout.tsx to record account activity
+    // (Rule 42) without needing a client-side beacon.
+    const forwardedHeaders = new Headers(request.headers);
+    forwardedHeaders.set("x-pathname", pathname);
+    response = NextResponse.next({ request: { headers: forwardedHeaders } });
   }
 
   // Issue the CSRF cookie once per session — non-HttpOnly by design,

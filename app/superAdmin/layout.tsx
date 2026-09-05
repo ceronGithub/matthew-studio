@@ -5,17 +5,16 @@
  * time this renders a valid session exists.
  *
  * PURPOSE:
- * Placeholder shell for the super-admin area, same pattern as
- * app/admin/layout.tsx and app/buyer/layout.tsx. Exists so
- * getDashboardPathForRole("superAdmin") in middleware.ts/SignInForm.tsx
- * has a real destination instead of a 404 — the full super-admin
- * dashboard (admin management, security logs, account activity,
- * backups, vault per super_admin_account_specification.md) is a
- * separate, larger build.
+ * Shell for the super-admin area: top bar (RoleAreaHeader) plus a
+ * server-side account-activity beacon (Rule 42) that records this
+ * page view against the signed-in account. Uses the x-pathname
+ * header middleware.ts forwards on every matched request — no
+ * client-side beacon needed for page views.
  */
 import type { ReactNode } from "react";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { supabaseAdminClient } from "@/lib/supabase/serverClient";
+import { recordAccountActivity } from "@/lib/accountActivity";
 import RoleAreaHeader from "@/components/shared/RoleAreaHeader";
 import "../styles/roleAreaDashboard.css";
 
@@ -29,6 +28,15 @@ export default async function SuperAdminLayout({ children }: { children: ReactNo
 
   const displayName =
     (data.user?.user_metadata?.fullName as string | undefined) ?? data.user?.email ?? "there";
+
+  // Record this page view against the signed-in account (Rule 42) —
+  // never awaited into the render path failing; recordAccountActivity
+  // never throws, so this is safe to await directly.
+  const requestHeaders = await headers();
+  const pathname = requestHeaders.get("x-pathname") ?? "/superAdmin";
+  if (data.user?.email) {
+    await recordAccountActivity({ accountId: data.user.email, action: pathname });
+  }
 
   return (
     <div className="roleAreaShell">

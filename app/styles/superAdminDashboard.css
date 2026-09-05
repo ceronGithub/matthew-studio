@@ -1,0 +1,229 @@
+/**
+ * FILE: app/styles/superAdminDashboard.css
+ * PURPOSE:
+ * Styles for app/superAdmin/dashboard/page.tsx's health widget,
+ * recent activity panel, quick actions panel, and analytics stub.
+ * References app/globals.css tokens only — responsive breakpoints
+ * live in app/styles/mediaQueries.css, not inline here.
+ */
+
+.dashboardHome {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.dashboardHomeHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.dashboardHomeEyebrow {
+  font-family: var(--font-geist-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.dashboardHomeTitle {
+  font-size: 1.8rem;
+  color: var(--color-text-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+/* --- Health widget stat cards --- */
+.dashboardStatGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-lg);
+}
+
+.dashboardStatCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xs);
+  padding: var(--space-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+
+.dashboardStatCard:hover {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.dashboardStatIcon {
+  color: var(--color-text-muted);
+}
+
+/* Warning/error variants tint the icon only — never the whole card,
+   so a bad number doesn't visually overwhelm the layout. */
+.dashboardStatCardWarning .dashboardStatIcon {
+  color: var(--color-warning);
+}
+
+.dashboardStatCardError .dashboardStatIcon {
+  color: var(--color-error);
+}
+
+.dashboardStatValue {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+}
+
+.dashboardStatLabel {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+/* --- Two-column layout for Recent Activity + Quick Actions --- */
+.dashboardHomeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-lg);
+}
+
+.dashboardPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+}
+
+.dashboardPanelTitle {
+  font-size: 1.1rem;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.dashboardEmptyState {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* --- Recent Activity list --- */
+.dashboardActivityList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.dashboardActivityItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.dashboardActivityAccount {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.dashboardActivityAction {
+  font-family: var(--font-geist-mono);
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.dashboardActivityMeta {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+/* --- Quick Actions list --- */
+.dashboardQuickActionList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.dashboardQuickActionLink {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-md);
+  min-height: 44px;
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.dashboardQuickActionLink:hover,
+.dashboardQuickActionLink:focus-visible {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.dashboardQuickActionIcon {
+  flex: 0 0 auto;
+  color: var(--color-text-muted);
+}
+
+.dashboardQuickActionText {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dashboardQuickActionLabel {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.dashboardQuickActionDescription {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.dashboardQuickActionArrow {
+  flex: 0 0 auto;
+  color: var(--color-text-muted);
+}
+
+/* --- Analytics stub --- */
+.dashboardAnalyticsStub {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border: 1px dashed var(--color-border);
+  border-radius: 10px;
+}
+
+.dashboardAnalyticsStubIcon {
+  flex: 0 0 auto;
+  color: var(--color-text-muted);
+}
+
+.dashboardAnalyticsStubText {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
