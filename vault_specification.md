@@ -638,16 +638,16 @@ export function middleware(request: NextRequest) {
 
 ### Pages & UI
 
-- [x] Create `/superAdmin/vault/page.tsx` — super-admin vault page (**mockup only** — mock slug data, see Section 13)
-- [x] Create `/admin/vault/page.tsx` — admin vault page (**mockup only**)
-- [x] Create component: `VaultSlugDisplay.tsx` — display slug components
-- [x] Create component: `VaultCredentialsModal.tsx` — generate & display creds (named `VaultCredentialsModal`, not `VaultCredentialsGenerator`, since it renders as a modal)
-- [x] Create component: `VaultPageContent.tsx` — shared page body, parameterized by role (not in the original checklist, added because super-admin/admin share nearly everything)
-- [x] Create component: `VaultEmergencyActions.tsx` — Gatekeeper panel + backup/wipe/lockdown controls (Section 12, **mockup only**)
-- [x] Create component: `ConfirmActionModal.tsx` — type-to-confirm modal for the two most destructive actions (Section 12.6)
-- [x] Create component: `CopyButton.tsx` — shared copy-to-clipboard button used across slug/credential displays
-- [x] Create `lib/vaultMockData.ts` — mockup-only slug/credential generator (browser-side, not the real BIP39 list — replaced by `lib/slugGenerator.ts` above once the real backend is built)
-- [x] Create styles: `/app/styles/vault.css`
+- [ ] Create `/superAdmin/vault/page.tsx` — super-admin vault page (mockup — mock slug data, see Section 13)
+- [ ] Create `/admin/vault/page.tsx` — admin vault page (mockup)
+- [ ] Create component: `VaultSlugDisplay.tsx` — display slug components
+- [ ] Create component: `VaultCredentialsModal.tsx` — generate & display creds (named `VaultCredentialsModal`, not `VaultCredentialsGenerator`, since it renders as a modal)
+- [ ] Create component: `VaultPageContent.tsx` — shared page body, parameterized by role (not in the original checklist, added because super-admin/admin share nearly everything)
+- [ ] Create component: `VaultEmergencyActions.tsx` — Gatekeeper panel + backup/wipe/lockdown controls (Section 12, mockup)
+- [ ] Create component: `ConfirmActionModal.tsx` — type-to-confirm modal for the two most destructive actions (Section 12.6)
+- [ ] Create component: `CopyButton.tsx` — shared copy-to-clipboard button used across slug/credential displays
+- [ ] Create `lib/vaultMockData.ts` — mockup-only slug/credential generator (browser-side, not the real BIP39 list — replaced by `lib/slugGenerator.ts` above once the real backend is built)
+- [ ] Create styles: `/app/styles/vault.css`
 
 ### Gatekeeper & Emergency Actions (Section 12 — not yet started beyond the mockup UI)
 
@@ -830,33 +830,43 @@ Because the entire point of this section is to still work if the site is hacked 
 
 ---
 
-## 13. IMPLEMENTATION STATUS (MOCKUP)
+## 13. IMPLEMENTATION STATUS
 
-As of this update, the vault pages exist as a **front-end mockup only** — reviewed for layout/UX before the real backend (Section 9's checklist) gets built.
+**Correction (2026-09-05):** this section previously claimed a front-end
+mockup was already built. A repo check against the `shop` branch found
+none of the files listed below exist — `app/superAdmin/` contains only
+`dashboard/page.tsx` and `layout.tsx`, there is no `app/admin/vault/`,
+`components/vault/`, or `lib/vaultMockData.ts` anywhere in the repo, and
+`middleware.ts` has no vault route handling. The vault system —
+mockup or real — has not been started. The list below is now the full
+scope still to build; nothing in Section 9's checklist is done.
 
-**Built:**
+**Not built (all of Section 9):**
 
-- `/superAdmin/vault` and `/admin/vault` routes, both rendering the shared `VaultPageContent` component parameterized by role
-- Session slug display (word grid + alphanumeric/alphaspecial token rows), read-only, with per-group copy buttons
-- Vault credentials generation modal (15 words + 15 alphanumeric), regenerate/close
-- Emergency Actions section (Section 12): Gatekeeper threat panel, auto-lockdown toggle, manual lockdown, backup, wipe database, wipe vault data, unblock account, block all accounts — all with the confirmation modals described in Section 12.6
-- Fully responsive (mobile/tablet/desktop), dark theme matching the rest of the site, toast feedback on every action
+- No `/superAdmin/vault` or `/admin/vault` routes, mockup or real
+- No `VaultPageContent`, `VaultSlugDisplay`, `VaultCredentialsModal`,
+  `VaultEmergencyActions`, `ConfirmActionModal`, or `CopyButton`
+  components
+- No `lib/vaultMockData.ts` placeholder generator, and no real
+  `lib/slugGenerator.ts` / `lib/vaultHelpers.ts`
+- No `AdminSession`, `VaultCredentials`, or `GatekeeperEvent` tables —
+  nothing is persisted
+- No slug generation on login/logout, real or mocked
+- No middleware slug validation beyond the existing role-based route
+  guard every `/superAdmin/*`/`/admin/*` page already has
+- No attack detection — Gatekeeper's threat counters (Section 12.2)
+  don't exist in any form
+- None of the Emergency Actions (Section 12.3–12.5) exist — no UI, no
+  API routes, no SecurityLog entries
+- No hardened/independent auth path (Section 12.8)
 
-**Explicitly NOT built (all of Section 9's unchecked items):**
-
-- No `AdminSession`, `VaultCredentials`, or `GatekeeperEvent` tables — nothing is persisted
-- No real slug generation on login/logout — the session slug shown is generated once in the browser on page load, standing in for a real row
-- No real BIP39 word list — the mockup uses a ~50-word placeholder pool (`lib/vaultMockData.ts`)
-- No middleware slug validation beyond the existing role-based route guard every `/superAdmin/*`/`/admin/*` page already has
-- No real attack detection — Gatekeeper's threat counters are hardcoded mock numbers
-- None of the Emergency Actions do anything real — every button (backup, both wipes, unblock, block all, lockdown) only shows a toast; no API calls, no database changes, no SecurityLog entries
-- No hardened/independent auth path (Section 12.8) — currently relies on the same middleware guard as every other admin page, which is the opposite of what Section 12.8 calls for
-
-**File map (mockup):**
+**File map (planned, per Section 9 — none of these exist yet):**
 
 ```
 lib/
-  vaultMockData.ts                    ← mock slug/credential generator (browser-side)
+  vaultMockData.ts                    ← mock slug/credential generator (browser-side), if a mockup pass happens first
+  slugGenerator.ts                    ← real BIP39/alphanumeric/alphaspecial generation
+  vaultHelpers.ts                     ← slug validation & persistence
 
 components/vault/
   CopyButton.tsx                      ← shared copy-to-clipboard button
@@ -879,9 +889,10 @@ app/styles/vault.css                  ← all vault page/component styles
 | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 2026-09-03 | Initial vault specification created — session slug system, vault credentials, database schema, API routes, page layout, middleware, security rules, implementation checklist.                                                                                                                                                                                                                                    |
 | 2026-09-03 | Added Section 12 (Gatekeeper & Emergency Actions) — threat monitoring, auto/manual lockdown, database wipe vs. vault wipe as separate actions, unblock account, block all accounts, type-to-confirm requirements for the two most severe actions. Added Section 13 documenting the front-end mockup already built. Updated Section 9's checklist to reflect completed UI items and new Gatekeeper backend items. |
+| 2026-09-05 | **Correction:** repo check against the `shop` branch found none of Section 13's claimed mockup files actually exist (no vault routes, no `components/vault/*`, no `lib/vaultMockData.ts`). Unchecked all of Section 9's Pages & UI items and rewrote Section 13 to state the vault system — mockup or real — has not been started.                                                                               |
 
 ---
 
-**Document Version:** 1.1
-**Last Updated:** 2026-09-03
+**Document Version:** 1.2
+**Last Updated:** 2026-09-05
 **Status:** Mockup Complete (front-end only, see Section 13) — Real backend (Sections 4/5/7/9/12.7-12.8) not yet started.
