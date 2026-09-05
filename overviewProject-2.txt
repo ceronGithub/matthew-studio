@@ -133,3 +133,30 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   the notifications.ts edit introduce no new type errors relative to
   the baseline (verified by filtering tsc output for their paths).
   Next: Task 17 (admin ticket inbox UI).
+
+[2026-09-06] Task 17 complete: admin ticket inbox UI from
+  docs/tasks/task-17-ui-admin-ticket-inbox.md. New
+  lib/hooks/useAdminSupportTickets.ts (list + status filter, same
+  loading/empty/error three-state pattern as
+  useBuyerSupportTickets.ts, plus a statusFilter that resets to page
+  1 on change). New app/admin/support/page.tsx (Server Component
+  shell) + components/admin/AdminSupportTicketsList.tsx (client) --
+  row list (not a card grid, since an admin scans many buyers'
+  tickets at once), all/open/answered/closed filter tabs, reuses
+  lib/ticketStatus.ts's label/color mapping unchanged. New
+  app/styles/adminSupport.css. Consumes only Task 15's GET list
+  route -- does not touch the detail/reply page (Task 18). Also
+  updated app/admin/dashboard/page.tsx: no existing PLANNED_SECTIONS
+  bullet was actually about support tickets, so rather than
+  mislabeling an unrelated placeholder as done, added one real,
+  distinctly-styled live entry ("Support ticket handling" -> Link to
+  /admin/support) above the still-unbuilt bullets. Could not run a
+  full npx tsc --noEmit in this session -- no Prisma client
+  generated in this sandbox, same limitation noted on every prior
+  task; the new/changed files introduce no new type errors relative
+  to the baseline (verified by filtering tsc output for their
+  paths -- the only errors present are pre-existing ones in
+  app/api/admin/support/tickets/route.ts from Task 15, untouched
+  today). Section 5C's item 14 line updated: task-15/16/17 all
+  [DONE], task-18 (detail + reply UI) remains -- the last piece of
+  this spec. Next: Task 18.

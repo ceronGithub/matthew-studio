@@ -492,7 +492,14 @@ Order.status)
         [DONE] task-16 (POST reply / PUT status routes) — built
                2026-09-06, wired createNotification() (ticket_reply),
                closing Task 14's last missing source.
-        [ ]    task-17 (inbox UI)
+        [DONE] task-17 (inbox UI) — built 2026-09-06:
+               lib/hooks/useAdminSupportTickets.ts, app/admin/support/
+               page.tsx + components/admin/AdminSupportTicketsList.tsx
+               (status filter tabs, row list, pagination, 3 data
+               states), app/styles/adminSupport.css. Admin dashboard's
+               PLANNED_SECTIONS list now has one live entry ("Support
+               ticket handling" links to /admin/support) distinct from
+               the still-unbuilt bullets.
         [ ]    task-18 (detail/reply UI)
 
 Already built, excluded from the sequence above:

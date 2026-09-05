@@ -1,0 +1,251 @@
+/**
+ * FILE: app/styles/adminSupport.css
+ * PURPOSE:
+ * Styles for app/admin/support/page.tsx and
+ * components/admin/AdminSupportTicketsList.tsx (Task 17). References
+ * the design tokens in app/globals.css — never hardcoded colors or
+ * spacing. Responsive breakpoints live in app/styles/mediaQueries.css,
+ * not inline here. Row layout (rather than buyerSupport.css's card
+ * grid) since the admin inbox is a denser, single-column list meant
+ * for scanning many buyers' tickets at once.
+ */
+
+.adminSupportPage {
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.adminSupportHeader {
+  margin-bottom: var(--space-xl);
+}
+
+.adminSupportEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.adminSupportTitle {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-top: var(--space-xs);
+}
+
+.adminSupportSubtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+  max-width: 70ch;
+}
+
+/* Status filter tabs */
+.adminSupportFilterTabs {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-lg);
+}
+
+.adminSupportFilterTab {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+.adminSupportFilterTab:hover,
+.adminSupportFilterTab:focus-visible {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+.adminSupportFilterTab--active {
+  background-color: var(--color-surface-active);
+  border-color: var(--color-accent);
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+/* adminSupportGrid
+ * Single-column row list — denser than the buyer card grid since an
+ * admin scans many buyers' tickets at once (Rule 23.2). */
+.adminSupportGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* adminSupportRow
+ * Elevated row per Rule 23.10 — visible border, generous padding.
+ * Whole row is a Link to the ticket's detail page. */
+.adminSupportRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  text-decoration: none;
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+.adminSupportRow:hover,
+.adminSupportRow:focus-visible {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.adminSupportRowMain {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1 1 320px;
+}
+
+.adminSupportSubject {
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+.adminSupportBuyerEmail {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.adminSupportPreview {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.adminSupportRowMeta {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-md);
+  flex-shrink: 0;
+}
+
+.adminSupportStatusBadge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.adminSupportDate {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.adminSupportOrderTag {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+/* Skeleton loading state (Rule 25.2) — mirrors the real row shape. */
+.adminSupportRow--skeleton {
+  pointer-events: none;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.adminSupportSkeletonLine {
+  height: 14px;
+  width: 60%;
+  border-radius: 4px;
+}
+.adminSupportSkeletonLine--short {
+  width: 30%;
+}
+
+.adminSupportEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+.adminSupportRetryButton {
+  padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+.adminSupportRetryButton:hover {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.adminSupportPagination {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+}
+.adminSupportPageButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+.adminSupportPageButton:hover:not(:disabled) {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+.adminSupportPageButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.adminSupportPageLabel {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+/* Live link item on the admin dashboard placeholder list — distinct
+ * from the still-unbuilt roleAreaComingSoonListItem bullets. */
+.roleAreaComingSoonListItem--live {
+  text-decoration: none;
+  cursor: pointer;
+}
+.roleAreaComingSoonListItem--live::before {
+  background-color: var(--color-accent);
+}
+.roleAreaComingSoonListItem--live:hover,
+.roleAreaComingSoonListItem--live:focus-visible {
+  color: var(--color-text-primary);
+}

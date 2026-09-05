@@ -9,8 +9,16 @@
  * guidance) — listing the sections admin_account_specification.md
  * defines as this area's real scope, so an admin knows the login
  * worked and what's still ahead rather than seeing a dead-end.
+ *
+ * "Support ticket handling" is the one entry that's actually live
+ * (Task 17, admin_support_ticket_specification.md) — styled and linked
+ * distinctly from the still-unbuilt PLANNED_SECTIONS bullets below it,
+ * so this list doubles as a real nav item without misrepresenting the
+ * rest as done.
  */
 import type { Metadata } from "next";
+import Link from "next/link";
+import "../../styles/adminSupport.css";
 
 export const metadata: Metadata = {
   title: "Admin dashboard | Matthew Studio",
@@ -34,6 +42,9 @@ export default function AdminDashboardPage() {
         This area is still being built out. Here&apos;s what&apos;s planned for it:
       </p>
       <ul className="roleAreaComingSoonList">
+        <li className="roleAreaComingSoonListItem roleAreaComingSoonListItem--live">
+          <Link href="/admin/support">Support ticket handling</Link>
+        </li>
         {PLANNED_SECTIONS.map((section) => (
           <li key={section} className="roleAreaComingSoonListItem">
             {section}
