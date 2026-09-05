@@ -1,6 +1,6 @@
 ================================================================================
 SERVICE AGREEMENT — VILLA AZURE RESORT BOOKING PLATFORM
-Version 7 — Four-Tier Model with Infrastructure Ownership & Detailed Terms
+Version 8 — Four-Tier Model with Infrastructure Ownership, Detailed Terms & Free Trial Program
 ================================================================================
 
 Date: August 4, 2026
@@ -67,7 +67,7 @@ TIER 1 — MANAGED RENTAL (Monthly, Resellable Template)
 ================================================================================
 
 OVERVIEW:
-Vic (Developer) owns and operates all infrastructure. Client receives fully
+Ceron (Developer) owns and operates all infrastructure. Client receives fully
 customized access to manage the resort via the admin dashboard. This is a
 RENTAL MODEL with month-to-month flexibility — no minimum commitment.
 
@@ -279,7 +279,7 @@ TIER 2 — FULL BUYOUT (One-Time Purchase, Custom Build)
 ================================================================================
 
 OVERVIEW:
-Vic builds a fully customized resort booking platform based on the Villa Azure
+Ceron builds a fully customized resort booking platform based on the Villa Azure
 template. Client receives complete ownership of GitHub repository, Vercel
 account, Supabase instance, Cloudflare R2 bucket, and all credentials. This is
 a FULL HANDOVER after launch.
@@ -369,7 +369,7 @@ TIER 3 — BUILD-TO-OWN (Custom Build with Payment Plan)
 
 OVERVIEW:
 Client wants a fully custom resort booking platform but lacks upfront capital.
-Vic builds the site to Client's specifications over 3-5 months, while Client
+Ceron builds the site to Client's specifications over 3-5 months, while Client
 makes monthly payments over 36 months. After final payment, Client owns
 everything (GitHub, Vercel, Supabase, code).
 
@@ -490,7 +490,7 @@ TIER 4 — FULL CUSTOM FROM SCRATCH (Complete Independence)
 
 OVERVIEW:
 Client wants a fully custom resort booking platform built from the ground up
-(not based on Villa Azure template). Vic builds to Client's exact
+(not based on Villa Azure template). Ceron builds to Client's exact
 specifications, then transfers complete ownership. This is the most expensive
 and most customizable tier.
 
@@ -1295,12 +1295,12 @@ TYPICAL INFRASTRUCTURE COSTS (absorbed by Service Provider — informational onl
   - Typically no cost for small resorts
   - Same dedicated-email/Service-Provider-managed model as above
 • Cloudflare R2: ₱200–500/month (if high image traffic)
-  - Vic optimizes usage to minimize costs
+  - Ceron optimizes usage to minimize costs
 • Google Drive: ₱0–150/month (if storage exceeded)
   - Typically free for resorts
 • EmailJS: ₱0–200/month (overage only)
 
-Vic's Role:
+Ceron's Role:
 • Creates, exclusively manages, and PAYS FOR all infrastructure
   accounts under the Client's dedicated business email — the Client
   has no direct account access, control, or billing exposure
@@ -1316,7 +1316,7 @@ Service Provider's own expense, covered by the platform fee.
 TOTAL MONTHLY COST TO CLIENT:
 ₱15,000/month flat — infrastructure fully absorbed by Service Provider
 
-Vic provides monthly transparency report showing all infrastructure usage.
+Ceron provides monthly transparency report showing all infrastructure usage.
 
 ================================================================================
 10. RESELLABLE TEMPLATE DISCLOSURE (TIER 1 ONLY)
@@ -1642,5 +1642,5 @@ This Service Agreement is binding and enforceable per Philippine law.
 For questions or amendments, contact: developerceron@gmail.com
 
 ================================================================================
-END OF SERVICE AGREEMENT — VERSION 7 COMPREHENSIVE
+END OF SERVICE AGREEMENT — VERSION 8 COMPREHENSIVE
 ================================================================================
