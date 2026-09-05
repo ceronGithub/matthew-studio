@@ -194,6 +194,58 @@ model Order {
   @@index([status])
 }
 
+/// Subscription
+/// buyer_account_specification.md Section 4.4. One row per buyer for
+/// the Template Tier 1 recurring plan — a 1:1 relationship for now
+/// per the spec's single-plan assumption (@unique on userId). Never
+/// deleted on cancel: cancelAtPeriodEnd is set instead so the buyer
+/// keeps access through currentPeriodEnd, matching the spec's "takes
+/// effect at the end of the current billing period, never
+/// immediately" rule. paymongoCustomerId is nullable — reserved for
+/// when actual recurring-charge automation is wired up; this task
+/// only needs the row to exist and be readable/writable, per
+/// docs/tasks/task-04-schema-subscription.md's stated scope.
+model Subscription {
+  id                 String    @id @default(cuid())
+  userId             String    @unique
+  planName           String
+  priceAmount        Float
+  billingCycle       String // "monthly" | "yearly"
+  status             String    @default("active") // active | past_due | cancelled
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  cancelAtPeriodEnd  Boolean   @default(false)
+  paymongoCustomerId String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  invoices SubscriptionInvoice[]
+
+  @@index([userId])
+  @@index([status])
+}
+
+/// SubscriptionInvoice
+/// Billing-cycle records for Section 4.4's "Billing history" list —
+/// deliberately separate from Order (purchases), since an invoice
+/// here represents a recurring charge, not a one-time cart checkout.
+/// pdfUrl is nullable until a PDF-generation/storage step (Rule
+/// 35.6/35.7) is wired up; the UI (Task 06) must handle a null
+/// download link gracefully rather than assuming it's always set.
+model SubscriptionInvoice {
+  id                String   @id @default(cuid())
+  subscriptionId    String
+  amount            Float
+  status            String // paid | failed | pending
+  paymongoPaymentId String?
+  pdfUrl            String?
+  issuedAt          DateTime @default(now())
+
+  subscription Subscription @relation(fields: [subscriptionId], references: [id])
+
+  @@index([subscriptionId])
+}
+
 /// OrderItem
 /// Snapshots product name/price/variant at time of purchase (never a
 /// live join to the product table) so a later catalog price change

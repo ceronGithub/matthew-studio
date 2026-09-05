@@ -881,3 +881,12 @@ restriction as before; schema block manually reviewed for syntax.
   blocked by the same binaries.prisma.sh sandbox restriction as
   before -- not re-verified from this sandbox; please run both
   locally before deploying.
+[2026-09-06] Corrected overviewProject.txt Section 5C: Payment
+  Methods (4.3) was still marked "API + UI not started" despite
+  Tasks 01-03 already completing it end to end (see the three
+  entries above). Flipped 4.3 to [DONE] with a Layer-3 verification
+  note, updated the section's "remaining build order" line, and
+  filed buyer_account_specification.md Section 4.4 (Subscription
+  Management) as micro-tasks docs/tasks/task-04-schema-subscription.md,
+  task-05-api-subscription.md, and task-06-ui-subscription-page.md.
+  No feature code changed in this entry.
