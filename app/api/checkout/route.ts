@@ -27,9 +27,14 @@
  *    this fails, the just-created Order/OrderItems are deleted rather
  *    than left behind as an orphaned "pending" row with no way to
  *    ever be paid.
- * 6. Clear the buyer's/guest's cart — once a pending Order exists for
- *    these items, showing them again in the cart drawer would let the
- *    buyer accidentally order the same things twice.
+ *
+ * The cart is intentionally NOT cleared here. It is only ever cleared
+ * once PayMongo confirms the payment (webhook, or the self-heal
+ * status endpoint) via lib/orderPayment.ts's markOrderPaid() — see
+ * that file's header for why. Clearing it at session-creation time
+ * (the previous behavior) meant a buyer whose connection died between
+ * clicking "Pay" and PayMongo's redirect lost their cart contents even
+ * if the payment never actually completed.
  */
 export const dynamic = "force-dynamic";
 
@@ -103,6 +108,10 @@ export async function POST(request: Request) {
       data: {
         userId,
         guestEmail: userId ? null : email,
+        // Captured now so the webhook/self-heal path (server-to-server,
+        // no buyer cookies available) knows which guest cart to clear
+        // once — and only once — payment is confirmed (Gap A fix).
+        cartToken: userId ? null : cartToken,
         status: "pending",
         subtotal,
         shippingFee,
@@ -157,14 +166,6 @@ export async function POST(request: Request) {
       where: { id: order.id },
       data: { paymongoOrderId: checkoutSessionId },
     });
-
-    // Step 6 — clear the cart now that a pending Order owns these
-    // items; never before the Order was successfully created above.
-    if (userId) {
-      await prisma.cartItem.deleteMany({ where: { userId } });
-    } else if (cartToken) {
-      await prisma.cartItem.deleteMany({ where: { cartToken } });
-    }
 
     const data: CheckoutResponseData = { orderId: order.id, checkoutUrl };
     return NextResponse.json({ success: true, data, message: "Redirecting you to payment…" });

@@ -4,13 +4,17 @@
  * (cart_checkout_specification.md Section 4.3, Rule 30, Phase 1 step 1e).
  *
  * PURPOSE:
- * The single source of truth for payment confirmation. Verifies
+ * The primary source of truth for payment confirmation (the
+ * /api/orders/[orderId]/status self-heal path is the fallback for
+ * when this webhook never arrives — see that route's header). Verifies
  * PayMongo's webhook signature before touching anything, then flips
  * the matching Order to "PAID" and fills in the three webhook-owned
- * fields (paymongoPaymentId, paymentStatus, paidAt) per Rule 30.1/30.2.
- * No other route in this app is allowed to set Order.status to "PAID"
- * (Rule 30.3) — the checkout submit route (1d) only ever creates
- * "pending" orders.
+ * fields (paymongoPaymentId, paymentStatus, paidAt) per Rule 30.1/30.2
+ * via lib/orderPayment.ts's markOrderPaid() — which also clears the
+ * cart that produced this Order, only now that payment is confirmed
+ * (Gap A fix; see that file's header). No other route in this app is
+ * allowed to set Order.status to "PAID" directly (Rule 30.3) — the
+ * checkout submit route (1d) only ever creates "pending" orders.
  *
  * SIGNATURE VERIFICATION:
  * PayMongo sends a `Paymongo-Signature` header shaped like
@@ -47,6 +51,7 @@ import { createHmac, timingSafeEqual } from "crypto";
 import { NextResponse } from "next/server";
 import { prisma } from "@/services/prisma";
 import { logSecurityEvent } from "@/lib/securityLog";
+import { markOrderPaid } from "@/lib/orderPayment";
 
 const SIGNATURE_HEADER = "paymongo-signature";
 
@@ -201,14 +206,15 @@ export async function POST(request: Request) {
   const paymentStatus: string | undefined = payments[0]?.attributes?.status;
   const paidAt = payments[0]?.attributes?.paid_at ? new Date(payments[0].attributes.paid_at * 1000) : new Date();
 
-  await prisma.order.update({
-    where: { id: order.id },
-    data: {
-      status: "PAID",
-      paymongoPaymentId: paymentId ?? null,
-      paymentStatus: paymentStatus ?? "paid",
-      paidAt,
-    },
+  // Flips the Order to PAID and clears the cart that produced it, in
+  // one place shared with the self-heal status endpoint (Gap A fix).
+  await markOrderPaid({
+    orderId: order.id,
+    userId: order.userId,
+    cartToken: order.cartToken,
+    paymentId: paymentId ?? null,
+    paymentStatus: paymentStatus ?? "paid",
+    paidAt,
   });
 
   await logSecurityEvent({

@@ -154,3 +154,74 @@ export async function createCheckoutSession(
 
   return { checkoutSessionId, checkoutUrl };
 }
+
+/**
+ * PaymongoPayment / PaymongoCheckoutSessionPayments
+ * Minimal shape of the fields this app actually reads from a
+ * PayMongo Checkout Session's nested `payments` array — the same
+ * shape the webhook route parses from the event payload (Rule 30.2),
+ * reused here for the self-heal direct-query path.
+ */
+interface PaymongoPayment {
+  id?: string;
+  attributes?: {
+    status?: string;
+    paid_at?: number;
+  };
+}
+
+export interface CheckoutSessionPaymentDetails {
+  paymentId: string | null;
+  paymentStatus: string | null;
+  paidAt: Date | null;
+  isPaid: boolean;
+}
+
+/**
+ * extractPaymentDetails
+ * Rule 30.2's exact extraction pattern, factored out so both the
+ * webhook (parsing a pushed event) and getCheckoutSession (parsing a
+ * pulled API response — same nested `data.attributes.payments`
+ * shape) never implement this twice.
+ */
+export function extractPaymentDetails(payments: PaymongoPayment[] | undefined): CheckoutSessionPaymentDetails {
+  const payment = payments?.[0];
+  const paymentStatus = payment?.attributes?.status ?? null;
+  return {
+    paymentId: payment?.id ?? null,
+    paymentStatus,
+    paidAt: payment?.attributes?.paid_at ? new Date(payment.attributes.paid_at * 1000) : null,
+    isPaid: paymentStatus === "paid",
+  };
+}
+
+/**
+ * getCheckoutSession
+ * Self-heal path only (Gap B fix, cart_checkout_specification.md
+ * Section 4.3 KNOWN GAP) — directly asks PayMongo for a Checkout
+ * Session's current state when a webhook may never have arrived.
+ * Never called from the normal payment-confirmation flow, which
+ * relies exclusively on the webhook per Rule 30.3.
+ */
+export async function getCheckoutSession(checkoutSessionId: string): Promise<CheckoutSessionPaymentDetails> {
+  const secretKey = process.env.PAYMONGO_SECRET_KEY;
+  if (!secretKey) {
+    throw new Error("PAYMONGO_SECRET_KEY is not configured.");
+  }
+
+  const response = await fetch(`${PAYMONGO_API_BASE}/checkout_sessions/${checkoutSessionId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Basic ${Buffer.from(`${secretKey}:`).toString("base64")}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.text().catch(() => "");
+    throw new Error(`PayMongo checkout session lookup failed (${response.status}): ${errorBody}`);
+  }
+
+  const payload = await response.json();
+  const payments: PaymongoPayment[] | undefined = payload?.data?.attributes?.payments;
+  return extractPaymentDetails(payments);
+}

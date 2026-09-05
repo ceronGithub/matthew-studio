@@ -90,6 +90,7 @@ model Order {
   id                String    @id @default(cuid())
   userId            String? // null if guest checkout, claimable later
   guestEmail        String?
+  cartToken         String? // guest cart_token this Order was created from — lets the webhook/self-heal endpoint clear the correct guest cart without ever trusting a client-submitted value
   status            String    @default("pending") // pending | PAID | Confirmed | Shipped | Delivered | Cancelled
   subtotal          Float
   shippingFee       Float     @default(0)
