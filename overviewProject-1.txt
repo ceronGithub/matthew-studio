@@ -321,3 +321,66 @@ that file left off.
   -- VAULT_OWNER_TELEGRAM_CHAT_ID and its wiring into
   services/vaultTelegramAlerts.js still need to be built in the actual
   template repo.
+
+[2026-09-05] Resolved v2 review Item #4 (no fallback on Telegram send
+  failure) in trial_tracking_and_developer_notifications_specification.md
+  Section 2.3: Daily Developer Reminders (Day 20-30) now send via both
+  Telegram AND email (VAULT_OWNER_EMAIL), matching the existing
+  dual-channel pattern already used by the vault's OTP/passphrase sends.
+  No retry-with-backoff added -- kept consistent with
+  services/telegram.js's existing best-effort, never-throws design; the
+  two-channel redundancy covers more failure modes than retrying one
+  channel. Every attempt (success/failure, either channel) now logs to
+  SecurityLog as trial_reminder_sent / trial_reminder_send_failed.
+  Spec-only -- no code built yet.
+
+[2026-09-05] Resolved v2 review Item #5 (invoice email destination) in
+  trial_tracking_and_developer_notifications_specification.md Section
+  2.4 step 3: recipient is now explicitly resolved via
+  AdminProfile.isOwner: true -> Supabase adminClient.auth.admin.getUserById()
+  for the real email, never any other super_admin/staff account's
+  email. Missing isOwner profile or a failed lookup escalates to the
+  developer over the same VAULT_OWNER_EMAIL/VAULT_OWNER_TELEGRAM_CHAT_ID
+  dual channel from Item #4, instead of silently dropping the invoice.
+  Every attempt logs to SecurityLog as trial_invoice_sent /
+  trial_invoice_send_failed with the email masked. Spec-only -- no code
+  built yet.
+[2026-09-05] Resolved v2 review Item #6 (no job completion confirmation)
+  in trial_tracking_and_developer_notifications_specification.md
+  Section 2.4: added step 5 -- a single job-summary push notification to
+  the developer (VAULT_OWNER_EMAIL + VAULT_OWNER_TELEGRAM_CHAT_ID dual
+  channel) after the T-8h lockdown+invoice job finishes or crashes,
+  listing per-step outcome (lockdown/invoice-generated/invoice-emailed)
+  and overall status. Deliberately push, not just a dashboard log row,
+  unlike the nightly backup job's silent BackupLog pattern (Rule 40.6) --
+  this event is rare and high-stakes enough to alert on immediately.
+  Logs to SecurityLog as trial_lockdown_job_completed /
+  trial_lockdown_job_failed. Spec-only -- no code built yet.
+
+[2026-09-05] Resolved v2 review Item #7 (job idempotency on crash/retry)
+  in trial_tracking_and_developer_notifications_specification.md
+  Section 2.4: added a step-0 idempotency guard using the existing
+  TrialStatus timestamp fields (lockedAt, invoiceGeneratedAt,
+  invoiceEmailedAt -- no new fields needed) -- each of steps 1-3 checks
+  its own marker first and skips if already set, writing the marker
+  immediately on success rather than batching at the end. Makes the
+  T-8h job safe to re-invoke after a mid-job crash without repeating a
+  completed step -- specifically prevents the invoice email (step 3)
+  from ever being sent twice. Spec-only -- no code built yet.
+
+[2026-09-05] Resolved v2 review Item #8 (missing unlockedAt field) in
+  trial_tracking_and_developer_notifications_specification.md: added
+  TrialStatus.unlockedAt (Section 3), set during Section 2.5's
+  late-conversion reversal -- audit-trail counterpart to lockedAt, so a
+  reversed lockdown is timestamped and distinguishable from a trial that
+  never locked. Spec-only -- no code built yet.
+
+[2026-09-05] Resolved v2 review Item #9 (zero-bookings invoice) in
+  trial_tracking_and_developer_notifications_specification.md Section
+  2.4 step 2: invoice is still generated (never skipped) when a trial
+  has zero bookings -- PDF states "No bookings were recorded during
+  this trial period" instead of a blank table, no special-case branch
+  in the job logic. Also closed out Section 6: all 9 v2-review items
+  now resolved, noted explicitly; only the two unrelated open items
+  (48-hour data-export confirm, Criteria 2/3 stacking question) remain.
+  Spec-only -- no code built yet.
