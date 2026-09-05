@@ -353,7 +353,9 @@ PHASE 2 — CORE BUYER EXPERIENCE (needs Phase 1's Order model to exist)
               spec's own "full plan-change logic can be a follow-up
               phase" allowance — /pricing does not read a highlight
               query param yet.
-       [ ]    4.5 Support Tickets — not started
+       [~]    4.5 Support Tickets — schema (task-07) DONE, API routes
+              (task-08) DONE, UI pages (task-09 list/new-ticket form,
+              task-10 detail thread) not started
        [ ]    4.6 Notifications (+ bell icon in BuyerNav) — not started
        Remaining build order per the spec's own Section 9 priority
        list: Support Tickets next, then Notifications.

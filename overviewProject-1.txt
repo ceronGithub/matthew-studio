@@ -934,3 +934,21 @@ restriction as before; schema block manually reviewed for syntax.
   format/validate still blocked by the binaries.prisma.sh sandbox
   restriction -- run npx prisma db push && npx prisma generate
   locally before continuing to Task 08.
+[2026-09-06] Task 08 complete: added Support Tickets API routes per
+  docs/tasks/task-08-api-support-tickets.md -- app/api/buyer/support/
+  route.ts (list + create), app/api/buyer/support/[ticketId]/route.ts
+  (detail + thread), app/api/buyer/support/[ticketId]/reply/route.ts
+  (add message, auto-reopens a closed ticket), app/api/buyer/support/
+  [ticketId]/reopen/route.ts (standalone reopen, idempotent no-op if
+  already open). All four routes: CSRF-validated on mutations,
+  session-scoped ownership check baked into the query (404 not 403 on
+  mismatch), forbidden-character sanitization on subject/message
+  fields (Rule 18.1), standard Rule 28 response shape. npx tsc
+  --noEmit clean on these files except one implicit-any warning caused
+  solely by the ungenerated Prisma client (SupportTicket/TicketMessage
+  types don't exist until prisma generate runs) -- run npx prisma
+  db push && npx prisma generate locally, which will also clear
+  Task 07's pending client-regen note. Next: Task 09 (buyer/support
+  list + new-ticket form UI) and Task 10 (ticket detail thread UI,
+  plus fixing OrderTrackingDetail.tsx's "Contact Support" button to
+  link into this system instead of the public /support contact form).
