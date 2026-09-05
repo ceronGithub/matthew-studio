@@ -5,6 +5,131 @@ sequence, etc.) stays authoritative in overviewProject.txt. This file
 is change-log entries only, newest at the bottom, continuing where
 that file left off.
 
+[2026-09-02] Added a "beating heart" hover pulse to the homepage's
+  card-style outlines: new shared @keyframes cardHeartbeatPulse in
+  app/styles/shared.css (two quick box-shadow pulses then a rest,
+  mimicking an actual heartbeat rhythm; respects prefers-reduced-
+  motion). Wired into :hover on .whyUsItem (shared.css) and
+  .categoryCard/.featuredProductCard/.testimonialHomeCard/.statCard
+  (home.css) alongside each card's existing border-color/transform
+  hover styles — .categoryCard also feeds its own --categoryAccent
+  into the pulse color via --cardHeartbeatColor so each category
+  keeps its accent tint.
+
+[2026-09-02] Fixed the Create Account tab getting clipped on
+  /auth/login (app/styles/auth.css): .authGlassCard had no height cap,
+  and its parent .authPageWrapper is overflow: hidden with no page
+  scroll (full-bleed background slideshow), so the longer Register
+  form (name/email/password/confirm/terms) could grow taller than the
+  viewport with the bottom of the form — including the submit button —
+  clipped and unreachable. Added max-height: calc(100dvh - 2rem) +
+  overflow-y: auto to .authGlassCard so it scrolls internally instead.
+
+[2026-09-03] Started visitor_specification.md Implementation Order
+  Step 2 (category grids): confirmed "/shop" is a retired redirect to
+  "/pricing" (no grid to animate there, spec note is stale). Fixed
+  .productCard hover in app/styles/shared.css — was still box-shadow-
+  only despite the spec claiming it was already switched; now uses
+  transform: translateY(-4px) + border/background brighten per Rule
+  17.7 (shadows reserved for floating elements). This is a shared
+  class so it applies to every product grid site-wide. Wired the
+  ScrollReveal scroll-entrance stagger (same 0.06s step, 8-card cap as
+  ProductsGrid.tsx) into components/home/TShirtsSection.tsx's product
+  grid, which powers both the homepage T-Shirts section and the
+  "/tshirts" category page. Remaining category grids (templates,
+  ai-videos, file-tools, game-characters, tutorials) still pending.
+
+[2026-09-03] Continued visitor_specification.md Implementation Order
+  Step 2: wired the ScrollReveal scroll-entrance stagger (0.06s step,
+  8-card cap) into components/home/TemplatesSection.tsx's
+  productCardsGrid, which powers both the homepage Templates section
+  and the "/templates" category page. Remaining category grids
+  (ai-videos, file-tools, game-characters, tutorials) still pending.
+
+[2026-09-03] Continued visitor_specification.md Implementation Order
+  Step 2: wired the ScrollReveal scroll-entrance stagger (0.06s step,
+  8-card cap) into components/home/AIVideosSection.tsx's
+  productCardsGrid, which powers both the homepage AI Videos section
+  and the "/ai-videos" category page. Noted for follow-up:
+  GameCharactersSection.tsx and FileToolsSection.tsx have no entrance
+  animation on their product grids yet; TutorialsSection.tsx has its
+  own hand-rolled stagger that should eventually be normalized to
+  ScrollReveal (currently skips the prefers-reduced-motion check).
+  Remaining: file-tools, game-characters, tutorials.
+
+[2026-09-03] Continued visitor_specification.md Implementation Order
+  Step 2: wired the ScrollReveal scroll-entrance stagger (0.06s step,
+  8-card cap) into components/home/FileToolsSection.tsx's
+  productCardsGrid, which powers both the homepage File Tools section
+  and the "/file-tools" category page. This grid previously had no
+  entrance animation at all. Remaining: game-characters, tutorials.
+
+[2026-09-03] Continued visitor_specification.md Implementation Order
+  Step 2: wired the ScrollReveal scroll-entrance stagger (0.06s step,
+  8-card cap) into components/home/GameCharactersSection.tsx's
+  productCardsGrid (bottom product-card row with Rigged/Modular/
+  Low-poly tags) — each gameCharacterCardWrap (badge + ProductCard)
+  is now the ScrollReveal child so badge and card animate together.
+  The character-thumbnail gallery above already had its own stagger/
+  scale entrance and was left untouched. Remaining: tutorials.
+
+[2026-09-03] Completed visitor_specification.md Implementation Order
+  Step 2: normalized components/home/TutorialsSection.tsx's product
+  grid from a hand-rolled motion.div stagger (raw initial/whileInView/
+  transition, no reduced-motion handling) to the shared ScrollReveal
+  primitive, preserving the same per-level-group delay formula
+  (groupIndex * 0.15 + itemIndex * 0.05). All six category grids
+  (tshirts, templates, ai-videos, file-tools, game-characters,
+  tutorials) plus /products now use ScrollReveal consistently; /shop
+  confirmed as a retired redirect with nothing to animate. Next step
+  in the spec's Implementation Order: /pricing, /compare,
+  /how-it-works.
+
+[2026-09-03] Expanded super_admin_account_specification.md (now v1.1)
+  with Sections 3.7-3.14: Content Management/CMS, Buyer Management,
+  Announcements, Product Management, Order Management, Admin Task
+  Assignment, Customer Assignment to Admin, and the Full-Control
+  Principle. Establishes that super-admin manages all visitor content,
+  buyers, products, orders, and admin work assignment, on top of the
+  existing admin-management/security-logs/account-activity/backups/
+  vault pages. Spec-only change — no code built yet.
+
+[2026-09-03] Added Section 9 (Recommended Improvements & Hardening,
+  proposed/not yet built) to super_admin_account_specification.md
+  (now v1.2): 2FA/MFA, IP allowlist + anomaly-blocking, break-glass
+  recovery, product approval flow, customer-assignment exclusivity
+  check, task notifications/escalation, CMS multi-version history,
+  media library, scoped-by-default admin views, in-app notification
+  center, full Analytics page, per-buyer data export, backup restore
+  runbook. Testing checklist renumbered to Section 10, Change Log to
+  Section 11. Spec-only change — no code built yet.
+
+[2026-09-03] Added Section 12 (Implementation Plan, Phased) to
+  super_admin_account_specification.md (now v1.3): 10-phase,
+  dependency-ordered build sequence covering Sections 3, 7, and 9 in
+  full — Phase 1 auth/2FA foundation through Phase 10 remaining
+  hardening — each phase with scope, deliverables, and acceptance
+  criteria. Spec-only change — no code built yet.
+[2026-09-03] Added buyer_account_specification.md (new file) — Downloads/
+  License Delivery, Profile, Payment Methods, Subscription Management,
+  Support Tickets, Notifications. Companion to buyer_order_tracking_
+  specification.md, covers everything else in the buyer dashboard
+  recommendation review. Spec-only — no code built yet.
+
+[2026-09-03] Added sitewide_technical_seo_specification.md (new file) —
+  SEO infra (sitemap.ts/robots.ts), global error handling (root
+  not-found.tsx/error.tsx), idle session timeout (Rule 32.5), and
+  anonymized traffic analytics (Rule 41). No prior spec existed for
+  any of these four items. Spec-only — no code built yet.
+
+[2026-09-03] Added cart_checkout_specification.md (new file) — Cart
+  (guest cookie + buyer-persisted), Checkout (digital vs physical
+  shipping paths), PayMongo Payment Link + webhook integration per
+  Rule 30, and Order/OrderItem creation. Verified as completely
+  missing from the repo (no cart/checkout/paymongo files found
+  anywhere) — this is the dependency every other buyer-facing spec
+  (order tracking, buyer account) relies on. Spec-only — no code
+
 [2026-09-03] Added additional_platform_gaps_specification.md (new
   file) — Coupon/Discount codes, Refund Request & Processing,
   Social/OAuth login (Google), Buyer 2FA (opt-in), Transactional
@@ -496,3 +621,37 @@ that file left off.
   same pre-existing "PrismaClient has no exported member" -- prisma
   generate has never been run in this sandbox against the current
   schema; run it locally before testing this route).
+
+[2026-09-05] Fixed cart-clear timing and added webhook self-heal —
+  Gaps A & B from cart_checkout_specification.md Section 4.3:
+  app/api/checkout/route.ts no longer clears the cart at Checkout
+  Session creation (Gap A — a buyer whose connection died mid-payment
+  was losing their cart even if payment never completed); it now
+  only captures cartToken on the Order for guest carts. New
+  lib/orderPayment.ts exports markOrderPaid() — a single, idempotent
+  helper that flips Order.status to "PAID" (Rule 30.1/30.2 fields)
+  and clears the cart only at that confirmed moment; both
+  app/api/paymongo/webhook/route.ts and a new self-heal path now call
+  it instead of each having their own copy. New
+  app/api/orders/[orderId]/status/route.ts (Gap B) is the order-
+  confirmation page's polling endpoint: once an Order has been
+  "pending" longer than SELF_HEAL_THRESHOLD_SECONDS, it makes the one
+  documented exception to Rule 30.3 and re-queries PayMongo directly
+  for that Checkout Session, since by definition the webhook never
+  arrived — runs markOrderPaid() if PayMongo confirms payment.
+  services/paymongo.ts gained the session-lookup call this route
+  needs. Added Order.cartToken to prisma/schema.prisma (Rule 21:
+  run npx prisma db push + npx prisma generate locally).
+
+[2026-09-05] Added the order confirmation page with status polling —
+  completes cart_checkout_specification.md Section 9 step 6, Phase 1
+  step 1f: app/(public)/order-confirmation/[orderId]/page.tsx (the
+  route PayMongo's success_url already pointed at, per the 2026-09-05
+  webhook entry above) and components/checkout/OrderConfirmation.tsx
+  (Client Component, polls /api/orders/[orderId]/status on an
+  interval until the Order leaves "pending", showing a pending/paid/
+  failed state accordingly). New app/styles/checkout.css additions
+  for the confirmation layout. components/checkout/CheckoutForm.tsx
+  updated in step with the cart-clear timing fix above. Phase 1 of
+  cart_checkout_specification.md (Cart → Checkout → PayMongo →
+  Webhook → Order Confirmation) is now fully built end to end.
