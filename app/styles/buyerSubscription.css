@@ -1,0 +1,343 @@
+/**
+ * FILE: app/styles/buyerSubscription.css
+ * PURPOSE:
+ * Styles for app/buyer/subscription/page.tsx and
+ * SubscriptionDetail.tsx. References the design tokens in
+ * app/globals.css — never hardcoded colors or spacing. Responsive
+ * breakpoints live in app/styles/mediaQueries.css, not inline here.
+ * Same card pattern as buyerPaymentMethods.css/buyerOrders.css for
+ * visual consistency across the buyer account area. Also carries its
+ * own copy of the shared ConfirmationModal's styles (.confirmationModal*)
+ * per the existing per-page-CSS precedent (buyerOrderDetail.css,
+ * buyerPaymentMethods.css).
+ */
+
+.subscriptionPage {
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.subscriptionHeader {
+  margin-bottom: var(--space-xl);
+}
+
+.subscriptionEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.subscriptionTitle {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-top: var(--space-xs);
+}
+
+.subscriptionSubtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+}
+
+/* subscriptionCard
+ * Elevated card per Rule 23.10 — visible border, generous padding. */
+.subscriptionCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg) var(--space-xl);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  margin-bottom: var(--space-xl);
+}
+
+.subscriptionCardHeader {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.subscriptionPlanName {
+  font-size: 1.3rem;
+  color: var(--color-text-primary);
+}
+
+.subscriptionPlanPrice {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-xs);
+}
+
+/* subscriptionStatusBadge
+ * Color-coded per status (Rule 17.2 — accent used for meaning, not
+ * decoration). */
+.subscriptionStatusBadge {
+  display: inline-flex;
+  width: fit-content;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.subscriptionStatusBadge--active {
+  background-color: rgba(34, 197, 94, 0.15);
+  color: var(--color-success);
+}
+.subscriptionStatusBadge--past_due {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: var(--color-warning);
+}
+.subscriptionStatusBadge--cancelled {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: var(--color-error);
+}
+
+.subscriptionNextBilling {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+.subscriptionActions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.subscriptionUpgradeButton,
+.subscriptionCancelButton,
+.subscriptionRetryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.subscriptionUpgradeButton,
+.subscriptionRetryButton {
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+}
+.subscriptionUpgradeButton:hover,
+.subscriptionUpgradeButton:focus-visible,
+.subscriptionUpgradeButton:active,
+.subscriptionRetryButton:hover,
+.subscriptionRetryButton:focus-visible,
+.subscriptionRetryButton:active {
+  background-color: var(--color-surface-hover);
+}
+
+.subscriptionCancelButton {
+  border: 1px solid var(--color-error);
+  background-color: transparent;
+  color: var(--color-error);
+}
+.subscriptionCancelButton:hover,
+.subscriptionCancelButton:focus-visible,
+.subscriptionCancelButton:active {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* Billing history */
+.subscriptionBillingHistory {
+  padding: var(--space-lg) var(--space-xl);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+}
+
+.subscriptionBillingHistoryTitle {
+  font-size: 1.1rem;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-md);
+}
+
+.subscriptionBillingHistoryEmpty {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.subscriptionInvoiceList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.subscriptionInvoiceRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+}
+
+.subscriptionInvoiceDate {
+  flex: 1 1 140px;
+  font-size: 0.85rem;
+}
+
+.subscriptionInvoiceAmount {
+  flex: 0 0 auto;
+  font-size: 0.85rem;
+  color: var(--color-text-primary);
+}
+
+.subscriptionInvoiceStatus {
+  flex: 0 0 auto;
+  font-size: 0.75rem;
+  text-transform: capitalize;
+}
+.subscriptionInvoiceStatus--paid {
+  color: var(--color-success);
+}
+.subscriptionInvoiceStatus--failed {
+  color: var(--color-error);
+}
+.subscriptionInvoiceStatus--pending {
+  color: var(--color-warning);
+}
+
+.subscriptionInvoiceDownload {
+  flex: 0 0 auto;
+  display: inline-flex;
+  color: var(--color-text-secondary);
+  transition: color var(--transition-fast);
+}
+.subscriptionInvoiceDownload:hover,
+.subscriptionInvoiceDownload:focus-visible {
+  color: var(--color-accent);
+}
+
+.subscriptionInvoiceDownloadUnavailable {
+  flex: 0 0 auto;
+  color: var(--color-text-muted);
+}
+
+/* Empty state (Rule 25.3) */
+.subscriptionEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+/* Skeleton loading state (Rule 25.2) */
+.subscriptionCard--skeleton {
+  gap: var(--space-sm);
+}
+.subscriptionSkeletonLine {
+  height: 16px;
+  width: 100%;
+  border-radius: 4px;
+}
+
+/* ── Shared ConfirmationModal (Rule 34.4) ──
+ * Duplicated here per the existing per-page-CSS precedent set by
+ * buyerOrderDetail.css/buyerPaymentMethods.css. */
+.confirmationModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  z-index: var(--z-modal-backdrop);
+}
+
+.confirmationModalDialog {
+  width: 100%;
+  max-width: 420px;
+  padding: var(--space-lg) var(--space-xl);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-bg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  z-index: var(--z-modal);
+  transition: transform var(--transition-slow), opacity var(--transition-slow);
+}
+
+.confirmationModalTitle {
+  font-size: 1.1rem;
+  color: var(--color-text-primary);
+}
+
+.confirmationModalDescription {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+}
+
+.confirmationModalActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.confirmationModalCancelButton {
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.confirmationModalCancelButton:hover,
+.confirmationModalCancelButton:focus-visible,
+.confirmationModalCancelButton:active {
+  background-color: var(--color-surface-hover);
+}
+
+.confirmationModalConfirmButton {
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  border: none;
+  background-color: var(--color-error);
+  color: #ffffff;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.confirmationModalConfirmButton:hover,
+.confirmationModalConfirmButton:focus-visible,
+.confirmationModalConfirmButton:active {
+  opacity: 0.9;
+}
+.confirmationModalCancelButton:disabled,
+.confirmationModalConfirmButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

@@ -326,7 +326,7 @@ PHASE 2 — CORE BUYER EXPERIENCE (needs Phase 1's Order model to exist)
 [~] 3. buyer_account_specification.md — IN PROGRESS (re-corrected
        here 2026-09-06 — Payment Methods was still shown as API+UI
        not started; Tasks 01-03 actually completed it end to end,
-       see overviewProject-1.txt change log. 3 of its 6 pages are
+       see overviewProject-1.txt change log. 4 of its 6 pages are
        now built):
        [DONE] 4.1 Downloads / License Delivery (app/buyer/downloads/,
               app/api/buyer/downloads/) — built 2026-09-05
@@ -341,16 +341,22 @@ PHASE 2 — CORE BUYER EXPERIENCE (needs Phase 1's Order model to exist)
               handling — built 2026-09-06 (docs/tasks/task-01
               through task-03). Layer-3 verified: routes and page
               actually exist and are wired, not just specced.
-       [ ]    4.4 Subscription Management — not started. Split into
-              micro-tasks (docs/tasks/task-04 through task-06):
-              schema (Subscription + SubscriptionInvoice models),
-              API (GET status, POST cancel, GET billing history),
-              UI (/buyer/subscription page).
+       [DONE] 4.4 Subscription Management — Subscription +
+              SubscriptionInvoice models, 3 API routes (GET status,
+              POST cancel, GET billing history), and
+              /buyer/subscription page (plan card, status badge,
+              upgrade/downgrade link to /pricing, cancel via
+              ConfirmationModal, billing history with download
+              links) — built 2026-09-06 (docs/tasks/task-04 through
+              task-06). Dashboard quick-link added alongside it.
+              Upgrade/downgrade is a plain link to /pricing per the
+              spec's own "full plan-change logic can be a follow-up
+              phase" allowance — /pricing does not read a highlight
+              query param yet.
        [ ]    4.5 Support Tickets — not started
        [ ]    4.6 Notifications (+ bell icon in BuyerNav) — not started
        Remaining build order per the spec's own Section 9 priority
-       list: Subscription Management next, then Support Tickets +
-       Notifications.
+       list: Support Tickets next, then Notifications.
 
 PHASE 3 — ADMIN & OVERSIGHT (needs real orders from Phase 1-2 to
 manage against; building admin UI before there's data to manage

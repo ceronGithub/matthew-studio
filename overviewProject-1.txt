@@ -890,3 +890,40 @@ restriction as before; schema block manually reviewed for syntax.
   Management) as micro-tasks docs/tasks/task-04-schema-subscription.md,
   task-05-api-subscription.md, and task-06-ui-subscription-page.md.
   No feature code changed in this entry.
+
+[2026-09-06] Task 04 complete: added Subscription and
+  SubscriptionInvoice models to prisma/schema.prisma per
+  docs/tasks/task-04-schema-subscription.md. npx prisma generate /
+  db push not verified from this sandbox (binaries.prisma.sh
+  blocked, same restriction as before) -- run both locally first.
+
+[2026-09-06] Task 05 complete: added the 3 buyer subscription API
+  routes per docs/tasks/task-05-api-subscription.md --
+  app/api/buyer/subscription/route.ts (GET current plan/status,
+  null-safe for buyers with no subscription), .../cancel/route.ts
+  (POST, sets cancelAtPeriodEnd rather than deleting or cancelling
+  immediately), .../invoices/route.ts (GET billing history, newest
+  first). All three follow the existing buyer-route pattern
+  (getSessionUser, Rule 28 response shape, CSRF check on the
+  cancel mutation).
+
+[2026-09-06] Task 06 complete: built the /buyer/subscription page
+  per docs/tasks/task-06-ui-subscription-page.md --
+  app/buyer/subscription/page.tsx, SubscriptionDetail.tsx (plan
+  card, color-coded status badge, upgrade/downgrade link to
+  /pricing, Cancel via the shared ConfirmationModal, billing
+  history list with download links, Rule 25 loading/empty/error
+  states), and lib/hooks/useBuyerSubscription.ts. Added a
+  "Manage subscription" quick-link to the buyer dashboard
+  (QuickLinkGrid gained a refresh-cw icon). This completes
+  buyer_account_specification.md Section 4.4 end to end (Tasks
+  04-06); corrected overviewProject.txt Section 5C's 4.4 line and
+  "remaining build order" note to match. Upgrade/downgrade is a
+  plain link to /pricing (no highlight query param wired yet) per
+  the spec's own follow-up-phase allowance for full plan-change
+  logic. npx prisma generate / npx tsc --noEmit still blocked by
+  the binaries.prisma.sh sandbox restriction for the generate step;
+  tsc --noEmit itself ran clean against these new files (only the
+  same pre-existing, unrelated errors from the ungenerated Prisma
+  client remain) -- please run prisma generate locally before
+  deploying.

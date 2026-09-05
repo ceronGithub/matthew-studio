@@ -12,6 +12,9 @@
  * OnboardingModal (client) additionally renders the Section 10 welcome
  * overlay itself, but only right after registration — see that
  * component's header comment for how it detects a fresh signup.
+ * Subscription Management (buyer_account_specification.md Section
+ * 4.4, added 2026-09-06) also gets a quick-link here, same as
+ * Payment Methods before it.
  *
  * Per buyer_homepage_specification.md §13.2, the header and the
  * quick-link cards below now have a mount-in entrance (fade/scale-in)
@@ -69,6 +72,13 @@ const QUICK_LINKS: QuickLinkItem[] = [
     description: "Save a card so checkout is one click next time.",
     href: "/buyer/payment-methods",
     icon: "credit-card",
+    available: true,
+  },
+  {
+    title: "Manage subscription",
+    description: "See your plan, billing history, and cancel or change anytime.",
+    href: "/buyer/subscription",
+    icon: "refresh-cw",
     available: true,
   },
 ];
