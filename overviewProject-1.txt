@@ -927,3 +927,10 @@ restriction as before; schema block manually reviewed for syntax.
   same pre-existing, unrelated errors from the ungenerated Prisma
   client remain) -- please run prisma generate locally before
   deploying.
+
+[2026-09-06] Task 07 complete: added SupportTicket and TicketMessage
+  models to prisma/schema.prisma per
+  docs/tasks/task-07-schema-support-tickets.md. npx prisma generate/
+  format/validate still blocked by the binaries.prisma.sh sandbox
+  restriction -- run npx prisma db push && npx prisma generate
+  locally before continuing to Task 08.
