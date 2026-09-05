@@ -271,10 +271,12 @@ Site structure:
 [DONE] /security, /privacy, /terms, /refund-policy
 
 5C. SPEC BUILD SEQUENCE — master order across every specification
-    document in this repo, dependency-first. Checked against every
-    *_specification.md file's own Status line as of 2026-09-03.
-    Docs already built ([DONE]) are excluded — only what's still
-    outstanding is sequenced below.
+    document in this repo, dependency-first. Corrected 2026-09-05 (see
+    Section 8 change log): removed a superseded doc that was still
+    listed as buildable, and added an explicit exclusion list so the
+    two Tier 1 trial docs and the contract draft aren't just silently
+    missing from the count. Docs already built ([DONE]) are excluded —
+    only what's still outstanding is sequenced below.
 --------------------------------------------------------
 PHASE 1 — FOUNDATION (blocks everything buyer-facing; build first)
 [~] 1. cart_checkout_specification.md — IN PROGRESS, per its own
@@ -300,6 +302,13 @@ PHASE 3 — ADMIN & OVERSIGHT (needs real orders from Phase 1-2 to
 manage against; building admin UI before there's data to manage
 means testing against fixtures instead of the real flow)
 [ ] 4. admin_account_specification.md
+       Includes base Product CRUD (create/edit/list/delete a
+       product) — this must land before item 8 below, since
+       product_media_upload_specification.md only adds media fields
+       to an already-existing product, it doesn't create one.
+       (prisma/schema.prisma's Product/ProductGalleryImage models
+       were added 2026-09-05 — schema exists now, but no admin
+       route/UI reads or writes them yet.)
 [ ] 5. super_admin_account_specification.md
        Has its own internal phased build plan (see its Section 12)
        covering Sections 3, 7, and 9 of that document.
@@ -307,43 +316,52 @@ means testing against fixtures instead of the real flow)
 PHASE 4 — SECURITY & ACCESS HARDENING (independent of commerce;
 sequenced after core buyer flow so login/vault hardening doesn't
 block revenue-generating pages from shipping first)
-[ ] 6. login_vault_page_secret_key_generation.md
-[ ] 7. vault_specification.md
+[ ] 6. vault_specification.md
        Front-end mockup already done (Section 13) — this phase is
-       the real backend (Sections 4/5/7/9/12.7-12.8).
-[ ] 8. gatekeeper_specification.md
-       Device-ban check in middleware.ts + DeviceBan table.
-[ ] 9. buyer_password_recovery_specification.md
+       the real backend (Sections 4/5/7/9/12.7-12.8). Schema
+       (AdminSession/VaultCredentials/GatekeeperEvent) added
+       2026-09-05 — build order below is unaffected, this is just
+       schema now existing ahead of the API/UI work.
+[ ] 7. gatekeeper_specification.md
+       Device-ban check in middleware.ts + DeviceBan table (schema
+       added 2026-09-05; middleware.ts itself not yet wired). No
+       hard ordering against item 6 — both touch middleware.ts but
+       independently (Gatekeeper's ban check runs first per its own
+       Section 6, vault only guards /superAdmin/vault + /admin/vault)
+       — build whichever is more urgent first, just resolve any
+       merge overlap in middleware.ts by hand.
+[ ] 8. buyer_password_recovery_specification.md
        Telegram bot recovery flow; buyer registration currently
        ends at the onboarding modal with no recovery path set up.
 
 PHASE 5 — CATALOG & PRODUCT FEATURES (independent of commerce
-plumbing; can slot in whenever bandwidth allows)
-[ ] 10. product_media_upload_specification.md
-        Gallery + video support (current form is single 5MB image).
-[ ] 11. bulk_file_converter_and_pdf_renamer_specification.md
+plumbing; can slot in whenever bandwidth allows — but item 9 needs
+item 4's Product CRUD to exist first, see the note there)
+[ ] 9. product_media_upload_specification.md
+       Gallery + video support (current form is single 5MB image).
+[ ] 10. bulk_file_converter_and_pdf_renamer_specification.md
         File Tools product — bulk/individual conversion + PDF
         invoice renaming.
 
 PHASE 5B — FRONT-END MODERNIZATION (independent of commerce; purely
 visual/motion polish on already-shipped pages — safe filler work)
-[DONE] 11B. buyer_homepage_specification_done.md Section 13 — full
-        audit (2026-09-04) found every section already compliant
-        except Hero's parallax (fixed: mobile + reduced-motion
-        disable). Nothing else needed code changes.
+[DONE] buyer_homepage_specification_done.md Section 13 — full audit
+        (2026-09-04) found every section already compliant except
+        Hero's parallax (fixed: mobile + reduced-motion disable).
+        Nothing else needed code changes.
 
 PHASE 6 — SITEWIDE POLISH & PLATFORM HARDENING (cheap, mostly
 independent — good filler work between the phases above, but
 additional_platform_gaps' Coupons/Refunds sub-items specifically
 need Phase 1 done first since they hook into checkout totals and
 Order.status)
-[ ] 12. sitewide_technical_seo_specification.md
+[ ] 11. sitewide_technical_seo_specification.md
         Sitemap/robots, global 404/error boundaries, idle session
         timeout, anonymized traffic analytics.
-[ ] 13. additional_platform_gaps_specification.md
+[ ] 12. additional_platform_gaps_specification.md
         Coupons, Refund processing, OAuth login, Buyer 2FA,
         transactional emails, shop filtering, dev env setup.
-[ ] 14. infra_ops_specification.md
+[ ] 13. infra_ops_specification.md
         CI/CD, error tracking (Sentry), security headers/CSP,
         Blog CMS admin.
 
@@ -353,7 +371,33 @@ Already built, excluded from the sequence above:
 [DONE] buyer_homepage_specification_done.md (Phase 1-2 done, Phase 3
        done except personalized recommendations — its own Section 13
        Front-End Modernization Enhancement Plan is the only real
-       remaining work; see PHASE 5B below)
+       remaining work; see PHASE 5B above)
+
+Excluded from the sequence above, on purpose, not by oversight:
+[SUPERSEDED] login_vault_page_secret_key_generation.md — was item 6
+       in the old sequence, listed as buildable. It describes a
+       different, conflicting vault design (a Prisma `User` model
+       with a hashed `password` field, its own login logic) that
+       contradicts the real auth system, which is Supabase Auth
+       only (role read from user_metadata.role in middleware.ts —
+       see super_admin_account_specification.md's own 2026-09-05
+       correction, which already replaced its Section 3.6 pointer
+       to this doc with a pointer to vault_specification.md
+       instead). Removed from the build sequence entirely — do not
+       build anything from this doc; vault_specification.md is the
+       design of record.
+[OUT OF REPO] tier1_free_trial_subscription_specification.md and
+       trial_tracking_and_developer_notifications_specification.md —
+       both are spec-only business-rules documents for Tier 1
+       client deployments (e.g. a Villa Azure-style managed rental
+       site), a SEPARATE codebase from matthew-studio per each doc's
+       own "where this gets built" note. This repo has no multi-
+       tenant client model to build these against. The docs live
+       here for reference/authoring convenience only — they were
+       never part of matthew-studio's own build sequence, and adding
+       them here would be wrong, not just out of order.
+[REFERENCE ONLY] villa-azure-agreement-v8-DRAFT-with-trial.txt —
+       contract text, not a technical spec; not sequenced.
 
 6. HOW WE'RE WORKING
 --------------------------------------------------------

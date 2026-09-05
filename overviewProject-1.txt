@@ -428,3 +428,23 @@ that file left off.
   `prisma validate` (no network access to Prisma's engine binaries in
   this environment) -- run `npx prisma validate` locally to confirm
   before `db push`.
+
+[2026-09-05] Fixed Section 5C's build sequence in overviewProject.txt:
+  (1) removed login_vault_page_secret_key_generation.md entirely --
+  it was still numbered as item 6 (buildable), but its User/password
+  design conflicts with the real Supabase-only auth system and is
+  superseded by vault_specification.md, per super_admin_account_
+  specification.md's own 2026-09-05 correction. (2) Added an explicit
+  exclusion list documenting that tier1_free_trial_subscription_
+  specification.md and trial_tracking_and_developer_notifications_
+  specification.md were never missing by oversight -- both target a
+  separate deployed-client-template codebase, not matthew-studio,
+  per their own "where this gets built" notes; also listed villa-
+  azure-agreement-v8-DRAFT-with-trial.txt as reference-only. Renum
+  bered items 6-14 down to 6-13 to close the gap left by removing
+  login_vault_page_secret_key_generation.md. (3) Added a note on item
+  4 (admin_account_specification.md) that its Product CRUD must exist
+  before item 9 (product_media_upload_specification.md) can add media
+  fields to a real record -- product_media_upload's own spec only
+  ever assumed a Product row already existed. Spec-only edit -- no
+  application code changed.
