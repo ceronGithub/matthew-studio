@@ -8,6 +8,14 @@
  * based on role. All route protection lives here — never inside page
  * components.
  *
+ * Gatekeeper (gatekeeper_specification.md, Rule 47.3) runs FIRST,
+ * ahead of role-based routing and ahead of any Supabase session
+ * lookup — a banned device is rejected before the request does any
+ * further work. The fingerprint here is header-only (no client JS
+ * involved), matching lib/deviceFingerprint.ts's narrower Gatekeeper
+ * hash so the same device produces the same fingerprint whether it's
+ * hitting a page route or an API route.
+ *
  * Three separate protected areas, per Section 12.3 — never collapsed
  * into one "any non-buyer" check:
  *   /buyer/*      requires role "buyer"
@@ -25,6 +33,8 @@ import type { NextRequest } from "next/server";
 import { supabaseAdminClient } from "@/lib/supabase/serverClient";
 import { CSRF_COOKIE_NAME, generateCsrfToken } from "@/lib/csrf";
 import { getDashboardPathForRole } from "@/lib/roleRouting";
+import { generateDeviceFingerprint } from "@/lib/deviceFingerprint";
+import { checkDeviceBan } from "@/lib/gatekeeper";
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -36,8 +46,27 @@ function redirectToLogin(request: NextRequest, pathname: string): NextResponse {
   return NextResponse.redirect(loginUrl);
 }
 
+// Generic rejection for a banned device — the response deliberately
+// never explains WHY (Rule 47.3: "never reveal why the device was
+// banned"), so an attacker probing the ban can't learn anything from
+// the error shape.
+function rejectBannedDevice(): NextResponse {
+  return NextResponse.json(
+    { success: false, data: null, message: "This request could not be completed." },
+    { status: 403 }
+  );
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // --- Gatekeeper: runs before anything else, including auth lookup ---
+  const deviceFingerprint = generateDeviceFingerprint(request.headers);
+  const activeBan = await checkDeviceBan(deviceFingerprint);
+  if (activeBan) {
+    return rejectBannedDevice();
+  }
+
   const accessToken = request.cookies.get("sb-access-token")?.value;
 
   const { data } = accessToken
@@ -82,5 +111,15 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/buyer/:path*", "/admin/:path*", "/superAdmin/:path*", "/auth/:path*"],
+  // /api/auth/:path* is included so Gatekeeper's ban check also
+  // covers pre-auth login/register/forgot-password calls, not just
+  // page navigation — a banned device must be rejected before it can
+  // even attempt to log in (Rule 47.3).
+  matcher: [
+    "/buyer/:path*",
+    "/admin/:path*",
+    "/superAdmin/:path*",
+    "/auth/:path*",
+    "/api/auth/:path*",
+  ],
 };

@@ -16,6 +16,7 @@ import { prisma } from "@/services/prisma";
 import { UAParser } from "ua-parser-js";
 import { generateDeviceFingerprint } from "@/lib/deviceFingerprint";
 import { getGeolocationFromIP } from "@/services/geoip";
+import { evaluateGatekeeperTriggers } from "@/lib/gatekeeper";
 
 interface LogSecurityEventInput {
   eventType: string;
@@ -62,6 +63,11 @@ export async function logSecurityEvent({
         geoAccuracy: geo.geoAccuracy,
       },
     });
+
+    // Gatekeeper reads directly off the row we just wrote — never a
+    // separate strike-counter table (Rule 47.3). Never awaited into
+    // failure of the parent write; it has its own internal try/catch.
+    await evaluateGatekeeperTriggers({ eventType, deviceFingerprint });
   } catch (error) {
     // NEVER re-throw — a logging failure should never take down login/register.
     console.error("[securityLog] Failed to write event:", (error as Error).message);

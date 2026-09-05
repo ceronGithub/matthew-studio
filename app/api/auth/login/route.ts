@@ -14,6 +14,7 @@ import { supabaseServerClient } from "@/lib/supabase/serverClient";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { logSecurityEvent } from "@/lib/securityLog";
 import { isValidCsrfRequest } from "@/lib/csrf";
+import { detectAnomalies } from "@/lib/anomalyDetection";
 
 const isProduction = process.env.NODE_ENV === "production";
 const LOGIN_MAX_ATTEMPTS = 5;
@@ -77,6 +78,24 @@ export async function POST(request: Request) {
       request,
       details: `Signed in as role: ${role}`,
     });
+
+    // Section 9.1 — an impossible-travel login BLOCKS the session
+    // instead of just logging it. No AdminSession row is created by
+    // this route yet, so there's nothing to deactivate — blocking the
+    // response itself (no cookies set, no success) is the enforcement
+    // point for now. A device_change alone is only logged, never
+    // blocks — see lib/anomalyDetection.ts's header comment.
+    const anomalyCheck = await detectAnomalies({ accountId: data.user.email ?? email, request });
+    if (anomalyCheck.blocked) {
+      return NextResponse.json(
+        {
+          success: false,
+          data: null,
+          message: "This login was blocked due to unusual activity. Please try again or contact support.",
+        },
+        { status: 403 }
+      );
+    }
 
     const response = NextResponse.json({
       success: true,
