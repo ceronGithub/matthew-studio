@@ -43,3 +43,24 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   session -- no node_modules/Prisma client generated here, same
   sandbox limitation noted on prior tasks; run locally before
   deploying. Next: Task 13 (bell icon + /buyer/notifications page).
+
+[2026-09-06] Task 13 complete: built the notification UI per
+  docs/tasks/task-13-ui-notifications.md -- lib/hooks/useBuyerNotifications.ts
+  (list + unreadCount + markAsRead + markAllAsRead, shared by both
+  call sites below so the badge count never drifts from the full
+  page), components/buyer/NotificationBell.tsx (bell + badge in
+  BuyerNav, outside-click-to-close dropdown, top-5 preview, mark-all,
+  deep-link navigation on row click), and app/buyer/notifications/
+  (page.tsx Server Component shell + NotificationsList.tsx client
+  component -- full history, pagination, Rule 25 loading/empty/error
+  states). Added lib/notificationType.ts for the type->label lookup
+  (order_update/billing/ticket_reply/announcement), same pattern as
+  ticketStatus.ts/orderStatus.ts. Styles: bell/dropdown in
+  buyerDashboard.css alongside the rest of BuyerNav, full page in new
+  app/styles/buyerNotifications.css. Updated Section 5C's 4.6 line.
+  Flagged: nothing creates a Notification row yet -- this UI has no
+  real data until Task 14 wires creation into the order webhook,
+  subscription cancel, and ticket reply routes. Could not run npx
+  tsc --noEmit in this session (same node_modules/Prisma-client
+  sandbox limitation as Tasks 11-12); run locally before deploying.
+  Next: Task 14 (wire notification triggers).

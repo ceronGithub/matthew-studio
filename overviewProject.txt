@@ -366,17 +366,21 @@ PHASE 2 — CORE BUYER EXPERIENCE (needs Phase 1's Order model to exist)
               or docs/tasks/ (task-09/task-10 files were never
               written despite the work landing in the repo).
        [~]    4.6 Notifications (+ bell icon in BuyerNav) — IN
-              PROGRESS (2026-09-06). Notification model added
-              (task-11). API routes done (task-12): GET
-              /api/buyer/notifications (list + unread count), PUT
-              /api/buyer/notifications/[id]/read, PUT
-              /api/buyer/notifications/read-all — all follow the same
-              session/ownership/CSRF pattern as
-              app/api/buyer/support/route.ts. STILL MISSING: task-13
-              (bell + /buyer/notifications page), task-14 (wiring
-              triggers into existing events). "announcement" type
-              included in the schema enum but has no source yet —
-              depends on the super-admin Announcements feature
+              PROGRESS (2026-09-06). Schema (task-11) and API routes
+              (task-12) done. UI done (task-13): NotificationBell.tsx
+              (dropdown in BuyerNav, unread badge, mark-one/mark-all,
+              deep-link on click) and /buyer/notifications
+              (NotificationsList.tsx — full history, pagination,
+              same three data states as SupportTicketsList.tsx).
+              lib/hooks/useBuyerNotifications.ts shared by both call
+              sites so unread count never drifts between the bell and
+              the full page. STILL MISSING: task-14 (wiring
+              notification creation into the 3 existing event
+              sources — right now nothing actually creates a
+              Notification row yet, so this UI has no real data until
+              that lands). "announcement" type included in the schema
+              enum but has no source yet — depends on the super-admin
+              Announcements feature
               (super_admin_account_specification.md Section 3.9),
               which isn't built in this repo.
        Remaining build order per the spec's own Section 9 priority

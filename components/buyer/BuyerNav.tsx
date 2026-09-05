@@ -15,6 +15,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LogOut, Loader2 } from "lucide-react";
 import { getCsrfHeader } from "@/lib/csrf";
+import NotificationBell from "@/components/buyer/NotificationBell";
 
 interface BuyerNavProps {
   displayName: string;
@@ -43,6 +44,7 @@ export default function BuyerNav({ displayName }: BuyerNavProps) {
         </Link>
 
         <div className="buyerNavRight">
+          <NotificationBell />
           <span className="buyerNavWelcome">Hi, {displayName}</span>
           <button
             type="button"

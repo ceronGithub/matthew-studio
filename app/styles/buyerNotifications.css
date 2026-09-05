@@ -1,0 +1,210 @@
+/**
+ * FILE: app/styles/buyerNotifications.css
+ * PURPOSE:
+ * Styles for app/buyer/notifications/page.tsx and
+ * NotificationsList.tsx (Task 13). References the design tokens in
+ * app/globals.css — never hardcoded colors or spacing. Responsive
+ * breakpoints live in app/styles/mediaQueries.css, not inline here.
+ * Header block and card grid mirror buyerSupport.css for visual
+ * consistency across the buyer account area. NotificationBell's own
+ * dropdown styles live in buyerDashboard.css alongside the rest of
+ * BuyerNav — this file is the full-page view only.
+ */
+
+.buyerNotificationsPage {
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.buyerNotificationsHeader {
+  margin-bottom: var(--space-xl);
+}
+
+.buyerNotificationsEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.buyerNotificationsTitle {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-top: var(--space-xs);
+}
+
+.buyerNotificationsSubtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+}
+
+.notificationsToolbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-bottom: var(--space-md);
+}
+
+.notificationsMarkAllButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.notificationsMarkAllButton:hover,
+.notificationsMarkAllButton:focus-visible,
+.notificationsMarkAllButton:active {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+/* notificationsGrid
+ * Single-column stack of full-width cards — a notification's title +
+ * body reads better full-width than in a multi-column grid, unlike
+ * the ticket/order card grids elsewhere in this project. */
+.notificationsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: 0;
+  list-style: none;
+}
+
+.notificationCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xs);
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background-color: var(--color-surface);
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+.notificationCard:hover,
+.notificationCard:focus-visible {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+.notificationCard--unread {
+  border-color: var(--color-accent);
+}
+
+.notificationCardHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.notificationCardType {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+}
+
+.notificationCardDate {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.notificationCardTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.notificationCardBody {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  max-width: 70ch;
+}
+
+.notificationCard--skeleton {
+  cursor: default;
+}
+
+.notificationSkeletonLine {
+  height: 1rem;
+  width: 60%;
+  border-radius: 4px;
+}
+.notificationSkeletonLine--short {
+  width: 30%;
+}
+
+.notificationsEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.notificationsEmptyStateHint {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.notificationsRetryButton {
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.notificationsPagination {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+.notificationsPagination button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.notificationsPagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
