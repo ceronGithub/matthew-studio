@@ -481,12 +481,16 @@ Order.status)
 [ ] 13. infra_ops_specification.md
         CI/CD, error tracking (Sentry), security headers/CSP,
         Blog CMS admin.
-[ ] 14. admin_support_ticket_specification.md (new, 2026-09-06)
+[~] 14. admin_support_ticket_specification.md (new, 2026-09-06)
         Admin ticket inbox + thread + reply — closes the
         Notifications spec's (item 3, 4.6) missing ticket_reply
         source. Belongs in Phase 3 alongside item 4
         (admin_account_specification.md) — same account area, no new
         schema, reuses SupportTicket/TicketMessage as-is.
+        [DONE] task-15 (getSessionAdmin.ts + GET list/detail routes)
+        [ ]    task-16 (POST reply / PUT status routes)
+        [ ]    task-17 (inbox UI)
+        [ ]    task-18 (detail/reply UI)
 
 Already built, excluded from the sequence above:
 [DONE] visitor_specification_done.md

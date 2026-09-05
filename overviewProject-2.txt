@@ -92,3 +92,22 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   locally before deploying. Section 5C's 4.6 line stays [~] --
   full completion is blocked on the admin support-reply route
   existing.
+
+[2026-09-06] Task 15 complete: new lib/getSessionAdmin.ts (admin-route
+  equivalent of lib/getSessionUserId.ts -- resolves the sb-access-token
+  cookie's user and requires role "admin" or "superAdmin", since
+  /api/admin/* isn't in middleware.ts's matcher and each route must
+  self-check, same as every /api/buyer/* route already does). Built
+  the two read-only routes from
+  docs/tasks/task-15-admin-ticket-auth-and-read-routes.md: GET
+  /api/admin/support/tickets (paginated 20/page, optional ?status=
+  filter, buyer emails resolved per-page via
+  supabaseAdminClient.auth.admin.getUserById(), deduplicated so a
+  buyer with multiple tickets on one page only triggers one lookup)
+  and GET /api/admin/support/tickets/[ticketId] (full thread, no
+  ownership scoping -- admin can open any buyer's ticket). Flipped
+  Section 5C's item 14 line to [~] with per-task sub-checkboxes.
+  Could not run npx tsc --noEmit in this session -- no node_modules/
+  Prisma client generated here, same sandbox limitation noted on
+  every prior task. Next: Task 16 (reply + status mutation routes,
+  wires the ticket_reply notification).
