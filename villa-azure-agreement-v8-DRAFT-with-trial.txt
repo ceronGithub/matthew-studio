@@ -83,12 +83,12 @@ WHAT'S INCLUDED:
 ✓ Full admin dashboard access with all features (see Section 2A below)
 ✓ 24/7 automated security monitoring (intrusion detection, alerts)
 ✓ Platform maintenance and security patches
-✓ Uptime monitoring (99% SLA target, see Section 6)
+✓ Uptime monitoring (99% SLA target, see Section 5)
 ✓ 10 hours/week of developer support (see Section 3 below)
 
 WHAT'S NOT INCLUDED:
 ✗ Support beyond 10 hours/week (charged at ₱2,000/hour, see Section 3A)
-✗ Feature development (new features cost extra, see Section 9)
+✗ Feature development (new features cost extra, see Section 6)
 ✗ Backup/disaster recovery (Client can enable Supabase PITR separately)
 ✗ Photo/content management (Client manages via dashboard)
 ✗ Infrastructure changes or account updates
@@ -202,10 +202,10 @@ TRIAL PERIOD (DAYS 1–30):
   (Section 3A) apply during the trial exactly as in a paid month
 • No Setup Fee (Section 4A) and no Monthly Service Fee are charged
   during Days 1–30 — only the Trial Onboarding Fee above applies
-• [ASSUMPTION — CONFIRM: the Trial site is the live, production booking
-  platform (real guests may book real reservations), not a staging/demo
-  copy. If real guest bookings occur during the Trial and the Trial is
-  NOT converted, see "GUEST BOOKINGS MADE DURING TRIAL" below.]
+• CONFIRMED: the Trial site is the live, production booking platform —
+  real guests may book real reservations during the Trial Period, not
+  a staging/demo copy. See "GUEST BOOKINGS MADE DURING TRIAL" below for
+  what happens to those reservations if the Trial is NOT converted.
 
 CLIENT'S DECISION WINDOW (DAYS 1–29):
 Client must notify the Service Provider in writing (email is sufficient)
@@ -239,9 +239,10 @@ NON-CONVERSION — IF CLIENT DOES NOT SUBSCRIBE BY DAY 30:
   monitoring and invoicing process described elsewhere in this
   Agreement
 • Data export: available on request within 48 hours of termination, at
-  no charge [ASSUMPTION — CONFIRM: matching Section 8A's standard export
-  window, rather than the ₱2,000/hour rate Section 4A applies to a paid
-  client's 30+ day non-payment export.]
+  no charge — CONFIRMED to match Section 8A's standard (no-penalty)
+  export window. The ₱2,000/hour rate in Section 4A applies only to a
+  paid client's 30+ day non-payment default, which does not describe a
+  Trial that simply did not convert.
 • Aside from the non-refundable ₱5,000 Trial Onboarding Fee already paid
   at trial start, no further fees are owed by Client for the Trial
   Period itself
@@ -249,16 +250,23 @@ NON-CONVERSION — IF CLIENT DOES NOT SUBSCRIBE BY DAY 30:
   written consent (prevents repeated free trials on the same project)
 
 GUEST BOOKINGS MADE DURING TRIAL:
-[NEEDS CLIENT/DEVELOPER DECISION — NOT YET DEFINED] If the Trial site is
-live to the public and accepts real guest reservations, and the Trial is
-NOT converted, the Client (resort owner) — not the Service Provider — is
+CONFIRMED: the Client (resort owner) — not the Service Provider — is
 solely responsible for honoring, relocating, or refunding any guest
 bookings made during the Trial before the site is taken offline. The
-Client is strongly encouraged to notify guests and export booking data
-before Day 30, or to disable live public bookings during the Trial and
-use it for internal/staff evaluation only. The Service Provider is not
-liable for guest-facing disruption caused by Trial non-conversion (see
-Section 13, Limitation of Liability).
+Service Provider is not liable for guest-facing disruption caused by
+Trial non-conversion (see Section 13, Limitation of Liability).
+
+To reduce the risk of the Client being caught off guard, the Service
+Provider will send the Client a written reminder (email) no later than
+Day 27 of the Trial Period, flagging that Day 30 is approaching and
+recommending the Client either (a) notify guests and export booking
+data ahead of takedown, or (b) disable live public bookings and use
+the remaining Trial days for internal/staff evaluation only. This
+reminder is an informational courtesy, not a guarantee, condition, or
+extension of liability — the Client remains solely responsible for
+guest bookings per the paragraph above regardless of whether the
+reminder is read, acted upon, or (due to delivery failure outside the
+Service Provider's control) received at all.
 
 FEATURE REQUESTS & OVERAGE DURING TRIAL:
 Section 3A (10 hrs/week included support) and Section 6 (feature-request
@@ -283,7 +291,7 @@ BASE PRICING:
 
 TIMELINE:
 • Standard deployment: 2–4 weeks from deposit + complete content handover
-• Rush deployment available (see Section 5 below)
+• Rush deployment available (see below)
 
 WHAT'S INCLUDED:
 ✓ Complete customization (logo, colors, fonts, resort branding)
@@ -296,12 +304,12 @@ WHAT'S INCLUDED:
 ✓ Complete documentation and client guides
 ✓ GitHub repository with full source code
 ✓ Transfer of Vercel, Supabase, R2, and all hosting accounts to Client
-✓ 2-week FREE post-launch support period (see Section 7 below)
+✓ 2-week FREE post-launch support period (see Section 3B)
 
 WHAT'S NOT INCLUDED:
 ✗ Payment gateway integration (PayMongo, Stripe) — separate project
 ✗ SMS/WhatsApp notifications — separate project
-✗ New feature development beyond base package — see Section 9
+✗ New feature development beyond base package — see Section 6
 ✗ Support beyond 2-week period — Client is now independent owner
 ✗ Ongoing hosting cost management — Client's responsibility
 
