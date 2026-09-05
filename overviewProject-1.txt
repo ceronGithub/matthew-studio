@@ -787,3 +787,16 @@ that file left off.
   member" cascade (binaries.prisma.sh blocked in this sandbox --
   prisma generate has never produced real types here; run it locally
   before testing this route).
+
+[2026-09-06] buyer_order_tracking_specification.md Section 3.2 API
+layer built: GET /api/buyer/orders/[orderId] (full detail, digital
+3-step vs tshirt 6-stage timeline, ownership-checked 404) and PUT
+/api/buyer/orders/[orderId]/cancel (status + productionStage guard,
+409 on blocked cancel). Added productionStageHistory (Json),
+courier, trackingNumber, shippingAddress fields to Order in
+schema.prisma -- these were assumed to already exist by the spec but
+were not found in the schema (admin's production-stage write
+endpoint, admin_account_specification.md item 4, is still not built,
+so these stay null/empty until that lands). NOT built yet: the
+/buyer/orders/[orderId] page itself and the Cancel/Reorder/Contact
+Support actions + toasts.

@@ -310,12 +310,20 @@ PHASE 1 — FOUNDATION (blocks everything buyer-facing; build first)
        → Webhook → Order Confirmation, incl. failed/retry).
 
 PHASE 2 — CORE BUYER EXPERIENCE (needs Phase 1's Order model to exist)
-[~] 2. buyer_order_tracking_specification.md — IN PROGRESS (built here
-       2026-09-06). Section 3.1 Order History (`/buyer/orders` list +
-       `GET /api/buyer/orders`, paginated) is done. STILL MISSING:
-       Section 3.2 Order Tracking Detail (`/buyer/orders/[orderId]`)
-       — the tracking timeline, cancel/reorder actions, and the
-       `GET /api/buyer/orders/[orderId]` + `PUT .../cancel` endpoints.
+[~] 2. buyer_order_tracking_specification.md — IN PROGRESS. Section 3.1
+       Order History (`/buyer/orders` list + `GET /api/buyer/orders`,
+       paginated) is done. Section 3.2 API layer is now also done:
+       `GET /api/buyer/orders/[orderId]` (full detail + digital/tshirt
+       timeline) and `PUT /api/buyer/orders/[orderId]/cancel` (status +
+       productionStage guard) — built 2026-09-06. Required adding
+       productionStageHistory/courier/trackingNumber/shippingAddress
+       fields to Order (schema.prisma) since the admin spec's write
+       side for these doesn't exist yet (admin_account_specification.md
+       item 4 is still Phase 3 [ ], not started) — buyer detail route
+       reads them as null/empty until that lands. STILL MISSING: the
+       `/buyer/orders/[orderId]` page itself (timeline UI, items,
+       payment summary, shipping info) and the Cancel/Reorder/Contact
+       Support actions + toasts.
 [~] 3. buyer_account_specification.md — IN PROGRESS (corrected here
        2026-09-06 — this item was shown as fully unstarted; 2 of its
        6 pages are already built):

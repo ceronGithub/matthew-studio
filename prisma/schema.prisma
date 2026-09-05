@@ -142,6 +142,10 @@ model Order {
   paymentStatus     String? // set by webhook, Rule 30.1
   paidAt            DateTime? // set by webhook, Rule 30.1
   productionStage   String? // t-shirt orders only, per buyer_order_tracking_specification.md
+  productionStageHistory Json? // timestamped stage transitions incl. reverts (admin spec Section 3.3.3); buyer-facing GET /api/buyer/orders/[orderId] filters reverts out per tracking spec Section 3.2/4. Null until the admin production-stage endpoint (not yet built) starts writing to it.
+  courier           String?   // set by admin once shipped, per admin spec Section 3.3.2 "Send Tracking Email" trigger
+  trackingNumber    String?   // set alongside courier
+  shippingAddress   Json?     // t-shirt orders only — delivery address on file
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
   deletedAt         DateTime? // Rule 6 soft delete — excluded from normal reads by default
