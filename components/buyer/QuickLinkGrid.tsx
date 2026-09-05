@@ -26,13 +26,14 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ShoppingBag, GraduationCap, UserRound, CreditCard, type LucideIcon } from "lucide-react";
+import { ShoppingBag, GraduationCap, UserRound, CreditCard, Download, type LucideIcon } from "lucide-react";
 
 const ICON_MAP: Record<string, LucideIcon> = {
   "shopping-bag": ShoppingBag,
   "graduation-cap": GraduationCap,
   "user-round": UserRound,
   "credit-card": CreditCard,
+  download: Download,
 };
 
 export interface QuickLinkItem {

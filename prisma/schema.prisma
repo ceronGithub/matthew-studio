@@ -295,3 +295,24 @@ model DeviceBan {
   @@index([deviceFingerprint])
   @@index([isActive])
 }
+
+/// BuyerDownload
+/// One row per digital item a buyer owns — created once at order
+/// fulfillment time (never here) for Templates/File Tools purchases,
+/// per buyer_account_specification.md Section 4.1. T-shirt orders and
+/// AI Video jobs never get a row here — those live in Order History /
+/// a future "My AI Videos" list instead. licenseKey is set once and
+/// never re-issued on repeat download (Section 8 checklist); r2Key is
+/// the private object key used to mint a fresh signed URL per request
+/// — never the public bucket URL, since these are paid, ownership-
+/// gated files.
+model BuyerDownload {
+  id          String   @id @default(cuid())
+  userId      String
+  productId   String
+  licenseKey  String?
+  r2Key       String?
+  purchasedAt DateTime @default(now())
+
+  @@index([userId])
+}

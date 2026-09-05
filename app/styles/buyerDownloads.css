@@ -1,0 +1,228 @@
+/**
+ * FILE: app/styles/buyerDownloads.css
+ * PURPOSE:
+ * Styles for app/buyer/downloads/page.tsx and DownloadsList.tsx.
+ * References the design tokens in app/globals.css — never hardcoded
+ * colors or spacing. Responsive breakpoints for this file live in
+ * app/styles/mediaQueries.css, not inline here. Grid uses
+ * auto-fill/minmax (Rule 23.2) so it reflows without needing any
+ * breakpoint overrides at all.
+ */
+
+.buyerDownloadsPage {
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.buyerDownloadsHeader {
+  margin-bottom: var(--space-xl);
+}
+
+.buyerDownloadsEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.buyerDownloadsTitle {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-top: var(--space-xs);
+}
+
+.buyerDownloadsSubtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+}
+
+/* buyerDownloadsGrid
+ * Auto-responsive card grid — no breakpoints needed, column count
+ * reflows on its own via auto-fill + minmax (Rule 23.2/23.3). */
+.buyerDownloadsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-lg);
+}
+
+/* buyerDownloadCard
+ * Elevated card per Rule 23.10 — never flush against neighbors,
+ * always a visible border, generous inner padding. */
+.buyerDownloadCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+.buyerDownloadCard:hover {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.buyerDownloadThumbWrapper {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: var(--space-sm);
+}
+.buyerDownloadThumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.buyerDownloadThumbFallback {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-surface-active);
+}
+
+.buyerDownloadCategory {
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.buyerDownloadName {
+  font-size: 1.1rem;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+.buyerDownloadDate {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+/* buyerDownloadLicenseRow
+ * License key display + copy button — monospace so the key is easy
+ * to scan/select, muted surface to set it apart from the card body. */
+.buyerDownloadLicenseRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  background-color: var(--color-surface-active);
+  border-radius: 6px;
+  margin-top: var(--space-xs);
+}
+.buyerDownloadLicenseKey {
+  flex: 1;
+  font-size: 0.75rem;
+  font-family: monospace;
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.buyerDownloadCopyButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  min-height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+.buyerDownloadCopyButton:hover,
+.buyerDownloadCopyButton:focus-visible,
+.buyerDownloadCopyButton:active {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+
+.buyerDownloadButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  margin-top: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border: none;
+  border-radius: 8px;
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  font-size: 0.875rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.buyerDownloadButton:hover,
+.buyerDownloadButton:focus-visible,
+.buyerDownloadButton:active {
+  background-color: var(--color-accent-hover);
+}
+.buyerDownloadButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* buyerDownloadsEmptyState
+ * Shared shell for both the empty and error states (Rule 25.3/25.4) —
+ * icon + message + one action, centered, generous padding. */
+.buyerDownloadsEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+.buyerDownloadsRetryButton {
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  text-decoration: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.buyerDownloadsRetryButton:hover,
+.buyerDownloadsRetryButton:focus-visible,
+.buyerDownloadsRetryButton:active {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+/* Skeleton loading state (Rule 25.2) — mirrors the real card shape */
+.buyerDownloadCard--skeleton {
+  gap: var(--space-sm);
+}
+.buyerDownloadSkeletonThumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+}
+.buyerDownloadSkeletonLine {
+  width: 100%;
+  height: 0.9rem;
+  border-radius: 4px;
+}
+.buyerDownloadSkeletonLine--short {
+  width: 60%;
+}

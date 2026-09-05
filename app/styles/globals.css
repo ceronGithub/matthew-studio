@@ -175,6 +175,33 @@ select:focus-visible {
 }
 
 /*
+ * .skeletonBlock (Rule 25.2)
+ * Shared loading-skeleton utility — any component's loading state
+ * mirrors its real content shape with this class rather than a
+ * generic spinner. First used by DownloadsList.tsx; reusable by any
+ * future list/card grid's loading state.
+ */
+@keyframes skeletonPulse {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+.skeletonBlock {
+  background: linear-gradient(
+    90deg,
+    var(--color-skeleton-base) 25%,
+    var(--color-skeleton-shine) 50%,
+    var(--color-skeleton-base) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeletonPulse 1.5s infinite;
+  border-radius: 4px;
+}
+
+/*
  * Reduced motion (Rule 17.5 / IMPROVEMENTS.md Section 7 + Section 13
  * accessibility checklist). Collapses every CSS transition/animation
  * to near-instant for users who have this OS-level preference set,

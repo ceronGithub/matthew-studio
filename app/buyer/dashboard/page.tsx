@@ -18,7 +18,7 @@
  * own that motion so this page itself can stay a Server Component.
  */
 import type { Metadata } from "next";
-import { ShoppingBag, GraduationCap, UserRound, CreditCard } from "lucide-react";
+import { ShoppingBag, GraduationCap, UserRound, CreditCard, Download } from "lucide-react";
 import OnboardingModal from "@/components/buyer/OnboardingModal";
 import DashboardHeaderReveal from "@/components/buyer/DashboardHeaderReveal";
 import QuickLinkGrid, { type QuickLinkItem } from "@/components/buyer/QuickLinkGrid";
@@ -41,6 +41,13 @@ const QUICK_LINKS: QuickLinkItem[] = [
     description: "Guides and walkthroughs for getting the most out of your template.",
     href: "/tutorials",
     icon: "graduation-cap",
+    available: true,
+  },
+  {
+    title: "Your downloads",
+    description: "Templates, file tools, and license keys you've purchased.",
+    href: "/buyer/downloads",
+    icon: "download",
     available: true,
   },
   {
