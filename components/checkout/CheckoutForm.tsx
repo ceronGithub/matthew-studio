@@ -14,17 +14,20 @@
  * surfaced here as a warning toast, matching Rule 22.3's out-of-stock
  * message.
  *
- * PAYMENT — NOT YET WIRED (Phase 1 step 1d):
- * The "Pay with PayMongo" button is intentionally disabled. Actually
- * creating the Order row and a PayMongo Payment Link
- * (cart_checkout_specification.md Section 4.3/4.4) is the next build
- * step — wiring a fake/incomplete submit here would leave the buyer
- * with no real payment flow and no way to know their order didn't
- * actually go through, which is worse than an honest "coming soon."
+ * PAYMENT (Phase 1 step 1d):
+ * Submitting calls POST /api/checkout, which re-validates the cart
+ * server-side, creates the pending Order + OrderItems, opens a
+ * PayMongo Checkout Session for the server-computed total, and
+ * returns a checkoutUrl — this component's only job on success is a
+ * full-page redirect to it (never a client-side route change; it's
+ * an external PayMongo-hosted URL). Order confirmation + webhook-
+ * driven status polling is step 1e/1f, not built yet — PayMongo's own
+ * success_url already points at /order-confirmation/[orderId] in the
+ * meantime, that page just doesn't exist as a route yet.
  */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { Loader2, ShoppingBag, TriangleAlert } from "lucide-react";
 import { CATEGORY_ICONS } from "@/lib/categoryIcons";
@@ -38,6 +41,12 @@ interface CheckoutApiResponse {
   message: string;
 }
 
+interface CheckoutSubmitResponse {
+  success: boolean;
+  data: { orderId: string; checkoutUrl: string } | null;
+  message: string;
+}
+
 export default function CheckoutForm() {
   const [summary, setSummary] = useState<CheckoutSummaryData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -46,7 +55,41 @@ export default function CheckoutForm() {
   const [shippingName, setShippingName] = useState("");
   const [shippingAddress, setShippingAddress] = useState("");
   const [shippingPhone, setShippingPhone] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toasts, showToast, dismissToast } = useToast();
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!summary || isSubmitting) return;
+
+    if (summary.requiresShipping && (!shippingName.trim() || !shippingAddress.trim() || !shippingPhone.trim())) {
+      showToast("✕ Enter your full shipping details to continue.", "error");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, shippingName, shippingAddress, shippingPhone }),
+      });
+      const payload: CheckoutSubmitResponse = await response.json();
+
+      if (!payload.success || !payload.data) {
+        showToast(`✕ ${payload.message || "We couldn't process your order. Please try again."}`, "error");
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Full-page navigation, not next/link — this is PayMongo's own
+      // hosted checkout domain, not a route within this app.
+      window.location.href = payload.data.checkoutUrl;
+    } catch {
+      showToast("✕ We couldn't reach the server. Check your connection and try again.", "error");
+      setIsSubmitting(false);
+    }
+  }
 
   useEffect(() => {
     let isCancelled = false;
@@ -124,7 +167,7 @@ export default function CheckoutForm() {
     <div className="checkoutLayout">
       <ToastStack toasts={toasts} onDismiss={dismissToast} />
 
-      <form className="checkoutForm" noValidate>
+      <form className="checkoutForm" noValidate onSubmit={handleSubmit} id="checkoutForm">
         <div className="checkoutFormSection">
           <h2 className="checkoutFormSectionTitle">Contact information</h2>
           <label className="checkoutFormField">
@@ -232,11 +275,23 @@ export default function CheckoutForm() {
           </div>
         </div>
 
-        <button type="button" className="buttonPrimary checkoutPayButton" disabled title="Online payment launches soon">
-          Pay with PayMongo
+        <button
+          type="submit"
+          form="checkoutForm"
+          className="buttonPrimary checkoutPayButton"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? (
+            <>
+              <Loader2 size={18} strokeWidth={2} className="checkoutSpinner" aria-hidden="true" />
+              Redirecting to payment…
+            </>
+          ) : (
+            "Pay with PayMongo"
+          )}
         </button>
         <p className="checkoutFormHint">
-          Online payment launches with the next update — your cart is saved in the meantime.
+          You&apos;ll be redirected to PayMongo&apos;s secure checkout to complete payment.
         </p>
       </aside>
     </div>

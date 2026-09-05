@@ -448,3 +448,30 @@ that file left off.
   fields to a real record -- product_media_upload's own spec only
   ever assumed a Product row already existed. Spec-only edit -- no
   application code changed.
+
+[2026-09-05] Built cart_checkout_specification.md Phase 1 step 1d
+  (PayMongo integration, Section 4.3/4.4): services/paymongo.ts
+  (createCheckoutSession -- PayMongo Checkout Session product, not
+  Payment Links, chosen for success_url/cancel_url + itemized
+  line_items support the spec's product choice was left open on) and
+  app/api/checkout/route.ts (POST -- rate-limited 10/15min per Rule
+  32.1's payment tier, re-validates cart server-side via the existing
+  loadCartLineItems/resolveCartIdentity helpers, creates Order+
+  OrderItem as "pending", opens the PayMongo session, deletes the
+  Order on PayMongo failure rather than leaving an orphaned pending
+  row, clears the cart only after the session is created). Updated
+  components/checkout/CheckoutForm.tsx: Pay with PayMongo button now
+  submits to this route and does a full-page redirect to the returned
+  checkoutUrl. Added PAYMONGO_SECRET_KEY to the env vars list (Section
+  7), which was also corrected to list every var actually referenced
+  in the codebase (was still just the original 3 Supabase keys).
+  npx tsc --noEmit passes clean except the pre-existing "PrismaClient
+  has no exported member" error, which is expected -- `prisma
+  generate` has never been run in this sandbox (no network access to
+  Prisma's engine binaries) or presumably against the new Product/
+  AdminSession/etc. models from earlier today either; run `npx prisma
+  generate` locally before testing this route. Order.status is never
+  set to PAID by this route -- that's 1e (webhook), not built yet.
+  order-confirmation/[orderId] route also doesn't exist yet (1f) --
+  PayMongo's success_url points at it already, so it 404s today until
+  1f is built.

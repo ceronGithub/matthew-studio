@@ -285,9 +285,13 @@ PHASE 1 — FOUNDATION (blocks everything buyer-facing; build first)
        [DONE] 1b. Cart (drawer + CartItem API)
        [DONE] 1c. Checkout page + server-side validation (payment button
               intentionally disabled — that's 1d, PayMongo Payment Link)
-       [ ]    1d. PayMongo Payment Link creation
+       [DONE] 1d. PayMongo Checkout Session creation (services/paymongo.ts
+              + app/api/checkout/route.ts) -- built 2026-09-05, product
+              choice is Checkout Session not Payment Link, see file header
        [ ]    1e. Webhook + Order status update (Rule 30)
-       [ ]    1f. Order confirmation page + status polling
+       [ ]    1f. Order confirmation page + status polling -- success_url
+              already points at /order-confirmation/[orderId] from 1d,
+              but that route doesn't exist yet
        Nothing in Phase 2 has real data to show without this — it's
        the source of every Order row.
 
@@ -408,10 +412,33 @@ nothing gets scaffolded ahead of what's actually requested.
 
 7. ENVIRONMENT VARIABLES REQUIRED
 --------------------------------------------------------
-.env.local:
+Corrected 2026-09-05 -- this list previously only had the 3 Supabase
+keys from the project's very first build; every other var actually
+referenced in the codebase today (grep-verified) is added below.
+
+.env.local (Next.js app runtime):
   NEXT_PUBLIC_SUPABASE_URL=
   NEXT_PUBLIC_SUPABASE_ANON_KEY=
   SUPABASE_SERVICE_ROLE_KEY=
+  DATABASE_URL=              # Supabase transaction pooler, port 6543 -- services/prisma.ts
+  DIRECT_URL=                # Supabase session pooler, port 5432 -- prisma.config.mjs (CLI only)
+  EMAILJS_PUBLIC_KEY=
+  EMAILJS_PRIVATE_KEY=
+  EMAILJS_SERVICE_ID=
+  EMAILJS_TEMPLATE_ID_CONTACT=
+  EMAILJS_TEMPLATE_ID_SUPPORT=
+  PAYMONGO_SECRET_KEY=       # server-only, no NEXT_PUBLIC_ prefix (Rule 18.5) -- services/paymongo.ts, added 2026-09-05
+
+.env (Prisma CLI -- generate/db push/migrate, read via prisma.config.mjs):
+  DATABASE_URL=
+  DIRECT_URL=
+
+Still not built, so not yet needed: Cloudflare R2 and Google Drive
+credentials (services/r2.ts, services/googleDrive.ts don't exist),
+MaxMind GeoLite2 path (no geolocation logging built).
+
+No .env.example file exists in the repo yet -- still an open item
+from the earlier Task 1 gap list.
 
 8. CHANGE LOG
 --------------------------------------------------------
