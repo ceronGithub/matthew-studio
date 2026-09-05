@@ -276,11 +276,19 @@ Site structure:
     listed as buildable, and added an explicit exclusion list so the
     two Tier 1 trial docs and the contract draft aren't just silently
     missing from the count. Docs already built ([DONE]) are excluded —
-    only what's still outstanding is sequenced below.
+    only what's still outstanding is sequenced below. Re-corrected
+    2026-09-06: 5 commits' worth of actual work (Phase 1 step 1f,
+    Phase 2 item 3's Downloads + Profile pages, and Phase 3/4 work on
+    super_admin_account_specification.md's own internal Phase 2 —
+    device fingerprinting, geoip, anomaly detection, and Gatekeeper
+    middleware wiring) had landed in the repo without ever updating
+    this section or the change log below — see the backfilled entries
+    at the bottom. Status markers below now match the actual repo
+    state as of that date.
 --------------------------------------------------------
 PHASE 1 — FOUNDATION (blocks everything buyer-facing; build first)
-[~] 1. cart_checkout_specification.md — IN PROGRESS, per its own
-       Section 9 internal order:
+[DONE] 1. cart_checkout_specification.md — per its own Section 9
+       internal order, all 6 steps now built:
        [DONE] 1a. Order/OrderItem/CartItem schema (prisma/schema.prisma)
        [DONE] 1b. Cart (drawer + CartItem API)
        [DONE] 1c. Checkout page + server-side validation (payment button
@@ -290,18 +298,38 @@ PHASE 1 — FOUNDATION (blocks everything buyer-facing; build first)
               choice is Checkout Session not Payment Link, see file header
        [DONE] 1e. Webhook + Order status update (Rule 30) --
               app/api/paymongo/webhook/route.ts, built 2026-09-05
-       [ ]    1f. Order confirmation page + status polling -- success_url
-              already points at /order-confirmation/[orderId] from 1d,
-              but that route doesn't exist yet
-       Nothing in Phase 2 has real data to show without this — it's
-       the source of every Order row.
+       [DONE] 1f. Order confirmation page + status polling --
+              app/(public)/order-confirmation/[orderId]/page.tsx +
+              components/checkout/OrderConfirmation.tsx, built
+              2026-09-05 (corrected here 2026-09-06 — this line
+              previously said the route didn't exist yet; it does).
+              Plus the FAILED-status + retry-payment extension (not
+              in the original 6-step list, but the same phase):
+              app/api/orders/[orderId]/retry-payment/route.ts.
+       Phase 1 is fully built end to end (Cart → Checkout → PayMongo
+       → Webhook → Order Confirmation, incl. failed/retry).
 
 PHASE 2 — CORE BUYER EXPERIENCE (needs Phase 1's Order model to exist)
-[ ] 2. buyer_order_tracking_specification.md
+[ ] 2. buyer_order_tracking_specification.md — NOT STARTED.
        /buyer/orders list + /buyer/orders/[orderId] tracking detail.
-[ ] 3. buyer_account_specification.md
-       Downloads/License, Profile, Payment Methods, Subscription
-       Management, Support Tickets, Notifications.
+       No app/buyer/orders/ route and no app/api/buyer/orders/ route
+       exist yet (grep-verified 2026-09-06). Per
+       buyer_account_specification.md Section 9's own priority list,
+       this is a "quick win" once Phase 1 is done — it now is.
+[~] 3. buyer_account_specification.md — IN PROGRESS (corrected here
+       2026-09-06 — this item was shown as fully unstarted; 2 of its
+       6 pages are already built):
+       [DONE] 4.1 Downloads / License Delivery (app/buyer/downloads/,
+              app/api/buyer/downloads/) — built 2026-09-05
+       [DONE] 4.2 Profile (app/buyer/profile/, app/api/buyer/profile/,
+              avatar upload) — built 2026-09-05
+       [ ]    4.3 Payment Methods — not started
+       [ ]    4.4 Subscription Management — not started
+       [ ]    4.5 Support Tickets — not started
+       [ ]    4.6 Notifications (+ bell icon in BuyerNav) — not started
+       Remaining build order per the spec's own Section 9 priority
+       list: Payment Methods next (pairs with Profile), then
+       Subscription Management, then Support Tickets + Notifications.
 
 PHASE 3 — ADMIN & OVERSIGHT (needs real orders from Phase 1-2 to
 manage against; building admin UI before there's data to manage
@@ -314,9 +342,31 @@ means testing against fixtures instead of the real flow)
        (prisma/schema.prisma's Product/ProductGalleryImage models
        were added 2026-09-05 — schema exists now, but no admin
        route/UI reads or writes them yet.)
-[ ] 5. super_admin_account_specification.md
-       Has its own internal phased build plan (see its Section 12)
-       covering Sections 3, 7, and 9 of that document.
+[~] 5. super_admin_account_specification.md — IN PROGRESS (corrected
+       here 2026-09-06). Per its own Section 12 internal phasing:
+       - Phase 2 (Dashboard Shell + Security/Activity Logging) is
+         mostly built: dashboard shell with real health widget +
+         activity log (app/superAdmin/dashboard/page.tsx,
+         lib/dashboardStats.ts, built 2026-09-06), SecurityLog model +
+         logSecurityEvent() (Rule 38), device fingerprinting + geoip +
+         anomaly detection (lib/deviceFingerprint.ts,
+         services/geoip.ts, lib/anomalyDetection.ts, built
+         2026-09-06), AccountActivityLog model + recordAccountActivity()
+         (Rule 42, lib/accountActivity.ts).
+         STILL MISSING from this same internal phase: the Security
+         Logs page (Section 3.3), the Account Activity page (Section
+         3.4), and the Gatekeeper/device-bans page (Section 12's own
+         note that gatekeeper_specification.md belongs bundled into
+         this phase) — the logging/ban infrastructure exists but has
+         no viewer UI yet, so a device ban today can only be lifted
+         by hand in the DB, not via "only a super-admin can unban,
+         and only with a note" as this phase's acceptance criteria
+         requires.
+       - Phase 1 (2FA/TOTP enrollment) not found in the repo
+         (grep-verified) — flagging since Phase 2 work is already
+         ahead of it; not blocking, just noting the gap.
+       - Phases 3+ (admin management, vault, buyer management, etc.)
+         not started.
 
 PHASE 4 — SECURITY & ACCESS HARDENING (independent of commerce;
 sequenced after core buyer flow so login/vault hardening doesn't
@@ -326,15 +376,19 @@ block revenue-generating pages from shipping first)
        the real backend (Sections 4/5/7/9/12.7-12.8). Schema
        (AdminSession/VaultCredentials/GatekeeperEvent) added
        2026-09-05 — build order below is unaffected, this is just
-       schema now existing ahead of the API/UI work.
-[ ] 7. gatekeeper_specification.md
-       Device-ban check in middleware.ts + DeviceBan table (schema
-       added 2026-09-05; middleware.ts itself not yet wired). No
-       hard ordering against item 6 — both touch middleware.ts but
-       independently (Gatekeeper's ban check runs first per its own
-       Section 6, vault only guards /superAdmin/vault + /admin/vault)
-       — build whichever is more urgent first, just resolve any
-       merge overlap in middleware.ts by hand.
+       schema now existing ahead of the API/UI work. Still not
+       started as of 2026-09-06.
+[~] 7. gatekeeper_specification.md — IN PROGRESS (corrected here
+       2026-09-06 — this item previously said middleware.ts wasn't
+       wired yet; it now is). Built: DeviceBan table, lib/gatekeeper.ts
+       (checkDeviceBan() read-only lookup + evaluateGatekeeperTriggers()
+       instant-ban/3-strike logic), wired into middleware.ts ahead of
+       role-based routing and into app/api/auth/login/route.ts (built
+       2026-09-06, see e775106). STILL MISSING: the
+       /superAdmin/gatekeeper page for viewing bans and the manual
+       unban action (Section 6 / Rule 47.3) — bans currently can only
+       be lifted by hand in the DB, same gap noted under item 5 above
+       since this page is the same deliverable both specs point to.
 [ ] 8. buyer_password_recovery_specification.md
        Telegram bot recovery flow; buyer registration currently
        ends at the onboarding modal with no recovery path set up.

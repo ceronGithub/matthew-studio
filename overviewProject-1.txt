@@ -698,3 +698,57 @@ that file left off.
   '@prisma/client' has no exported member" gap (binaries.prisma.sh is
   blocked in this sandbox, so `prisma generate` has never produced
   real types here; run it locally before testing this route).
+
+[2026-09-06] Backfilled 5 unlogged commits found on 2026-09-06 during a
+  Phase 2 status check (same kind of gap as the 2026-09-05 "log
+  unlogged commits" entry above) — Section 5C in overviewProject.txt
+  corrected to match:
+  1. fc1d8a1 "add buyer downloads and license delivery page" —
+     buyer_account_specification.md Section 4.1: app/buyer/downloads/
+     page.tsx, components/buyer/DownloadsList.tsx,
+     lib/hooks/useBuyerDownloads.ts, app/api/buyer/downloads/route.ts
+     + [id]/file/route.ts (signed R2 download URLs via new
+     services/r2.ts helper), lib/getSessionUserId.ts (Supabase Auth
+     session helper — this app has no Prisma User model), new
+     Download-related fields on prisma/schema.prisma.
+  2. 47088c5 "add buyer profile page with avatar upload" —
+     buyer_account_specification.md Section 4.2: app/buyer/profile/
+     page.tsx, components/buyer/ProfileForm.tsx,
+     lib/hooks/useBuyerProfile.ts, app/api/buyer/profile/route.ts +
+     avatar/route.ts (uploads through lib/imageProcessor.ts's existing
+     resize/WebP pipeline per Rule 35.6 before hitting R2).
+  3. 31e5a55 "add device fingerprinting, geoip, and anomaly detection
+     foundation" — super_admin_account_specification.md's own Section
+     12 Phase 2 / Rule 38: lib/deviceFingerprint.ts (SHA-256 hash per
+     Rule 38.4), services/geoip.ts (MaxMind GeoLite2 city-level
+     lookup per Rule 38.5), lib/anomalyDetection.ts (impossible-travel
+     + new-device detection per Rule 38.8), lib/securityLog.ts
+     extended to populate the new fields, lib/accountActivity.ts
+     (Rule 42's recordAccountActivity() helper), prisma/schema.prisma
+     gained the SecurityLog/AccountActivityLog geo + device columns.
+  4. e775106 "wire Gatekeeper device-ban enforcement into middleware
+     and login" — gatekeeper_specification.md / Rule 47.3: new
+     lib/gatekeeper.ts (checkDeviceBan() read-only lookup, fails open
+     on DB error; evaluateGatekeeperTriggers() instant-ban on
+     sql_injection_attempt/location_anomaly, 3-strike ban on
+     login_failed/admin_login_denied/registration_abuse/
+     rate_limit_hit/password_recovery_failed within a rolling 24h
+     window counted directly from SecurityLog), wired into
+     middleware.ts ahead of role-based routing and into
+     app/api/auth/login/route.ts. NOT built yet: the
+     /superAdmin/gatekeeper viewer/unban page — bans can currently
+     only be lifted by hand in the DB.
+  5. a8ca8f1 "build real super-admin dashboard with health widget and
+     activity log" — super_admin_account_specification.md Section
+     3.1: app/superAdmin/dashboard/page.tsx rebuilt on real data via
+     new lib/dashboardStats.ts, app/superAdmin/layout.tsx and
+     middleware.ts adjusted to match.
+  None of these 5 commits are individually large enough to warrant
+  reverting or re-sequencing — they're genuine progress — but Section
+  5C's status markers were left stale (Phase 1 item 1f shown as not
+  built when it was; Phase 2 item 3 shown as fully unstarted when 2 of
+  its 6 pages exist; Phase 3 item 5 and Phase 4 item 7 shown as fully
+  unstarted when both have real backend work landed, just missing
+  their viewer-page deliverables). overviewProject.txt Section 5C
+  updated in place to reflect actual status; no code was changed by
+  this entry, documentation only.
