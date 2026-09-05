@@ -53,9 +53,9 @@ const QUICK_LINKS: QuickLinkItem[] = [
   {
     title: "Complete your profile",
     description: "Add your details so orders and support requests are pre-filled.",
-    href: "#",
+    href: "/buyer/profile",
     icon: "user-round",
-    available: false,
+    available: true,
   },
   {
     title: "Add payment method",

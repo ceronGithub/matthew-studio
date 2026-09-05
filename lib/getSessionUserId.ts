@@ -16,7 +16,7 @@
  */
 import { supabaseAdminClient } from "@/lib/supabase/serverClient";
 
-export async function getSessionUserId(request: Request): Promise<string | null> {
+function getAccessTokenFromCookie(request: Request): string | null {
   const cookieHeader = request.headers.get("cookie");
   if (!cookieHeader) return null;
 
@@ -25,9 +25,24 @@ export async function getSessionUserId(request: Request): Promise<string | null>
     .map((part) => part.trim())
     .find((part) => part.startsWith("sb-access-token="));
 
-  const accessToken = match ? decodeURIComponent(match.slice("sb-access-token=".length)) : null;
+  return match ? decodeURIComponent(match.slice("sb-access-token=".length)) : null;
+}
+
+/**
+ * getSessionUser
+ * Resolves the full Supabase user object (not just the id) for the
+ * calling buyer — used by /api/buyer/profile, which needs email,
+ * created_at, and the existing user_metadata to merge updates into.
+ */
+export async function getSessionUser(request: Request) {
+  const accessToken = getAccessTokenFromCookie(request);
   if (!accessToken) return null;
 
   const { data } = await supabaseAdminClient.auth.getUser(accessToken);
-  return data.user?.id ?? null;
+  return data.user ?? null;
+}
+
+export async function getSessionUserId(request: Request): Promise<string | null> {
+  const user = await getSessionUser(request);
+  return user?.id ?? null;
 }
