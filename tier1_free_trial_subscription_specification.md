@@ -27,9 +27,11 @@ whether to commit to the Managed Rental model.
 
 ## 2. OPEN QUESTIONS (must be resolved before this is contract-ready)
 
-These are called out with `[ASSUMPTION — CONFIRM]` markers in the v8
-contract draft too — repeated here so the business decision isn't
-buried in legal text:
+Most of these are already answered in the v8 contract text itself —
+kept here as a checklist so the resolution is visible without reading
+the full legal draft. Genuinely open items are marked as such below;
+resolved ones are struck through with a pointer to where the contract
+answers them:
 
 1. ~~Does the ₱25,000 Trial Conversion Fee replace or add to the
    standard ₱15,000 Setup Fee + ₱15,000 Month 1?~~ **RESOLVED
@@ -42,26 +44,34 @@ buried in legal text:
    vs. the standard ₱30,000 non-Trial path. If the Client does not
    convert, the ₱5,000 is forfeited (covers the Service Provider's
    onboarding labor) and no further fees are owed.
-2. **Is the trial site live/production** (real guests can book real
-   reservations) or a staging copy? This drives the "Guest Bookings
-   Made During Trial" liability question below.
-3. **Exact Day 30 mechanics** — is takedown immediate at 11:59 PM PHT,
-   or does it follow the existing Tier 1 pattern of a 24-hour grace
-   window before dashboard access is disabled?
-4. **Data export on non-conversion** — free 48-hour window (matching
-   standard Tier 1 cancellation) or no export at all, since no payment
-   was ever received?
-5. **3-month lock-in start point** — does it begin at the Trial
-   Conversion payment (Month 2 of the relationship = Month 1 of
-   lock-in), or somewhere else?
-6. **Trial eligibility/abuse prevention** — one trial per
-   client/business, verified how? Currently drafted as Service
-   Provider's discretion, no hard technical check specified.
-7. **Guest bookings made during an unconverted trial** — who's
-   responsible for honoring/relocating/refunding them once the site
-   goes offline? Currently drafted as the resort owner's (Client's)
-   responsibility, with a recommendation (not requirement) to disable
-   live public bookings during evaluation-only trials.
+2. ~~Is the trial site live/production?~~ **RESOLVED — already in v8:**
+   contract confirms the Trial site is "the live, production booking
+   platform — real guests may book real reservations during the Trial
+   Period, not a staging/demo copy."
+3. ~~Exact Day 30 mechanics?~~ **RESOLVED — already in v8:** takedown
+   is at ~3:59 PM PHT on Day 30 — 8 hours before the 11:59 PM PHT
+   automatic-termination cutoff, not a 24-hour grace window after it.
+4. ~~Data export on non-conversion?~~ **RESOLVED — already in v8:**
+   free 48-hour window on request, matching Section 8A's standard
+   paid-cancellation export term.
+5. ~~3-month lock-in start point?~~ **RESOLVED 2026-09-05:** There is
+   no lock-in. Contract Section 4A states Tier 1's Minimum Commitment
+   is "None — cancel anytime with 1 month written notice," and this
+   applies unchanged from Month 2 onward after Trial Conversion. The
+   3-month figure was mistakenly carried over from Tier 3's 36-month
+   lock-in model, which does not apply to Tier 1.
+6. ~~Trial eligibility/abuse prevention?~~ **RESOLVED (business rule) —
+   already in v8, PARTIAL (technical check still unbuilt):** contract
+   already defines this objectively, not as discretion — per-template,
+   based on the Service Provider's own records of the Client's prior
+   Tier 1 history (Trial or paid) on that specific template. What's
+   still missing is the automated technical check (Section 4) to
+   enforce it without a manual records lookup.
+7. ~~Guest bookings during an unconverted trial?~~ **RESOLVED — already
+   in v8:** the Client (resort owner) is solely responsible for
+   honoring/relocating/refunding guest bookings once the site goes
+   offline; the Service Provider sends a Day 27 courtesy reminder but
+   bears no liability regardless of whether it's acted on.
 
 ---
 
@@ -88,10 +98,12 @@ buried in legal text:
   Onboarding Fee already paid (credited in full) = ₱20,000 balance due
   at conversion.
 - Month 2 onward: standard ₱15,000/month Tier 1 fee, no discount.
-- 3-month minimum commitment starts counting from the Trial Conversion
-  payment.
-- Client's own infrastructure costs (Vercel Pro, etc.) become their
-  responsibility starting Month 2.
+- No minimum commitment — matches contract Section 4A. Client may
+  cancel from Month 2 onward with 1 month written notice, same as any
+  standard (non-Trial) Tier 1 client.
+- Infrastructure remains all-inclusive and absorbed by the Service
+  Provider starting Month 2 — matches contract Sections 2/9. Client is
+  never billed separately for infrastructure under Tier 1.
 
 ### 3.4 — Non-conversion (client does not subscribe by Day 30)
 
@@ -99,7 +111,8 @@ buried in legal text:
 - Site/dashboard taken offline.
 - The ₱5,000 Trial Onboarding Fee is forfeited (non-refundable); no
   further fees owed.
-- Data export available on request (window TBD — see Open Questions).
+- Data export available on request within 48 hours, at no charge —
+  matches Section 8A's standard cancellation export term.
 - Repeat trials require Service Provider's written consent.
 
 ### 3.5 — Everything else unchanged
@@ -138,14 +151,20 @@ features):
   assumption in the contract.]
 - **Criteria 4 (Blanket buyout, one-time ₱180,000):** all future
   features automatically exclusive going forward, Monthly Fee stays
-  ₱15,000 regardless of how many accumulate. Prospective only — doesn't
-  retroactively reduce the Monthly Fee for features already under an
-  active Criteria 2/3 election at the time of Buyout (needs
-  confirmation, per the contract's inline `[ASSUMPTION — CONFIRM]`).
-- Open: stacking rule when a client holds both an active Criteria 2 and
-  Criteria 3 feature simultaneously — drafted as Criteria 2's flat rate
-  absorbing Criteria 3, needs confirmation (see contract's inline
-  `[ASSUMPTION — CONFIRM]`).
+  ₱15,000 regardless of how many accumulate. **RESOLVED — already in
+  v8:** "Prospective only" isn't actually a live question — the
+  contract's General Rules paragraph makes only one Criteria active
+  per account at a time, and electing Criteria 4 immediately
+  terminates whatever Criteria (2 or 3) was previously active, per the
+  "SWITCHING UP INTO CRITERIA 4" rule. There's no separate ongoing
+  Criteria 2/3 fee left to "retroactively reduce" once Criteria 4 is
+  elected — the flat ₱15,000/month replaces it outright.
+- ~~Stacking rule when a client holds both an active Criteria 2 and
+  Criteria 3 feature simultaneously?~~ **RESOLVED — already in v8:**
+  this can't happen — the contract's General Rules paragraph states
+  the Client may hold only ONE active Criteria for the account at any
+  time; electing a new Criteria always terminates the prior one, so
+  there is never a combined fee to stack.
 
 ---
 
@@ -168,7 +187,8 @@ being tracked manually — would need:
 - A notification/reminder to the client as Day 29 approaches (email,
   per the existing EmailJS pattern used elsewhere in this repo).
 - Recording the Trial Conversion Fee payment and flipping the client to
-  standard paid status, resetting the lock-in clock per Section 3.3.
+  standard paid status per Section 3.3 (no lock-in clock to reset —
+  there is no minimum commitment at any point for Tier 1).
 
 None of this is built. This spec documents the business rules only, so
 the eventual technical build (and any future contract amendments) has

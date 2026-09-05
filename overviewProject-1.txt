@@ -408,3 +408,23 @@ that file left off.
   permissions list, the /api/admin/vault/generate route (now /api/
   vault/credentials/generate), the testing checklist, and Phase 4's
   scope line to match. Spec-only -- no code built yet.
+[2026-09-05] Added Product, ProductGalleryImage, AdminSession,
+  VaultCredentials, GatekeeperEvent, and DeviceBan models to
+  prisma/schema.prisma -- closes part of the Task 1 gap flagged
+  earlier (missing Prisma models). AdminSession/VaultCredentials/
+  GatekeeperEvent copied from vault_specification.md Section 4/12.7;
+  DeviceBan copied from gatekeeper_specification.md Section 5.1;
+  Product/ProductGalleryImage derived from lib/productsData.ts's
+  actual interface plus product_media_upload_specification.md's media
+  fields, since no formal Prisma block for base Product existed
+  before. Deliberately did NOT add a Prisma User model --
+  login_vault_page_secret_key_generation.md's User/password block
+  conflicts with the real auth system (Supabase Auth only, role in
+  user_metadata.role, per middleware.ts) and appears superseded by
+  vault_specification.md. Also deleted the duplicate
+  bulk-file-converter-and-pdf-renamer-spec.md (byte-identical to
+  bulk_file_converter_and_pdf_renamer_specification.md). Schema
+  written but not pushed to a live DB, and not run through
+  `prisma validate` (no network access to Prisma's engine binaries in
+  this environment) -- run `npx prisma validate` locally to confirm
+  before `db push`.

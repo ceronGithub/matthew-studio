@@ -127,3 +127,170 @@ model OrderItem {
 
   @@index([orderId])
 }
+
+/// Product
+/// Base catalog fields mirror lib/productsData.ts's Product interface —
+/// no formal Prisma block existed for this before (only the media
+/// add-on fields were spec'd, in product_media_upload_specification.md).
+/// `startingPrice` is the one universal sort/filter value every
+/// category has; `pricingDetails`/`variants` are Json since only
+/// Templates use the managed/self-hosted/custom tier breakdown and
+/// variant list — every other category leaves them null rather than
+/// carrying unused columns. Soft-deleted (deletedAt) since products
+/// are admin-managed content, not disposable rows.
+model Product {
+  id            String    @id @default(cuid())
+  slug          String    @unique
+  category      String // ProductCategorySlug: templates | tshirts | ai-videos | file-tools | tutorials | game-characters
+  categoryLabel String
+  name          String
+  description   String
+  iconName      String
+  startingPrice Float // universal sort/filter value, all categories
+  pricingDetails Json? // { managed?: {monthly, annual}, selfHosted?: number, custom?: number } — Templates only
+  ratingAverage Float     @default(0)
+  ratingCount   Int       @default(0)
+  badge         String? // "bestseller" | "new" | "limited"
+  dateAdded     DateTime  @default(now())
+  trendingScore Float     @default(0)
+  variants      Json? // ProductVariant[] — Templates only
+  status        String    @default("draft") // draft | published
+
+  // Media fields — product_media_upload_specification.md Section 6
+  coverImageUrl   String? // R2 public URL, products/<id>/cover.webp
+  coverImageKey   String? // R2 key, needed for deletion/replacement
+  previewVideoUrl String? // R2 public URL, products/<id>/video/<uuid>.<ext>
+  previewVideoKey String?
+  galleryImages   ProductGalleryImage[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? // Rule 6 soft delete — excluded from normal reads by default
+
+  @@index([category])
+  @@index([status])
+  @@index([slug])
+}
+
+/// ProductGalleryImage
+/// Up to 8 per product per product_media_upload_specification.md
+/// Section 9's checklist. sortOrder matches the reorderable strip in
+/// the admin gallery editor (Section 4).
+model ProductGalleryImage {
+  id        String  @id @default(cuid())
+  productId String
+  url       String
+  key       String
+  sortOrder Int     @default(0)
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+}
+
+/// AdminSession
+/// One row per admin/super-admin login — holds the auto-generated
+/// session slug (vault_specification.md Section 2). Reused across
+/// requests while isActive; a fresh row (never a reused slug) is
+/// created on every post-logout login. userId references Supabase
+/// auth.users.id as a plain string — no local User table (Supabase
+/// Auth is the single source of identity; role lives in
+/// user_metadata.role, read in middleware.ts).
+model AdminSession {
+  id     String @id @default(cuid())
+  userId String
+  role   String // "superAdmin" | "admin"
+
+  slug     Json // { words: string[], alphanumeric, alphaspecial? }
+  isActive Boolean @default(true)
+
+  loginAt        DateTime  @default(now())
+  lastActivityAt DateTime  @default(now())
+  signedOutAt    DateTime?
+  expiresAt      DateTime // 24 hours from login
+
+  ipAddress  String?
+  userAgent  String?
+  deviceType String? // "mobile" | "tablet" | "desktop"
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([isActive])
+  @@index([expiresAt])
+}
+
+/// VaultCredentials
+/// Metadata only for offline emergency-access credentials
+/// (vault_specification.md Section 3) — the actual 15 words + 15
+/// alphanumeric are NEVER stored, only their SHA-256 hashes, for
+/// audit-trail purposes.
+model VaultCredentials {
+  id             String @id @default(cuid())
+  userId         String
+  adminSessionId String
+  role           String // "superAdmin" | "admin"
+
+  wordsHash        String
+  alphanumericHash String
+
+  generatedAt DateTime  @default(now())
+  expiresAt   DateTime // 24 hours from generation, metadata only — no enforcement
+  accessedAt  DateTime?
+
+  generatedBy String? // super-admin email if generated on behalf of another admin
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([adminSessionId])
+  @@index([expiresAt])
+}
+
+/// GatekeeperEvent
+/// Vault-page emergency actions log (vault_specification.md Section
+/// 12.7) — backup/wipe/lockdown/unblock actions taken from the Vault's
+/// Emergency Actions panel. Distinct from DeviceBan below, which is
+/// the site-wide automatic ban system (gatekeeper_specification.md).
+model GatekeeperEvent {
+  id          String @id @default(cuid())
+  eventType   String // sql_injection_attempt | force_entry_attempt | auto_lockdown | manual_lockdown | database_wipe | vault_wipe | account_unblocked | block_all_accounts
+  triggeredBy String? // super-admin/admin email if manual; null if automated
+  ipAddress   String?
+  details     String?
+
+  createdAt DateTime @default(now())
+
+  @@index([eventType])
+  @@index([createdAt])
+}
+
+/// DeviceBan
+/// Site-wide device-fingerprint ban list (gatekeeper_specification.md
+/// Section 5) — checked on every request in middleware.ts before any
+/// role-based routing. Permanent until a super-admin manually unbans
+/// (Section 8); one active row per device, since a second breach from
+/// an already-banned device never reaches the code that would log a
+/// new strike.
+model DeviceBan {
+  id                String   @id @default(cuid())
+  deviceFingerprint String   @unique
+  reason            String // human-readable, e.g. "3x admin_login_denied within 24h"
+  triggerEventType  String // the eventType that caused the ban, or "manual"
+  strikeCount       Int? // null for instant-ban triggers, 3 for strike-based
+  relatedLogIds     String[] // SecurityLog row IDs that led to the ban, for audit review
+
+  bannedAt DateTime @default(now())
+  bannedBy String   @default("system") // "system" (auto) or super-admin's ID/email (manual)
+
+  isActive   Boolean   @default(true)
+  unbannedAt DateTime?
+  unbannedBy String? // super-admin's ID/email
+  unbanNote  String? // required when unbanning, Section 8
+
+  createdAt DateTime @default(now())
+
+  @@index([deviceFingerprint])
+  @@index([isActive])
+}

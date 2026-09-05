@@ -386,8 +386,11 @@ Moderate        | Seasonal pricing, multi-room types | ₱450k–600k
 Complex         | Payment integration, SMS alerts    | ₱600k–800k
 Advanced        | Multi-property, AI features        | ₱800k–1M+
 
-EXAMPLE: Client requests moderate complexity → ₱500k total project cost
-Monthly: ₱500k ÷ 25 months ≈ ₱20k/month
+EXAMPLE: Client requests moderate complexity → falls within the
+₱450k–600k range above. Monthly Installment stays the flat
+₱20,000/month for 36 months described above (₱720,000 total) — the
+complexity table sets scope and the project's price tier, not a
+per-project monthly-rate calculation.
 
 Actual project cost and timeline are confirmed in a separate Scope Document
 before development begins.
@@ -395,7 +398,7 @@ before development begins.
 TIMELINE:
 • Development Phase: 3–5 months (design + development + testing)
 • Payment Phase: 36 months (₱20k/month)
-• Total Relationship: ~42–41 months (5 months dev + 36 months payment)
+• Total Relationship: ~39–41 months (3–5 months dev + 36 months payment)
 
 WHAT'S INCLUDED:
 ✓ Fully custom design (NOT a resellable template)
@@ -1010,12 +1013,12 @@ Note: Tiers 2, 3, 4 do not have SLA (Client is independent owner)
 6. FEATURE REQUESTS & NEW FUNCTIONALITY
 ================================================================================
 
-All feature requests start at ₱10,000 MINIMUM.
+All feature requests start at ₱15,000 MINIMUM.
 
 Pricing Structure:
 
 Complexity      | Examples                                    | Price Range
-Simple          | New admin widget, email template, FAQ       | ₱10k–20k
+Simple          | New admin widget, email template, FAQ       | ₱15k–20k
 Moderate        | Spa booking module, staff management        | ₱20k–40k
 Complex         | PayMongo integration, SMS system            | ₱40k–65k+
 
@@ -1263,7 +1266,7 @@ After Final Delivery:
 • Service Provider has no further obligations (after 2-week support ends)
 
 ================================================================================
-9. INFRAST RUCTURE COSTS & BILLING (TIER 1 ONLY)
+9. INFRASTRUCTURE COSTS & BILLING (TIER 1 ONLY)
 ================================================================================
 
 The Service Provider owns, controls, and maintains all Tier 1
