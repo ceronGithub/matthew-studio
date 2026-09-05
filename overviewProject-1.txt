@@ -828,3 +828,11 @@ hold with setup_future_usage attached -- next tasks (2: paymongo.ts
 helpers, 3: API endpoints, 4: UI page) build on this. prisma
 validate/format both blocked by the same binaries.prisma.sh sandbox
 restriction as before; schema block manually reviewed for syntax.
+
+[2026-09-06] Split Phase 2 item 3's remaining 4.3 Payment Methods
+  work into 3 micro-tasks under docs/tasks/ (Rule 49 Step 4):
+  task-01-paymongo-vault-service.md (services/paymongo.ts vaulting
+  helpers), task-02-api-payment-methods.md (list/add/remove/set-
+  default routes), task-03-ui-payment-methods-page.md
+  (/buyer/payment-methods page + component). No code changed. Build
+  order is 01 -> 02 -> 03.

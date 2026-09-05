@@ -28,6 +28,8 @@
  * HTTP Basic Auth with the secret key as the username and an empty
  * password.
  */
+import { prisma } from "@/services/prisma";
+
 const PAYMONGO_API_BASE = "https://api.paymongo.com/v1";
 
 export interface CheckoutSessionResult {
@@ -266,4 +268,242 @@ export async function getCheckoutSession(checkoutSessionId: string): Promise<Che
     ...extractPaymentDetails(payments),
     isExpired: sessionStatus === "expired",
   };
+}
+
+/**
+ * ── PAYMENT METHOD VAULTING (buyer_account_specification.md Section 4.3) ──
+ *
+ * PayMongo has no standalone hosted "save card" page — a card is only
+ * vaulted as a byproduct of a real Payment Intent. This app uses the
+ * "authorize-then-void" pattern confirmed with the developer
+ * 2026-09-06: attach `setup_future_usage: "off_session"` to a tiny
+ * (₱1) authorization, capture nothing, then immediately void the
+ * intent. The card's payment_method is vaulted against the PayMongo
+ * Customer regardless of the intent's own outcome.
+ *
+ * Card numbers are never touched by this app (Rule 6.6 / never_store)
+ * — the actual card form is PayMongo's own hosted authorization
+ * widget, this service only orchestrates the Customer + Payment
+ * Intent calls around it.
+ */
+
+function paymongoAuthHeader(secretKey: string): string {
+  return `Basic ${Buffer.from(`${secretKey}:`).toString("base64")}`;
+}
+
+/**
+ * getOrCreatePaymongoCustomer
+ * Looks up the buyer's BuyerPaymentProfile row for an existing
+ * PayMongo Customer id; creates one on PayMongo (and the local row)
+ * on first use. One Customer per buyer, reused for every future
+ * vaulted card.
+ */
+export async function getOrCreatePaymongoCustomer(
+  userId: string,
+  email: string
+): Promise<string> {
+  const secretKey = process.env.PAYMONGO_SECRET_KEY;
+  if (!secretKey) {
+    throw new Error("PAYMONGO_SECRET_KEY is not configured.");
+  }
+
+  const existing = await prisma.buyerPaymentProfile.findUnique({
+    where: { userId },
+  });
+  if (existing) return existing.paymongoCustomerId;
+
+  const response = await fetch(`${PAYMONGO_API_BASE}/customers`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: paymongoAuthHeader(secretKey),
+    },
+    body: JSON.stringify({
+      data: { attributes: { email } },
+    }),
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.text().catch(() => "");
+    throw new Error(`PayMongo customer creation failed (${response.status}): ${errorBody}`);
+  }
+
+  const payload = await response.json();
+  const paymongoCustomerId: string | undefined = payload?.data?.id;
+  if (!paymongoCustomerId) {
+    throw new Error("PayMongo response missing customer id.");
+  }
+
+  await prisma.buyerPaymentProfile.create({
+    data: { userId, paymongoCustomerId },
+  });
+
+  return paymongoCustomerId;
+}
+
+export interface VaultingHoldResult {
+  paymentIntentId: string;
+  clientKey: string;
+}
+
+/**
+ * createVaultingHold
+ * Creates a ₱1 authorization Payment Intent with
+ * `setup_future_usage: "off_session"` attached to the given Customer.
+ * The returned clientKey is handed to PayMongo's hosted card form on
+ * the client (Task 03) to collect and attach the card — this service
+ * never sees the raw card number at any point.
+ */
+export async function createVaultingHold(
+  paymongoCustomerId: string
+): Promise<VaultingHoldResult> {
+  const secretKey = process.env.PAYMONGO_SECRET_KEY;
+  if (!secretKey) {
+    throw new Error("PAYMONGO_SECRET_KEY is not configured.");
+  }
+
+  const response = await fetch(`${PAYMONGO_API_BASE}/payment_intents`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: paymongoAuthHeader(secretKey),
+    },
+    body: JSON.stringify({
+      data: {
+        attributes: {
+          amount: 100, // ₱1.00 — smallest allowed authorization, never captured
+          currency: "PHP",
+          capture_type: "manual", // authorize only; Task 02 voids instead of capturing
+          payment_method_allowed: ["card"],
+          setup_future_usage: "off_session",
+          customer: paymongoCustomerId,
+          description: "Card verification hold (not charged)",
+        },
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.text().catch(() => "");
+    throw new Error(`PayMongo vaulting hold creation failed (${response.status}): ${errorBody}`);
+  }
+
+  const payload = await response.json();
+  const paymentIntentId: string | undefined = payload?.data?.id;
+  const clientKey: string | undefined = payload?.data?.attributes?.client_key;
+
+  if (!paymentIntentId || !clientKey) {
+    throw new Error("PayMongo response missing payment intent id or client_key.");
+  }
+
+  return { paymentIntentId, clientKey };
+}
+
+export interface VaultedPaymentMethodResult {
+  paymongoPaymentMethodId: string;
+  maskedLabel: string;
+}
+
+function capitalize(value: string): string {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+/**
+ * getVaultedPaymentMethodFromHold
+ * After the client has attached a card to the hold's Payment Intent
+ * (Task 03's hosted card form step), reads back which payment_method
+ * got vaulted and builds the display-safe masked label (e.g. "Visa
+ * •••• 4417") — this app stores only this label plus PayMongo's own
+ * reference id, never the card number itself (Rule 6.6).
+ */
+export async function getVaultedPaymentMethodFromHold(
+  paymentIntentId: string
+): Promise<VaultedPaymentMethodResult> {
+  const secretKey = process.env.PAYMONGO_SECRET_KEY;
+  if (!secretKey) {
+    throw new Error("PAYMONGO_SECRET_KEY is not configured.");
+  }
+
+  const response = await fetch(`${PAYMONGO_API_BASE}/payment_intents/${paymentIntentId}`, {
+    method: "GET",
+    headers: { Authorization: paymongoAuthHeader(secretKey) },
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.text().catch(() => "");
+    throw new Error(`PayMongo payment intent lookup failed (${response.status}): ${errorBody}`);
+  }
+
+  const payload = await response.json();
+  const paymentMethodId: string | undefined = payload?.data?.attributes?.payment_method;
+  const details = payload?.data?.attributes?.payment_method_details?.card;
+
+  if (!paymentMethodId) {
+    throw new Error("Payment intent has no attached payment method yet.");
+  }
+
+  const brand: string = details?.brand ? capitalize(details.brand) : "Card";
+  const last4: string = details?.last4 ?? "????";
+
+  return {
+    paymongoPaymentMethodId: paymentMethodId,
+    maskedLabel: `${brand} •••• ${last4}`,
+  };
+}
+
+/**
+ * voidVaultingHold
+ * Cancels the authorization Payment Intent after the card is
+ * confirmed vaulted (Task 02 calls this immediately after
+ * getVaultedPaymentMethodFromHold succeeds) — the buyer is never
+ * actually charged the ₱1.
+ */
+export async function voidVaultingHold(paymentIntentId: string): Promise<void> {
+  const secretKey = process.env.PAYMONGO_SECRET_KEY;
+  if (!secretKey) {
+    throw new Error("PAYMONGO_SECRET_KEY is not configured.");
+  }
+
+  const response = await fetch(`${PAYMONGO_API_BASE}/payment_intents/${paymentIntentId}/cancel`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: paymongoAuthHeader(secretKey),
+    },
+    body: JSON.stringify({ data: { attributes: {} } }),
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.text().catch(() => "");
+    // Non-fatal to the buyer's flow (the card is already vaulted by
+    // this point) but must not be silently swallowed — surfaces in
+    // logs so a stuck hold can be investigated.
+    console.error(`[paymongo] Failed to void hold ${paymentIntentId} (${response.status}): ${errorBody}`);
+  }
+}
+
+/**
+ * detachPaymongoPaymentMethod
+ * Detaches a vaulted payment method from its Customer on PayMongo's
+ * side. Called by Task 02's DELETE route before removing the local
+ * SavedPaymentMethod row — keeps PayMongo and this app's DB in sync.
+ */
+export async function detachPaymongoPaymentMethod(paymentMethodId: string): Promise<void> {
+  const secretKey = process.env.PAYMONGO_SECRET_KEY;
+  if (!secretKey) {
+    throw new Error("PAYMONGO_SECRET_KEY is not configured.");
+  }
+
+  const response = await fetch(
+    `${PAYMONGO_API_BASE}/payment_methods/${paymentMethodId}/detach`,
+    {
+      method: "POST",
+      headers: { Authorization: paymongoAuthHeader(secretKey) },
+    }
+  );
+
+  if (!response.ok) {
+    const errorBody = await response.text().catch(() => "");
+    throw new Error(`PayMongo payment method detach failed (${response.status}): ${errorBody}`);
+  }
 }
