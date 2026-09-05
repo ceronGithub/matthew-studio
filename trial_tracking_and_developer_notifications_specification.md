@@ -84,6 +84,44 @@ in this repo until explicitly marked `_done`.
 - Reminders stop immediately the moment the trial is marked Converted
   (see 2.5) — no reminder fires for a trial that's already resolved.
 
+### 2.3a — Day 27 Client Reminder (Contract-Required)
+
+- Separate from Section 2.3's developer-facing daily reminders. The
+  contract (`villa-azure-agreement-v8-DRAFT-with-trial.txt`, the
+  "GUEST BOOKINGS MADE DURING TRIAL" clause) requires the Service
+  Provider to send the **Client** (resort owner) a written email
+  reminder no later than Day 27, flagging that Day 30 is approaching
+  and recommending the Client either notify guests and export booking
+  data, or disable live public bookings for the remainder of the
+  trial. This is a one-time email, not a daily countdown — distinct in
+  audience, frequency, and purpose from 2.3's developer Telegram+email
+  reminders.
+- Sent to the same address resolved in 2.4 step 3 —
+  `prisma.adminProfile.findFirst({ where: { isOwner: true } })` →
+  `adminClient.auth.admin.getUserById(id)` for the actual email — never
+  any other `super_admin` account, and never the developer's own
+  contact info from Section 2.2.
+- Fires once, on Day 27 of the trial (a scheduled job check, same
+  cadence mechanism as 2.3's daily job). Per the contract's own
+  language, this is "an informational courtesy, not a guarantee,
+  condition, or extension of liability" — a failed send does not block
+  or alter the Day 30 auto-lockdown flow (2.4) in any way, but it does
+  still need to be attempted and logged.
+- **Failure escalation:** if the send fails (no `isOwner: true`
+  profile, or the Supabase lookup/email send fails), the failure
+  escalates to the developer over the same dual channel as 2.3
+  (`TRIAL_DEVELOPER_EMAIL` + `TRIAL_DEVELOPER_TELEGRAM_CHAT_ID`) —
+  same reasoning as 2.4 step 3's escalation, since a missed contractual
+  reminder needs the developer to know and follow up manually.
+- Skipped entirely if the trial is already Converted (2.5) by Day 27 —
+  no reminder needed for a client who has already committed to
+  continuing.
+- Every attempt logs to `SecurityLog` (Rule 38) as
+  `trial_client_day27_reminder_sent` /
+  `trial_client_day27_reminder_send_failed`, with the owner's email
+  masked (e.g. `j***@domain.com`) in the logged `details`, same
+  masking rule as 2.4 step 3.
+
 ### 2.4 — Auto-Lockdown + Invoice Generation (Day 30, T-minus 8 hours)
 
 - A scheduled job runs 8 hours before the Day 30, 11:59 PM cutoff
@@ -204,7 +242,8 @@ model TrialStatus {
   invoiceR2Key       String?                      // per Rule 35.6 — documents/ subfolder
   invoiceR2Url       String?
   invoiceEmailedAt   DateTime?
-  lastReminderSentAt DateTime?                     // last Day 20-30 reminder sent, prevents duplicate sends
+  lastReminderSentAt DateTime?                     // last Day 20-30 developer reminder sent, prevents duplicate sends
+  day27ClientReminderSentAt DateTime?               // Day 27 contract-required client email (2.3a), prevents duplicate sends
   // No telegramChatId field — the developer's contact point is the
   // deployment-wide TRIAL_DEVELOPER_TELEGRAM_CHAT_ID env var (Section 2.2),
   // not a per-trial DB value.
@@ -229,6 +268,8 @@ Day 1   : Trial deployment goes live. trialStartDate set. Developer's
           set in .env.local as part of initial deployment.
 Day 1-19: No reminders. Dashboard shows "Day X of 30."
 Day 20  : First daily Telegram reminder sent to developer.
+Day 27  : One-time contract-required email reminder sent to Client
+          (2.3a) — separate from the developer's daily reminders.
 Day 20-29: Daily reminders continue. Client may notify + pay Trial
           Conversion Fee at any point — developer marks "Converted" on
           the dashboard when this happens. Reminders stop immediately.
@@ -329,3 +370,16 @@ review and remain genuinely open:
 - The still-open Criteria 2/3 simultaneous-stacking question (Section
   3.6 of `tier1_free_trial_subscription_specification.md`) is unrelated
   to this feature and remains unresolved.
+
+---
+
+## 7. CHANGE LOG
+
+| Date       | Change                                                                                                                                                                                                                                                                                                                                 |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-09-05 | Added Section 2.3a — the contract-required Day 27 written email reminder to the Client, previously missing from this spec (the contract's non-conversion clause requires it; only developer-facing reminders existed in Section 2.3). Added `day27ClientReminderSentAt` to the `TrialStatus` model and a Day 27 line to the User Flow. |
+
+---
+
+**Document Version:** 1.1
+**Last Updated:** 2026-09-05
