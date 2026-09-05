@@ -121,6 +121,43 @@ model CartItem {
   @@index([cartToken])
 }
 
+/// BuyerPaymentProfile
+/// One row per buyer who has ever saved a card. Holds the PayMongo
+/// Customer id (buyer_account_specification.md Section 4.3/5) since
+/// there is no local User/Buyer table in this schema — auth is
+/// entirely Supabase, userId is only ever referenced as a plain
+/// string elsewhere (Order.userId, etc.). Created lazily on the
+/// first "Add Payment Method" attempt, never upfront.
+model BuyerPaymentProfile {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  paymongoCustomerId String  @unique
+  createdAt         DateTime @default(now())
+
+  savedPaymentMethods SavedPaymentMethod[]
+}
+
+/// SavedPaymentMethod
+/// Never stores card numbers (Rule 6 / never_store) — only PayMongo's
+/// returned payment-method reference and a display-safe masked label
+/// ("Visa •••• 4417"), per buyer_account_specification.md Section 4.3.
+/// Vaulted via a minimal authorize-then-void hold (PayMongo's "Hold
+/// then capture" feature) since PayMongo only vaults a card as a
+/// byproduct of a real Payment Intent, never through a standalone
+/// hosted "save card" page.
+model SavedPaymentMethod {
+  id                    String   @id @default(cuid())
+  buyerPaymentProfileId String
+  paymongoPaymentMethodId String @unique
+  maskedLabel           String  // e.g. "Visa •••• 4417"
+  isDefault             Boolean @default(false)
+  createdAt             DateTime @default(now())
+
+  buyerPaymentProfile BuyerPaymentProfile @relation(fields: [buyerPaymentProfileId], references: [id])
+
+  @@index([buyerPaymentProfileId])
+}
+
 /// Order
 /// Created "pending" at checkout submit (cart_checkout_specification.md
 /// Section 4.4) with a PayMongo Payment Link id; the PayMongo webhook —

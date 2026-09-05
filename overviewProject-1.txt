@@ -815,3 +815,16 @@ npx tsc --noEmit shows only the pre-existing implicit-any cascade on
 Order.items already present in the sibling orders/route.ts (same
 root cause -- Prisma client types aren't fully generated here) --
 no new type errors introduced by this change.
+
+[2026-09-06] buyer_account_specification.md Section 4.3 (Payment
+Methods) task 1/4 built: added BuyerPaymentProfile and
+SavedPaymentMethod models to schema.prisma. No local User/Buyer
+table exists in this schema (auth is entirely Supabase) so
+BuyerPaymentProfile holds the PayMongo Customer id per userId.
+Design decision confirmed with developer: since PayMongo has no
+standalone hosted "save card" flow (only vaults via a real Payment
+Intent), Add Payment Method will use a minimal authorize-then-void
+hold with setup_future_usage attached -- next tasks (2: paymongo.ts
+helpers, 3: API endpoints, 4: UI page) build on this. prisma
+validate/format both blocked by the same binaries.prisma.sh sandbox
+restriction as before; schema block manually reviewed for syntax.

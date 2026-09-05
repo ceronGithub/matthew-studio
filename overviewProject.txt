@@ -330,7 +330,14 @@ PHASE 2 — CORE BUYER EXPERIENCE (needs Phase 1's Order model to exist)
               app/api/buyer/downloads/) — built 2026-09-05
        [DONE] 4.2 Profile (app/buyer/profile/, app/api/buyer/profile/,
               avatar upload) — built 2026-09-05
-       [ ]    4.3 Payment Methods — not started
+       [ ]    4.3 Payment Methods — schema done (BuyerPaymentProfile +
+              SavedPaymentMethod models, schema.prisma, built
+              2026-09-06); API + UI not started. Card vaulting design:
+              PayMongo has no standalone "save card" hosted page —
+              vaulting only happens via a real Payment Intent, so
+              "Add Payment Method" will use a minimal authorize-then-
+              void hold ("Hold then capture") with setup_future_usage
+              attached, confirmed by developer 2026-09-06.
        [ ]    4.4 Subscription Management — not started
        [ ]    4.5 Support Tickets — not started
        [ ]    4.6 Notifications (+ bell icon in BuyerNav) — not started
