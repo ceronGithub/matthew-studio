@@ -20,10 +20,10 @@
  * PayMongo Checkout Session for the server-computed total, and
  * returns a checkoutUrl — this component's only job on success is a
  * full-page redirect to it (never a client-side route change; it's
- * an external PayMongo-hosted URL). Order confirmation + webhook-
- * driven status polling is step 1e/1f, not built yet — PayMongo's own
- * success_url already points at /order-confirmation/[orderId] in the
- * meantime, that page just doesn't exist as a route yet.
+ * an external PayMongo-hosted URL). PayMongo's own success_url points
+ * at /order-confirmation/[orderId] (components/checkout/
+ * OrderConfirmation.tsx), which polls the webhook-driven order status
+ * from there (step 1e/1f, both now built).
  */
 "use client";
 
