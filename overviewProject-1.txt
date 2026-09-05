@@ -752,3 +752,38 @@ that file left off.
   their viewer-page deliverables). overviewProject.txt Section 5C
   updated in place to reflect actual status; no code was changed by
   this entry, documentation only.
+
+[2026-09-06] Built buyer_order_tracking_specification.md Section 3.1
+  (Order History list) — Phase 2 item 2, first half: new
+  app/api/buyer/orders/route.ts (paginated, 10/page, scoped to the
+  calling buyer's own userId per Section 2, joins each OrderItem's
+  productId against the static lib/productsData.ts catalog via
+  getProductById() -- not the empty Prisma Product table, since
+  checkout stores productId from the static catalog, and the admin
+  Product CRUD that would populate that table doesn't exist yet).
+  New lib/orderStatus.ts centralizes the raw Order.status ->
+  buyer-facing label/color mapping (Pending/Confirmed/Shipped/
+  Delivered/Cancelled per spec, plus a "Payment Failed" bucket for
+  the FAILED status the checkout spec added after this doc was
+  written) and the 6-stage productionStage label map, shared with the
+  detail page's timeline once that's built. New
+  lib/hooks/useBuyerOrders.ts + components/buyer/OrdersList.tsx (all
+  three Rule 25 states: skeleton, empty with CTA to /shop, error with
+  retry) + app/buyer/orders/page.tsx + app/styles/buyerOrders.css,
+  same card/skeleton pattern as buyerDownloads.css for visual
+  consistency. Added a "Your orders" quick-link card to
+  app/buyer/dashboard/page.tsx (new Package icon key in
+  QuickLinkGrid.tsx's ICON_MAP) -- also removed that file's
+  lucide-react import, which was already fully unused dead code
+  before this change (QUICK_LINKS only ever used string icon keys,
+  never the icon components directly). NOT built yet: Section 3.2
+  Order Tracking Detail (/buyer/orders/[orderId]) -- timeline,
+  cancel/reorder actions, GET .../[orderId] + PUT .../cancel
+  endpoints. npx eslint clean except the same pre-existing
+  set-state-in-effect finding already present in useBuyerDownloads.ts
+  and useBuyerProfile.ts (this hook follows the same fetch-on-mount
+  pattern by design, for consistency with those two). npx tsc --noEmit
+  shows only the same pre-existing "@prisma/client has no exported
+  member" cascade (binaries.prisma.sh blocked in this sandbox --
+  prisma generate has never produced real types here; run it locally
+  before testing this route).

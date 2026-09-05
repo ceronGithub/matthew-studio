@@ -5,9 +5,10 @@
  * PURPOSE:
  * First screen a buyer lands on after signing in or registering
  * (login_and_registration_page.md Sections 3.1/3.2/7). Shows a welcome
- * message and the same four quick-start items listed in Section 10's
- * onboarding checklist. Profile and payment method pages don't exist
- * yet, so those two cards are shown as upcoming rather than dead links.
+ * message and quick-start items from Section 10's onboarding
+ * checklist plus Orders (buyer_order_tracking_specification.md,
+ * added 2026-09-06). Payment method page doesn't exist yet, so that
+ * card is shown as upcoming rather than a dead link.
  * OnboardingModal (client) additionally renders the Section 10 welcome
  * overlay itself, but only right after registration — see that
  * component's header comment for how it detects a fresh signup.
@@ -18,7 +19,6 @@
  * own that motion so this page itself can stay a Server Component.
  */
 import type { Metadata } from "next";
-import { ShoppingBag, GraduationCap, UserRound, CreditCard, Download } from "lucide-react";
 import OnboardingModal from "@/components/buyer/OnboardingModal";
 import DashboardHeaderReveal from "@/components/buyer/DashboardHeaderReveal";
 import QuickLinkGrid, { type QuickLinkItem } from "@/components/buyer/QuickLinkGrid";
@@ -48,6 +48,13 @@ const QUICK_LINKS: QuickLinkItem[] = [
     description: "Templates, file tools, and license keys you've purchased.",
     href: "/buyer/downloads",
     icon: "download",
+    available: true,
+  },
+  {
+    title: "Your orders",
+    description: "See every order you've placed and track t-shirt production.",
+    href: "/buyer/orders",
+    icon: "package",
     available: true,
   },
   {

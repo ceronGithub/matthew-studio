@@ -310,12 +310,12 @@ PHASE 1 — FOUNDATION (blocks everything buyer-facing; build first)
        → Webhook → Order Confirmation, incl. failed/retry).
 
 PHASE 2 — CORE BUYER EXPERIENCE (needs Phase 1's Order model to exist)
-[ ] 2. buyer_order_tracking_specification.md — NOT STARTED.
-       /buyer/orders list + /buyer/orders/[orderId] tracking detail.
-       No app/buyer/orders/ route and no app/api/buyer/orders/ route
-       exist yet (grep-verified 2026-09-06). Per
-       buyer_account_specification.md Section 9's own priority list,
-       this is a "quick win" once Phase 1 is done — it now is.
+[~] 2. buyer_order_tracking_specification.md — IN PROGRESS (built here
+       2026-09-06). Section 3.1 Order History (`/buyer/orders` list +
+       `GET /api/buyer/orders`, paginated) is done. STILL MISSING:
+       Section 3.2 Order Tracking Detail (`/buyer/orders/[orderId]`)
+       — the tracking timeline, cancel/reorder actions, and the
+       `GET /api/buyer/orders/[orderId]` + `PUT .../cancel` endpoints.
 [~] 3. buyer_account_specification.md — IN PROGRESS (corrected here
        2026-09-06 — this item was shown as fully unstarted; 2 of its
        6 pages are already built):
