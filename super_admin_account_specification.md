@@ -307,42 +307,14 @@ POST /api/admin/create-admin
 
 ### 3.6 — Vault / Emergency Credentials (/superAdmin/vault)
 
-**Purpose:** Generate and manage emergency backup access credentials
-
-**Landing Page:**
-
-- Subheading: "Generate backup access credentials for emergency admin access"
-- CTA: "Generate New Credentials" → modal form
-- Table of previously generated credentials:
-  - Columns: Created Date, Created By (admin email), Used (yes/no), Used At, Status (Active/Revoked)
-  - Actions: View (read-only details), Revoke (confirmation modal, disable immediately)
-
-**Generate Modal:**
-
-- **Reason** (dropdown, required):
-  - Emergency access
-  - Delegated temporary admin task
-  - Backup authentication method
-- **Expires In** (dropdown, required):
-  - 1 hour
-  - 4 hours
-  - 24 hours
-- **Description** (textarea, optional, max 200 chars)
-- Button: "Generate Credentials" (disabled during submission)
-
-**On Submit:**
-
-1. Generate 32-char alphanumeric secret key
-2. Create vault record in DB (status: active)
-3. Redirect to `/superAdmin/vault/[secretId]` (display-only page)
-
-**Vault Details Page (/superAdmin/vault/[secretId]):**
-
-- Secret key displayed in a copy-to-clipboard box (mono font, faded background)
-- Expiry countdown timer (e.g., "Expires in 3 hours 42 minutes")
-- "Copy to Clipboard" button
-- "Revoke Immediately" button (red)
-- Note: "This credential provides full admin access. Treat it like your house key."
+**Correction (2026-09-05):** this section previously described a
+different mechanism (on-demand 32-char secret key, Reason/Expiry form,
+DB-persisted, revocable, history table) that conflicted with Section 7
+and with `vault_specification.md`'s canonical design — a session slug
+auto-generated on login plus ephemeral, never-stored emergency
+credentials. Section 7 is the design of record; see it for the full
+specification (session slug lifecycle, 15-word/15-alphanumeric
+emergency credentials, storage rules, page layout).
 
 ---
 
@@ -537,8 +509,8 @@ The following operations **can ONLY be performed by super-admin**, never by regu
 - ✓ Update admin permissions
 - ✓ View security logs (all events)
 - ✓ View account activity (all admins + super-admin)
-- ✓ View/revoke vault credentials
-- ✓ Generate new vault credentials
+- ✓ View own vault session slug
+- ✓ Generate new vault emergency credentials (ephemeral, Section 7.2)
 - ✓ Access platform health dashboard
 - ✓ Modify system settings (future)
 - ✓ Edit all visitor-facing content (CMS, Section 3.7)
@@ -718,17 +690,22 @@ All super-admin actions are logged in SecurityLog (Rule 38) and AccountActivityL
 }
 ```
 
-### POST /api/admin/vault/generate
+### POST /api/vault/credentials/generate
 
-**Permission:** superAdmin only
+**Correction (2026-09-05):** replaces the old `/api/admin/vault/generate`
+route below, which matched the removed Section 3.6 design (DB-persisted,
+revocable, `vaultId`). Per Section 7.2 / `vault_specification.md`
+Section 5.4, credentials are ephemeral — generated on demand, never
+stored as plaintext, and returned once.
+
+**Permission:** superAdmin or admin (own session only)
 
 **Request:**
 
 ```json
 {
-  "reason": "Emergency access",
-  "expiresIn": 3600,
-  "description": "Backup auth for API migration"
+  "sessionId": "session-uuid",
+  "role": "superAdmin"
 }
 ```
 
@@ -738,11 +715,12 @@ All super-admin actions are logged in SecurityLog (Rule 38) and AccountActivityL
 {
   "success": true,
   "data": {
-    "vaultId": "uuid",
-    "secretKey": "a7f2e9c1b4d8a3f5e7c2b9d4a1e8f3c5",
-    "expiresAt": "2026-09-01T13:00:00Z"
-  },
-  "message": "Vault credentials generated."
+    "words": ["...15 words..."],
+    "alphanumeric": "Aa1Bb2Cc3Dd4Ee5",
+    "generatedAt": "2026-09-05T10:45:00Z",
+    "expiresAt": "2026-09-06T10:45:00Z",
+    "warning": "⚠️ These credentials exist only on this screen. Copy or screenshot immediately."
+  }
 }
 ```
 
@@ -901,7 +879,7 @@ These are gaps identified on review of Sections 1–8. None of these have been i
 - [ ] Super-admin can reset admin passwords (email sent)
 - [ ] Super-admin can delete admin accounts (5-second confirmation delay)
 - [ ] Security logs are populated with all super-admin actions
-- [ ] Vault credentials are generated, displayed, and can be revoked
+- [ ] Vault emergency credentials are generated and displayed once, never retrievable after the page closes (Section 7.2)
 - [ ] Session timeout after 15 minutes of inactivity (auto-logout, toast notification)
 - [ ] Password change required within 90 days (reminder email at day 75)
 - [ ] Failed login attempts locked account after 5 failures (1-hour lockout)
@@ -924,16 +902,17 @@ These are gaps identified on review of Sections 1–8. None of these have been i
 
 ## 11. CHANGE LOG
 
-| Date       | Change                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 2026-09-03 | Added Section 12: Implementation Plan (Phased) — 10-phase, dependency-ordered build sequence covering every page/feature in Sections 3, 7, and 9 (auth/2FA foundation, dashboard + logging, admin management, vault/backups, buyer management, product/order management with approval flow, CMS/announcements/media, task/customer assignment with notifications, analytics, remaining hardening), each with scope, deliverables, and acceptance criteria.                                                                         |
-| 2026-09-03 | Added Section 9: Recommended Improvements & Hardening (proposed, not yet built) — 2FA/MFA, IP allowlist/anomaly-blocking, break-glass recovery, product approval flow, customer-assignment exclusivity check, task notifications/escalation, CMS multi-version history, media library, scoped-by-default admin views, in-app notification center, full Analytics page, per-buyer data export, backup restore runbook. Renumbered Testing checklist to Section 10 and Change Log to Section 11, and added matching checklist items. |
-| 2026-09-03 | Added Sections 3.7–3.14: Content Management/CMS, Buyer Management, Announcements, Product Management, Order Management, Admin Task Assignment, Customer Assignment to Admin, and the Full-Control Principle — super-admin can now manage all visitor content, buyers, products, orders, and admin work assignment, on top of the existing admin-management/security/vault pages. Updated Section 4.1's super-admin-only operations list to match.                                                                                  |
-| 2026-09-04 | Section 3.10's product Media field expanded from single image to Cover Image + up to 8 Gallery Images + optional Preview Video, per new `product_media_upload_specification.md` — all stored in Cloudflare R2, same component shared with `/admin/products`.                                                                                                                                                                                                                                                                       |
-| 2026-09-04 | Added "Manage Device Bans" quick action link to the dashboard, and folded the new `gatekeeper_specification.md` (device-fingerprint-based ban system, all account types + pre-auth traffic, permanent ban until manual super-admin unban) into Phase 2's scope/deliverables/acceptance criteria, since it depends directly on the `SecurityLog` infrastructure built in that same phase.                                                                                                                                           |
-| 2026-09-04 | Updated Section 3.11 Order Management: added super-admin-only unrestricted Production Stage override, Production Stage filter on the order list, and `order_production_stage_updated` security event. Updated Phase 6 scope/deliverables/acceptance to include the shared `productionStage` pipeline (admin spec Section 3.3.3) and the new companion `buyer_order_tracking_specification.md`.                                                                                                                                     |
-| 2026-09-03 | Added Section 7: Vault & Session Slug System — super-admin slug format (12 words + 12 alphanumeric + 12 alphaspecial), auto-generation on first login, slug reuse on subsequent logins, new slug on sign-out + next login. Added vault credentials (15 words + 15 alphanumeric) for emergency access.                                                                                                                                                                                                                              |
-| 2026-09-01 | Initial super-admin specification created; account creation, dashboard, admin management, security logs sections documented.                                                                                                                                                                                                                                                                                                                                                                                                       |
+| Date       | Change                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-09-03 | Added Section 12: Implementation Plan (Phased) — 10-phase, dependency-ordered build sequence covering every page/feature in Sections 3, 7, and 9 (auth/2FA foundation, dashboard + logging, admin management, vault/backups, buyer management, product/order management with approval flow, CMS/announcements/media, task/customer assignment with notifications, analytics, remaining hardening), each with scope, deliverables, and acceptance criteria.                                                                                                                                   |
+| 2026-09-05 | **Correction:** Section 3.6 described a different, conflicting vault mechanism (on-demand DB-persisted secret key, Reason/Expiry form, revocable) from Section 7's session-slug + ephemeral-credentials design (the design of record, matching `vault_specification.md`). Replaced Section 3.6 with a pointer to Section 7. Aligned downstream references: the admin-permissions list (removed "revoke," now ephemeral-only), the `/api/admin/vault/generate` route (replaced with `/api/vault/credentials/generate` per Section 7.2), the testing checklist item, and Phase 4's scope line. |
+| 2026-09-03 | Added Section 9: Recommended Improvements & Hardening (proposed, not yet built) — 2FA/MFA, IP allowlist/anomaly-blocking, break-glass recovery, product approval flow, customer-assignment exclusivity check, task notifications/escalation, CMS multi-version history, media library, scoped-by-default admin views, in-app notification center, full Analytics page, per-buyer data export, backup restore runbook. Renumbered Testing checklist to Section 10 and Change Log to Section 11, and added matching checklist items.                                                           |
+| 2026-09-03 | Added Sections 3.7–3.14: Content Management/CMS, Buyer Management, Announcements, Product Management, Order Management, Admin Task Assignment, Customer Assignment to Admin, and the Full-Control Principle — super-admin can now manage all visitor content, buyers, products, orders, and admin work assignment, on top of the existing admin-management/security/vault pages. Updated Section 4.1's super-admin-only operations list to match.                                                                                                                                            |
+| 2026-09-04 | Section 3.10's product Media field expanded from single image to Cover Image + up to 8 Gallery Images + optional Preview Video, per new `product_media_upload_specification.md` — all stored in Cloudflare R2, same component shared with `/admin/products`.                                                                                                                                                                                                                                                                                                                                 |
+| 2026-09-04 | Added "Manage Device Bans" quick action link to the dashboard, and folded the new `gatekeeper_specification.md` (device-fingerprint-based ban system, all account types + pre-auth traffic, permanent ban until manual super-admin unban) into Phase 2's scope/deliverables/acceptance criteria, since it depends directly on the `SecurityLog` infrastructure built in that same phase.                                                                                                                                                                                                     |
+| 2026-09-04 | Updated Section 3.11 Order Management: added super-admin-only unrestricted Production Stage override, Production Stage filter on the order list, and `order_production_stage_updated` security event. Updated Phase 6 scope/deliverables/acceptance to include the shared `productionStage` pipeline (admin spec Section 3.3.3) and the new companion `buyer_order_tracking_specification.md`.                                                                                                                                                                                               |
+| 2026-09-03 | Added Section 7: Vault & Session Slug System — super-admin slug format (12 words + 12 alphanumeric + 12 alphaspecial), auto-generation on first login, slug reuse on subsequent logins, new slug on sign-out + next login. Added vault credentials (15 words + 15 alphanumeric) for emergency access.                                                                                                                                                                                                                                                                                        |
+| 2026-09-01 | Initial super-admin specification created; account creation, dashboard, admin management, security logs sections documented.                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 
 ---
 
@@ -1010,7 +989,7 @@ Order is dependency-driven, not priority-driven — each phase below only depend
 
 **Goal:** the emergency-access and disaster-recovery layer — built early so it's protecting the system by the time there's real data worth protecting.
 
-**Scope:** Section 7 (session slug + vault credentials), Section 3.6 Vault page, Section 3.5 Backups page (read-only viewer), Rule 40's backup script + `BackupLog` model, Section 9.1's break-glass recovery runbook, Section 9.6's restore runbook.
+**Scope:** Section 7 (session slug + vault credentials, incorporating the 2026-09-05 Section 3.6 correction), Section 3.5 Backups page (read-only viewer), Rule 40's backup script + `BackupLog` model, Section 9.1's break-glass recovery runbook, Section 9.6's restore runbook.
 
 **Deliverables:** vault generate/revoke flow, session slug lifecycle, scheduled backup script wired to the Backups page, written recovery and restore runbooks (docs, not UI).
 
@@ -1090,6 +1069,6 @@ Order is dependency-driven, not priority-driven — each phase below only depend
 
 ---
 
-**Document Version:** 1.6  
-**Last Updated:** 2026-09-04  
+**Document Version:** 1.7  
+**Last Updated:** 2026-09-05  
 **Status:** Specification Complete — Section 9 items proposed pending build; Section 12 is the build sequence for Sections 3, 7, and 9 combined

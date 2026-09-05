@@ -398,3 +398,13 @@ that file left off.
   by Day 27, previously missing (only developer-facing reminders
   existed in Section 2.3). Added TrialStatus.day27ClientReminderSentAt
   and a Day 27 line to the User Flow. Spec-only -- no code built yet.
+
+[2026-09-05] Corrected super_admin_account_specification.md (now v1.7)
+  Section 3.6 -- it described a different, conflicting vault mechanism
+  (on-demand DB-persisted secret key, Reason/Expiry form, revocable)
+  from Section 7's session-slug + ephemeral-credentials design, which
+  matches vault_specification.md and is the design of record. Replaced
+  Section 3.6 with a pointer to Section 7. Also aligned the admin-
+  permissions list, the /api/admin/vault/generate route (now /api/
+  vault/credentials/generate), the testing checklist, and Phase 4's
+  scope line to match. Spec-only -- no code built yet.
