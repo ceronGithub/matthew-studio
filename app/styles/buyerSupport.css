@@ -1,0 +1,372 @@
+/**
+ * FILE: app/styles/buyerSupport.css
+ * PURPOSE:
+ * Styles for app/buyer/support/page.tsx, SupportTicketsList.tsx, and
+ * NewSupportTicketForm.tsx (Task 09). References the design tokens
+ * in app/globals.css — never hardcoded colors or spacing. Responsive
+ * breakpoints live in app/styles/mediaQueries.css, not inline here.
+ * Card grid mirrors buyerOrders.css for visual consistency across
+ * the buyer account area.
+ */
+
+.buyerSupportPage {
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.buyerSupportHeader {
+  margin-bottom: var(--space-xl);
+}
+
+.buyerSupportEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.buyerSupportTitle {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-top: var(--space-xs);
+}
+
+.buyerSupportSubtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+}
+
+/* Toolbar — houses the "New ticket" button above the grid. */
+.supportTicketsToolbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-bottom: var(--space-md);
+}
+
+.supportTicketsNewButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-accent);
+  color: #09090b;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.supportTicketsNewButton:hover,
+.supportTicketsNewButton:focus-visible {
+  background-color: var(--color-accent-hover);
+}
+
+/* supportTicketsGrid
+ * Auto-responsive card grid — no breakpoints needed, column count
+ * reflows on its own via auto-fill + minmax (Rule 23.2/23.3). */
+.supportTicketsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-lg);
+}
+
+/* supportTicketCard
+ * Elevated card per Rule 23.10 — never flush against neighbors,
+ * always a visible border, generous inner padding. Whole card is a
+ * Link to the ticket's thread page. */
+.supportTicketCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  text-decoration: none;
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+.supportTicketCard:hover,
+.supportTicketCard:focus-visible {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.supportTicketIconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background-color: var(--color-surface-active);
+  color: var(--color-text-secondary);
+}
+
+.supportTicketCardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.supportTicketSubject {
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+.supportTicketPreview {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.supportTicketDate {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.supportTicketCardMeta {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-top: auto;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+}
+
+.supportTicketStatusBadge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.supportTicketOrderTag {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+/* Skeleton loading state (Rule 25.2) — mirrors the real card shape. */
+.supportTicketCard--skeleton {
+  pointer-events: none;
+}
+.supportTicketSkeletonIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+}
+.supportTicketSkeletonLine {
+  height: 14px;
+  width: 100%;
+  border-radius: 4px;
+}
+.supportTicketSkeletonLine--short {
+  width: 50%;
+}
+
+.supportTicketsEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+.supportTicketsRetryButton {
+  padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+.supportTicketsRetryButton:hover {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.supportTicketsPagination {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+}
+.supportTicketsPageButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+.supportTicketsPageButton:hover:not(:disabled) {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+.supportTicketsPageButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.supportTicketsPageLabel {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+/* ============================================================
+ * NEW TICKET FORM
+ * ============================================================ */
+.newTicketFormWrapper {
+  margin-bottom: var(--space-xl);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+}
+
+.newTicketFormHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+}
+.newTicketFormHeader h2 {
+  font-size: 1.15rem;
+  color: var(--color-text-primary);
+}
+
+.newTicketFormClose {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+.newTicketFormClose:hover,
+.newTicketFormClose:focus-visible {
+  background-color: var(--color-surface-hover);
+}
+
+.newTicketForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.newTicketFormLegend {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.newTicketFormOrderNote {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 6px;
+  background-color: var(--color-surface-active);
+  width: fit-content;
+}
+
+.newTicketFormField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.newTicketFormField input,
+.newTicketFormField textarea {
+  width: 100%;
+  font-size: 1rem;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface-active);
+  color: var(--color-text-primary);
+  font-family: inherit;
+  resize: vertical;
+}
+
+.newTicketFormError {
+  font-size: 0.8rem;
+  color: var(--color-error);
+}
+
+.newTicketFormActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}
+
+.newTicketFormCancel {
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.newTicketFormCancel:hover:not(:disabled) {
+  background-color: var(--color-surface-hover);
+}
+
+.newTicketFormSubmit {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-accent);
+  color: #09090b;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.newTicketFormSubmit:hover:not(:disabled) {
+  background-color: var(--color-accent-hover);
+}
+.newTicketFormSubmit:disabled,
+.newTicketFormCancel:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
