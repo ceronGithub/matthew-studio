@@ -27,3 +27,19 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   super_admin_account_specification.md), not built in this repo.
   Next: Task 12 (API routes) then npx prisma db push + generate can
   run once schema work for this feature is fully settled.
+
+[2026-09-06] Task 12 complete: built the 3 Notification API routes
+  per docs/tasks/task-12-api-notifications.md -- GET
+  /api/buyer/notifications (list, paginated 20/page, newest first,
+  plus a separate unreadCount query so the bell badge doesn't need a
+  second request), PUT /api/buyer/notifications/[id]/read (ownership-
+  checked single mark-as-read), PUT
+  /api/buyer/notifications/read-all (bulk updateMany scoped to
+  userId + isRead:false). All three follow the same session
+  resolution (getSessionUserId), Rule 28 response shape, CSRF check
+  on mutations, and force-dynamic pattern already used in
+  app/api/buyer/support/route.ts. Updated Section 5C's 4.6 line in
+  overviewProject.txt. Could not run npx tsc --noEmit in this
+  session -- no node_modules/Prisma client generated here, same
+  sandbox limitation noted on prior tasks; run locally before
+  deploying. Next: Task 13 (bell icon + /buyer/notifications page).

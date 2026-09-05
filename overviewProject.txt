@@ -366,16 +366,17 @@ PHASE 2 — CORE BUYER EXPERIENCE (needs Phase 1's Order model to exist)
               or docs/tasks/ (task-09/task-10 files were never
               written despite the work landing in the repo).
        [~]    4.6 Notifications (+ bell icon in BuyerNav) — IN
-              PROGRESS (2026-09-06). Notification model added to
-              prisma/schema.prisma (task-11). Split into 4 micro-tasks
-              (docs/tasks/task-11 through task-14) since it spans
-              schema + API + UI + wiring into 3 existing routes
-              (order webhook, subscription cancel, ticket reply).
-              STILL MISSING: task-12 (API routes), task-13 (bell +
-              /buyer/notifications page), task-14 (wiring triggers
-              into existing events). "announcement" type included in
-              the schema enum but has no source yet — depends on the
-              super-admin Announcements feature
+              PROGRESS (2026-09-06). Notification model added
+              (task-11). API routes done (task-12): GET
+              /api/buyer/notifications (list + unread count), PUT
+              /api/buyer/notifications/[id]/read, PUT
+              /api/buyer/notifications/read-all — all follow the same
+              session/ownership/CSRF pattern as
+              app/api/buyer/support/route.ts. STILL MISSING: task-13
+              (bell + /buyer/notifications page), task-14 (wiring
+              triggers into existing events). "announcement" type
+              included in the schema enum but has no source yet —
+              depends on the super-admin Announcements feature
               (super_admin_account_specification.md Section 3.9),
               which isn't built in this repo.
        Remaining build order per the spec's own Section 9 priority
