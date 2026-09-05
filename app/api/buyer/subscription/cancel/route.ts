@@ -25,6 +25,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/services/prisma";
 import { getSessionUser } from "@/lib/getSessionUserId";
 import { isValidCsrfRequest } from "@/lib/csrf";
+import { createNotification } from "@/lib/notifications";
 
 export async function POST(request: Request) {
   try {
@@ -65,6 +66,14 @@ export async function POST(request: Request) {
     const updated = await prisma.subscription.update({
       where: { id: subscription.id },
       data: { cancelAtPeriodEnd: true },
+    });
+
+    await createNotification({
+      userId: user.id,
+      type: "billing",
+      title: "Subscription set to cancel",
+      body: `Your ${updated.planName} plan will remain active through ${updated.currentPeriodEnd.toLocaleDateString()}, then it won't renew.`,
+      linkHref: "/buyer/subscription",
     });
 
     return NextResponse.json({

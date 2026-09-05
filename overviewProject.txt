@@ -374,17 +374,20 @@ PHASE 2 — CORE BUYER EXPERIENCE (needs Phase 1's Order model to exist)
               same three data states as SupportTicketsList.tsx).
               lib/hooks/useBuyerNotifications.ts shared by both call
               sites so unread count never drifts between the bell and
-              the full page. STILL MISSING: task-14 (wiring
-              notification creation into the 3 existing event
-              sources — right now nothing actually creates a
-              Notification row yet, so this UI has no real data until
-              that lands). "announcement" type included in the schema
-              enum but has no source yet — depends on the super-admin
-              Announcements feature
-              (super_admin_account_specification.md Section 3.9),
-              which isn't built in this repo.
+              the full page. Task 14 (2026-09-06) wired 2 of 3 event
+              sources: order_update (PayMongo webhook, paid+failed)
+              and billing (subscription cancel) both now create real
+              Notification rows. STILL MISSING: ticket_reply — no
+              admin-side support ticket reply route exists anywhere
+              in this repo yet, so that source has nothing to wire
+              into; tracked as its own new spec, item 14 below.
+              "announcement" type included in the schema enum but has
+              no source yet — depends on the super-admin Announcements
+              feature (super_admin_account_specification.md Section
+              3.9), which isn't built in this repo.
        Remaining build order per the spec's own Section 9 priority
-       list: Notifications is the only item left in this spec.
+       list: Notifications' ticket_reply source depends on item 14
+       below; everything else in this spec is done.
 
 PHASE 3 — ADMIN & OVERSIGHT (needs real orders from Phase 1-2 to
 manage against; building admin UI before there's data to manage
@@ -478,6 +481,12 @@ Order.status)
 [ ] 13. infra_ops_specification.md
         CI/CD, error tracking (Sentry), security headers/CSP,
         Blog CMS admin.
+[ ] 14. admin_support_ticket_specification.md (new, 2026-09-06)
+        Admin ticket inbox + thread + reply — closes the
+        Notifications spec's (item 3, 4.6) missing ticket_reply
+        source. Belongs in Phase 3 alongside item 4
+        (admin_account_specification.md) — same account area, no new
+        schema, reuses SupportTicket/TicketMessage as-is.
 
 Already built, excluded from the sequence above:
 [DONE] visitor_specification_done.md

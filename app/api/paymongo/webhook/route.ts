@@ -51,6 +51,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/services/prisma";
 import { logSecurityEvent } from "@/lib/securityLog";
 import { markOrderPaid, markOrderFailed } from "@/lib/orderPayment";
+import { createNotification } from "@/lib/notifications";
 
 const SIGNATURE_HEADER = "paymongo-signature";
 
@@ -197,6 +198,18 @@ export async function POST(request: Request) {
 
     await markOrderFailed({ orderId: order.id, paymentStatus: failedPaymentStatus ?? "failed" });
 
+    // Guest checkouts have no buyer account to notify (Order.userId
+    // is null) — only signed-in buyers get a Notification row.
+    if (order.userId) {
+      await createNotification({
+        userId: order.userId,
+        type: "order_update",
+        title: "Payment failed",
+        body: `We couldn't process payment for order #${order.id.slice(-8)}. You can retry from your orders page.`,
+        linkHref: `/buyer/orders/${order.id}`,
+      });
+    }
+
     await logSecurityEvent({
       eventType: "paymongo_webhook_payment_failed",
       request,
@@ -233,6 +246,18 @@ export async function POST(request: Request) {
     paymentStatus: paymentStatus ?? "paid",
     paidAt,
   });
+
+  // Guest checkouts have no buyer account to notify (Order.userId is
+  // null) — only signed-in buyers get a Notification row.
+  if (order.userId) {
+    await createNotification({
+      userId: order.userId,
+      type: "order_update",
+      title: "Payment received",
+      body: `Your payment for order #${order.id.slice(-8)} was confirmed.`,
+      linkHref: `/buyer/orders/${order.id}`,
+    });
+  }
 
   await logSecurityEvent({
     eventType: "paymongo_webhook_payment_paid",

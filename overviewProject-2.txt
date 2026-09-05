@@ -64,3 +64,31 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   tsc --noEmit in this session (same node_modules/Prisma-client
   sandbox limitation as Tasks 11-12); run locally before deploying.
   Next: Task 14 (wire notification triggers).
+
+[2026-09-06] Task 14 complete (partial per repo reality): wired
+  notification creation into 2 of the 3 event sources named in
+  docs/tasks/task-14-wire-notification-triggers.md. New shared
+  lib/notifications.ts createNotification() (try/catch-wrapped,
+  never throws -- a notification is a side effect of an already-
+  successful state change and must never roll it back). Wired into
+  app/api/paymongo/webhook/route.ts (order_update, on both
+  markOrderPaid and markOrderFailed paths -- skipped for guest
+  checkouts where Order.userId is null, since there's no buyer
+  account to notify) and app/api/buyer/subscription/cancel/route.ts
+  (billing, after cancelAtPeriodEnd is set). The third source in the
+  task spec -- "when senderRole is admin" on the ticket reply route
+  -- does not exist yet: app/api/buyer/support/[ticketId]/reply/
+  route.ts is buyer-only and always writes senderRole "buyer"; no
+  admin-side support ticket reply route has been built anywhere in
+  this repo. Left a NOT YET WIRED block with the exact call to add
+  in lib/notifications.ts's own header so it isn't lost. Also
+  confirmed via schema comments that Order's "Shipped"/"Delivered"
+  statuses and the admin production-stage/courier endpoints
+  mentioned in task-14's spec aren't built yet either, so
+  order_update notifications only fire for the two states the
+  codebase actually sets (PAID, FAILED). Could not run npx tsc
+  --noEmit in this session -- no node_modules/Prisma client
+  generated here, same sandbox limitation as Tasks 11-13; run
+  locally before deploying. Section 5C's 4.6 line stays [~] --
+  full completion is blocked on the admin support-reply route
+  existing.
