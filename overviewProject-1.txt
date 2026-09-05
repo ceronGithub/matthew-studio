@@ -836,3 +836,48 @@ restriction as before; schema block manually reviewed for syntax.
   default routes), task-03-ui-payment-methods-page.md
   (/buyer/payment-methods page + component). No code changed. Build
   order is 01 -> 02 -> 03.
+
+[2026-09-06] Task 01 complete: extended services/paymongo.ts with the
+  vaulting helpers (getOrCreatePaymongoCustomer,
+  createVaultingHold, getVaultedPaymentMethodFromHold,
+  voidVaultingHold, detachPaymongoPaymentMethod) per
+  docs/tasks/task-01-paymongo-vault-service.md. No API routes or UI
+  in this task. (Logged retroactively — the code already existed on
+  the shop branch when this session cloned it, but the change-log
+  entry was missed at the time.)
+
+[2026-09-06] Task 02 complete: added the 3 buyer payment-methods API
+  routes per docs/tasks/task-02-api-payment-methods.md --
+  app/api/buyer/payment-methods/route.ts (GET list, POST two-phase
+  vaulting start/finalize), app/api/buyer/payment-methods/[id]/route.ts
+  (DELETE, detaches on PayMongo then removes the row, promotes the
+  next-newest card to default if the removed one was default),
+  app/api/buyer/payment-methods/[id]/default/route.ts (PUT, single-
+  transaction default reassignment). All three follow the existing
+  buyer-route pattern (CSRF check, getSessionUser, ownership-scoped
+  404s, Rule 28 response shape). npx prisma generate / npx tsc
+  --noEmit still blocked by the same binaries.prisma.sh sandbox
+  restriction as before -- not re-verified from this sandbox.
+
+[2026-09-06] Task 03 complete: built the /buyer/payment-methods page
+  per docs/tasks/task-03-ui-payment-methods-page.md --
+  app/buyer/payment-methods/page.tsx, PaymentMethodsList.tsx
+  (list/add/remove/set-default, Rule 25 loading/empty/error states,
+  ConfirmationModal for remove), AddPaymentMethodForm.tsx (card
+  number/expiry/cvc form), new lib/paymongoClient.ts (browser-side
+  PayMongo publishable-key calls -- tokenizes the card and attaches
+  it to the server-created hold; card digits never touch this app's
+  own backend) and lib/hooks/useBuyerPaymentMethods.ts. Added 3D
+  Secure handling: PaymongoClient's attach call surfaces a
+  next_action redirect when required, the form sends the browser to
+  PayMongo, and PaymentMethodsList picks the flow back up on return
+  via a ?intent= query param and calls the API's finalize phase.
+  Flipped the dashboard's "Add payment method" quick-link from
+  available:false to the real /buyer/payment-methods href. New env
+  var required: NEXT_PUBLIC_PAYMONGO_PUBLIC_KEY (publishable key,
+  safe client-side per Rule 18.5/31.8 -- add to .env.local). This
+  completes buyer_account_specification.md Section 4.3 end to end
+  (Tasks 01-03). npx prisma generate / npx tsc --noEmit still
+  blocked by the same binaries.prisma.sh sandbox restriction as
+  before -- not re-verified from this sandbox; please run both
+  locally before deploying.

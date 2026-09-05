@@ -7,8 +7,8 @@
  * (login_and_registration_page.md Sections 3.1/3.2/7). Shows a welcome
  * message and quick-start items from Section 10's onboarding
  * checklist plus Orders (buyer_order_tracking_specification.md,
- * added 2026-09-06). Payment method page doesn't exist yet, so that
- * card is shown as upcoming rather than a dead link.
+ * added 2026-09-06) and Payment Methods
+ * (buyer_account_specification.md Section 4.3, added 2026-09-06).
  * OnboardingModal (client) additionally renders the Section 10 welcome
  * overlay itself, but only right after registration — see that
  * component's header comment for how it detects a fresh signup.
@@ -67,9 +67,9 @@ const QUICK_LINKS: QuickLinkItem[] = [
   {
     title: "Add payment method",
     description: "Save a card so checkout is one click next time.",
-    href: "#",
+    href: "/buyer/payment-methods",
     icon: "credit-card",
-    available: false,
+    available: true,
   },
 ];
 

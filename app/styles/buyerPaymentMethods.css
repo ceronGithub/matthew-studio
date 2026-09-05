@@ -1,0 +1,401 @@
+/**
+ * FILE: app/styles/buyerPaymentMethods.css
+ * PURPOSE:
+ * Styles for app/buyer/payment-methods/page.tsx,
+ * PaymentMethodsList.tsx, and AddPaymentMethodForm.tsx. References the
+ * design tokens in app/globals.css — never hardcoded colors or
+ * spacing. Responsive breakpoints live in app/styles/mediaQueries.css,
+ * not inline here. Same card pattern as buyerOrders.css/
+ * buyerDownloads.css for visual consistency across the buyer account
+ * area. Also carries its own copy of the shared ConfirmationModal's
+ * styles (.confirmationModal*) since this is the second page to use
+ * that component — same per-page-CSS precedent already set by
+ * buyerOrderDetail.css, the first page that used it.
+ */
+
+.paymentMethodsPage {
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.paymentMethodsHeader {
+  margin-bottom: var(--space-xl);
+}
+
+.paymentMethodsEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.paymentMethodsTitle {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-top: var(--space-xs);
+}
+
+.paymentMethodsSubtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+}
+
+/* paymentMethodsGrid
+ * Auto-responsive card grid — no breakpoints needed, column count
+ * reflows on its own via auto-fill + minmax (Rule 23.2/23.3). */
+.paymentMethodsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+/* paymentMethodCard
+ * Elevated card per Rule 23.10 — never flush against neighbors,
+ * always a visible border, generous inner padding. */
+.paymentMethodCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+.paymentMethodCard:hover {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.paymentMethodIconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background-color: var(--color-surface-active);
+  color: var(--color-accent);
+}
+
+.paymentMethodCardBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.paymentMethodLabel {
+  font-size: 0.95rem;
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+.paymentMethodDefaultBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  width: fit-content;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.paymentMethodCardActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.paymentMethodSetDefaultButton {
+  padding: var(--space-xs) var(--space-sm);
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  font-size: 0.8rem;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.paymentMethodSetDefaultButton:hover,
+.paymentMethodSetDefaultButton:focus-visible,
+.paymentMethodSetDefaultButton:active {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.paymentMethodRemoveButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: transparent;
+  color: var(--color-error);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.paymentMethodRemoveButton:hover,
+.paymentMethodRemoveButton:focus-visible,
+.paymentMethodRemoveButton:active {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+/* Skeleton (Rule 25.2) */
+.paymentMethodCard--skeleton {
+  gap: var(--space-md);
+}
+.paymentMethodSkeletonIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+.paymentMethodSkeletonLine {
+  height: 1rem;
+  width: 60%;
+  border-radius: 4px;
+}
+
+.paymentMethodsEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.paymentMethodsRetryButton,
+.paymentMethodsAddButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-lg);
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.paymentMethodsRetryButton:hover,
+.paymentMethodsRetryButton:focus-visible,
+.paymentMethodsRetryButton:active,
+.paymentMethodsAddButton:hover,
+.paymentMethodsAddButton:focus-visible,
+.paymentMethodsAddButton:active {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+/* ── Add Payment Method form (AddPaymentMethodForm.tsx) ── */
+
+.addPaymentMethodForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+}
+
+.addPaymentMethodLegend {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.addPaymentMethodRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.addPaymentMethodField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  flex: 1 1 140px;
+}
+
+.addPaymentMethodLabel {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.addPaymentMethodInput {
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-md);
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.addPaymentMethodInput:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+.addPaymentMethodError {
+  font-size: 0.85rem;
+  color: var(--color-error);
+}
+
+.addPaymentMethodActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}
+
+.addPaymentMethodCancelButton {
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.addPaymentMethodCancelButton:hover,
+.addPaymentMethodCancelButton:focus-visible,
+.addPaymentMethodCancelButton:active {
+  background-color: var(--color-surface-hover);
+}
+
+.addPaymentMethodSubmitButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-lg);
+  min-height: 44px;
+  border-radius: 8px;
+  border: none;
+  background-color: var(--color-accent);
+  color: #09090b;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.addPaymentMethodSubmitButton:hover,
+.addPaymentMethodSubmitButton:focus-visible,
+.addPaymentMethodSubmitButton:active {
+  background-color: var(--color-accent-hover);
+}
+.addPaymentMethodSubmitButton:disabled,
+.addPaymentMethodCancelButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Shared ConfirmationModal (Rule 34.4) ──
+ * Duplicated here per the existing per-page-CSS precedent set by
+ * buyerOrderDetail.css (the modal's first usage) — see that file if
+ * these two copies ever need to be merged into one shared stylesheet. */
+.confirmationModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  z-index: var(--z-modal-backdrop);
+}
+
+.confirmationModalDialog {
+  width: 100%;
+  max-width: 420px;
+  padding: var(--space-lg) var(--space-xl);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-bg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  z-index: var(--z-modal);
+  transition: transform var(--transition-slow), opacity var(--transition-slow);
+}
+
+.confirmationModalTitle {
+  font-size: 1.1rem;
+  color: var(--color-text-primary);
+}
+
+.confirmationModalDescription {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+}
+
+.confirmationModalActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.confirmationModalCancelButton {
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.confirmationModalCancelButton:hover,
+.confirmationModalCancelButton:focus-visible,
+.confirmationModalCancelButton:active {
+  background-color: var(--color-surface-hover);
+}
+
+.confirmationModalConfirmButton {
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  border: none;
+  background-color: var(--color-error);
+  color: #ffffff;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.confirmationModalConfirmButton:hover,
+.confirmationModalConfirmButton:focus-visible,
+.confirmationModalConfirmButton:active {
+  opacity: 0.9;
+}
+.confirmationModalCancelButton:disabled,
+.confirmationModalConfirmButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
