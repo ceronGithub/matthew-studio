@@ -1,225 +1,183 @@
-# Trial Tracking, Developer Telegram Notifications & Auto-Lockdown/Invoice — Feature Specification Document
+# Tier 1 Free Trial Subscription Program — Feature Specification Document
 
 ## 1. PURPOSE & OVERVIEW
 
-Extends the Tier 1 Free Trial Program (see `tier1_free_trial_subscription_specification.md`
-and `villa-azure-agreement-v8-DRAFT-with-trial.txt`) with the operational
-automation needed to run it day-to-day, without the developer having to
-manually track every trial client's countdown.
+Business plan (not yet built, not yet legally finalized): Tier 1 clients
+(the Villa Azure-style Managed Rental model — see
+`villa-azure-agreement-v7-COMPREHENSIVE.txt` and its v8 draft) may
+optionally start with a 30-calendar-day free trial instead of paying
+immediately. The client has a decision window through Day 29 to commit;
+if they do, they pay a one-time Trial Conversion Fee and continue as a
+standard paid Tier 1 client from Month 2 onward. If they don't commit by
+Day 30, the agreement auto-terminates and the deployed site/dashboard
+goes offline.
 
-**Where this gets built:** the deployed client template itself (e.g.
-`small-time-resort-template`, and any other Tier 1 template repo used for
-a trial deployment) — NOT Matthew Studio. Each client's booking data,
-super-admin dashboard, and First-Run Setup Wizard already live in that
-codebase per deployment; building this feature there keeps every trial
-self-contained to its own site with no cross-system dependency back to
-Matthew Studio. This spec document itself stays in the `matthew-studio`
-repo alongside the other Tier 1 business-rule specs, per existing
-convention — the doc's home and the code's home are different, on
-purpose.
+This document is the source of truth for the **business rules**. The
+matching **contract language** lives in the client-facing agreement
+(currently drafted as an addition to Villa Azure's Section 2/4A/5/8A/19 —
+see the v8 draft delivered alongside this spec). Neither the contract
+clause nor the technical automation described below has been reviewed
+by a lawyer or built yet — this is spec-only, same status as every other
+`_specification.md` in this repo until explicitly marked `_done`.
 
-**Target User:** the developer (Service Provider) monitoring one or more
-active Tier 1 trial clients, and the resort owner (Client) who receives
-the non-conversion invoice.
-
-Not yet built. Spec-only, same status as every other `_specification.md`
-in this repo until explicitly marked `_done`.
+**Target User:** a prospective Tier 1 client (resort owner) evaluating
+whether to commit to the Managed Rental model.
 
 ---
 
-## 2. CORE FEATURES
+## 2. OPEN QUESTIONS (must be resolved before this is contract-ready)
 
-### 2.1 — Trial Day Tracker
+These are called out with `[ASSUMPTION — CONFIRM]` markers in the v8
+contract draft too — repeated here so the business decision isn't
+buried in legal text:
 
-- Trial start date is set once, during initial deployment (First-Run
-  Setup Wizard or a manual seed value) — this is the Day 1 anchor.
-- Trial end is always Day 30, 11:59 PM (PHT), per the contract's
-  automatic-termination clause.
-- Current day-of-trial is computed on demand (no need to store it
-  separately) from the start date; the super-admin dashboard displays a
-  simple "Day X of 30" / days-remaining readout.
-
-### 2.2 — Developer Contact Setup (Env Vars, Never Wizard/Dashboard-Editable)
-
-- Reuses the vault's own developer-contact pattern instead of a separate
-  DB-linked Telegram flow — one developer identity for both vault
-  recovery and trial notifications, not two. The deployed template
-  already has `VAULT_OWNER_EMAIL` (`services/vaultOtp.js` /
-  `services/vaultPassphrase.js`) for exactly this purpose; this spec adds
-  the matching `VAULT_OWNER_TELEGRAM_CHAT_ID`.
-- Both env vars are pasted into `.env.local` during initial deployment,
-  same step where `TELEGRAM_BOT_TOKEN` already gets set — **never
-  editable via any wizard form or dashboard settings page afterward**,
-  unlike `SystemSettings.adminTelegramChatIds` (the client/staff
-  booking-alert list, which stays dashboard-editable per
-  `TelegramChatIdsCard.jsx`). This keeps the developer's own contact info
-  structurally separate from anything the Client's `super_admin` account
-  can see or change — no DB row, no admin UI, no way for the Client to
-  even find where it's set.
-- `TELEGRAM_BOT_TOKEN` stays server-side only, never `NEXT_PUBLIC_`, same
-  as before.
-- Both env vars only matter for deployments where the Tier 1 Free Trial
-  is active — a client who paid upfront (no trial) can leave them unset.
-
-### 2.3 — Daily Developer Reminders (Day 20–30)
-
-- Starting Day 20 of the trial, a scheduled job sends the developer one
-  Telegram message per day with the days-remaining count, until Day 30.
-- Reminders stop immediately the moment the trial is marked Converted
-  (see 2.5) — no reminder fires for a trial that's already resolved.
-
-### 2.4 — Auto-Lockdown + Invoice Generation (Day 30, T-minus 8 hours)
-
-- A scheduled job runs 8 hours before the Day 30, 11:59 PM cutoff
-  (≈ 3:59 PM PHT on Day 30).
-- The job first checks conversion status. If already Converted, it does
-  nothing and exits.
-- If NOT converted, it:
-  1. Locks down the public-facing site and the regular admin dashboard
-     (matches the contract's non-conversion offline behavior). This
-     never touches `/system-vault/[vaultSlug]` — that route already runs
-     its own passphrase + OTP gate, structurally independent of the
-     `session`/`vaultSession` cookies and middleware every `/superAdmin/*`
-     page relies on (per `services/vaultAuth.js`), so it stays reachable
-     through the lockdown by construction, not as a special exception
-     carved out for this feature.
-  2. Generates a PDF invoice of every booking made during the trial —
-     pending, booked (confirmed), and cancelled — so the client has a
-     record of guest activity even though the site is going offline.
-  3. Emails the PDF automatically to the resort owner (Client), per the
-     contract's no-charge data/records handoff on non-conversion.
-  4. Marks the trial status as Locked (Non-Conversion).
-
-### 2.5 — Late-Conversion Reversal
-
-Conversion is a manual event — the contract requires written notice plus
-the Trial Conversion Fee, not an automated online payment — so it is
-recorded by the developer flipping a "Mark as Converted" action on the
-super-admin dashboard, at any point.
-
-- **Converted before the T-8h job runs:** the job's status check (2.4,
-  step 1) simply skips lockdown entirely. Nothing else happens; the
-  client proceeds as a standard paid Tier 1 client from Month 2.
-- **Converted after lockdown already executed:** marking Converted
-  immediately reverses the lockdown — site and dashboard restored to
-  normal access — and cancels the invoice if it has not yet been emailed
-  to the client. If the invoice was already sent, it is left as-is (it's
-  just a record of their own bookings, not a bill demanding payment) and
-  the trial status is shown as "Converted (invoice sent, superseded)."
+1. ~~Does the ₱25,000 Trial Conversion Fee replace or add to the
+   standard ₱15,000 Setup Fee + ₱15,000 Month 1?~~ **RESOLVED
+   2026-09-04:** Trial onboarding is no longer fee-free. A ₱5,000
+   non-refundable Trial Onboarding Fee is now due at trial start,
+   covering deployment/branding/content population. If the Client
+   converts, that ₱5,000 is credited against the ₱25,000 Trial
+   Conversion Fee (Client pays the remaining ₱20,000 balance) — total
+   cost to a converting Trial client is still ₱25,000, a ₱5,000 savings
+   vs. the standard ₱30,000 non-Trial path. If the Client does not
+   convert, the ₱5,000 is forfeited (covers the Service Provider's
+   onboarding labor) and no further fees are owed.
+2. **Is the trial site live/production** (real guests can book real
+   reservations) or a staging copy? This drives the "Guest Bookings
+   Made During Trial" liability question below.
+3. **Exact Day 30 mechanics** — is takedown immediate at 11:59 PM PHT,
+   or does it follow the existing Tier 1 pattern of a 24-hour grace
+   window before dashboard access is disabled?
+4. **Data export on non-conversion** — free 48-hour window (matching
+   standard Tier 1 cancellation) or no export at all, since no payment
+   was ever received?
+5. **3-month lock-in start point** — does it begin at the Trial
+   Conversion payment (Month 2 of the relationship = Month 1 of
+   lock-in), or somewhere else?
+6. **Trial eligibility/abuse prevention** — one trial per
+   client/business, verified how? Currently drafted as Service
+   Provider's discretion, no hard technical check specified.
+7. **Guest bookings made during an unconverted trial** — who's
+   responsible for honoring/relocating/refunding them once the site
+   goes offline? Currently drafted as the resort owner's (Client's)
+   responsibility, with a recommendation (not requirement) to disable
+   live public bookings during evaluation-only trials.
 
 ---
 
-## 3. DATA MODEL
+## 3. BUSINESS RULES (as currently drafted)
 
-Single-tenant per deployment — one trial record per site, not a
-multi-client table (each Tier 1 trial client gets their own deployment
-with its own database).
+### 3.1 — Trial period (Days 1–30)
 
-```prisma
-model TrialStatus {
-  id                 String    @id @default(cuid())
-  trialStartDate     DateTime
-  trialEndDate       DateTime                    // computed at creation: startDate + 30 days, 11:59 PM PHT
-  conversionStatus   String    @default("active") // active | converted | locked_non_conversion
-  convertedAt        DateTime?
-  lockedAt           DateTime?
-  invoiceGeneratedAt DateTime?
-  invoiceR2Key       String?                      // per Rule 35.6 — documents/ subfolder
-  invoiceR2Url       String?
-  invoiceEmailedAt   DateTime?
-  lastReminderSentAt DateTime?                     // last Day 20-30 reminder sent, prevents duplicate sends
-  // No telegramChatId field — the developer's contact point is the
-  // deployment-wide VAULT_OWNER_TELEGRAM_CHAT_ID env var (Section 2.2),
-  // not a per-trial DB value.
-}
-```
+- Trial Onboarding Fee: ₱5,000 one-time, non-refundable, due at trial
+  start before deployment work begins. Covers standard Tier 1
+  onboarding: deployment, branding, content population.
+- Full admin dashboard, security monitoring, 10 hrs/week included
+  support apply during the trial (same as a paid month).
+- No Setup Fee, no Monthly Fee charged — only the ₱5,000 Trial
+  Onboarding Fee above.
 
----
+### 3.2 — Decision window (Days 1–29)
 
-## 4. USER FLOW
+- Client must give written notice (email sufficient) of intent to
+  subscribe, and pay the Trial Conversion Fee, by Day 29.
 
-```
-Day 1   : Trial deployment goes live. trialStartDate set. Developer's
-          VAULT_OWNER_EMAIL / VAULT_OWNER_TELEGRAM_CHAT_ID (2.2) already
-          set in .env.local as part of initial deployment.
-Day 1-19: No reminders. Dashboard shows "Day X of 30."
-Day 20  : First daily Telegram reminder sent to developer.
-Day 20-29: Daily reminders continue. Client may notify + pay Trial
-          Conversion Fee at any point — developer marks "Converted" on
-          the dashboard when this happens. Reminders stop immediately.
-Day 30, 3:59 PM PHT (T-8h):
-          Scheduled job checks conversionStatus.
-          - If "converted" -> exit, no action.
-          - If "active" -> lock site+dashboard, generate PDF invoice of
-            all bookings (pending/booked/cancelled), email to Client,
-            set conversionStatus = "locked_non_conversion."
-Day 30, any time after lockdown:
-          If developer marks "Converted" late -> site/dashboard restored
-          immediately, invoice cancelled if not yet emailed (left as-is
-          if already sent), conversionStatus = "converted."
-Day 30, 11:59 PM PHT:
-          Contract's formal automatic-termination point, if still
-          non-converted. Site is already offline since 3:59 PM per 2.4.
-```
+### 3.3 — Conversion (client subscribes)
 
----
+- Trial Conversion Fee: ₱25,000 total, minus the ₱5,000 Trial
+  Onboarding Fee already paid (credited in full) = ₱20,000 balance due
+  at conversion.
+- Month 2 onward: standard ₱15,000/month Tier 1 fee, no discount.
+- 3-month minimum commitment starts counting from the Trial Conversion
+  payment.
+- Client's own infrastructure costs (Vercel Pro, etc.) become their
+  responsibility starting Month 2.
 
-## 5. ACCESS CONTROL — "MARK AS CONVERTED" LIVES IN THE VAULT
+### 3.4 — Non-conversion (client does not subscribe by Day 30)
 
-The Client's own account holds the `super_admin` role on their deployed
-site (per `services/adminSession.js` — there is no separate "developer"
-role in the base template). "Mark as Converted" must therefore never be
-reachable from anywhere a `super_admin`/`session` cookie alone can reach
-— otherwise the Client could self-mark their trial as converted without
-actually paying.
+- Agreement auto-terminates, no penalty to client.
+- Site/dashboard taken offline.
+- The ₱5,000 Trial Onboarding Fee is forfeited (non-refundable); no
+  further fees owed.
+- Data export available on request (window TBD — see Open Questions).
+- Repeat trials require Service Provider's written consent.
 
-**Revision from v2:** rather than a dashboard button gated by a
-purpose-built 6-digit Telegram code (the original design), "Mark as
-Converted" is placed inside the existing hidden vault
-(`/system-vault/[vaultSlug]`, Section 12-equivalent Emergency Actions)
-alongside the other owner-only recovery controls. This reuses a
-mechanism that's already built and already stronger, instead of adding a
-second, parallel one:
+### 3.5 — Everything else unchanged
 
-- The vault has **no super-admin identity behind it at all** (per
-  `services/vaultAuth.js`: _"there is no super-admin session behind it
-  anymore"_) — reaching it requires the separate vault passphrase, then
-  an OTP emailed to `VAULT_OWNER_EMAIL` and sent via Telegram to
-  `VAULT_OWNER_TELEGRAM_CHAT_ID` (2.2). A valid `super_admin` session
-  cookie — including the Client's own — grants zero access to this
-  route on its own.
-- Because this gate is already two-factor (passphrase + OTP) and already
-  proves "this is the developer" before the vault's contents even
-  render, "Mark as Converted" inside it needs only a standard
-  Cancel/Confirm modal (Rule 34.4) — no additional 6-digit code layer on
-  top. The vault's own entry gate **is** the confirmation.
-- Confirming triggers the full flow from Section 2.5 (status flip,
-  unlock if already locked, invoice cancellation if not yet sent).
-- Every attempt to reach or use this control — success or failure — logs
-  to `SecurityLog` (Rule 38) as `trial_conversion_marked` /
-  `trial_conversion_vault_denied`, same as every other vault action.
+- Feature-request pricing (`Section 6`) and overage support billing
+  (`Section 3A`) apply during the trial exactly as in a paid month —
+  only the Setup/Monthly Fee is waived, not custom work.
+- Uptime SLA (`Section 5`) applies during the trial at the same 99%
+  target as a paid month.
 
-This also directly resolves the earlier open question of reaching
-"Mark as Converted" while the site is fully locked down (2.4): the
-vault was never inside that lockdown's blast radius to begin with, so
-no separate "Trial Ended" screen or carve-out is needed — the developer
-reaches the same vault they'd use for any other recovery scenario.
+### 3.6 — Feature Exclusivity Options (`Section 6A`, all Tier 1 clients,
 
-No data model addition needed for this section — the vault's existing
-`VaultPassphrase`/OTP mechanism in the deployed template already covers
-what the removed `conversionCodeHash`/`conversionCodeSentAt`/
-`conversionCodeExpires`/`conversionAttempts` fields would have
-duplicated.
+not trial-specific)
+New for this revision, applies to any Tier 1 client (trial or standard)
+requesting a new feature. Feature Fee for ALL criteria scales with
+complexity per Section 6's existing table (₱15,000 min. for Simple,
+up to ₱65k+ for Complex) — the criteria below govern exclusivity/
+Monthly Fee treatment only, never the feature's own dev cost. Client
+picks one per feature (or elects Criteria 4 once, covering all future
+features):
+
+- **Criteria 1 (Shared, default):** feature folds into the resellable
+  template, Monthly Fee stays ₱15,000.
+- **Criteria 2 (Permanent exclusivity):** feature never shared, Monthly
+  Fee becomes a flat ₱25,000 — does not stack across multiple Criteria
+  2 features.
+- **Criteria 3 (6-month exclusivity):** Monthly Fee is ₱20,000/month
+  while at least one feature is within its window. Each feature gets
+  its own independent 6-month clock counted from that feature's own
+  request/completion date — not one shared account-wide window — so
+  features requested at different times expire from exclusivity on
+  different dates. Each feature auto-shares (and fee reverts to
+  ₱15,000 once none remain active) independently; renewable per
+  feature for ₱7,500/6mo, or the whole account can upgrade to
+  Criteria 2. [RESOLVED 2026-09-05 — was previously an open
+  assumption in the contract.]
+- **Criteria 4 (Blanket buyout, one-time ₱180,000):** all future
+  features automatically exclusive going forward, Monthly Fee stays
+  ₱15,000 regardless of how many accumulate. Prospective only — doesn't
+  retroactively reduce the Monthly Fee for features already under an
+  active Criteria 2/3 election at the time of Buyout (needs
+  confirmation, per the contract's inline `[ASSUMPTION — CONFIRM]`).
+- Open: stacking rule when a client holds both an active Criteria 2 and
+  Criteria 3 feature simultaneously — drafted as Criteria 2's flat rate
+  absorbing Criteria 3, needs confirmation (see contract's inline
+  `[ASSUMPTION — CONFIRM]`).
 
 ---
 
-## 6. OPEN ITEMS (not covered by this spec)
+## 4. FUTURE TECHNICAL BUILD (not started)
 
-- The contract's `[ASSUMPTION — CONFIRM]` on the 48-hour data-export
-  window (line 240 of the v8 draft) is separate from this spec's
-  auto-generated bookings PDF — that PDF is a courtesy record sent
-  automatically, not the formal "data export on request" the contract
-  clause describes. Still needs its own confirm.
-- The still-open Criteria 2/3 simultaneous-stacking question (Section
-  3.6 of `tier1_free_trial_subscription_specification.md`) is unrelated
-  to this feature and remains unresolved.
+Once the contract terms above are confirmed and signed, the matching
+technical feature — for this to actually enforce itself rather than
+being tracked manually — would need:
+
+- A `trialEndsAt` / `trialStatus` field on whatever tenant/client record
+  represents a Tier 1 deployment (this repo's own schema doesn't have a
+  multi-tenant client model yet — Villa Azure and any other Tier 1
+  client today are presumably each their own separate deployment/repo,
+  not rows in a shared `matthew-studio` database. If Tier 1 clients are
+  ever managed from a shared admin panel in _this_ codebase, that's a
+  separate, larger spec of its own.)
+- A scheduled job (cron/edge function) that checks trial status daily
+  and auto-disables dashboard access + takes the public site offline at
+  the Day 30 cutoff if no conversion payment was recorded.
+- A notification/reminder to the client as Day 29 approaches (email,
+  per the existing EmailJS pattern used elsewhere in this repo).
+- Recording the Trial Conversion Fee payment and flipping the client to
+  standard paid status, resetting the lock-in clock per Section 3.3.
+
+None of this is built. This spec documents the business rules only, so
+the eventual technical build (and any future contract amendments) has
+one source of truth to work from.
+
+---
+
+## 5. CHANGE LOG
+
+| Date       | Change                                                                                                                                                                                                                                                                      |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-09-04 | Initial specification, drafted alongside a matching contract addition to `villa-azure-agreement-v7-COMPREHENSIVE.txt` (delivered as a v8 draft). Several terms are explicitly unconfirmed — see Section 2. Not reviewed by a lawyer. Spec-only, no technical build started. |
