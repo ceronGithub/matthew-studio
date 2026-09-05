@@ -800,3 +800,18 @@ endpoint, admin_account_specification.md item 4, is still not built,
 so these stay null/empty until that lands). NOT built yet: the
 /buyer/orders/[orderId] page itself and the Cancel/Reorder/Contact
 Support actions + toasts.
+
+[2026-09-06] buyer_order_tracking_specification.md Section 3.2 page
+built: app/buyer/orders/[orderId]/page.tsx + OrderTrackingDetail.tsx
+(digital 3-step / tshirt 6-stage timeline, items, payment summary,
+shipping, Cancel Order behind a new shared ConfirmationModal
+component, Reorder via direct /api/cart calls + redirect to
+/checkout, Contact Support link). Added useBuyerOrderDetail.ts hook
+and app/styles/buyerOrderDetail.css. buyer_order_tracking_specification.md
+is now fully built end to end (Sections 3.1 and 3.2). npm install
+succeeded in this sandbox (previously untried); npx prisma generate
+still fails on the same blocked binaries.prisma.sh check as before.
+npx tsc --noEmit shows only the pre-existing implicit-any cascade on
+Order.items already present in the sibling orders/route.ts (same
+root cause -- Prisma client types aren't fully generated here) --
+no new type errors introduced by this change.

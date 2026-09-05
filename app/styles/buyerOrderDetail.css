@@ -1,0 +1,374 @@
+/**
+ * FILE: app/styles/buyerOrderDetail.css
+ * PURPOSE:
+ * Styles for app/buyer/orders/[orderId]/page.tsx and
+ * OrderTrackingDetail.tsx, plus the shared ConfirmationModal used by
+ * its Cancel Order action. References design tokens in
+ * app/globals.css only — no hardcoded colors/spacing. Responsive
+ * breakpoints belong in app/styles/mediaQueries.css, not here.
+ */
+
+.orderDetailPage {
+  width: 100%;
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+/* ---------- Header ---------- */
+
+.orderDetailEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.orderDetailHeaderRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+}
+
+.orderDetailTitle {
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+.orderDetailStatusBadge {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* ---------- Timeline ---------- */
+
+.orderDetailTimeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+}
+
+.orderDetailTimelineStep {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+
+.orderDetailTimelineIcon {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.orderDetailTimelineIcon--done {
+  color: var(--color-success);
+}
+
+/* Current step gets the accent color so it stands out from completed/future steps */
+.orderDetailTimelineStep--current .orderDetailTimelineIcon {
+  color: var(--color-accent);
+}
+
+.orderDetailTimelineStepLabel {
+  font-size: 0.95rem;
+  color: var(--color-text-primary);
+}
+
+.orderDetailTimelineStep--current .orderDetailTimelineStepLabel {
+  font-weight: 600;
+}
+
+.orderDetailTimelineStepTime {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* ---------- Items ---------- */
+
+.orderDetailSectionTitle {
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.orderDetailItemsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.orderDetailItemRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background-color: var(--color-surface);
+}
+
+.orderDetailItemIcon {
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.orderDetailItemBody {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.orderDetailItemName {
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+.orderDetailItemVariant,
+.orderDetailItemQuantity {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.orderDetailItemSubtotal {
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  flex-shrink: 0;
+}
+
+/* ---------- Payment summary ---------- */
+
+.orderDetailSummary {
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+}
+
+.orderDetailSummaryRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  padding: var(--space-xs) 0;
+}
+
+.orderDetailSummaryRow--total {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  border-top: 1px solid var(--color-border);
+  margin-top: var(--space-xs);
+  padding-top: var(--space-sm);
+}
+
+.orderDetailPaymentMethod {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: var(--space-sm);
+}
+
+/* ---------- Shipping ---------- */
+
+.orderDetailShipping {
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+}
+
+.orderDetailShippingLine {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+/* ---------- Actions ---------- */
+
+.orderDetailActions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.orderDetailActionButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  font-size: 0.85rem;
+  min-height: 44px;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.orderDetailActionButton--secondary {
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+}
+
+.orderDetailActionButton--secondary:hover,
+.orderDetailActionButton--secondary:focus-visible,
+.orderDetailActionButton--secondary:active {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.orderDetailActionButton--primary {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.orderDetailActionButton--primary:hover,
+.orderDetailActionButton--primary:focus-visible,
+.orderDetailActionButton--primary:active {
+  background-color: var(--color-accent-hover);
+}
+
+.orderDetailActionButton--destructive {
+  background-color: transparent;
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+.orderDetailActionButton--destructive:hover,
+.orderDetailActionButton--destructive:focus-visible,
+.orderDetailActionButton--destructive:active {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.orderDetailActionButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---------- Skeleton / empty states (Rule 25) ---------- */
+
+.orderDetailSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.orderDetailSkeletonBlock {
+  height: 96px;
+  border-radius: 12px;
+}
+
+.orderDetailEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.orderDetailBackLink {
+  color: var(--color-accent);
+  font-size: 0.9rem;
+}
+
+/* ---------- Confirmation Modal (Rule 34.4 shared component) ---------- */
+
+.confirmationModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  z-index: var(--z-modal-backdrop);
+}
+
+.confirmationModalDialog {
+  width: 100%;
+  max-width: 420px;
+  padding: var(--space-lg) var(--space-xl);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-bg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  z-index: var(--z-modal);
+  transition: transform var(--transition-slow), opacity var(--transition-slow);
+}
+
+.confirmationModalTitle {
+  font-size: 1.1rem;
+  color: var(--color-text-primary);
+}
+
+.confirmationModalDescription {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+}
+
+.confirmationModalActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.confirmationModalCancelButton {
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+
+.confirmationModalCancelButton:hover,
+.confirmationModalCancelButton:focus-visible,
+.confirmationModalCancelButton:active {
+  background-color: var(--color-surface-hover);
+}
+
+.confirmationModalConfirmButton {
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-error);
+  background-color: var(--color-error);
+  color: var(--color-text-primary);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+
+.confirmationModalConfirmButton:hover,
+.confirmationModalConfirmButton:focus-visible,
+.confirmationModalConfirmButton:active {
+  background-color: #dc2626;
+}
+
+.confirmationModalCancelButton:disabled,
+.confirmationModalConfirmButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
