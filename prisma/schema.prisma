@@ -493,3 +493,26 @@ model TicketMessage {
 
   @@index([ticketId])
 }
+
+/// Notification
+/// buyer_account_specification.md Section 4.6 / Section 5. Fed from
+/// three existing event sources (order status change, subscription
+/// billing, ticket admin replies — Task 14). "announcement" is
+/// included in `type` for forward compatibility with the super-admin
+/// Announcements feature (super_admin_account_specification.md
+/// Section 3.9), which does not exist in this repo yet — no code
+/// creates that type until that feature is built. linkHref is
+/// nullable since not every notification deep-links somewhere.
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String // "order_update" | "billing" | "ticket_reply" | "announcement"
+  title     String
+  body      String
+  linkHref  String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([isRead])
+}

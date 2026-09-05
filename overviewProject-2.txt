@@ -13,3 +13,17 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   task-10 files were never written even though the work landed in the
   repo. Remaining open item in buyer_account_specification.md: 4.6
   Notifications (+ bell icon in BuyerNav), not yet started.
+
+[2026-09-06] Task 11 complete: added Notification model to
+  prisma/schema.prisma per buyer_account_specification.md Section
+  4.6/5 (id, userId, type, title, body, linkHref, isRead, createdAt;
+  indexes on userId and isRead for the unread-count query). Wrote
+  docs/tasks/task-11 through task-14 as a 4-part micro-task
+  breakdown for the full 4.6 build (schema / API / UI / wiring into
+  3 existing event sources). Flipped Section 5C's 4.6 line from [ ]
+  to [~] in overviewProject.txt. Scope note: "announcement" type is
+  in the schema enum but has no producer yet -- depends on the
+  super-admin Announcements feature (Section 3.9 of
+  super_admin_account_specification.md), not built in this repo.
+  Next: Task 12 (API routes) then npx prisma db push + generate can
+  run once schema work for this feature is fully settled.
