@@ -291,3 +291,33 @@ that file left off.
   finalize without that code, so the Client (who holds the super_admin
   role on their own site) can never self-convert. Spec-only -- no code
   built yet.
+
+[2026-09-05] Resolved v2 review Item #1 (contract/spec timing mismatch)
+  in villa-azure-agreement-v8-DRAFT-with-trial.txt: replaced the
+  "[ASSUMPTION -- CONFIRM: within 24 hours of termination]" placeholder
+  with the confirmed 8-hours-BEFORE-cutoff timing, matching Section 2.4
+  (T-8h) of trial_tracking_and_developer_notifications_specification.md.
+  Contract-only change -- no code built yet.
+
+[2026-09-05] Resolved v2 review Items #2/#3 in
+  trial_tracking_and_developer_notifications_specification.md by
+  redesigning Section 5 around the hidden vault
+  (/system-vault/[vaultSlug]) already built in
+  small-time-resort-template (static branch) rather than a new
+  Telegram-code system: "Mark as Converted" now lives inside the vault's
+  Emergency Actions, gated by the vault's own passphrase+OTP (no
+  super-admin identity behind it at all, per services/vaultAuth.js) --
+  this resolves both who can finalize a conversion (developer only, by
+  construction) and reaching it during full lockdown (vault was never
+  inside the lockdown's blast radius). Section 2.2 changed from a
+  wizard Telegram deep-link flow to two env vars set once during
+  deployment and never exposed via any wizard/dashboard UI:
+  VAULT_OWNER_EMAIL (already existed in the template) and the new
+  VAULT_OWNER_TELEGRAM_CHAT_ID -- distinct from the dashboard-editable
+  SystemSettings.adminTelegramChatIds used for client/staff booking
+  alerts. Removed TrialStatus.telegramChatId and the
+  conversionCodeHash/conversionCodeSentAt/conversionCodeExpires/
+  conversionAttempts fields (Section 3/5) as no longer needed. Spec-only
+  -- VAULT_OWNER_TELEGRAM_CHAT_ID and its wiring into
+  services/vaultTelegramAlerts.js still need to be built in the actual
+  template repo.

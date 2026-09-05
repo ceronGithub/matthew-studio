@@ -233,9 +233,11 @@ NON-CONVERSION — IF CLIENT DOES NOT SUBSCRIBE BY DAY 30:
 • This Agreement AUTOMATICALLY TERMINATES at 11:59 PM (PHT) on Day 30 of
   the Trial Period — no further notice from either party is required
 • The public-facing website and admin dashboard are taken offline
-  [ASSUMPTION — CONFIRM: within 24 hours of termination, consistent with
-  Section 8A's standard Tier 1 access-disable timeline, rather than
-  immediately at the Day 30 cutoff.]
+  8 hours BEFORE this Day 30, 11:59 PM (PHT) cutoff -- i.e. at
+  approximately 3:59 PM PHT on Day 30, ahead of the automatic
+  termination itself, not after it -- per the developer's own
+  monitoring and invoicing process described elsewhere in this
+  Agreement
 • Data export: available on request within 48 hours of termination, at
   no charge [ASSUMPTION — CONFIRM: matching Section 8A's standard export
   window, rather than the ₱2,000/hour rate Section 4A applies to a paid
