@@ -41,12 +41,15 @@ in this repo until explicitly marked `_done`.
 
 ### 2.2 — Developer Contact Setup (Env Vars, Never Wizard/Dashboard-Editable)
 
-- Reuses the vault's own developer-contact pattern instead of a separate
-  DB-linked Telegram flow — one developer identity for both vault
-  recovery and trial notifications, not two. The deployed template
-  already has `VAULT_OWNER_EMAIL` (`services/vaultOtp.js` /
-  `services/vaultPassphrase.js`) for exactly this purpose; this spec adds
-  the matching `VAULT_OWNER_TELEGRAM_CHAT_ID`.
+- Two dedicated env vars: `TRIAL_DEVELOPER_EMAIL` and
+  `TRIAL_DEVELOPER_TELEGRAM_CHAT_ID`. **Not reused from the vault** —
+  the developer is never an account/user on the deployed site at all
+  (per `services/adminSession.js`, the only roles are `superAdmin` and
+  `admin`, both of which the Client's own login can hold), and the
+  actual vault (`vault_specification.md`) is itself reached by logging
+  in as one of those roles. A mechanism the developer can't log into
+  can't be "reused" for the developer's own contact info — these stay
+  standalone, deployment-wide env vars instead.
 - Both env vars are pasted into `.env.local` during initial deployment,
   same step where `TELEGRAM_BOT_TOKEN` already gets set — **never
   editable via any wizard form or dashboard settings page afterward**,
@@ -66,12 +69,10 @@ in this repo until explicitly marked `_done`.
 - Starting Day 20 of the trial, a scheduled job sends the developer one
   Telegram message per day with the days-remaining count, until Day 30.
 - **Dual-channel, no retry (v2 review Item #4):** the same reminder is
-  also emailed to `VAULT_OWNER_EMAIL` alongside the Telegram send — same
-  "independent second channel" reasoning already used for the vault's
-  own OTP/passphrase sends (`services/vaultOtp.js`,
-  `services/vaultPassphrase.js`), so a blocked bot, wrong chat ID, or
-  network blip on one channel never means the developer misses the
-  reminder entirely. Consistent with `services/telegram.js`'s existing
+  also emailed to `TRIAL_DEVELOPER_EMAIL` alongside the Telegram send,
+  so a blocked bot, wrong chat ID, or network blip on one channel never
+  means the developer misses the reminder entirely. Consistent with
+  `services/telegram.js`'s existing
   best-effort design (`sendTelegramMessage()` never throws, never
   retries) — no added retry-with-backoff logic, since redundancy across
   two channels covers more failure modes than retrying a single channel
@@ -101,13 +102,15 @@ in this repo until explicitly marked `_done`.
   invoice email (step 3) a second time just because the job crashed
   between step 3 and step 4.
   1. Locks down the public-facing site and the regular admin dashboard
-     (matches the contract's non-conversion offline behavior). This
-     never touches `/system-vault/[vaultSlug]` — that route already runs
-     its own passphrase + OTP gate, structurally independent of the
-     `session`/`vaultSession` cookies and middleware every `/superAdmin/*`
-     page relies on (per `services/vaultAuth.js`), so it stays reachable
-     through the lockdown by construction, not as a special exception
-     carved out for this feature. Skipped if `lockedAt` is already set
+     (matches the contract's non-conversion offline behavior) — **except**
+     the single "Mark as Converted" action route (Section 5), which is an
+     explicit, named exception carved out in the lockdown middleware.
+     Unlike a vault-based design, this route has no structurally separate
+     access path of its own — it lives on the same `/superAdmin/*` dashboard
+     as everything else — so the exemption has to be deliberate: the
+     lockdown middleware checks the request path against a short allowlist
+     (this one route) before applying the block, rather than blocking
+     `/superAdmin/*` wholesale. Skipped if `lockedAt` is already set
      (Item #7); otherwise sets `lockedAt` immediately on success.
   2. Generates a PDF invoice of every booking made during the trial —
      pending, booked (confirmed), and cancelled — so the client has a
@@ -136,13 +139,12 @@ in this repo until explicitly marked `_done`.
      front-desk/staff admin also holds that role. If no `isOwner: true`
      profile exists, or the Supabase lookup fails, the invoice is NOT
      silently dropped: the failure escalates to the developer over the
-     same dual channel from 2.3 (`VAULT_OWNER_EMAIL` +
-     `VAULT_OWNER_TELEGRAM_CHAT_ID`), since a missing/broken owner
+     same dual channel from 2.3 (`TRIAL_DEVELOPER_EMAIL` +
+     `TRIAL_DEVELOPER_TELEGRAM_CHAT_ID`), since a missing/broken owner
      account at this exact moment needs manual attention. Every attempt
      logs to `SecurityLog` as `trial_invoice_sent` /
-     `trial_invoice_send_failed`, with the owner's email masked (same
-     masking pattern as `services/vaultOtp.js`'s `maskEmail()`), never
-     logged in full.
+     `trial_invoice_send_failed`, with the owner's email masked (e.g.
+     `j***@domain.com`) in the logged `details`, never logged in full.
   4. Marks the trial status as Locked (Non-Conversion) — always the
      last action, only once steps 1-3 have each either run or been
      confirmed already-done.
@@ -150,7 +152,7 @@ in this repo until explicitly marked `_done`.
      1-4 finish (or the job's top-level try/catch catches an unexpected
      crash partway through), a single summary is sent to the developer
      over the same dual channel as 2.3/2.4-step-3
-     (`VAULT_OWNER_EMAIL` + `VAULT_OWNER_TELEGRAM_CHAT_ID`), listing
+     (`TRIAL_DEVELOPER_EMAIL` + `TRIAL_DEVELOPER_TELEGRAM_CHAT_ID`), listing
      each step's outcome: lockdown ✓/✕, invoice generated ✓/✕, invoice
      emailed ✓/✕ (cross-referencing the step-3 escalation above if that
      one failed), and overall job status. This is a push notification,
@@ -204,8 +206,16 @@ model TrialStatus {
   invoiceEmailedAt   DateTime?
   lastReminderSentAt DateTime?                     // last Day 20-30 reminder sent, prevents duplicate sends
   // No telegramChatId field — the developer's contact point is the
-  // deployment-wide VAULT_OWNER_TELEGRAM_CHAT_ID env var (Section 2.2),
+  // deployment-wide TRIAL_DEVELOPER_TELEGRAM_CHAT_ID env var (Section 2.2),
   // not a per-trial DB value.
+
+  // "Mark as Converted" confirmation code (Section 5) — the developer-
+  // possession factor that gates the action, since the button itself
+  // sits on the same dashboard the Client's own super_admin login reaches.
+  conversionCodeHash    String?                     // bcrypt hash, never the raw code
+  conversionCodeSentAt  DateTime?
+  conversionCodeExpires DateTime?                   // 10-minute expiry
+  conversionAttempts    Int       @default(0)        // wrong-code guesses; locks out and requires a fresh code past a threshold
 }
 ```
 
@@ -215,7 +225,7 @@ model TrialStatus {
 
 ```
 Day 1   : Trial deployment goes live. trialStartDate set. Developer's
-          VAULT_OWNER_EMAIL / VAULT_OWNER_TELEGRAM_CHAT_ID (2.2) already
+          TRIAL_DEVELOPER_EMAIL / TRIAL_DEVELOPER_TELEGRAM_CHAT_ID (2.2) already
           set in .env.local as part of initial deployment.
 Day 1-19: No reminders. Dashboard shows "Day X of 30."
 Day 20  : First daily Telegram reminder sent to developer.
@@ -239,62 +249,76 @@ Day 30, 11:59 PM PHT:
 
 ---
 
-## 5. ACCESS CONTROL — "MARK AS CONVERTED" LIVES IN THE VAULT
+## 5. ACCESS CONTROL — "MARK AS CONVERTED" GATED BY A TELEGRAM CODE
 
 The Client's own account holds the `super_admin` role on their deployed
 site (per `services/adminSession.js` — there is no separate "developer"
 role in the base template). "Mark as Converted" must therefore never be
-reachable from anywhere a `super_admin`/`session` cookie alone can reach
-— otherwise the Client could self-mark their trial as converted without
+_executable_ by anyone who only holds a `super_admin`/`session` cookie —
+otherwise the Client could self-mark their trial as converted without
 actually paying.
 
-**Revision from v2:** rather than a dashboard button gated by a
-purpose-built 6-digit Telegram code (the original design), "Mark as
-Converted" is placed inside the existing hidden vault
-(`/system-vault/[vaultSlug]`, Section 12-equivalent Emergency Actions)
-alongside the other owner-only recovery controls. This reuses a
-mechanism that's already built and already stronger, instead of adding a
-second, parallel one:
+**Reverted from the v2 vault-based design.** Placing this action inside
+`vault_specification.md`'s actual vault does not solve the problem: that
+vault is reached by logging in as `superAdmin` or `admin` (per its own
+Section 7, "Role is superAdmin or admin (from JWT)") — the exact same
+account type the Client already holds, with no owner-only distinction
+anywhere in `admin_account_specification.md` or
+`super_admin_account_specification.md`. Routing this through the vault
+would just mean the Client reaches "Mark as Converted" through one extra
+click, not that they're prevented from reaching it. Back to the original
+design instead — a dashboard button gated by a developer-possession
+factor, not a page-access restriction:
 
-- The vault has **no super-admin identity behind it at all** (per
-  `services/vaultAuth.js`: _"there is no super-admin session behind it
-  anymore"_) — reaching it requires the separate vault passphrase, then
-  an OTP emailed to `VAULT_OWNER_EMAIL` and sent via Telegram to
-  `VAULT_OWNER_TELEGRAM_CHAT_ID` (2.2). A valid `super_admin` session
-  cookie — including the Client's own — grants zero access to this
-  route on its own.
-- Because this gate is already two-factor (passphrase + OTP) and already
-  proves "this is the developer" before the vault's contents even
-  render, "Mark as Converted" inside it needs only a standard
-  Cancel/Confirm modal (Rule 34.4) — no additional 6-digit code layer on
-  top. The vault's own entry gate **is** the confirmation.
-- Confirming triggers the full flow from Section 2.5 (status flip,
-  unlock if already locked, invoice cancellation if not yet sent).
-- Every attempt to reach or use this control — success or failure — logs
-  to `SecurityLog` (Rule 38) as `trial_conversion_marked` /
-  `trial_conversion_vault_denied`, same as every other vault action.
+- The "Mark as Converted" button is visible on the regular super-admin
+  dashboard (the Client can see and click it — that part is unavoidable,
+  since there's no separate developer account to hide it from).
+- Clicking it does not immediately execute anything. It generates a
+  6-digit code, hashes it (`conversionCodeHash`, bcrypt — never stored or
+  logged raw), sets `conversionCodeSentAt` and a 10-minute
+  `conversionCodeExpires`, and sends the raw code to the developer only,
+  over both `TRIAL_DEVELOPER_TELEGRAM_CHAT_ID` and `TRIAL_DEVELOPER_EMAIL`
+  (same dual-channel reasoning as Section 2.3) — never to the Client, who
+  has no access to either.
+- A confirm modal (Rule 34.4) then asks whoever clicked the button to
+  enter the code relayed to them by the developer. Without that code —
+  which only reaches a channel the Client doesn't control — the action
+  cannot complete, regardless of the Client's own account access.
+- **Attempt limiting:** `conversionAttempts` increments on each wrong
+  entry; after 5 wrong attempts the code is invalidated
+  (`conversionCodeHash` cleared) and a new one must be generated,
+  preventing brute-forcing a 6-digit space from the dashboard UI.
+- Confirming with the correct code triggers the full flow from Section
+  2.5 (status flip, unlock if already locked, invoice cancellation if
+  not yet sent), and clears the code fields.
+- Every attempt — code sent, correct entry, wrong entry, expiry, lockout
+  — logs to `SecurityLog` (Rule 38) as `trial_conversion_code_sent` /
+  `trial_conversion_marked` / `trial_conversion_code_denied`.
 
-This also directly resolves the earlier open question of reaching
-"Mark as Converted" while the site is fully locked down (2.4): the
-vault was never inside that lockdown's blast radius to begin with, so
-no separate "Trial Ended" screen or carve-out is needed — the developer
-reaches the same vault they'd use for any other recovery scenario.
-
-No data model addition needed for this section — the vault's existing
-`VaultPassphrase`/OTP mechanism in the deployed template already covers
-what the removed `conversionCodeHash`/`conversionCodeSentAt`/
-`conversionCodeExpires`/`conversionAttempts` fields would have
-duplicated.
+**Reachability during lockdown (2.4):** because this route has no
+structurally separate access path of its own (it's on the same
+dashboard as everything else), the lockdown middleware must explicitly
+allowlist it — see 2.4 step 1's exemption. This is a deliberate,
+named carve-out, not something that falls out "by construction" the way
+a genuinely separate vault route would have. If the allowlist entry is
+ever missed or removed, a late conversion after lockdown silently
+becomes unreachable — this is worth a dedicated test case, not just a
+one-line middleware change.
 
 ---
 
 ## 6. OPEN ITEMS (not covered by this spec)
 
-All 9 items from the v2 review (screenshots) are now resolved — #1
-(contract/spec timing), #2 (who can click Convert), #3 (vault survives
-lockdown), #4 (Telegram fallback), #5 (invoice recipient), #6 (job
-completion notification), #7 (idempotency), #8 (`unlockedAt`), #9
-(zero-bookings invoice). The two items below are unrelated to that
+All 9 items from the v2 review (screenshots) are resolved — #1
+(contract/spec timing), #2 (who can click Convert — via the Telegram
+confirmation-code gate, Section 5), #3 (the confirmation route survives
+lockdown via an explicit middleware allowlist entry, Section 5/2.4),
+#4 (Telegram fallback), #5 (invoice recipient), #6 (job completion
+notification), #7 (idempotency), #8 (`unlockedAt`), #9 (zero-bookings
+invoice). Note: #2 and #3 were originally marked resolved via a vault-
+based redesign that was later found to not actually restrict access
+(2026-09-05) — see Section 5's current version for the corrected
+Telegram-code mechanism. The two items below are unrelated to that
 review and remain genuinely open:
 
 - The contract's `[ASSUMPTION — CONFIRM]` on the 48-hour data-export
