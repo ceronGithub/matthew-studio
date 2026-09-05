@@ -1,0 +1,15 @@
+CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
+
+[2026-09-06] Section 5C audit: flipped buyer_account_specification.md
+  4.5 Support Tickets from [~] to [DONE] in overviewProject.txt.
+  Layer-3 verified per Rule 49's audit standard -- schema
+  (SupportTicket, TicketMessage), API routes (list/create, detail,
+  reply, reopen, plus /api/support), and UI (app/buyer/support/ list +
+  new-ticket form, app/buyer/support/[ticketId]/ detail thread) all
+  confirmed wired: the pages call lib/hooks/useBuyerSupportTickets.ts
+  and useBuyerSupportTicketDetail.ts, which fetch the real API routes,
+  not stubs. This closes the gap flagged at the end of
+  overviewProject-1.txt's Task 10 entry, where docs/tasks/task-09 and
+  task-10 files were never written even though the work landed in the
+  repo. Remaining open item in buyer_account_specification.md: 4.6
+  Notifications (+ bell icon in BuyerNav), not yet started.
