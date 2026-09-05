@@ -37,13 +37,12 @@
  * Checkout Sessions — same nested shape as the Payment Links product
  * the rule was originally written against).
  *
- * KNOWN GAP: a `checkout_session.payment.failed` event is logged but
- * does not change Order.status — the Order schema (Section 5) has no
- * "failed"/"cancelled-by-payment-provider" status distinct from
- * "pending", so a failed payment just leaves the Order pending
- * forever with no buyer-facing signal. Flagged here rather than
- * inventing a new status value the spec doesn't define; a real fix
- * needs a spec decision, not a silent schema change from this route.
+ * FAILED PAYMENTS: a `checkout_session.payment.failed` event flips
+ * the Order to "FAILED" via lib/orderPayment.ts's markOrderFailed()
+ * — deliberately never markOrderPaid()'s twin, since a failed
+ * payment must NOT clear the buyer's cart/line items. The Order
+ * stays in place so app/api/orders/[orderId]/retry-payment/route.ts
+ * can open a new Checkout Session for the exact same Order.
  */
 export const dynamic = "force-dynamic";
 
@@ -51,7 +50,7 @@ import { createHmac, timingSafeEqual } from "crypto";
 import { NextResponse } from "next/server";
 import { prisma } from "@/services/prisma";
 import { logSecurityEvent } from "@/lib/securityLog";
-import { markOrderPaid } from "@/lib/orderPayment";
+import { markOrderPaid, markOrderFailed } from "@/lib/orderPayment";
 
 const SIGNATURE_HEADER = "paymongo-signature";
 
@@ -188,10 +187,28 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, data: null, message: "No matching order." });
   }
 
+  if (eventType === "checkout_session.payment.failed") {
+    // Rule 30.2's same nested extraction, just to read the failure's
+    // paymentStatus for the log line — markOrderFailed() never
+    // touches the cart (see file header), so a failed payment always
+    // leaves the Order retryable.
+    const failedPayments: PaymongoPayment[] = checkoutSession?.attributes?.payments ?? [];
+    const failedPaymentStatus: string | undefined = failedPayments[0]?.attributes?.status;
+
+    await markOrderFailed({ orderId: order.id, paymentStatus: failedPaymentStatus ?? "failed" });
+
+    await logSecurityEvent({
+      eventType: "paymongo_webhook_payment_failed",
+      request,
+      details: `orderId=${order.id} paymentStatus=${failedPaymentStatus ?? "failed"}`,
+    });
+
+    return NextResponse.json({ success: true, data: null, message: "Order marked as failed." });
+  }
+
   if (eventType !== "checkout_session.payment.paid") {
-    // Any other event (e.g. checkout_session.payment.failed) is
-    // acknowledged but doesn't change Order.status — see the KNOWN
-    // GAP note in the file header.
+    // Any other event this app doesn't act on — acknowledged so
+    // PayMongo doesn't retry, but Order.status is left unchanged.
     await logSecurityEvent({
       eventType: "paymongo_webhook_unhandled_event",
       request,

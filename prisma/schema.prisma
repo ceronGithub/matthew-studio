@@ -91,7 +91,7 @@ model Order {
   userId            String? // null if guest checkout, claimable later
   guestEmail        String?
   cartToken         String? // guest cart_token this Order was created from — lets the webhook/self-heal endpoint clear the correct guest cart without ever trusting a client-submitted value
-  status            String    @default("pending") // pending | PAID | Confirmed | Shipped | Delivered | Cancelled
+  status            String    @default("pending") // pending | PAID | FAILED | Confirmed | Shipped | Delivered | Cancelled — FAILED means PayMongo reported the checkout session as failed/expired; the Order stays in place (never deleted) so the buyer can retry via /api/orders/[orderId]/retry-payment instead of re-adding their whole cart
   subtotal          Float
   shippingFee       Float     @default(0)
   total             Float

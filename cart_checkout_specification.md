@@ -231,7 +231,7 @@ All follow the standard response shape (Rule 28) and `force-dynamic`
 - [ ] Mixed digital + physical cart correctly skips the shipping step's fee for digital-only lines
 - [ ] Webhook rejects requests with an invalid/missing PayMongo signature (401, logged as a security event)
 - [ ] `Order.status` only becomes `"PAID"` via the webhook — never set directly by the checkout submit route
-- [ ] Retry Payment flow is the only route allowed to re-query PayMongo directly (Rule 30.3 exception)
+- [x] Retry Payment flow is the only route allowed to re-query PayMongo directly (Rule 30.3 exception) — implemented 2026-09-05: the self-heal re-query lives in `app/api/orders/[orderId]/status/route.ts` (unchanged exception); the new `app/api/orders/[orderId]/retry-payment/route.ts` doesn't re-query PayMongo at all — it opens a brand-new Checkout Session on the same Order once `Order.status` is `"FAILED"`
 - [ ] Order confirmation page correctly shows "processing" then flips to "confirmed" without a manual refresh (poll `/api/orders/[orderId]/status`)
 - [ ] All tests pass with `npx tsc --noEmit`
 

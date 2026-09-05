@@ -261,3 +261,38 @@
   gap: var(--space-md);
   margin-top: var(--space-sm);
 }
+
+/* FAILED payment state — same card shape as .orderConfirmationConfirmed,
+ * error accent instead of success. */
+.orderConfirmationFailed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: var(--space-2xl) var(--space-lg);
+  text-align: center;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: var(--color-surface);
+}
+.orderConfirmationFailedIcon {
+  color: var(--color-error);
+}
+
+/* Client-side poll-timeout state — same card shape, warning accent. */
+.orderConfirmationTimedOut {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: var(--space-2xl) var(--space-lg);
+  text-align: center;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: var(--color-surface);
+}
+.orderConfirmationTimedOutIcon {
+  color: var(--color-warning);
+}

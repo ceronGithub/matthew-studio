@@ -28,8 +28,6 @@
  * HTTP Basic Auth with the secret key as the username and an empty
  * password.
  */
-import type { CartLineItem } from "@/lib/cartPricing";
-
 const PAYMONGO_API_BASE = "https://api.paymongo.com/v1";
 
 export interface CheckoutSessionResult {
@@ -37,8 +35,30 @@ export interface CheckoutSessionResult {
   checkoutUrl: string;
 }
 
+/**
+ * CheckoutLineItemInput
+ * The only shape createCheckoutSession actually needs from a "line
+ * item", regardless of where it came from. Deliberately narrower than
+ * lib/cartPricing.ts's CartLineItem (which carries catalog/display
+ * fields this function never reads) so a second caller can build
+ * this from a different source without importing cart-specific
+ * types. Two producers today:
+ *   1. app/api/checkout/route.ts — maps from live CartLineItem rows
+ *      (structurally compatible, no explicit conversion needed).
+ *   2. app/api/orders/[orderId]/retry-payment/route.ts — maps from
+ *      the Order's own OrderItem snapshots (nameSnapshot/
+ *      priceSnapshot), since a FAILED order's cart may no longer
+ *      exist or may have changed since checkout.
+ */
+export interface CheckoutLineItemInput {
+  name: string;
+  unitPrice: number;
+  variant: string | null;
+  quantity: number;
+}
+
 interface CreateCheckoutSessionParams {
-  items: CartLineItem[];
+  items: CheckoutLineItemInput[];
   shippingFee: number;
   requiresShipping: boolean;
   email: string;
@@ -175,6 +195,10 @@ export interface CheckoutSessionPaymentDetails {
   paymentStatus: string | null;
   paidAt: Date | null;
   isPaid: boolean;
+  /** True when PayMongo reports the payment attempt itself as
+   * "failed" (declined card, buyer cancelled, etc.) — distinct from
+   * isExpired, which is about the Checkout Session's own lifetime. */
+  isFailed: boolean;
 }
 
 /**
@@ -182,7 +206,10 @@ export interface CheckoutSessionPaymentDetails {
  * Rule 30.2's exact extraction pattern, factored out so both the
  * webhook (parsing a pushed event) and getCheckoutSession (parsing a
  * pulled API response — same nested `data.attributes.payments`
- * shape) never implement this twice.
+ * shape) never implement this twice. isFailed covers the
+ * checkout_session.payment.failed webhook event and any self-heal
+ * lookup that finds a payment attempt PayMongo marked "failed" —
+ * "unpaid" (no attempt made yet) is neither paid nor failed.
  */
 export function extractPaymentDetails(payments: PaymongoPayment[] | undefined): CheckoutSessionPaymentDetails {
   const payment = payments?.[0];
@@ -192,7 +219,17 @@ export function extractPaymentDetails(payments: PaymongoPayment[] | undefined): 
     paymentStatus,
     paidAt: payment?.attributes?.paid_at ? new Date(payment.attributes.paid_at * 1000) : null,
     isPaid: paymentStatus === "paid",
+    isFailed: paymentStatus === "failed",
   };
+}
+
+export interface CheckoutSessionLookupResult extends CheckoutSessionPaymentDetails {
+  /** True when PayMongo's own session-level status is "expired" —
+   * the buyer never completed (or abandoned) checkout before the
+   * session's lifetime ran out. Distinct from isFailed (a payment
+   * attempt was made and declined). Self-heal treats both the same
+   * way: mark the Order FAILED so the buyer can retry. */
+  isExpired: boolean;
 }
 
 /**
@@ -203,7 +240,7 @@ export function extractPaymentDetails(payments: PaymongoPayment[] | undefined): 
  * Never called from the normal payment-confirmation flow, which
  * relies exclusively on the webhook per Rule 30.3.
  */
-export async function getCheckoutSession(checkoutSessionId: string): Promise<CheckoutSessionPaymentDetails> {
+export async function getCheckoutSession(checkoutSessionId: string): Promise<CheckoutSessionLookupResult> {
   const secretKey = process.env.PAYMONGO_SECRET_KEY;
   if (!secretKey) {
     throw new Error("PAYMONGO_SECRET_KEY is not configured.");
@@ -223,5 +260,10 @@ export async function getCheckoutSession(checkoutSessionId: string): Promise<Che
 
   const payload = await response.json();
   const payments: PaymongoPayment[] | undefined = payload?.data?.attributes?.payments;
-  return extractPaymentDetails(payments);
+  const sessionStatus: string | undefined = payload?.data?.attributes?.status;
+
+  return {
+    ...extractPaymentDetails(payments),
+    isExpired: sessionStatus === "expired",
+  };
 }

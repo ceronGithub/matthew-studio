@@ -655,3 +655,46 @@ that file left off.
   updated in step with the cart-clear timing fix above. Phase 1 of
   cart_checkout_specification.md (Cart → Checkout → PayMongo →
   Webhook → Order Confirmation) is now fully built end to end.
+
+[2026-09-05] Built the FAILED payment status + retry flow (resolves
+  the KNOWN GAP documented in app/api/paymongo/webhook/route.ts's
+  header): added Order.status = "FAILED" (prisma/schema.prisma
+  comment updated, no migration needed -- status is already a plain
+  String field) and lib/orderPayment.ts's new markOrderFailed(),
+  which -- unlike markOrderPaid() -- never clears the cart, so a
+  failed order stays retryable. services/paymongo.ts gained a shared
+  CheckoutLineItemInput type (createCheckoutSession no longer takes a
+  cart-specific CartLineItem[]) plus isFailed/isExpired detection on
+  both the webhook's extractPaymentDetails() and the self-heal
+  getCheckoutSession() lookup. app/api/paymongo/webhook/route.ts now
+  handles checkout_session.payment.failed by calling
+  markOrderFailed(). app/api/orders/[orderId]/status/route.ts's
+  self-heal path now also detects a failed or expired PayMongo
+  session (not just a confirmed payment) and marks the Order FAILED
+  instead of leaving it "pending" forever. New app/api/orders/
+  [orderId]/retry-payment/route.ts opens a fresh PayMongo Checkout
+  Session for the same Order (never a new Order -- Rule 30.3's one
+  documented exception, same pattern as the self-heal route) using
+  the Order's own OrderItem snapshots as line items; resolves the
+  buyer's email via supabaseAdminClient.auth.admin.getUserById() for
+  signed-in buyers since this app has no Prisma User model (Supabase
+  Auth is the account source of truth -- this was the "thought there
+  was a User Prisma model, there wasn't" bug from the prior session).
+  KNOWN GAP carried into this route's header: Order doesn't persist
+  the original shipping name/address/phone, so a retry rebuilds
+  PayMongo billing with email only -- those fields are optional on
+  PayMongo's side, so this still produces a valid Checkout Session.
+  components/checkout/OrderConfirmation.tsx gained a "failed" state
+  (Retry Payment button, calls the new route and redirects to its
+  checkoutUrl) and a "timedOut" state (client-side 2-minute
+  POLL_TIMEOUT_MS safety net with a manual "Check again" button,
+  separate from and longer than the backend's own
+  SELF_HEAL_THRESHOLD_SECONDS). app/styles/checkout.css gained
+  .orderConfirmationFailed/.orderConfirmationTimedOut, same card
+  shape as the existing confirmed state with error/warning accents.
+  npm install run fresh in this sandbox to verify: npx tsc --noEmit
+  and npx eslint both pass clean on every changed file -- the only
+  tsc errors remaining are the same pre-existing "Module
+  '@prisma/client' has no exported member" gap (binaries.prisma.sh is
+  blocked in this sandbox, so `prisma generate` has never produced
+  real types here; run it locally before testing this route).

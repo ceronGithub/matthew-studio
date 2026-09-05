@@ -33,15 +33,19 @@
  *    first before self-healing.
  * 5. If still "pending" and past the threshold, call PayMongo directly
  *    for this Order's Checkout Session. If it reports paid, run
- *    markOrderPaid() and return "PAID". If not, return "pending"
- *    unchanged — the buyer may simply not have finished paying yet.
+ *    markOrderPaid() and return "PAID". If it reports the payment
+ *    failed OR the session itself expired, run markOrderFailed() and
+ *    return "FAILED" so the confirmation page can offer a retry
+ *    instead of polling a dead session forever. Otherwise ("unpaid",
+ *    session still active) return "pending" unchanged — the buyer may
+ *    simply still be on PayMongo's page.
  */
 export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 import { prisma } from "@/services/prisma";
 import { getCheckoutSession } from "@/services/paymongo";
-import { markOrderPaid } from "@/lib/orderPayment";
+import { markOrderPaid, markOrderFailed } from "@/lib/orderPayment";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { logSecurityEvent } from "@/lib/securityLog";
 
@@ -122,6 +126,28 @@ export async function GET(request: Request, { params }: { params: Promise<{ orde
         });
 
         const data: OrderStatusResponseData = { orderId: order.id, status: "PAID" };
+        return NextResponse.json({ success: true, data, message: "Order status." });
+      }
+
+      if (paymentDetails.isFailed || paymentDetails.isExpired) {
+        // The webhook, by definition, never confirmed this Order —
+        // and PayMongo now reports the attempt failed or the session
+        // itself expired. Either way there is nothing left to keep
+        // polling for, so flip to FAILED and let the confirmation
+        // page offer the buyer a retry (retry-payment route) rather
+        // than leaving them stuck on a "processing…" spinner.
+        await markOrderFailed({
+          orderId: order.id,
+          paymentStatus: paymentDetails.paymentStatus ?? (paymentDetails.isExpired ? "expired" : "failed"),
+        });
+
+        await logSecurityEvent({
+          eventType: "paymongo_selfheal_payment_failed",
+          request,
+          details: `orderId=${order.id} isExpired=${paymentDetails.isExpired} pendingForSeconds=${Math.round(pendingForSeconds)}`,
+        });
+
+        const data: OrderStatusResponseData = { orderId: order.id, status: "FAILED" };
         return NextResponse.json({ success: true, data, message: "Order status." });
       }
     } catch (selfHealError) {

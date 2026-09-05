@@ -71,3 +71,31 @@ export async function markOrderPaid({
     await prisma.cartItem.deleteMany({ where: { cartToken } });
   }
 }
+
+export interface MarkOrderFailedInput {
+  orderId: string;
+  paymentStatus: string | null;
+}
+
+/**
+ * markOrderFailed
+ * Flips Order.status to "FAILED" when PayMongo reports the checkout
+ * session itself failed or expired (webhook's
+ * checkout_session.payment.failed event, or the self-heal status
+ * route finding an expired session that was never paid). Unlike
+ * markOrderPaid(), this deliberately never touches the cart — the
+ * whole point of a FAILED order is that the buyer can retry the SAME
+ * order via app/api/orders/[orderId]/retry-payment/route.ts without
+ * losing their line items or having to rebuild the cart from
+ * scratch. Idempotent — re-applying to an already-FAILED Order is
+ * harmless.
+ */
+export async function markOrderFailed({ orderId, paymentStatus }: MarkOrderFailedInput): Promise<void> {
+  await prisma.order.update({
+    where: { id: orderId },
+    data: {
+      status: "FAILED",
+      paymentStatus: paymentStatus ?? "failed",
+    },
+  });
+}
