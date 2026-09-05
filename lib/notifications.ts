@@ -2,12 +2,12 @@
  * FILE: lib/notifications.ts
  * PURPOSE:
  * Task 14 (buyer_account_specification.md Section 4.6) — single
- * shared helper for creating a Notification row, called from the 3
- * existing event sources that should produce one:
+ * shared helper for creating a Notification row, called from all 3
+ * event sources that produce one:
  *   - app/api/paymongo/webhook/route.ts (order_update)
  *   - app/api/buyer/subscription/cancel/route.ts (billing)
- *   - a future admin-side support ticket reply route (ticket_reply)
- *     — see the "NOT YET WIRED" note at the bottom of this file.
+ *   - app/api/admin/support/tickets/[ticketId]/reply/route.ts
+ *     (ticket_reply) — wired 2026-09-06 (Task 16).
  *
  * Never called directly by a component or hook — this is
  * server-side-only, same as services/prisma.ts. Deliberately never
@@ -51,22 +51,3 @@ export async function createNotification({
   }
 }
 
-/**
- * NOT YET WIRED — ticket_reply
- * docs/tasks/task-14-wire-notification-triggers.md calls for this
- * helper to be called from the admin-side support ticket reply route
- * when senderRole is "admin" (buyer should be notified of admin
- * replies, not their own). That route does not exist in this repo
- * yet — only the buyer-side reply route
- * (app/api/buyer/support/[ticketId]/reply/route.ts) is built, and it
- * always writes senderRole "buyer". Wire the following call into the
- * admin route once it's built:
- *
- *   await createNotification({
- *     userId: ticket.userId,
- *     type: "ticket_reply",
- *     title: "New reply on your support ticket",
- *     body: `An admin replied to "${ticket.subject}".`,
- *     linkHref: `/buyer/support/${ticket.id}`,
- *   });
- */

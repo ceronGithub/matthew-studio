@@ -111,3 +111,25 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   Prisma client generated here, same sandbox limitation noted on
   every prior task. Next: Task 16 (reply + status mutation routes,
   wires the ticket_reply notification).
+
+[2026-09-06] Task 16 complete: added the two mutation routes from
+  docs/tasks/task-16-admin-ticket-reply-and-status-routes.md --
+  POST /api/admin/support/tickets/[ticketId]/reply (CSRF-checked,
+  getSessionAdmin()-guarded, creates a TicketMessage with senderRole
+  "admin" and flips SupportTicket.status to "answered" in one
+  $transaction, mirroring the buyer-side reply route's atomic
+  pattern in reverse) and PUT /api/admin/support/tickets/[ticketId]/
+  status (same guards, accepts { status: "closed" } only -- rejects
+  any other value with a 400 rather than silently accepting an
+  undefined transition). The reply route also calls
+  lib/notifications.ts's createNotification() with type
+  "ticket_reply", closing Task 14's third and final event source --
+  removed that file's "NOT YET WIRED" header block now that the
+  route it was waiting on exists. Section 5C's item 14 line updated:
+  task-15 and task-16 both [DONE], task-17/18 (inbox + detail/reply
+  UI) remain. Could not run a full npx tsc --noEmit in this
+  session -- no Prisma client generated in this sandbox, same
+  limitation noted on every prior task; the two new route files and
+  the notifications.ts edit introduce no new type errors relative to
+  the baseline (verified by filtering tsc output for their paths).
+  Next: Task 17 (admin ticket inbox UI).

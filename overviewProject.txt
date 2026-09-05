@@ -377,10 +377,11 @@ PHASE 2 — CORE BUYER EXPERIENCE (needs Phase 1's Order model to exist)
               the full page. Task 14 (2026-09-06) wired 2 of 3 event
               sources: order_update (PayMongo webhook, paid+failed)
               and billing (subscription cancel) both now create real
-              Notification rows. STILL MISSING: ticket_reply — no
-              admin-side support ticket reply route exists anywhere
-              in this repo yet, so that source has nothing to wire
-              into; tracked as its own new spec, item 14 below.
+              Notification rows. ticket_reply is now also wired
+              (2026-09-06, item 14 below / Task 16) — the admin
+              support ticket reply route calls createNotification()
+              on every admin reply. All 3 originally-scoped sources
+              for this item are complete.
               "announcement" type included in the schema enum but has
               no source yet — depends on the super-admin Announcements
               feature (super_admin_account_specification.md Section
@@ -488,7 +489,9 @@ Order.status)
         (admin_account_specification.md) — same account area, no new
         schema, reuses SupportTicket/TicketMessage as-is.
         [DONE] task-15 (getSessionAdmin.ts + GET list/detail routes)
-        [ ]    task-16 (POST reply / PUT status routes)
+        [DONE] task-16 (POST reply / PUT status routes) — built
+               2026-09-06, wired createNotification() (ticket_reply),
+               closing Task 14's last missing source.
         [ ]    task-17 (inbox UI)
         [ ]    task-18 (detail/reply UI)
 
