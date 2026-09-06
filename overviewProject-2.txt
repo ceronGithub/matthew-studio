@@ -408,3 +408,23 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   GatekeeperEvent/DeviceBan all confirmed in prisma/schema.prisma —
   so no schema task needed, straight to utility functions/API/UI).
   No feature code changed this turn — audit and planning only.
+
+[2026-09-07] Built task-28 (vault_specification.md Sections 2.2/2.3/
+  3.1): new lib/slugGenerator.ts (generateWords/generateAlphanumeric/
+  generateAlphaspecial, CSPRNG via node:crypto randomInt, BIP39 words
+  from the new `bip39` npm dependency) and lib/vaultHelpers.ts
+  (generateSuperAdminSlug, generateAdminSlug, generateSlugForRole,
+  validateSlugActive, expireAdminSessions, generateVaultCredentials,
+  hashVaultCredentials). Corrected overviewProject.txt Section 5C
+  item 6: the "front-end mockup already done" note was stale —
+  vault_specification.md's own Section 13 already corrected itself on
+  2026-09-05 to say no mockup files ever existed; fixed the summary
+  here to stop repeating that claim. Flipped item 6 from [ ] to [~].
+  Added `bip39` to package.json dependencies. `npx prisma generate`
+  fails in this sandbox (binaries.prisma.sh not reachable through the
+  network allowlist — pre-existing environment limitation, not new).
+  npx tsc --noEmit: only the expected 1 additional ungenerated-
+  Prisma-Client error on lib/vaultHelpers.ts's `AdminSession` type
+  import, same category as the pre-existing errors already documented
+  in earlier entries; no other new errors. eslint clean on both new
+  files. Checked off task-28 in docs/taskPlan.md.

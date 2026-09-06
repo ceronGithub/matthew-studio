@@ -36,8 +36,13 @@ see Section 5C / 8 in that file.
 
 ## PHASE 4 — SECURITY & ACCESS HARDENING (next up — commerce phases 1-3 are done)
 
-### [ ] 6. vault_specification.md — split into micro-tasks (schema already exists)
-- [ ] task-28 — Slug + vault-credentials utility functions (Sections 2.2/2.3/3.1)
+### [~] 6. vault_specification.md — split into micro-tasks (schema already exists)
+- [DONE] task-28 — Slug + vault-credentials utility functions (Sections
+      2.2/2.3/3.1) — `lib/slugGenerator.ts` + `lib/vaultHelpers.ts`,
+      built 2026-09-07. Also corrected a stale "front-end mockup
+      already done" claim found in overviewProject.txt — no mockup
+      ever existed (vault_specification.md's own Section 13 already
+      said so as of 2026-09-05).
 - [ ] task-29 — Modify login/logout routes to issue & clear session slug (5.1/5.2)
 - [ ] task-30 — Vault API routes: slug validate, credentials generate, credentials store (5.3/5.4/5.5)
 - [ ] task-31 — Middleware slug validation (7.1), ahead of role-based routing

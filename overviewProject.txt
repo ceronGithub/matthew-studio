@@ -441,13 +441,25 @@ means testing against fixtures instead of the real flow)
 PHASE 4 — SECURITY & ACCESS HARDENING (independent of commerce;
 sequenced after core buyer flow so login/vault hardening doesn't
 block revenue-generating pages from shipping first)
-[ ] 6. vault_specification.md
-       Front-end mockup already done (Section 13) — this phase is
-       the real backend (Sections 4/5/7/9/12.7-12.8). Schema
+[~] 6. vault_specification.md — IN PROGRESS (2026-09-07). Corrected
+       here: the "front-end mockup already done" note was itself
+       stale — vault_specification.md's own Section 13 was corrected
+       2026-09-05 to say NONE of the mockup files ever existed; there
+       is no mockup to build on top of. Schema
        (AdminSession/VaultCredentials/GatekeeperEvent) added
-       2026-09-05 — build order below is unaffected, this is just
-       schema now existing ahead of the API/UI work. Still not
-       started as of 2026-09-06.
+       2026-09-05. task-28 (docs/tasks/task-28-slug-vault-utilities.md)
+       built lib/slugGenerator.ts (BIP39 words + alphanumeric +
+       alphaspecial CSPRNG generators) and lib/vaultHelpers.ts
+       (generateSuperAdminSlug/generateAdminSlug composition,
+       validateSlugActive, expireAdminSessions,
+       generateVaultCredentials + hashVaultCredentials). Pure
+       functions + the two DB-touching validate/expire helpers only —
+       no API routes or persistence of a new session yet, that's
+       task-29/30. npx tsc --noEmit: 0 new errors (1 pre-existing-
+       category error on this file — `AdminSession` unresolved from
+       `@prisma/client` because the Prisma engine binary can't be
+       fetched in this sandbox, same ungenerated-client blocker noted
+       on task-27 and the retry-payment route). eslint clean.
 [~] 7. gatekeeper_specification.md — IN PROGRESS (corrected here
        2026-09-06 — this item previously said middleware.ts wasn't
        wired yet; it now is). Built: DeviceBan table, lib/gatekeeper.ts
