@@ -1,0 +1,209 @@
+/**
+ * FILE: app/styles/adminProductForm.css
+ * PURPOSE:
+ * Styles for app/admin/products/create/page.tsx,
+ * app/admin/products/[productId]/edit/page.tsx, and
+ * components/admin/AdminProductForm.tsx (Task 23). References the
+ * design tokens in app/globals.css — never hardcoded colors or
+ * spacing. Responsive breakpoints live in app/styles/mediaQueries.css.
+ * Field/error/action styling mirrors buyerSupport.css's
+ * .newTicketForm* classes closely on purpose — same form system
+ * across the app, not a one-off.
+ */
+
+.adminProductFormPage {
+  width: 100%;
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.adminProductFormHeader {
+  margin-bottom: var(--space-xl);
+}
+
+.adminProductFormEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.adminProductFormTitle {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-top: var(--space-xs);
+}
+
+.adminProductFormSubtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+  max-width: 70ch;
+}
+
+.adminProductForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.adminProductFormLegend {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.adminProductFormField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.adminProductFormField input,
+.adminProductFormField select,
+.adminProductFormField textarea {
+  width: 100%;
+  font-size: 1rem; /* never below 16px — prevents iOS auto-zoom (Rule 29.6) */
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface-active);
+  color: var(--color-text-primary);
+  font-family: inherit;
+  resize: vertical;
+}
+.adminProductFormField input:focus-visible,
+.adminProductFormField select:focus-visible,
+.adminProductFormField textarea:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+.adminProductFormCharCount {
+  align-self: flex-end;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.adminProductFormError,
+.adminProductFormSubmitError {
+  font-size: 0.8rem;
+  color: var(--color-error);
+}
+
+.adminProductFormStatusFieldset {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: var(--space-md);
+}
+.adminProductFormStatusFieldset legend {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+  padding: 0 var(--space-xs);
+}
+
+.adminProductFormRadio,
+.adminProductFormCheckbox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+/* Media placeholder — visibly disabled, "Coming soon" (Rule 17's
+ * empty-state guidance) rather than a hidden or misleading control;
+ * product_media_upload_specification.md wires this once it exists. */
+.adminProductFormMediaPlaceholder {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px dashed var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  color: var(--color-text-muted);
+}
+.adminProductFormMediaTitle {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+.adminProductFormMediaSubtitle {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.adminProductFormActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}
+
+.adminProductFormSubmit {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-accent);
+  color: #09090b;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.adminProductFormSubmit:hover:not(:disabled) {
+  background-color: var(--color-accent-hover);
+}
+.adminProductFormSubmit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.adminProductFormSpin {
+  animation: adminProductFormSpin 0.8s linear infinite;
+}
+@keyframes adminProductFormSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.adminProductFormSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.adminProductFormSkeletonLine {
+  height: 44px;
+  width: 100%;
+  border-radius: 8px;
+}
+.adminProductFormSkeletonLine--short {
+  width: 40%;
+}
+
+.adminProductFormErrorState {
+  padding: var(--space-2xl) var(--space-lg);
+  text-align: center;
+  color: var(--color-text-secondary);
+}

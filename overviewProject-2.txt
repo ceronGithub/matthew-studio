@@ -287,3 +287,39 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   -- list/create/edit/delete all reachable from the UI now except the
   actual create/edit form, which is Task 23. Next: Task 23 (admin
   product create/edit form UI) -- the last task closing Product CRUD.
+
+[2026-09-06] Task 23 complete: admin product create/edit form UI from
+  docs/tasks/task-23-ui-admin-products-form.md -- closes out Product
+  CRUD (all of docs/tasks/task-19 through task-23 now done). New
+  lib/hooks/useAdminProductForm.ts -- single hook for both create
+  (productId: null, POSTs) and edit (productId given, loads via Task
+  20's GET then PUTs) modes, same manual validate()-mirrors-server
+  pattern as buyer's NewSupportTicketForm, redirects to /admin/products
+  on save. New components/admin/AdminProductForm.tsx -- name/category/
+  description (with live char counter)/price/status radios/tags/
+  featured checkbox, autofocus, inline field errors, disabled submit
+  while saving; media fields shown as a visibly-disabled "Coming soon"
+  placeholder (Rule 17) rather than hidden, since
+  product_media_upload_specification.md (item 9) owns that surface
+  next. New app/admin/products/create/page.tsx and
+  app/admin/products/[productId]/edit/page.tsx (Server Component
+  shells, same params-Promise pattern as admin/support/[ticketId]/
+  page.tsx) and app/styles/adminProductForm.css (mirrors
+  buyerSupport.css's .newTicketForm* field/error/action styling on
+  purpose -- one form system, not a new one per feature). Confirmed
+  this codebase doesn't use react-hook-form/zod anywhere despite Rule
+  31.7's suggestion (no such dependency in package.json, no existing
+  form uses it) -- followed the project's own established manual-
+  validation convention instead of introducing a new pattern for one
+  form. npx tsc --noEmit still shows the same 20 pre-existing baseline
+  errors, none in the 4 new files; eslint clean. Section 5C's item 4:
+  all 5 tasks (19-23) now [DONE] -- Product CRUD is complete end to
+  end (list, create, edit, delete, audit log). Item 4 stays [~]
+  overall since the rest of admin_account_specification.md (dashboard,
+  orders, users, analytics, security logs, vault, profile) is still
+  unbuilt, but the slice blocking item 9
+  (product_media_upload_specification.md) is done. Next: per Section
+  5C's ordering, item 9 (product media upload) is now unblocked and
+  is a reasonable next pick, alongside resuming item 5 (super admin
+  account spec, already [~] in progress) or starting the rest of item
+  4's admin spec (dashboard/orders/users/analytics/security/vault).
