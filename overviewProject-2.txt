@@ -228,3 +228,34 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   19's entry. Section 5C's item 4 line updated to [~] -- Product CRUD
   read routes done, write routes (Task 21) and UI (22/23) remain.
   Next: Task 21 (admin product write routes).
+
+[2026-09-06] Task 21 complete: admin product create/update/delete
+  routes from docs/tasks/task-21-api-admin-products-write.md.
+  New lib/adminProductValidation.ts -- shared CATEGORY_LABELS map
+  (first shared source of truth for category slug->label; every
+  prior consumer duplicated the pairing inline), VALID_CATEGORIES/
+  VALID_STATUSES, FORBIDDEN_CHARACTERS (same regex already used on
+  buyer profile/registration fields, Rule 18.1), validateProductInput()
+  (trims + strips + validates name/category/description/price/status),
+  and slugify(). New lib/auditLog.ts -- recordAuditLog() (same
+  never-break-the-request try/catch pattern as lib/notifications.ts's
+  createNotification()) + diffProductFields() (before/after diff,
+  only changed fields per Section 6.1's own example). POST
+  app/api/admin/products/route.ts: CSRF check (Rule 32.2, same
+  isValidCsrfRequest() pattern as buyer profile PUT) -> auth ->
+  permission -> validate -> slug (collision retried once via Prisma's
+  P2002 rather than a pre-check query) -> create with createdBy ->
+  AuditLog "created". PUT/DELETE app/api/admin/products/[productId]/
+  route.ts: PUT loads existing row first (needed for the diff),
+  validates, updates with updatedBy, AuditLog "updated" with only-
+  changed-fields diff; DELETE is a soft delete only (sets deletedAt,
+  never a hard .delete()), AuditLog "deleted". Neither PUT nor POST
+  touch media fields (coverImageUrl/galleryImages/previewVideoUrl) --
+  left to product_media_upload_specification.md (item 9) as scoped.
+  npx tsc --noEmit still shows exactly the same 20 pre-existing
+  baseline errors, none in the 5 new/changed files; eslint clean.
+  Could not run prisma generate/db push -- same binaries.prisma.sh
+  403 as Tasks 19-20. Section 5C's item 4: task-21 flipped to [DONE]
+  -- all 3 API routes (list/detail/create/update/delete) are done;
+  only the 2 UI tasks (22-23) remain to close Product CRUD. Next:
+  Task 22 (admin product list UI).
