@@ -54,13 +54,19 @@ see Section 5C / 8 in that file.
 - [DONE] task-32 — Vault page UI: `/superAdmin/vault/[slug]` + `/admin/vault/[slug]`
       (6.1/6.2) — built 2026-09-07, see
       docs/tasks/task-32-ui-vault-pages.md
-- [ ] task-33 — Gatekeeper & Emergency Actions backend (12.2-12.7) — shared
-      deliverable with item 7 below; do this once, wire from both specs
+- [DONE] task-33 (API half) — Gatekeeper manual-ban/unban backend
+      (Sections 5.2/8/9): `listDeviceBans()`/`manualBanDevice()`/
+      `unbanDevice()` in `lib/gatekeeper.ts` + the two API routes under
+      `app/api/superadmin/gatekeeper/bans/`. Built 2026-09-07, see
+      docs/tasks/task-33-gatekeeper-bans-api.md.
+- [ ] task-33 (UI half) — `/superAdmin/gatekeeper` viewer page: DataTable,
+      filters, row expand, unban confirmation modal (needs a note-input
+      variant of ConfirmationModal). Shared deliverable with item 7 below.
 
 ### [~] 7. gatekeeper_specification.md — one gap remains
-- [ ] task-33 (same as above) covers `/superAdmin/gatekeeper` viewer page +
-      manual unban action (Section 6 / Rule 47.3). Nothing else outstanding —
-      instant-ban, 3-strike logic, and middleware wiring are already live.
+- [ ] task-33 (UI half, same as above) — viewer page + unban button wired to
+      the now-live API. Everything else is done: instant-ban, 3-strike logic,
+      middleware wiring, and manual ban/unban backend are all live.
 
 ### [ ] 8. buyer_password_recovery_specification.md
 - [ ] task-34 — Data model additions (recoverySetupComplete, telegramChatId,

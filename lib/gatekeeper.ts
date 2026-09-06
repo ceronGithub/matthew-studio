@@ -1,7 +1,7 @@
 /**
  * FILE: lib/gatekeeper.ts
  * PURPOSE:
- * Two responsibilities for the Gatekeeper device-ban system
+ * Four responsibilities for the Gatekeeper device-ban system
  * (gatekeeper_specification.md, Rule 47.3):
  *
  *   1. checkDeviceBan() — read-only lookup used by middleware.ts on
@@ -19,6 +19,24 @@
  *      window, counted directly from SecurityLog, no separate counter
  *      table). Bans are permanent until a super-admin manually unbans
  *      via the /superAdmin/gatekeeper page — no auto-expiry.
+ *
+ *   3. listDeviceBans() / manualBanDevice() / unbanDevice() — back the
+ *      /superAdmin/gatekeeper viewer page (Section 8) and its API
+ *      routes (Section 9, task-33). manualBanDevice() lets a
+ *      super-admin ban a device that hasn't yet crossed the automatic
+ *      strike threshold (Section 5.2); unbanDevice() requires a
+ *      non-empty note, mirroring Rule 34.4's confirmation-modal
+ *      discipline for destructive/security-sensitive actions.
+ *
+ * NOTE ON device_banned / device_unbanned LOGGING:
+ * These two actions write their own SecurityLog row directly via
+ * Prisma (writeGatekeeperAuditLog below) rather than calling
+ * lib/securityLog.ts's logSecurityEvent() — that helper computes
+ * deviceFingerprint from the CALLING request's own headers, which
+ * would record the super-admin's device, not the device being
+ * banned/unbanned. Writing directly also avoids a circular import,
+ * since securityLog.ts already imports evaluateGatekeeperTriggers
+ * from this file.
  */
 import { prisma } from "@/services/prisma";
 
@@ -136,4 +154,164 @@ export async function evaluateGatekeeperTriggers({
   } catch (error) {
     console.error("[gatekeeper] Failed to evaluate triggers:", (error as Error).message);
   }
+}
+
+/**
+ * writeGatekeeperAuditLog
+ * Writes a device_banned / device_unbanned row directly to
+ * SecurityLog (Rule 38) for the device that was just banned/unbanned
+ * — never the calling super-admin's own device. Never throws; a
+ * failed audit write should not undo or block the ban/unban action
+ * that already succeeded.
+ */
+async function writeGatekeeperAuditLog(input: {
+  eventType: "device_banned" | "device_unbanned";
+  actor: string | null;
+  deviceFingerprint: string;
+  details: string;
+}): Promise<void> {
+  try {
+    await prisma.securityLog.create({
+      data: {
+        eventType: input.eventType,
+        actor: input.actor,
+        details: input.details,
+        deviceFingerprint: input.deviceFingerprint,
+      },
+    });
+  } catch (error) {
+    console.error("[gatekeeper] Failed to write audit log:", (error as Error).message);
+  }
+}
+
+export interface ListDeviceBansParams {
+  page: number;
+  limit: number;
+  triggerEventType?: string;
+  isActive?: boolean;
+  dateFrom?: Date;
+  dateTo?: Date;
+}
+
+/**
+ * listDeviceBans
+ * Paginated, filterable read for the /superAdmin/gatekeeper page
+ * (Section 8) and its GET API route. Newest first, matching every
+ * other Rule 38.9-style viewer page in this project.
+ */
+export async function listDeviceBans({
+  page,
+  limit,
+  triggerEventType,
+  isActive,
+  dateFrom,
+  dateTo,
+}: ListDeviceBansParams) {
+  const where: {
+    triggerEventType?: string;
+    isActive?: boolean;
+    bannedAt?: { gte?: Date; lte?: Date };
+  } = {};
+
+  if (triggerEventType) where.triggerEventType = triggerEventType;
+  if (isActive !== undefined) where.isActive = isActive;
+  if (dateFrom || dateTo) {
+    where.bannedAt = {};
+    if (dateFrom) where.bannedAt.gte = dateFrom;
+    if (dateTo) where.bannedAt.lte = dateTo;
+  }
+
+  const [bans, totalCount] = await Promise.all([
+    prisma.deviceBan.findMany({
+      where,
+      orderBy: { bannedAt: "desc" },
+      skip: (page - 1) * limit,
+      take: limit,
+    }),
+    prisma.deviceBan.count({ where }),
+  ]);
+
+  return { bans, totalCount, totalPages: Math.max(1, Math.ceil(totalCount / limit)), page };
+}
+
+/**
+ * manualBanDevice
+ * Section 5.2 — lets a super-admin ban a device that hasn't yet
+ * crossed the automatic strike threshold (e.g. a suspicious pattern
+ * spotted on the Security Logs page). Rejects a device that already
+ * has an active ban rather than silently creating a duplicate row —
+ * deviceFingerprint is @unique on DeviceBan.
+ */
+export async function manualBanDevice(input: {
+  deviceFingerprint: string;
+  reason: string;
+  bannedByEmail: string;
+}): Promise<{ success: true; banId: string } | { success: false; message: string }> {
+  const existing = await prisma.deviceBan.findUnique({ where: { deviceFingerprint: input.deviceFingerprint } });
+  if (existing?.isActive) {
+    return { success: false, message: "This device is already banned." };
+  }
+
+  const ban = await prisma.deviceBan.create({
+    data: {
+      deviceFingerprint: input.deviceFingerprint,
+      reason: input.reason,
+      triggerEventType: "manual",
+      strikeCount: null,
+      relatedLogIds: [],
+      bannedBy: input.bannedByEmail,
+    },
+  });
+
+  await writeGatekeeperAuditLog({
+    eventType: "device_banned",
+    actor: input.bannedByEmail,
+    deviceFingerprint: input.deviceFingerprint,
+    details: `Manual ban: ${input.reason}`,
+  });
+
+  return { success: true, banId: ban.id };
+}
+
+/**
+ * unbanDevice
+ * Section 8 — the only way any ban is lifted. Requires a non-empty
+ * unbanNote (Rule 34.4's confirmation-modal discipline for
+ * destructive/security-sensitive actions) — never a one-click unban.
+ */
+export async function unbanDevice(input: {
+  banId: string;
+  unbanNote: string;
+  unbannedByEmail: string;
+}): Promise<{ success: true } | { success: false; message: string }> {
+  if (!input.unbanNote.trim()) {
+    return { success: false, message: "A note explaining the unban is required." };
+  }
+
+  const ban = await prisma.deviceBan.findUnique({ where: { id: input.banId } });
+  if (!ban) {
+    return { success: false, message: "Ban record not found." };
+  }
+  if (!ban.isActive) {
+    return { success: false, message: "This device is not currently banned." };
+  }
+
+  await prisma.deviceBan.update({
+    where: { id: input.banId },
+    data: {
+      isActive: false,
+      unbannedAt: new Date(),
+      unbannedBy: input.unbannedByEmail,
+      unbanNote: input.unbanNote.trim(),
+    },
+  });
+
+  await writeGatekeeperAuditLog({
+    eventType: "device_unbanned",
+    actor: input.unbannedByEmail,
+    deviceFingerprint: ban.deviceFingerprint,
+    details: `Unbanned: ${input.unbanNote.trim()}`,
+  });
+
+  return { success: true };
 }

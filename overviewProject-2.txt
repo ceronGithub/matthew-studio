@@ -507,3 +507,30 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   lib/vaultHelpers.ts, unchanged from prior entries). Run npx prisma
   generate && npx tsc --noEmit locally to confirm end to end. Checked
   off task-30 and task-32 in docs/taskPlan.md.
+
+[2026-09-07] Built task-33's API half (gatekeeper_specification.md
+  Section 9): lib/gatekeeper.ts gained listDeviceBans(),
+  manualBanDevice(), unbanDevice(), and a direct-Prisma
+  writeGatekeeperAuditLog() helper that writes device_banned /
+  device_unbanned SecurityLog rows for the BANNED device's
+  fingerprint -- never routed through lib/securityLog.ts's
+  logSecurityEvent(), which would have fingerprinted the calling
+  super-admin's own device instead, and would have created a circular
+  import (securityLog.ts already imports evaluateGatekeeperTriggers
+  from gatekeeper.ts). New routes:
+  app/api/superadmin/gatekeeper/bans/route.ts (GET paginated/
+  filterable list + POST manual ban, Section 5.2) and
+  app/api/superadmin/gatekeeper/bans/[banId]/unban/route.ts (PUT,
+  rejects an empty unbanNote per Rule 34.4). Both routes check
+  role === "superAdmin" strictly via getSessionAdmin() -- narrower
+  than the admin-OR-superAdmin pattern used by most /api/admin/*
+  routes, since Section 8 scopes this page to super-admin only.
+  UI half (viewer page, filters, row expand, unban modal) is not yet
+  built -- see docs/tasks/task-33-gatekeeper-bans-api.md. npx tsc
+  --noEmit introduces zero new errors from this change; the only
+  error touching lib/gatekeeper.ts is the same pre-existing
+  ungenerated-@prisma/client line seen in prior entries (npx prisma
+  generate still blocked by the binaries.prisma.sh sandbox
+  restriction -- run npx prisma generate locally to confirm clean).
+  overviewProject.txt Section 5C corrected in place (item 6/item 7's
+  task-33 lines split into API-done/UI-pending, matching this entry).
