@@ -352,3 +352,41 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   nothing outstanding in its own scope — marker was simply never
   flipped after that work landed. No code changed, planning/tracking
   correction only.
+[2026-09-06] Layer-3 re-verified product_media_upload_specification.md
+  (item 9) against Section 5C's stale [ ] markers for tasks 24-27 and
+  corrected both the markers and the underlying code:
+  - task-24 (cover upload route) and task-26 (video upload route) were
+    already fully built and wired despite being marked [ ] — flipped
+    both to [DONE], no code changes needed.
+  - task-25 (gallery routes) had a real gap: the DELETE-by-id handler
+    at media/gallery/[imageId]/route.ts was correct, but the sibling
+    media/gallery/route.ts (meant to hold the POST/add-image handler)
+    had been overwritten with a duplicate copy of that same DELETE
+    handler — there was no way to add a gallery image. Rewrote
+    media/gallery/route.ts with the real POST handler: 8-image cap
+    check, randomized R2 key, sortOrder = current image count,
+    createNotification-style JSON response shape. Flipped task-25 to
+    [DONE].
+  - task-27 (media UI in AdminProductForm) confirmed still NOT built —
+    AdminProductForm.tsx still shows the Task 23 "Coming soon" media
+    placeholder. Marker stays [ ]. This is now the only remaining
+    piece of item 9.
+  Files Changed: app/api/admin/products/[productId]/media/gallery/route.ts (rewritten)
+  Run in terminal: npx prisma generate (schema already has ProductGalleryImage/coverImageKey/previewVideoKey fields from a prior turn — no schema change this turn, generate only needed if the client wasn't already generated)
+
+[2026-09-06] Built Task 27 — media upload UI in the admin product
+  form, closing product_media_upload_specification.md (item 9) end to
+  end for /admin/products. New files: components/admin/
+  AdminProductMedia.tsx (container, edit-mode only), -MediaCover.tsx,
+  -MediaGallery.tsx, -MediaVideo.tsx (3 sub-components), lib/hooks/
+  useAdminProductMedia.ts (data + upload/remove actions against Tasks
+  24-26's routes). AdminProductForm.tsx now renders AdminProductMedia
+  in edit mode (create mode keeps the "save first" note) and owns a
+  single useToast/ToastStack instance passed down as a prop per Rule
+  22.4. Appended matching CSS to app/styles/adminProductForm.css
+  (adminProductMedia* classes, design tokens only). npx tsc --noEmit
+  run after `npm install` (deps were not previously installed in this
+  environment) -- 0 errors from any new/changed file; the 20 remaining
+  errors are all pre-existing, from the ungenerated Prisma Client
+  (same blocker noted in earlier entries) and unrelated implicit-any
+  spots in other files this task never touched.

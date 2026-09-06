@@ -12,16 +12,20 @@
  * consistent with every other form already in the codebase rather
  * than introducing a new pattern for one form.
  *
- * Media fields (cover image, gallery, preview video) are shown as
- * visibly disabled "Coming soon" placeholders — actual upload wiring
- * belongs to product_media_upload_specification.md (build sequence
- * item 9), which needs this CRUD loop to exist first.
+ * Media fields (cover image, gallery, preview video) — Task 27,
+ * product_media_upload_specification.md. Only rendered in edit mode:
+ * a product needs to exist (have an id) before media can be attached
+ * to products/<productId>/..., so create mode still shows a short
+ * explanatory note instead of the upload controls.
  */
 "use client";
 
 import { Loader2, ImageOff } from "lucide-react";
 import { useAdminProductForm } from "@/lib/hooks/useAdminProductForm";
 import { CATEGORY_LABELS } from "@/lib/adminProductValidation";
+import { useToast } from "@/components/shared/useToast";
+import ToastStack from "@/components/shared/ToastStack";
+import AdminProductMedia from "@/components/admin/AdminProductMedia";
 
 const DESCRIPTION_MAX_LENGTH = 1000;
 
@@ -37,6 +41,10 @@ export default function AdminProductForm({ productId }: { productId: string | nu
     handleSubmit,
     isEditMode,
   } = useAdminProductForm(productId);
+
+  // Single toast stack for this page — passed down to AdminProductMedia
+  // (Rule 22.4) rather than that component owning its own instance.
+  const { toasts, showToast, dismissToast } = useToast();
 
   if (isLoading) {
     return (
@@ -175,13 +183,17 @@ export default function AdminProductForm({ productId }: { productId: string | nu
         Feature this product (shows a &quot;New&quot; badge)
       </label>
 
-      <div className="adminProductFormMediaPlaceholder">
-        <ImageOff size={20} />
-        <div>
-          <p className="adminProductFormMediaTitle">Cover image, gallery &amp; preview video</p>
-          <p className="adminProductFormMediaSubtitle">Coming soon — save this product first, then add media.</p>
+      {isEditMode && productId ? (
+        <AdminProductMedia productId={productId} showToast={showToast} />
+      ) : (
+        <div className="adminProductFormMediaPlaceholder">
+          <ImageOff size={20} />
+          <div>
+            <p className="adminProductFormMediaTitle">Cover image, gallery &amp; preview video</p>
+            <p className="adminProductFormMediaSubtitle">Save this product first, then add media.</p>
+          </div>
         </div>
-      </div>
+      )}
 
       {submitError && <p role="alert" className="adminProductFormSubmitError">{submitError}</p>}
 
@@ -191,6 +203,8 @@ export default function AdminProductForm({ productId }: { productId: string | nu
           {isSubmitting ? "Saving…" : isEditMode ? "Save changes" : "Create product"}
         </button>
       </div>
+
+      <ToastStack toasts={toasts} onDismiss={dismissToast} />
     </form>
   );
 }
