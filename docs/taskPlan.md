@@ -69,9 +69,13 @@ see Section 5C / 8 in that file.
       to the now-live API. Everything is done: instant-ban, 3-strike logic,
       middleware wiring, manual ban/unban backend, and the viewer page.
 
-### [ ] 8. buyer_password_recovery_specification.md
-- [ ] task-34 — Data model additions (recoverySetupComplete, telegramChatId,
-      securityQuestionId/Hash fields per Rule 48.2) + Telegram bot env vars
+### [~] 8. buyer_password_recovery_specification.md
+- [DONE] task-34 — Data model additions (recoverySetupComplete, telegramChatId,
+      securityQuestionId/Hash fields per Rule 48.2) + Telegram bot env vars.
+      Built as a new `BuyerRecovery` table (userId-keyed) rather than the
+      spec's literal `model Buyer` block, since this repo has no local
+      Buyer/User table — see prisma/schema.prisma header comment and
+      overviewProject-2.txt's 2026-09-07 entry.
 - [ ] task-35 — Post-registration setup flow (email OTP, Telegram link,
       security question) + `recoverySetupComplete` middleware gate
 - [ ] task-36 — `/auth/forgot-password` flow (3 recovery methods, anti-

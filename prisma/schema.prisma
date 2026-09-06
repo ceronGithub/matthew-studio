@@ -479,6 +479,52 @@ model BuyerDownload {
   @@index([userId])
 }
 
+/// BuyerRecovery
+/// buyer_password_recovery_specification.md Section 3 / Rule 48.2 —
+/// task-34. The spec's own Section 3 shows a literal `model Buyer`
+/// with these fields added directly to it, but this repo has no such
+/// table: buyer identity lives entirely in Supabase Auth
+/// (auth.users.user_metadata — see app/api/buyer/profile/route.ts's
+/// header comment). userId is the Supabase auth.users UUID with no
+/// FK (cross-schema, same pattern as BuyerPaymentProfile/
+/// BuyerDownload above) rather than a JSON metadata blob, because
+/// telegramChatId needs a real DB-level unique constraint (a JSON
+/// field can't enforce that) and recoverySetupComplete needs to be
+/// cheaply queryable from middleware.ts on every request without a
+/// Supabase Admin API round-trip.
+/// securityAnswerHash follows the exact same bcrypt discipline as
+/// passwords (Rule 18.2/32.4) — never plaintext, never logged.
+/// All writes to this table must go through server-side routes using
+/// the admin Prisma client only — never trust a client-supplied
+/// recoverySetupComplete=true or a client-supplied hash.
+model BuyerRecovery {
+  id                       String    @id @default(cuid())
+  userId                   String    @unique
+
+  recoverySetupComplete    Boolean   @default(false)
+
+  // Email recovery (Section 2.1 / 4.3)
+  emailVerifiedForRecovery Boolean   @default(false)
+
+  // Telegram recovery (Section 2.2 / 4.4) — chat_id is the real
+  // identifier the bot sends to; never the username (Telegram's Bot
+  // API cannot message by username).
+  telegramChatId           String?   @unique
+  telegramLinkedAt         DateTime?
+
+  // Security question recovery (Section 2.3 / 4.5) — securityQuestionId
+  // is a stable key into the shared Question Bank (2.3.1), not free
+  // text; securityAnswerHash is bcrypt, compared case-insensitively
+  // at verification time (lowercase/trim before hashing and comparing).
+  securityQuestionId       String?
+  securityAnswerHash       String?
+
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
+
+  @@index([userId])
+}
+
 /// SupportTicket
 /// buyer_account_specification.md Section 4.5 — a persistent,
 /// per-buyer thread tied to their account, distinct from the public

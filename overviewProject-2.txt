@@ -560,3 +560,22 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   restriction). overviewProject.txt Section 5C corrected in place
   (task-33's UI-half line and item 7 both flipped to [DONE]).
   Checked off task-33 in docs/taskPlan.md.
+
+[2026-09-07] task-34 (buyer_password_recovery_specification.md, Rule
+  48.2): added BuyerRecovery model to prisma/schema.prisma --
+  recoverySetupComplete, emailVerifiedForRecovery, telegramChatId
+  (unique) + telegramLinkedAt, securityQuestionId + securityAnswerHash,
+  keyed by userId (Supabase auth.users UUID, no FK -- same pattern as
+  BuyerPaymentProfile/BuyerDownload). Deliberately deviated from the
+  spec's literal `model Buyer` block: this repo has no local Buyer/User
+  table (identity lives in Supabase Auth user_metadata, per
+  app/api/buyer/profile/route.ts), and telegramChatId's uniqueness plus
+  frequent middleware reads of recoverySetupComplete both need a real
+  relational column rather than a JSON metadata field. Documented
+  TELEGRAM_BOT_TOKEN / TELEGRAM_BOT_USERNAME in overviewProject.txt
+  Section 7 (server-only, not yet consumed by any route -- that's
+  task-35). overviewProject.txt Section 5C corrected in place (item 8
+  flipped [ ] -> [~], task-34 marked [DONE], tasks 35-37 listed).
+  Checked off task-34 in docs/taskPlan.md. npx prisma generate/db push
+  not run in this sandbox (no DB credentials here) -- run locally
+  before deploying.
