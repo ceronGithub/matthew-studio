@@ -482,7 +482,7 @@ Order.status)
 [ ] 13. infra_ops_specification.md
         CI/CD, error tracking (Sentry), security headers/CSP,
         Blog CMS admin.
-[~] 14. admin_support_ticket_specification.md (new, 2026-09-06)
+[DONE] 14. admin_support_ticket_specification.md (new, 2026-09-06)
         Admin ticket inbox + thread + reply — closes the
         Notifications spec's (item 3, 4.6) missing ticket_reply
         source. Belongs in Phase 3 alongside item 4
@@ -500,7 +500,17 @@ Order.status)
                PLANNED_SECTIONS list now has one live entry ("Support
                ticket handling" links to /admin/support) distinct from
                the still-unbuilt bullets.
-        [ ]    task-18 (detail/reply UI)
+        [DONE] task-18 (detail/reply UI) — built 2026-09-06:
+               lib/hooks/useAdminSupportTicketDetail.ts,
+               app/admin/support/[ticketId]/page.tsx +
+               components/admin/AdminSupportTicketDetail.tsx (full
+               thread reusing buyerSupport.css's ticketThread* classes,
+               reply form, "Close ticket" gated by the shared
+               ConfirmationModal per Rule 34.4, toasts on reply/close/
+               error). Consumes Task 15's GET detail route and Task
+               16's POST reply / PUT status routes. This closes
+               admin_support_ticket_specification.md end to end —
+               item 14 is now fully built.
 
 Already built, excluded from the sequence above:
 [DONE] visitor_specification_done.md

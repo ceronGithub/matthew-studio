@@ -236,6 +236,20 @@
   color: var(--color-text-secondary);
 }
 
+/* Spinner for the reply-sending state — defined locally since
+ * buyerDashboard.css's .buyerSpin is only loaded under /buyer/*. */
+.adminSupportSpin {
+  animation: adminSupportSpin 0.8s linear infinite;
+}
+@keyframes adminSupportSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Live link item on the admin dashboard placeholder list — distinct
  * from the still-unbuilt roleAreaComingSoonListItem bullets. */
 .roleAreaComingSoonListItem--live {

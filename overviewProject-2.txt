@@ -160,3 +160,28 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   today). Section 5C's item 14 line updated: task-15/16/17 all
   [DONE], task-18 (detail + reply UI) remains -- the last piece of
   this spec. Next: Task 18.
+
+[2026-09-06] Task 18 complete: admin ticket detail + reply + close UI
+  from docs/tasks/task-18-ui-admin-ticket-detail-reply.md -- the last
+  piece of admin_support_ticket_specification.md. New
+  lib/hooks/useAdminSupportTicketDetail.ts (fetch thread, sendReply,
+  closeTicket -- same shape as useBuyerSupportTicketDetail.ts, with
+  closeTicket replacing reopenTicket as the admin-side counterpart
+  action). New app/admin/support/[ticketId]/page.tsx (Server
+  Component shell) + components/admin/AdminSupportTicketDetail.tsx
+  (client) -- full thread reusing buyerSupport.css's ticketThread*
+  classes unchanged (buyer/admin senders swap which side they render
+  on vs the buyer-facing page), reply textarea + submit, "Close
+  ticket" button gated by the existing shared ConfirmationModal (Rule
+  34.4), toasts (Rule 22) on reply sent / ticket closed / errors.
+  Added a small adminSupportSpin keyframe to adminSupport.css since
+  buyerDashboard.css's .buyerSpin is only loaded under /buyer/*, not
+  /admin/*. Consumes Task 15's GET detail route and Task 16's POST
+  reply / PUT status routes -- no new API work needed. Could not run
+  a full npx tsc --noEmit in this session -- no Prisma client
+  generated in this sandbox, same limitation noted on every prior
+  task; confirmed the total error count (20) is unchanged from before
+  today's files were added, and none of the errors reference any file
+  touched today. Section 5C's item 14 flipped from [~] to [DONE] --
+  admin_support_ticket_specification.md is now fully built end to
+  end: inbox -> detail thread -> reply -> notification -> close.
