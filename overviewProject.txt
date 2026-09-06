@@ -310,7 +310,7 @@ PHASE 1 — FOUNDATION (blocks everything buyer-facing; build first)
        → Webhook → Order Confirmation, incl. failed/retry).
 
 PHASE 2 — CORE BUYER EXPERIENCE (needs Phase 1's Order model to exist)
-[~] 2. buyer_order_tracking_specification.md — IN PROGRESS. Section 3.1
+[DONE] 2. buyer_order_tracking_specification.md — Section 3.1
        Order History and Section 3.2's API layer are done (see above).
        The `/buyer/orders/[orderId]` page is now also built —
        OrderTrackingDetail.tsx (timeline, items, payment summary,

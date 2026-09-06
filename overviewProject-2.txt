@@ -343,3 +343,12 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   recoverable -- media cleanup belongs to an eventual hard-delete
   pass, not this feature. No code written yet this entry -- planning
   only. Next: Task 24 (cover image upload route).
+
+[2026-09-06] Corrected overviewProject.txt Section 5C: flipped item 2
+  (buyer_order_tracking_specification.md) marker from [~] to [DONE].
+  The spec's own notes already stated Section 3.1 (Order History) and
+  Section 3.2 (order detail/tracking page, OrderTrackingDetail.tsx,
+  ConfirmationModal, reorder flow) were fully built end to end with
+  nothing outstanding in its own scope — marker was simply never
+  flipped after that work landed. No code changed, planning/tracking
+  correction only.
