@@ -534,3 +534,29 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   restriction -- run npx prisma generate locally to confirm clean).
   overviewProject.txt Section 5C corrected in place (item 6/item 7's
   task-33 lines split into API-done/UI-pending, matching this entry).
+
+[2026-09-07] Built task-33's UI half (gatekeeper_specification.md
+  Section 9), closing out task-33 and gatekeeper_specification.md
+  entirely: app/superAdmin/gatekeeper/page.tsx (Server Component
+  shell) + components/gatekeeper/GatekeeperBansList.tsx (paginated
+  list wired to the already-live API half, filters for
+  triggerEventType/isActive/date range, manual-ban entry point) +
+  components/gatekeeper/GatekeeperBanRow.tsx (row expand: reason,
+  strikeCount, bannedBy, relatedLogIds, and the unbannedAt/
+  unbannedBy/unbanNote trail once a ban is lifted) +
+  components/gatekeeper/ManualBanModal.tsx and
+  components/gatekeeper/UnbanNoteModal.tsx (both note/reason-input
+  variants of the destructive-action confirmation pattern -- the
+  shared ConfirmationModal has no text-input slot, so these are their
+  own small components rather than stretching that one's single-
+  description prop, per Rule 34.4 applied to both directions:
+  imposing and lifting a ban) + lib/hooks/useGatekeeperBans.ts (all
+  fetching/pagination/filter state, Rule 31.2 -- no direct fetch calls
+  inside any component). npx tsc --noEmit introduces zero new errors
+  from these files (only the same pre-existing, unrelated errors seen
+  in prior entries -- ungenerated @prisma/client types plus a handful
+  of implicit-any errors in unrelated buyer/admin routes -- npx prisma
+  generate still blocked by the binaries.prisma.sh sandbox
+  restriction). overviewProject.txt Section 5C corrected in place
+  (task-33's UI-half line and item 7 both flipped to [DONE]).
+  Checked off task-33 in docs/taskPlan.md.

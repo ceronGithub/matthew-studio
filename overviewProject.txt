@@ -480,7 +480,7 @@ block revenue-generating pages from shipping first)
               display once → client-side SHA-256 via lib/clientHash.ts
               → confirm/store) are live; Section 3 (Emergency Actions)
               is a stub pending task-33. Linked from both dashboards.
-       [~] task-33 — Gatekeeper & Emergency Actions backend + shared
+       [DONE] task-33 — Gatekeeper & Emergency Actions backend + shared
               viewer page, split into two files sharing one task id
               (same pattern as this plan's own dual-listing note):
        [DONE] task-33 (API half) — lib/gatekeeper.ts gained
@@ -500,22 +500,28 @@ block revenue-generating pages from shipping first)
               elsewhere, per Section 9's super-admin-only permission.
               Built 2026-09-07, see
               docs/tasks/task-33-gatekeeper-bans-api.md.
-       [ ] task-33 (UI half) — /superAdmin/gatekeeper viewer page:
-              paginated DataTable, filters, row expand for related
-              SecurityLog entries, unban confirmation modal requiring
-              a note (Rule 34.4). Not yet built.
-[~] 7. gatekeeper_specification.md — IN PROGRESS (corrected here
-       2026-09-06 — this item previously said middleware.ts wasn't
-       wired yet; it now is). Built: DeviceBan table, lib/gatekeeper.ts
+       [DONE] task-33 (UI half) — /superAdmin/gatekeeper viewer page:
+              app/superAdmin/gatekeeper/page.tsx (Server Component
+              shell) + components/gatekeeper/GatekeeperBansList.tsx
+              (paginated list, triggerEventType/isActive/date-range
+              filters, manual-ban button) +
+              components/gatekeeper/GatekeeperBanRow.tsx (row expand —
+              reason, strikeCount, bannedBy, relatedLogIds, and the
+              unban trail once lifted) + ManualBanModal.tsx /
+              UnbanNoteModal.tsx (note-input variants the shared
+              ConfirmationModal doesn't support — Rule 34.4 discipline
+              applied to both directions: imposing and lifting a ban).
+              Data fetching lives in lib/hooks/useGatekeeperBans.ts
+              (Rule 31.2) against the already-live API half. Built
+              2026-09-07, see docs/tasks/task-33-gatekeeper-bans-api.md.
+[DONE] 7. gatekeeper_specification.md — CLOSED 2026-09-07 (last gap,
+       the /superAdmin/gatekeeper viewer page, filled by task-33's UI
+       half above). Built: DeviceBan table, lib/gatekeeper.ts
        (checkDeviceBan() read-only lookup + evaluateGatekeeperTriggers()
        instant-ban/3-strike logic), wired into middleware.ts ahead of
        role-based routing and into app/api/auth/login/route.ts (built
        2026-09-06, see e775106). Manual ban / unban backend (Section
-       5.2 / Section 8) now live as of task-33's API half (see item 6
-       above) — bans no longer require hand-editing the DB. STILL
-       MISSING: the /superAdmin/gatekeeper viewer page itself
-       (task-33's UI half) — the API routes exist but nothing renders
-       them yet.
+       5.2 / Section 8) and the viewer page (Section 9) are both live.
 [ ] 8. buyer_password_recovery_specification.md
        Telegram bot recovery flow; buyer registration currently
        ends at the onboarding modal with no recovery path set up.

@@ -59,14 +59,15 @@ see Section 5C / 8 in that file.
       `unbanDevice()` in `lib/gatekeeper.ts` + the two API routes under
       `app/api/superadmin/gatekeeper/bans/`. Built 2026-09-07, see
       docs/tasks/task-33-gatekeeper-bans-api.md.
-- [ ] task-33 (UI half) — `/superAdmin/gatekeeper` viewer page: DataTable,
+- [DONE] task-33 (UI half) — `/superAdmin/gatekeeper` viewer page: DataTable,
       filters, row expand, unban confirmation modal (needs a note-input
       variant of ConfirmationModal). Shared deliverable with item 7 below.
+      Built 2026-09-07, see docs/tasks/task-33-gatekeeper-bans-api.md.
 
-### [~] 7. gatekeeper_specification.md — one gap remains
-- [ ] task-33 (UI half, same as above) — viewer page + unban button wired to
-      the now-live API. Everything else is done: instant-ban, 3-strike logic,
-      middleware wiring, and manual ban/unban backend are all live.
+### [DONE] 7. gatekeeper_specification.md — CLOSED 2026-09-07
+- [DONE] task-33 (UI half, same as above) — viewer page + unban button wired
+      to the now-live API. Everything is done: instant-ban, 3-strike logic,
+      middleware wiring, manual ban/unban backend, and the viewer page.
 
 ### [ ] 8. buyer_password_recovery_specification.md
 - [ ] task-34 — Data model additions (recoverySetupComplete, telegramChatId,
@@ -97,7 +98,7 @@ see Section 5C / 8 in that file.
 - [ ] task-45 — Security Logs page (Section 3.3, Rule 38.9) — DataTable,
       filters, export, expandable rows
 - [ ] task-46 — Account Activity page (Section 3.4, Rule 42.3)
-- [ ] task-33 (shared, see Phase 4) — Gatekeeper/device-bans page (Section
+- [DONE] task-33 (shared, see Phase 4) — Gatekeeper/device-bans page (Section
       3's note bundling gatekeeper_specification.md into this phase)
 - [ ] task-47 — Phase 1: 2FA/TOTP enrollment (flagged as missing even though
       later phases are already built — not blocking, but should not be
