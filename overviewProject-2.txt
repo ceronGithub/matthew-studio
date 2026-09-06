@@ -428,3 +428,26 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   import, same category as the pre-existing errors already documented
   in earlier entries; no other new errors. eslint clean on both new
   files. Checked off task-28 in docs/taskPlan.md.
+
+[2026-09-07] Built task-29 (vault_specification.md Sections 5.1/5.2):
+  added getOrCreateAdminSession() to lib/vaultHelpers.ts (reuse an
+  active unexpired slug, else generate+persist a new one via task-28's
+  generateSlugForRole). Modified app/api/auth/login/route.ts: new
+  buildLoginResponseData() issues/reuses the Vault slug for
+  admin/superAdmin roles only, logs vault_slug_generated/
+  vault_slug_reused, adds adminSessionId+slug to the response for
+  those roles (buyers unaffected). Modified
+  app/api/auth/logout/route.ts: resolves the caller via the existing
+  lib/getSessionAdmin.ts before cookies are cleared, calls
+  expireAdminSessions() for admin/superAdmin callers, logs
+  vault_slug_expired. Noted deviation from the spec's literal logout
+  request shape (spec expects a client-sent sessionId; this route
+  resolves the caller from the session cookie instead, matching every
+  other authenticated route in this codebase, and expires all of that
+  user's active sessions rather than one named id). npx tsc --noEmit:
+  1 new error found and fixed (data.user.email undefined vs. null,
+  narrowed with ?? null); final diff vs. task-28 baseline shows only
+  the pre-existing ungenerated-Prisma-Client line, now on
+  lib/vaultHelpers.ts:18 instead of :21 (line shift from the new
+  export, not a new error). eslint clean on all 3 touched files.
+  Checked off task-29 in docs/taskPlan.md.

@@ -447,19 +447,20 @@ block revenue-generating pages from shipping first)
        2026-09-05 to say NONE of the mockup files ever existed; there
        is no mockup to build on top of. Schema
        (AdminSession/VaultCredentials/GatekeeperEvent) added
-       2026-09-05. task-28 (docs/tasks/task-28-slug-vault-utilities.md)
-       built lib/slugGenerator.ts (BIP39 words + alphanumeric +
-       alphaspecial CSPRNG generators) and lib/vaultHelpers.ts
-       (generateSuperAdminSlug/generateAdminSlug composition,
-       validateSlugActive, expireAdminSessions,
-       generateVaultCredentials + hashVaultCredentials). Pure
-       functions + the two DB-touching validate/expire helpers only —
-       no API routes or persistence of a new session yet, that's
-       task-29/30. npx tsc --noEmit: 0 new errors (1 pre-existing-
-       category error on this file — `AdminSession` unresolved from
-       `@prisma/client` because the Prisma engine binary can't be
-       fetched in this sandbox, same ungenerated-client blocker noted
-       on task-27 and the retry-payment route). eslint clean.
+       2026-09-05.
+       [DONE] task-28 — lib/slugGenerator.ts (BIP39/alphanumeric/
+              alphaspecial CSPRNG generators) + lib/vaultHelpers.ts
+              (generateSuperAdminSlug/generateAdminSlug,
+              validateSlugActive, expireAdminSessions,
+              generateVaultCredentials, hashVaultCredentials).
+       [DONE] task-29 — login route now issues/reuses the slug for
+              admin/superAdmin roles (getOrCreateAdminSession, added
+              to lib/vaultHelpers.ts) and logs vault_slug_generated/
+              _reused; logout route expires all active AdminSession
+              rows for the caller and logs vault_slug_expired.
+       Still not started: task-30 (vault API routes), task-31
+       (middleware slug validation), task-32 (vault page UI), task-33
+       (Gatekeeper/Emergency Actions backend + shared viewer page).
 [~] 7. gatekeeper_specification.md — IN PROGRESS (corrected here
        2026-09-06 — this item previously said middleware.ts wasn't
        wired yet; it now is). Built: DeviceBan table, lib/gatekeeper.ts

@@ -6,6 +6,11 @@
  * cookies (never localStorage) so middleware.ts can validate the
  * session on protected routes. Returns the same generic error for a
  * wrong email or wrong password — never reveals which one failed.
+ *
+ * For admin/superAdmin roles only, also issues or reuses the Vault
+ * session slug (vault_specification.md Section 5.1, task-29) via
+ * lib/vaultHelpers.ts's getOrCreateAdminSession — buyers never get an
+ * AdminSession row.
  */
 export const dynamic = "force-dynamic";
 
@@ -15,10 +20,61 @@ import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { logSecurityEvent } from "@/lib/securityLog";
 import { isValidCsrfRequest } from "@/lib/csrf";
 import { detectAnomalies } from "@/lib/anomalyDetection";
+import { getOrCreateAdminSession } from "@/lib/vaultHelpers";
+import { UAParser } from "ua-parser-js";
 
 const isProduction = process.env.NODE_ENV === "production";
 const LOGIN_MAX_ATTEMPTS = 5;
 const LOGIN_WINDOW_MINUTES = 15;
+
+/**
+ * buildLoginResponseData
+ * Base response is just { userId, email, role } for buyers. For
+ * admin/superAdmin roles, also issues (or reuses) the Vault session
+ * slug (vault_specification.md Section 5.1) and logs which happened
+ * (Section 8.3: vault_slug_generated vs. vault_slug_reused). Never
+ * throws — a slug issuance failure logs and falls back to the base
+ * shape rather than blocking a successful login.
+ */
+async function buildLoginResponseData(
+  user: { userId: string; email: string | null; role: string },
+  request: Request
+) {
+  const baseData = { userId: user.userId, email: user.email, role: user.role };
+
+  if (user.role !== "admin" && user.role !== "superAdmin") {
+    return baseData;
+  }
+
+  try {
+    const userAgent = request.headers.get("user-agent");
+    const parsed = userAgent ? new UAParser(userAgent).getResult() : null;
+
+    const { session, reused } = await getOrCreateAdminSession(user.userId, user.role, {
+      ipAddress: getClientIp(request),
+      userAgent,
+      deviceType: parsed?.device.type ?? "desktop",
+    });
+
+    await logSecurityEvent({
+      eventType: reused ? "vault_slug_reused" : "vault_slug_generated",
+      actor: user.email,
+      request,
+      details: `AdminSession ${session.id} ${reused ? "reused" : "generated"} for role ${user.role}`,
+    });
+
+    return {
+      ...baseData,
+      adminSessionId: session.id,
+      slug: session.slug,
+    };
+  } catch (error) {
+    // A slug failure should never block an otherwise-successful login —
+    // the account just won't have vault access until the next attempt.
+    console.error("[auth/login] Vault slug issuance failed:", (error as Error).message);
+    return baseData;
+  }
+}
 
 export async function POST(request: Request) {
   try {
@@ -80,11 +136,11 @@ export async function POST(request: Request) {
     });
 
     // Section 9.1 — an impossible-travel login BLOCKS the session
-    // instead of just logging it. No AdminSession row is created by
-    // this route yet, so there's nothing to deactivate — blocking the
-    // response itself (no cookies set, no success) is the enforcement
-    // point for now. A device_change alone is only logged, never
-    // blocks — see lib/anomalyDetection.ts's header comment.
+    // instead of just logging it. This check runs BEFORE Vault slug
+    // issuance below, so a blocked login never creates an AdminSession
+    // row — blocking the response itself (no cookies set, no success)
+    // is the enforcement point. A device_change alone is only logged,
+    // never blocks — see lib/anomalyDetection.ts's header comment.
     const anomalyCheck = await detectAnomalies({ accountId: data.user.email ?? email, request });
     if (anomalyCheck.blocked) {
       return NextResponse.json(
@@ -99,7 +155,7 @@ export async function POST(request: Request) {
 
     const response = NextResponse.json({
       success: true,
-      data: { userId: data.user.id, email: data.user.email, role },
+      data: await buildLoginResponseData({ userId: data.user.id, email: data.user.email ?? null, role }, request),
       message: "Signed in successfully.",
     });
 

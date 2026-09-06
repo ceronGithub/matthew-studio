@@ -3,12 +3,9 @@
  * PURPOSE:
  * Composes the raw generators from lib/slugGenerator.ts into the
  * actual Vault shapes defined in vault_specification.md, and provides
- * the two DB-touching helpers the login/logout routes need
- * (validateSlugActive, expireAdminSessions). Persisting a NEW
- * AdminSession row on login is left to the login route itself
- * (task-29) — this file only generates the slug content and validates/
- * expires existing rows, per Section 9's own Utility Functions vs.
- * API Routes split.
+ * the DB-touching helpers the login/logout routes need:
+ * getOrCreateAdminSession (reuse-or-create, Section 2.1's lifecycle),
+ * validateSlugActive, and expireAdminSessions.
  *
  * Vault credentials (Section 3.1) are deliberately generated here but
  * NEVER persisted in plaintext anywhere — only their SHA-256 hashes
@@ -86,6 +83,56 @@ export function generateSlugForRole(role: "superAdmin" | "admin"): {
   const slug = role === "superAdmin" ? generateSuperAdminSlug() : generateAdminSlug();
   const expiresAt = new Date(Date.now() + SLUG_EXPIRY_HOURS * 60 * 60 * 1000);
   return { slug, expiresAt };
+}
+
+export interface AdminSessionRequestContext {
+  ipAddress: string | null;
+  userAgent: string | null;
+  deviceType: string | null;
+}
+
+/**
+ * getOrCreateAdminSession
+ * Implements Section 2.1's login lifecycle end to end: reuses the
+ * caller's currently-active, unexpired AdminSession slug if one
+ * exists (bumping lastActivityAt only — the slug itself never
+ * changes while still active), otherwise generates and persists a
+ * brand-new slug. Added in task-29 (built on top of task-28's pure
+ * generators) since the login route needs this exact
+ * check-then-create-or-reuse sequence and it doesn't belong inlined
+ * in the route handler.
+ */
+export async function getOrCreateAdminSession(
+  userId: string,
+  role: "admin" | "superAdmin",
+  context: AdminSessionRequestContext
+): Promise<{ session: AdminSession; reused: boolean }> {
+  const existing = await prisma.adminSession.findFirst({
+    where: { userId, isActive: true, expiresAt: { gt: new Date() } },
+    orderBy: { loginAt: "desc" },
+  });
+
+  if (existing) {
+    const reusedSession = await prisma.adminSession.update({
+      where: { id: existing.id },
+      data: { lastActivityAt: new Date() },
+    });
+    return { session: reusedSession, reused: true };
+  }
+
+  const { slug, expiresAt } = generateSlugForRole(role);
+  const newSession = await prisma.adminSession.create({
+    data: {
+      userId,
+      role,
+      slug,
+      expiresAt,
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+      deviceType: context.deviceType,
+    },
+  });
+  return { session: newSession, reused: false };
 }
 
 /**

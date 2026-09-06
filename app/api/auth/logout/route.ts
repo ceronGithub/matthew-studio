@@ -7,11 +7,19 @@
  * any cookies/storage/cache tied to this origin (Origin-Scoped Session
  * Termination) — belt-and-suspenders on top of the cookie expiry,
  * which is the part that actually ends the session.
+ *
+ * For admin/superAdmin roles, also expires every active AdminSession
+ * row for this user (vault_specification.md Section 5.2/2.1, task-29)
+ * so the Vault slug is invalidated and the next login always generates
+ * a brand-new one — old slugs are never reused after sign-out.
  */
 export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 import { isValidCsrfRequest } from "@/lib/csrf";
+import { getSessionAdmin } from "@/lib/getSessionAdmin";
+import { expireAdminSessions } from "@/lib/vaultHelpers";
+import { logSecurityEvent } from "@/lib/securityLog";
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -25,6 +33,21 @@ export async function POST(request: Request) {
         { success: false, data: null, message: "Invalid request." },
         { status: 403 }
       );
+    }
+
+    // Resolve BEFORE clearing cookies below — getSessionAdmin reads the
+    // sb-access-token cookie this same request still carries. Returns
+    // null for buyers (no AdminSession applies) or an already-expired
+    // token, in which case there's simply nothing to expire.
+    const admin = await getSessionAdmin(request);
+    if (admin) {
+      await expireAdminSessions(admin.id);
+      await logSecurityEvent({
+        eventType: "vault_slug_expired",
+        actor: admin.email,
+        request,
+        details: `All active AdminSession rows expired for role ${admin.role} on sign-out`,
+      });
     }
 
     const response = NextResponse.json({
