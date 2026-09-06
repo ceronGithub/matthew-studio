@@ -390,3 +390,19 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   errors are all pre-existing, from the ungenerated Prisma Client
   (same blocker noted in earlier entries) and unrelated implicit-any
   spots in other files this task never touched.
+
+[2026-09-07] Created docs/taskPlan.md (Rule 49 Step 3 master checklist
+  tracker) -- did not exist before, despite docs/tasks/*.md already
+  containing 12 filed micro-tasks (task-01/02/03, task-11 through
+  task-18, task-24 through task-27). Reconciled the 12 unfiled task
+  numbers (task-04 through task-10, task-19 through task-23) against
+  this file's own Section 5C text and commit history -- all 12
+  confirmed to correspond to Subscriptions (04-06), Support Tickets
+  (07-10), and Product CRUD (19-23) respectively, cross-referenced via
+  literal mentions in task-24/task-27's own file text ("Task 21
+  routes", "Task 23's original placeholder copy") and task-08's commit
+  message. No code changed this turn -- this is a docs-only
+  reconciliation. taskPlan.md is now the fast-scan checklist; this
+  Section 5C file stays the authoritative narrative status. Going
+  forward, taskPlan.md is updated the same turn any task is completed
+  or started, per the developer's request.
