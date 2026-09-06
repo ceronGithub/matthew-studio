@@ -185,3 +185,24 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   touched today. Section 5C's item 14 flipped from [~] to [DONE] --
   admin_support_ticket_specification.md is now fully built end to
   end: inbox -> detail thread -> reply -> notification -> close.
+
+[2026-09-06] Task 19 complete: Product audit fields + AuditLog model
+  from docs/tasks/task-19-schema-product-audit.md, first step of the
+  Product CRUD build (admin_account_specification.md Section 3.2,
+  the first not-started item in Section 5C's Phase 3 -- blocks item
+  9, product_media_upload_specification.md). prisma/schema.prisma:
+  added Product.createdBy/updatedBy (nullable, admin email) and a new
+  AuditLog model (entityType/entityId/actor/action/changes/note) --
+  Rule 6's content-change trail, deliberately separate from
+  SecurityLog (Rule 38) and AccountActivityLog (Rule 42), placed
+  right after the latter. entityType is a plain string, not an
+  enum/relation, so future entities (orders, users) reuse the same
+  table. Could not run `npx prisma generate`/`db push` or `npx tsc
+  --noEmit` in this session -- npm install succeeded this time, but
+  the Prisma engine binary itself is blocked (binaries.prisma.sh
+  returns 403 under this sandbox's network policy, distinct from the
+  "no Prisma client generated" limitation noted on every prior task).
+  Schema diff manually checked against the file's existing model
+  conventions (field/comment style, index placement) for syntax
+  correctness. Section 5C's item 4 line should be updated from [ ] to
+  [~] once Task 20 lands. Next: Task 20 (admin product read routes).

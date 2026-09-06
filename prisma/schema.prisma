@@ -101,6 +101,30 @@ model AccountActivityLog {
   @@index([createdAt])
 }
 
+/// AuditLog
+/// Rule 6: content-change audit trail — WHO changed WHAT content
+/// (products, and any future admin-managed entity), separate from
+/// SecurityLog (login/attack events, Rule 38) and AccountActivityLog
+/// (navigation trail, Rule 42). `entityType` is a plain string rather
+/// than an enum/relation so the same table can cover future entities
+/// (orders, users) without a schema change per admin_account_
+/// specification.md Section 6.1. `changes` only populated for
+/// action: "updated" — a before/after diff of the fields that
+/// actually changed, never the full row.
+model AuditLog {
+  id         String   @id @default(cuid())
+  entityType String // "product" for now, extensible later
+  entityId   String
+  actor      String // admin email
+  action     String // "created" | "updated" | "deleted"
+  changes    Json? // { field: { before, after } } — "updated" only
+  note       String? // optional admin-supplied reason
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([actor])
+}
+
 /// CartItem
 /// One row per line item in a cart — either a buyer's (userId set) or a
 /// guest's (cartToken set instead, matching the signed cookie value).
@@ -298,6 +322,9 @@ model Product {
   previewVideoUrl String? // R2 public URL, products/<id>/video/<uuid>.<ext>
   previewVideoKey String?
   galleryImages   ProductGalleryImage[]
+
+  createdBy String? // admin_account_specification.md 3.2.2 — admin email, set on create
+  updatedBy String? // admin email, set on every update — null on rows never touched by an admin
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
