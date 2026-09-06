@@ -206,3 +206,25 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   conventions (field/comment style, index placement) for syntax
   correctness. Section 5C's item 4 line should be updated from [ ] to
   [~] once Task 20 lands. Next: Task 20 (admin product read routes).
+
+[2026-09-06] Task 20 complete: admin product read routes from
+  docs/tasks/task-20-api-admin-products-read.md.
+  New lib/hasAdminPermission.ts -- reusable "manage-products"/etc.
+  permission check (Section 4.3): super-admin always passes,
+  regular admin checked against user_metadata.permissions fetched
+  via supabaseAdminClient (getSessionAdmin() only returns
+  id/email/role, not permissions). New GET app/api/admin/products/
+  route.ts (paginated 25/page, category/status/search filters,
+  deletedAt: null always per Rule 6) and GET
+  app/api/admin/products/[productId]/route.ts (full detail incl.
+  galleryImages, 404 on deleted/missing). Both follow the same
+  getSessionAdmin() 401 -> hasAdminPermission() 403 -> query shape
+  as the Task 15 ticket routes. No mutations (Task 21), no UI (Task
+  22/23). npm install succeeded this session; npx tsc --noEmit shows
+  exactly the same 20 pre-existing baseline errors as noted on prior
+  tasks, none in the 2 new route files or hasAdminPermission.ts;
+  eslint clean on all 3 new/changed files. Could not run `npx prisma
+  generate`/`db push` -- same binaries.prisma.sh 403 noted in Task
+  19's entry. Section 5C's item 4 line updated to [~] -- Product CRUD
+  read routes done, write routes (Task 21) and UI (22/23) remain.
+  Next: Task 21 (admin product write routes).
