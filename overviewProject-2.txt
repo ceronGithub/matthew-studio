@@ -391,18 +391,20 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   (same blocker noted in earlier entries) and unrelated implicit-any
   spots in other files this task never touched.
 
-[2026-09-07] Created docs/taskPlan.md (Rule 49 Step 3 master checklist
-  tracker) -- did not exist before, despite docs/tasks/*.md already
-  containing 12 filed micro-tasks (task-01/02/03, task-11 through
-  task-18, task-24 through task-27). Reconciled the 12 unfiled task
-  numbers (task-04 through task-10, task-19 through task-23) against
-  this file's own Section 5C text and commit history -- all 12
-  confirmed to correspond to Subscriptions (04-06), Support Tickets
-  (07-10), and Product CRUD (19-23) respectively, cross-referenced via
-  literal mentions in task-24/task-27's own file text ("Task 21
-  routes", "Task 23's original placeholder copy") and task-08's commit
-  message. No code changed this turn -- this is a docs-only
-  reconciliation. taskPlan.md is now the fast-scan checklist; this
-  Section 5C file stays the authoritative narrative status. Going
-  forward, taskPlan.md is updated the same turn any task is completed
-  or started, per the developer's request.
+[2026-09-07] Rule 49 Step -1 audit against overviewProject.txt Section
+  5C: grep-verified all 3 Notifications trigger sources
+  (order_update/billing/ticket_reply) are actually wired, and confirmed
+  no code exists yet for vault_specification.md or the Gatekeeper/
+  Security Logs/Account Activity viewer pages (schema-only for all
+  three). Corrected Section 5C in overviewProject.txt: flipped item 3
+  (buyer_account_specification.md) and its 4.6 sub-line from [~] to
+  [DONE] — the spec's last blocker (ticket_reply source, dependent on
+  item 14) is confirmed complete. Wrote docs/taskPlan.md: master
+  checklist covering all remaining Section 5C items (vault, gatekeeper
+  page, password recovery, admin/super-admin remaining pages, file
+  converter, SEO/hardening, platform gaps, infra ops), with
+  vault_specification.md pre-split into micro-tasks task-28 through
+  task-33 (schema already exists — AdminSession/VaultCredentials/
+  GatekeeperEvent/DeviceBan all confirmed in prisma/schema.prisma —
+  so no schema task needed, straight to utility functions/API/UI).
+  No feature code changed this turn — audit and planning only.

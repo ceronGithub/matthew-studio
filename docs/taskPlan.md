@@ -1,162 +1,142 @@
-# Master Task Plan — matthew-studio
+# MASTER TASK PLAN — matthew-studio (shop branch)
 
-Fast-scan checklist tracker (Rule 49 Step 3). This file is the quick
-index; **overviewProject.txt Section 5C** stays the authoritative
-narrative status (per-spec detail, deviations, dates) — this file
-never duplicates that detail, it just tracks the checklist state and
-points to Section 5C / docs/tasks/*.md for the "why."
+Generated per Rule 49. Source of truth for phase order: overviewProject.txt
+Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
+(Layer-3 grep verification) before being trusted at face value.
 
-Update rule (per user request): every time a task below is completed,
-this file is updated the SAME turn (Rule 16.1 / Rule 45 discipline) —
-checkbox flipped, no separate reminder needed.
+Legend: [ ] not started · [~] in progress · [DONE] complete
 
-Legend: `[DONE]` `[~]` in progress `[ ]` not started
-Confidence tag on reconciled (pre-numbering-convention) entries:
-`(confirmed)` = verified against code/commit/spec text this session.
-`(reconciled)` = task number backfilled from Section 5C / commit
-messages; no docs/tasks/*.md file was ever written for it.
+---
 
---------------------------------------------------------
-## PHASE 1 — FOUNDATION (cart_checkout_specification.md)
-- [DONE] 1a. Order/OrderItem/CartItem schema (confirmed)
-- [DONE] 1b. Cart (drawer + CartItem API) (confirmed)
-- [DONE] 1c. Checkout page + server-side validation (confirmed)
-- [DONE] 1d. PayMongo Checkout Session creation (confirmed)
-- [DONE] 1e. Webhook + Order status update (Rule 30) (confirmed)
-- [DONE] 1f. Order confirmation page + status polling, incl.
-        failed-status + retry-payment (confirmed)
+## STEP -1 AUDIT — corrections found this pass
 
-## PHASE 2 — CORE BUYER EXPERIENCE
-### buyer_order_tracking_specification.md
-- [DONE] Order history list (Section 3.1) (reconciled — pre-numbering,
-        no task-N file)
-- [DONE] Order detail + cancel API (Section 3.2) (reconciled)
-- [DONE] `/buyer/orders/[orderId]` tracking detail page — timeline,
-        cancel/reorder/contact support, shared ConfirmationModal
-        (reconciled)
+Section 5C is generally accurate and well-maintained (last corrected
+2026-09-06), but two lines were stale:
 
-### buyer_account_specification.md — [~] IN PROGRESS
-- [DONE] 4.1 Downloads / License Delivery (reconciled)
-- [DONE] 4.2 Profile + avatar upload (reconciled)
-- [DONE] 4.3 Payment Methods — **task-01, task-02, task-03** (confirmed
-        — filed .md, Layer-3 verified: vault service, API routes, UI)
-- [DONE] 4.4 Subscription Management — **task-04, task-05, task-06**
-        (confirmed via Section 5C text: schema / API / UI page — no
-        individual .md files were ever written for these three)
-- [DONE] 4.5 Support Tickets — **task-07** schema, **task-08**
-        list/create+detail+reply+reopen API (confirmed — commit
-        message literally says "task 08"), **task-09** list + new-
-        ticket UI, **task-10** detail thread UI (all confirmed via
-        Section 5C text; task-09/task-10 files were never written
-        despite the work landing in the repo)
-- [~] 4.6 Notifications — **task-11** schema (DONE), **task-12** API
-        (DONE), **task-13** UI/bell (DONE), **task-14** wire triggers
-        (DONE — all 3 sources: order_update, billing, ticket_reply).
-        All sub-items complete; spec itself stays [~] only pending the
-        unbuilt "announcement" source (depends on super-admin
-        Announcements, not yet built — no-op, not a blocker).
+| Module                              | Spec | Schema | Code Wired | Verdict |
+|--------------------------------------|------|--------|------------|---------|
+| Notifications (4.6, all 3 sources)   | ✅   | ✅     | ✅         | **Done** — was shown [~] |
+| buyer_account_specification.md (3)   | ✅   | ✅     | ✅         | **Done** — was shown [~], last blocker (ticket_reply) confirmed wired |
+| vault_specification.md (6)           | ✅   | ✅     | ❌         | Schema only — no API/UI |
+| Gatekeeper page (item 7's gap)        | ✅   | ✅     | ❌         | Not wired — no `/superAdmin/gatekeeper` route found |
+| Security Logs page (item 5's gap)     | ✅   | ✅     | ❌         | `logSecurityEvent()` writes rows, no viewer page |
+| Account Activity page (item 5's gap)  | ✅   | ✅     | ❌         | `recordAccountActivity()` writes rows, no viewer page |
 
-## PHASE 3 — ADMIN & OVERSIGHT
-### admin_account_specification.md — [~] IN PROGRESS
-- [DONE] **task-19** Product.createdBy/updatedBy + AuditLog model
-        (confirmed — referenced by name in task-24/task-27 files)
-- [DONE] **task-20** GET list + detail routes, hasAdminPermission.ts
-        (confirmed via Section 5C text)
-- [DONE] **task-21** POST/PUT/DELETE product routes (confirmed —
-        directly cross-referenced in task-24/25/26's "same 3 checks
-        as every Task 21 route")
-- [DONE] **task-22** admin product list UI (confirmed via Section 5C)
-- [DONE] **task-23** admin product create/edit form UI (confirmed —
-        directly cross-referenced in task-27's "Task 23's original
-        placeholder copy")
-- [ ] Remaining scope not started: dashboard (3.1), orders (3.3-3.4?),
-      users, analytics, security logs, vault, profile — see spec
-      Sections 3.1, 3.3–3.8 for exact numbering; not yet broken into
-      tasks.
+Verification commands run: grepped every `createNotification()` call site
+(webhook x2, subscription cancel, admin ticket reply — all 3 spec-required
+sources confirmed live); `find app/superAdmin` (only `dashboard/` exists);
+`find app -ipath "*vault*"` and `*gatekeeper*` (no matches — confirms
+schema-only status for both).
 
-### super_admin_account_specification.md — [~] IN PROGRESS
-- [DONE] Dashboard shell + health widget + activity log (reconciled)
-- [DONE] SecurityLog model + logSecurityEvent() (Rule 38) (reconciled)
-- [DONE] Device fingerprinting + geoip + anomaly detection foundation
-        (reconciled)
-- [DONE] AccountActivityLog model + recordAccountActivity() (Rule 42)
-        (reconciled)
-- [ ] Security Logs page (Section 3.3)
-- [ ] Account Activity page (Section 3.4)
-- [ ] Gatekeeper/device-bans viewer page + manual unban action
-      (shared deliverable with gatekeeper_specification.md below)
-- [ ] Phase 1 (2FA/TOTP enrollment) — not found in repo, flagged as a
-      gap (Phase 2 work is already ahead of it — not blocking)
-- [ ] Phases 3+ (admin management, vault, buyer management) — not
-      started
+`overviewProject.txt` Section 5C has been corrected in place (item 3 and
+its 4.6 sub-line flipped to `[DONE]`) with a matching CHANGE LOG entry —
+see Section 5C / 8 in that file.
 
-### admin_support_ticket_specification.md — [DONE]
-- [DONE] **task-15** getSessionAdmin.ts + GET list/detail routes
-        (confirmed — filed .md, Layer-3 verified)
-- [DONE] **task-16** POST reply / PUT status routes, wires
-        createNotification() ticket_reply source (confirmed)
-- [DONE] **task-17** admin ticket inbox UI (confirmed)
-- [DONE] **task-18** admin ticket detail/reply UI (confirmed) — spec
-        closed end to end
+---
 
-## PHASE 4 — SECURITY & ACCESS HARDENING
-- [ ] vault_specification.md — front-end mockup done; backend
-      (Sections 4/5/7/9/12.7-12.8) not started. Schema
-      (AdminSession/VaultCredentials/GatekeeperEvent) already exists.
-- [~] gatekeeper_specification.md — DeviceBan table, lib/gatekeeper.ts
-      (checkDeviceBan / evaluateGatekeeperTriggers), wired into
-      middleware.ts + login route — DONE. Missing: /superAdmin/
-      gatekeeper viewer + manual-unban UI (same gap as the super-admin
-      item above).
-- [ ] buyer_password_recovery_specification.md — Telegram bot recovery
-      flow (Rule 48 trio); buyer registration has no recovery path yet.
+## PHASE 4 — SECURITY & ACCESS HARDENING (next up — commerce phases 1-3 are done)
 
-## PHASE 5 — CATALOG & PRODUCT FEATURES
-### product_media_upload_specification.md — [DONE]
-- [DONE] **task-24** cover image upload route (confirmed — filed .md,
-        Layer-3 verified)
-- [DONE] **task-25** gallery image routes, 8-image cap (confirmed —
-        POST handler gap fixed same session it was caught)
-- [DONE] **task-26** preview video upload route (confirmed)
-- [DONE] **task-27** media UI in AdminProductForm (confirmed) — spec
-        closed end to end for /admin/products (superAdmin/products
-        side out of scope, no UI exists yet there)
-- [ ] bulk_file_converter_and_pdf_renamer_specification.md — File
-      Tools product, not started.
+### [ ] 6. vault_specification.md — split into micro-tasks (schema already exists)
+- [ ] task-28 — Slug + vault-credentials utility functions (Sections 2.2/2.3/3.1)
+- [ ] task-29 — Modify login/logout routes to issue & clear session slug (5.1/5.2)
+- [ ] task-30 — Vault API routes: slug validate, credentials generate, credentials store (5.3/5.4/5.5)
+- [ ] task-31 — Middleware slug validation (7.1), ahead of role-based routing
+- [ ] task-32 — Vault page UI: `/superAdmin/vault/[slug]` + `/admin/vault/[slug]` (6.1/6.2)
+- [ ] task-33 — Gatekeeper & Emergency Actions backend (12.2-12.7) — shared
+      deliverable with item 7 below; do this once, wire from both specs
 
-## PHASE 5B — FRONT-END MODERNIZATION
-- [DONE] buyer_homepage_specification_done.md Section 13 audit —
-        fully compliant, only Hero parallax fix needed (done).
+### [~] 7. gatekeeper_specification.md — one gap remains
+- [ ] task-33 (same as above) covers `/superAdmin/gatekeeper` viewer page +
+      manual unban action (Section 6 / Rule 47.3). Nothing else outstanding —
+      instant-ban, 3-strike logic, and middleware wiring are already live.
+
+### [ ] 8. buyer_password_recovery_specification.md
+- [ ] task-34 — Data model additions (recoverySetupComplete, telegramChatId,
+      securityQuestionId/Hash fields per Rule 48.2) + Telegram bot env vars
+- [ ] task-35 — Post-registration setup flow (email OTP, Telegram link,
+      security question) + `recoverySetupComplete` middleware gate
+- [ ] task-36 — `/auth/forgot-password` flow (3 recovery methods, anti-
+      enumeration responses, single-use reset token)
+- [ ] task-37 — `/auth/reset-password` page + rate limiting (5/15min across
+      all 3 methods combined) + SecurityLog + Gatekeeper strike wiring
+
+---
+
+## PHASE 3 (remainder) — ADMIN & SUPER-ADMIN OVERSIGHT
+
+### [~] 4. admin_account_specification.md — Product CRUD done; rest not started
+- [ ] task-38 — Admin dashboard (Section 3.1)
+- [ ] task-39 — Orders management (Section 3.3)
+- [ ] task-40 — Users management (Section 3.4)
+- [ ] task-41 — Analytics (Section 3.5) — depends on item 11's traffic table
+- [ ] task-42 — Admin Security Logs page (Section 3.6) — reuses Rule 38.9
+      pattern already designed for super-admin; confirm if admin gets a
+      scoped view or the same page with permission check
+- [ ] task-43 — Admin Vault page (Section 3.7) — depends on task-32
+- [ ] task-44 — Admin Profile page (Section 3.8)
+
+### [~] 5. super_admin_account_specification.md
+- [ ] task-45 — Security Logs page (Section 3.3, Rule 38.9) — DataTable,
+      filters, export, expandable rows
+- [ ] task-46 — Account Activity page (Section 3.4, Rule 42.3)
+- [ ] task-33 (shared, see Phase 4) — Gatekeeper/device-bans page (Section
+      3's note bundling gatekeeper_specification.md into this phase)
+- [ ] task-47 — Phase 1: 2FA/TOTP enrollment (flagged as missing even though
+      later phases are already built — not blocking, but should not be
+      skipped indefinitely)
+- [ ] task-48+ — Phases 3+: admin management, vault, buyer management
+      (break down further once task-47 scope is confirmed)
+
+---
+
+## PHASE 5 (remainder) — CATALOG & PRODUCT FEATURES
+
+### [ ] 10. bulk_file_converter_and_pdf_renamer_specification.md
+- [ ] task-49 — Read spec fully and break into schema/API/UI micro-tasks
+      once this phase is picked up (not detailed yet — lower priority per
+      Section 5C's own ordering)
+
+---
 
 ## PHASE 6 — SITEWIDE POLISH & PLATFORM HARDENING
-- [ ] sitewide_technical_seo_specification.md — sitemap/robots, global
-      404/error boundaries, idle session timeout (Rule 32.5),
-      anonymized traffic analytics (Rule 41)
-- [ ] additional_platform_gaps_specification.md — coupons, refunds,
-      OAuth login, buyer 2FA, transactional emails, shop filtering,
-      dev env setup
-- [ ] infra_ops_specification.md — CI/CD, Sentry, security
-      headers/CSP, Blog CMS admin
 
---------------------------------------------------------
-## RECONCILIATION NOTES (Rule 49.1 — logged once, not repeated per line)
+### [ ] 11. sitewide_technical_seo_specification.md
+- [ ] task-50 — Sitemap/robots.txt
+- [ ] task-51 — Global 404/error boundaries (Rule 31.10 pattern)
+- [ ] task-52 — Idle session timeout (Rule 32.5) — apply per account layout
+- [ ] task-53 — Anonymized traffic analytics (Rule 41) — `PageViewDaily`
+      table + super-admin Analytics dashboard (feeds task-41 above)
 
-- Numbered micro-task convention (docs/tasks/task-N-slug.md) started
-  with task-01 (Payment Methods, Section 4.3) — everything in Phase 1
-  and the early Phase 2 order-tracking items predates the convention
-  entirely and was never numbered. This is expected, not a defect.
-- task-04 through task-10 (Subscriptions + Support Tickets) and
-  task-19 through task-23 (Product CRUD) were used in spirit (spec
-  sections were tracked, work landed, Section 5C documents them by
-  number) but **no individual docs/tasks/*.md file was ever written**
-  for any of these 12 numbers. Per Rule 49.1 Rule 3, any future edit
-  to these areas should get a proper task-N-slug.md file retroactively
-  if the area is touched again, so traceability stops depending on
-  prose reconstruction like this one.
-- Going forward: before creating task-28 or higher, confirm against
-  this file first — no gaps should be introduced again.
+### [ ] 12. additional_platform_gaps_specification.md
+- [ ] task-54 — Coupons (needs Phase 1 checkout totals — already available)
+- [ ] task-55 — Refund processing (needs Order.status — already available)
+- [ ] task-56 — OAuth login
+- [ ] task-57 — Buyer 2FA
+- [ ] task-58 — Transactional emails
+- [ ] task-59 — Shop filtering
+- [ ] task-60 — Dev env setup docs
 
-## NEXT UP (first not-[DONE] item, in phase order)
-→ Phase 3: admin_account_specification.md remaining scope (dashboard,
-  orders, users, analytics, security logs, vault, profile) — OR
-  Phase 4/6 items, whichever the developer prioritizes next.
+### [ ] 13. infra_ops_specification.md
+- [ ] task-61 — CI/CD pipeline
+- [ ] task-62 — Error tracking (Sentry)
+- [ ] task-63 — Security headers / CSP
+- [ ] task-64 — Blog CMS admin
+
+---
+
+## NOTES
+
+- Task numbering continues from the highest existing file (`task-27`) —
+  next new task file is `task-28`.
+- `task-33` is listed under both item 6 and item 7 deliberately — it is
+  one deliverable (Gatekeeper/Emergency Actions backend + viewer page)
+  that closes gaps in two specs simultaneously. Build once, check off both.
+- Per Rule 8A, work proceeds one (micro-)task at a time with a checkpoint
+  after each. This file and `overviewProject.txt` Section 5C / CHANGE LOG
+  are updated the same turn any task's status changes.
+- Excluded from this plan (per Section 5C's own exclusion list, unchanged):
+  `login_vault_page_secret_key_generation.md` (superseded design),
+  `tier1_free_trial_subscription_specification.md` and
+  `trial_tracking_and_developer_notifications_specification.md` (separate
+  codebase), `villa-azure-agreement-v8-DRAFT-with-trial.txt` (contract, not
+  a spec).

@@ -323,11 +323,13 @@ PHASE 2 — CORE BUYER EXPERIENCE (needs Phase 1's Order model to exist)
        in CartContext, only app/(public)/layout.tsx is) and redirects
        to /checkout, which is inside CartProvider and hydrates from
        what was just added.
-[~] 3. buyer_account_specification.md — IN PROGRESS (re-corrected
-       here 2026-09-06 — Payment Methods was still shown as API+UI
-       not started; Tasks 01-03 actually completed it end to end,
-       see overviewProject-1.txt change log. 4 of its 6 pages are
-       now built):
+[DONE] 3. buyer_account_specification.md — corrected here 2026-09-07
+       (Rule 49 Step -1 audit): all 6 pages confirmed built end to
+       end, including 4.6's ticket_reply source (grep-verified
+       against app/api/admin/support/tickets/[ticketId]/reply/route.ts).
+       Previously shown [~] pending item 14; item 14 is now [DONE]
+       (see below), so this spec closes too. 4 of its 6 pages were
+       already built as of 2026-09-06:
        [DONE] 4.1 Downloads / License Delivery (app/buyer/downloads/,
               app/api/buyer/downloads/) — built 2026-09-05
        [DONE] 4.2 Profile (app/buyer/profile/, app/api/buyer/profile/,
@@ -365,8 +367,10 @@ PHASE 2 — CORE BUYER EXPERIENCE (needs Phase 1's Order model to exist)
               are, and were simply never reflected in this section
               or docs/tasks/ (task-09/task-10 files were never
               written despite the work landing in the repo).
-       [~]    4.6 Notifications (+ bell icon in BuyerNav) — IN
-              PROGRESS (2026-09-06). Schema (task-11) and API routes
+       [DONE] 4.6 Notifications (+ bell icon in BuyerNav) — corrected
+              here 2026-09-07, all 3 sources confirmed grep-wired
+              (order_update, billing, ticket_reply). Schema (task-11)
+              and API routes
               (task-12) done. UI done (task-13): NotificationBell.tsx
               (dropdown in BuyerNav, unread badge, mark-one/mark-all,
               deep-link on click) and /buyer/notifications
@@ -386,9 +390,8 @@ PHASE 2 — CORE BUYER EXPERIENCE (needs Phase 1's Order model to exist)
               no source yet — depends on the super-admin Announcements
               feature (super_admin_account_specification.md Section
               3.9), which isn't built in this repo.
-       Remaining build order per the spec's own Section 9 priority
-       list: Notifications' ticket_reply source depends on item 14
-       below; everything else in this spec is done.
+       All 6 pages in this spec's Section 9 priority list are now
+       built end to end — nothing remaining in this spec's own scope.
 
 PHASE 3 — ADMIN & OVERSIGHT (needs real orders from Phase 1-2 to
 manage against; building admin UI before there's data to manage
