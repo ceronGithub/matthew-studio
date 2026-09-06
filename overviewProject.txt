@@ -403,7 +403,7 @@ means testing against fixtures instead of the real flow)
        [DONE] task-20 (GET list + detail routes, "manage-products"
               permission check via new lib/hasAdminPermission.ts)
        [DONE] task-21 (POST/PUT/DELETE routes)
-       [ ]    task-22 (admin product list UI)
+       [DONE] task-22 (admin product list UI)
        [ ]    task-23 (admin product create/edit form UI)
        Rest of this spec (dashboard, orders, users, analytics,
        security logs, vault, profile — Sections 3.1, 3.3-3.8) not

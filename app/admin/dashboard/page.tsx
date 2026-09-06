@@ -10,11 +10,11 @@
  * defines as this area's real scope, so an admin knows the login
  * worked and what's still ahead rather than seeing a dead-end.
  *
- * "Support ticket handling" is the one entry that's actually live
- * (Task 17, admin_support_ticket_specification.md) — styled and linked
- * distinctly from the still-unbuilt PLANNED_SECTIONS bullets below it,
- * so this list doubles as a real nav item without misrepresenting the
- * rest as done.
+ * "Support ticket handling" and "Product management" are the two
+ * entries that are actually live (Tasks 17 and 22) — styled and
+ * linked distinctly from the still-unbuilt PLANNED_SECTIONS bullets
+ * below them, so this list doubles as a real nav item without
+ * misrepresenting the rest as done.
  */
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -26,7 +26,6 @@ export const metadata: Metadata = {
 };
 
 const PLANNED_SECTIONS = [
-  "Product management",
   "Order management",
   "User management",
   "Analytics dashboard",
@@ -44,6 +43,9 @@ export default function AdminDashboardPage() {
       <ul className="roleAreaComingSoonList">
         <li className="roleAreaComingSoonListItem roleAreaComingSoonListItem--live">
           <Link href="/admin/support">Support ticket handling</Link>
+        </li>
+        <li className="roleAreaComingSoonListItem roleAreaComingSoonListItem--live">
+          <Link href="/admin/products">Product management</Link>
         </li>
         {PLANNED_SECTIONS.map((section) => (
           <li key={section} className="roleAreaComingSoonListItem">

@@ -1,0 +1,291 @@
+/**
+ * FILE: app/styles/adminProducts.css
+ * PURPOSE:
+ * Styles for app/admin/products/page.tsx and
+ * components/admin/AdminProductsList.tsx (Task 22). References the
+ * design tokens in app/globals.css — never hardcoded colors or
+ * spacing. Responsive breakpoints live in app/styles/mediaQueries.css,
+ * not inline here. Row layout, same density/skeleton/empty-state/
+ * pagination conventions as adminSupport.css — kept close on purpose
+ * so the two admin list pages read as one system, not two.
+ */
+
+.adminProductsPage {
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.adminProductsHeader {
+  margin-bottom: var(--space-xl);
+}
+
+.adminProductsEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.adminProductsTitle {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-top: var(--space-xs);
+}
+
+.adminProductsSubtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+  max-width: 70ch;
+}
+
+/* Toolbar: search + 2 filter selects + create button, all wrap
+ * independently on narrow viewports (Rule 29). */
+.adminProductsToolbar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.adminProductsSearchInput,
+.adminProductsFilterSelect {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 1rem; /* never below 16px — prevents iOS auto-zoom (Rule 29.6) */
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.adminProductsSearchInput {
+  flex: 1 1 220px;
+}
+.adminProductsFilterSelect {
+  flex: 0 1 180px;
+}
+.adminProductsSearchInput:focus-visible,
+.adminProductsFilterSelect:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+.adminProductsCreateButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--color-accent);
+  border-radius: 8px;
+  background-color: var(--color-accent);
+  color: #09090b;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.adminProductsCreateButton:hover,
+.adminProductsCreateButton:focus-visible {
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+/* adminProductsGrid — single-column row list (Rule 23.2), same
+ * density as adminSupportGrid. */
+.adminProductsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* adminProductsRow — elevated row per Rule 23.10: visible border,
+ * generous padding, 3 sections (main / meta / actions). */
+.adminProductsRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+.adminProductsRow:hover {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.adminProductsRowMain {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1 1 220px;
+}
+
+.adminProductsName {
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+.adminProductsCategory {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.adminProductsRowMeta {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-md);
+  flex-shrink: 0;
+}
+
+.adminProductsStatusBadge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 2px var(--space-sm);
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+}
+.adminProductsStatusBadge--published {
+  color: var(--color-success);
+  border-color: var(--color-success);
+}
+.adminProductsStatusBadge--draft {
+  color: var(--color-text-muted);
+}
+
+.adminProductsPrice {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.adminProductsDate {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.adminProductsRowActions {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.adminProductsIconButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+.adminProductsIconButton:hover,
+.adminProductsIconButton:focus-visible {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+  color: var(--color-text-primary);
+}
+.adminProductsIconButton--danger:hover,
+.adminProductsIconButton--danger:focus-visible {
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+/* Skeleton loading state (Rule 25.2) — mirrors the real row shape. */
+.adminProductsRow--skeleton {
+  pointer-events: none;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.adminProductsSkeletonLine {
+  height: 14px;
+  width: 60%;
+  border-radius: 4px;
+}
+.adminProductsSkeletonLine--short {
+  width: 30%;
+}
+
+.adminProductsEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+.adminProductsRetryButton {
+  padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+.adminProductsRetryButton:hover {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.adminProductsPagination {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+}
+.adminProductsPageButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+.adminProductsPageButton:hover:not(:disabled) {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+.adminProductsPageButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.adminProductsPageLabel {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}

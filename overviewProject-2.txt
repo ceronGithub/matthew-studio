@@ -259,3 +259,31 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   -- all 3 API routes (list/detail/create/update/delete) are done;
   only the 2 UI tasks (22-23) remain to close Product CRUD. Next:
   Task 22 (admin product list UI).
+
+[2026-09-06] Task 22 complete: admin product list UI from
+  docs/tasks/task-22-ui-admin-products-list.md. New
+  lib/hooks/useAdminProducts.ts -- same loading/empty/error +
+  pagination shape as useAdminSupportTickets.ts, plus
+  category/status/search filters (search debounced 300ms
+  client-side, Rule 34.2's spirit applied to input) and a
+  deleteProduct() action (DELETE with getCsrfHeader(), refetches the
+  current page on success). New components/admin/AdminProductsList.tsx
+  -- toolbar (search + 2 filter selects + "New product" link to
+  Task 23's create page), row list mirroring AdminSupportTicketsList's
+  density/skeleton/empty-state/pagination conventions, Edit link per
+  row, Delete behind the shared ConfirmationModal (Rule 34.4) with
+  useToast/ToastStack feedback (Rule 22). Bulk actions and CSV export
+  deliberately deferred, as scoped in the task file. New
+  app/admin/products/page.tsx (Server Component shell, same split as
+  admin/support/page.tsx) and app/styles/adminProducts.css (mirrors
+  adminSupport.css's tokens/row/skeleton/pagination CSS closely on
+  purpose -- one visual system across admin list pages, not two;
+  reuses the existing .roleAreaComingSoonListItem--live class rather
+  than redefining it). Updated app/admin/dashboard/page.tsx: "Product
+  management" moved out of PLANNED_SECTIONS into a second live link
+  next to "Support ticket handling". npx tsc --noEmit still shows the
+  same 20 pre-existing baseline errors, none in the 5 new/changed
+  files; eslint clean. Section 5C's item 4: task-22 flipped to [DONE]
+  -- list/create/edit/delete all reachable from the UI now except the
+  actual create/edit form, which is Task 23. Next: Task 23 (admin
+  product create/edit form UI) -- the last task closing Product CRUD.
