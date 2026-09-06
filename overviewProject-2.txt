@@ -323,3 +323,23 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   is a reasonable next pick, alongside resuming item 5 (super admin
   account spec, already [~] in progress) or starting the rest of item
   4's admin spec (dashboard/orders/users/analytics/security/vault).
+
+[2026-09-06] Broke down product_media_upload_specification.md (Section
+  5C item 9, now unblocked by item 4's completed Product CRUD) into
+  docs/tasks/task-24 through task-27: cover image upload route,
+  gallery image routes (add/remove, 8-image cap, sortOrder), preview
+  video upload route (no Sharp pipeline -- video bypasses it per the
+  spec's own Section 7 warning), and the media UI replacing
+  AdminProductForm's "Coming soon" placeholder from Task 23. Flagged
+  two deliberate deviations from the spec's literal text before
+  writing any code: dedicated per-purpose routes
+  (/api/admin/products/[productId]/media/cover|gallery|video) instead
+  of the spec's generic POST /api/upload, since this codebase has
+  never had a shared upload endpoint -- only per-feature ones (the
+  buyer avatar route is the only prior precedent); and product
+  deletion will NOT wipe the R2 media prefix on delete, since Task
+  21's DELETE is a Rule 6 soft delete and destroying media at that
+  point would defeat the soft-delete's whole point of being
+  recoverable -- media cleanup belongs to an eventual hard-delete
+  pass, not this feature. No code written yet this entry -- planning
+  only. Next: Task 24 (cover image upload route).

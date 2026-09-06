@@ -463,8 +463,21 @@ block revenue-generating pages from shipping first)
 PHASE 5 — CATALOG & PRODUCT FEATURES (independent of commerce
 plumbing; can slot in whenever bandwidth allows — but item 9 needs
 item 4's Product CRUD to exist first, see the note there)
-[ ] 9. product_media_upload_specification.md
+[~] 9. product_media_upload_specification.md — IN PROGRESS (2026-09-06).
        Gallery + video support (current form is single 5MB image).
+       Now unblocked by item 4's Product CRUD completion. Broken into
+       docs/tasks/task-24 through task-27:
+       [ ] task-24 (cover image upload route)
+       [ ] task-25 (gallery image routes, add/remove, 8-image cap)
+       [ ] task-26 (preview video upload route)
+       [ ] task-27 (media UI in AdminProductForm)
+       Deliberate deviations from the spec's literal text, noted in
+       the task files: (1) dedicated per-purpose routes instead of a
+       generic POST /api/upload — this codebase has no such shared
+       endpoint anywhere, only per-feature ones (the avatar route);
+       (2) product deletion does NOT wipe the R2 media prefix, since
+       our Product delete (Task 21) is a Rule 6 soft delete and
+       destroying media would defeat its recoverability.
 [ ] 10. bulk_file_converter_and_pdf_renamer_specification.md
         File Tools product — bulk/individual conversion + PDF
         invoice renaming.
