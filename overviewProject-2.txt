@@ -474,3 +474,36 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   used (userId, role) were confirmed directly against
   prisma/schema.prisma. Run npx prisma generate && npx tsc --noEmit
   locally before deploying. Checked off task-31 in docs/taskPlan.md.
+
+[2026-09-07] Built task-32: Vault page UI (vault_specification.md
+  Sections 6.1/6.2). Added app/superAdmin/vault/page.tsx and
+  app/admin/vault/page.tsx -- thin Server Components that resolve the
+  caller's current AdminSession via getOrCreateAdminSession and
+  redirect to the session-scoped URL Rule 47.2 requires. Added
+  app/superAdmin/vault/[slug]/page.tsx and app/admin/vault/[slug]/
+  page.tsx -- fetch the session server-side via validateSlugActive,
+  independently re-check role/ownership (defense in depth on top of
+  middleware.ts's task-31 guard), and render the shared
+  components/vault/VaultPage.tsx client component with the slug data.
+  VaultPage.tsx implements Section 1 (read-only slug display with
+  per-component copy buttons) and Section 2 (Generate Emergency
+  Credentials -> plaintext shown once -> client-side SHA-256 via new
+  lib/clientHash.ts -> POST /api/vault/credentials/store); Section 3
+  (Emergency Actions) is a stub pending task-33, not omitted silently.
+  Added a distinct sessionRole vs. pageVariant split on VaultPage so a
+  super-admin visiting /admin/vault still sends their real role
+  ("superAdmin") to the credentials API rather than the page's
+  display variant ("admin") -- avoids a 403 role-mismatch the generate
+  route already enforces. Added app/styles/vault.css (existing token
+  system only). Linked "Security Vault" from both
+  app/superAdmin/dashboard/page.tsx's Quick Actions and
+  app/admin/dashboard/page.tsx's live-links list. Also corrected
+  docs/taskPlan.md's task-30 line, which still read "[ ]" despite
+  being confirmed DONE by task-31's own Layer-3 audit -- Rule 16.1
+  cross-check caught the drift before starting task-32. npm install
+  succeeded in this sandbox; eslint clean on all 8 new/modified files;
+  npx tsc --noEmit introduces zero new errors (only the same
+  pre-existing @prisma/client ungenerated-types line, now on
+  lib/vaultHelpers.ts, unchanged from prior entries). Run npx prisma
+  generate && npx tsc --noEmit locally to confirm end to end. Checked
+  off task-30 and task-32 in docs/taskPlan.md.

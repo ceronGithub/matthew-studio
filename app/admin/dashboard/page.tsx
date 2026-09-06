@@ -47,6 +47,9 @@ export default function AdminDashboardPage() {
         <li className="roleAreaComingSoonListItem roleAreaComingSoonListItem--live">
           <Link href="/admin/products">Product management</Link>
         </li>
+        <li className="roleAreaComingSoonListItem roleAreaComingSoonListItem--live">
+          <Link href="/admin/vault">Security vault</Link>
+        </li>
         {PLANNED_SECTIONS.map((section) => (
           <li key={section} className="roleAreaComingSoonListItem">
             {section}

@@ -1,0 +1,328 @@
+/**
+ * FILE: app/styles/vault.css
+ * PURPOSE:
+ * Styles for components/vault/VaultPage.tsx, shared by
+ * app/superAdmin/vault/[slug]/page.tsx and app/admin/vault/[slug]/page.tsx.
+ * References app/globals.css tokens only — responsive breakpoints
+ * live in app/styles/mediaQueries.css, not inline here.
+ */
+
+.vaultPage {
+  width: 100%;
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.vaultPageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.vaultPageEyebrow {
+  font-family: var(--font-geist-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.vaultPageTitle {
+  font-size: 1.6rem;
+  color: var(--color-text-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.vaultPageSubtitle {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* --- Warning banner (amber) --- */
+.vaultWarningBanner {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  background-color: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 10px;
+}
+
+.vaultWarningIcon {
+  flex-shrink: 0;
+  color: var(--color-warning);
+  margin-top: 0.15rem;
+}
+
+.vaultWarningTitle {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-xs) 0;
+}
+
+.vaultWarningText {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* --- Session info box --- */
+.vaultSessionInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.vaultSessionInfoRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.vaultSessionInfoLabel {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.vaultSessionInfoValue {
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+}
+
+.vaultSessionInfoValue--active {
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+/* --- Panels (Section 1 / 2 / 3 containers) --- */
+.vaultPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.vaultPanelTitle {
+  font-size: 1.05rem;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.vaultPanelDescription {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* --- Slug / credential component cards --- */
+.vaultSlugGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.vaultSlugCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-lg);
+  background-color: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.vaultSlugLabel {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.vaultSlugValue {
+  font-family: var(--font-geist-mono);
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.vaultCopyButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  align-self: flex-start;
+  min-height: 44px;
+  padding: 0 var(--space-md);
+  font-size: 0.8rem;
+  color: var(--color-text-primary);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.vaultCopyButton:hover,
+.vaultCopyButton:focus-visible,
+.vaultCopyButton:active {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.vaultRegenerateButton {
+  align-self: flex-start;
+  min-height: 44px;
+  padding: 0 var(--space-md);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  cursor: not-allowed;
+}
+
+/* --- Generate credentials button --- */
+.vaultGenerateButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  align-self: flex-start;
+  min-height: 44px;
+  padding: 0 var(--space-lg);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-bg);
+  background-color: var(--color-accent);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+
+.vaultGenerateButton:hover,
+.vaultGenerateButton:focus-visible {
+  background-color: var(--color-accent-hover);
+}
+
+.vaultGenerateButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* --- Generated credentials result --- */
+.vaultCredentialsResult {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.vaultCredentialsWarning {
+  font-size: 0.875rem;
+  color: var(--color-warning);
+  margin: 0;
+}
+
+.vaultCredentialsActions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.vaultCredentialsCancel,
+.vaultCredentialsConfirm {
+  min-height: 44px;
+  padding: 0 var(--space-lg);
+  font-size: 0.875rem;
+  border-radius: 8px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.vaultCredentialsCancel {
+  color: var(--color-text-secondary);
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+}
+
+.vaultCredentialsCancel:hover,
+.vaultCredentialsCancel:focus-visible {
+  border-color: var(--color-border-hover);
+}
+
+.vaultCredentialsConfirm {
+  color: var(--color-bg);
+  background-color: var(--color-accent);
+  border: none;
+  font-weight: 600;
+}
+
+.vaultCredentialsConfirm:hover,
+.vaultCredentialsConfirm:focus-visible {
+  background-color: var(--color-accent-hover);
+}
+
+.vaultCredentialsCancel:disabled,
+.vaultCredentialsConfirm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* --- Emergency Actions stub (Section 3, built in task-33) --- */
+.vaultStub {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xl) var(--space-lg);
+  text-align: center;
+}
+
+.vaultStubIcon {
+  color: var(--color-text-muted);
+}
+
+.vaultStubText {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  max-width: 40ch;
+  margin: 0;
+}
+
+/* --- Footer --- */
+.vaultFooter {
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.vaultFooterTip {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}

@@ -17,7 +17,7 @@
  */
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ShieldAlert, ShieldCheck, Ban, Activity, ArrowRight, BarChart3 } from "lucide-react";
+import { ShieldAlert, ShieldCheck, Ban, Activity, ArrowRight, BarChart3, KeyRound } from "lucide-react";
 import { getDashboardHealthStats, getRecentAccountActivity } from "@/lib/dashboardStats";
 import "../../styles/superAdminDashboard.css";
 
@@ -27,6 +27,12 @@ export const metadata: Metadata = {
 };
 
 const QUICK_ACTIONS = [
+  {
+    href: "/superAdmin/vault",
+    label: "Security Vault",
+    description: "Session slug and emergency backup credentials",
+    icon: KeyRound,
+  },
   {
     href: "/superAdmin/security-logs",
     label: "Security Logs",

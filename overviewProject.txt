@@ -470,8 +470,18 @@ block revenue-generating pages from shipping first)
               (validateSlugActive), owned by the requesting user, and
               role-matched to the route, before allowing
               /superAdmin/vault/[slug] or /admin/vault/[slug] through.
-       Still not started: task-32 (vault page UI), task-33
-       (Gatekeeper/Emergency Actions backend + shared viewer page).
+       [DONE] task-32 — Vault page UI (Sections 6.1/6.2):
+              app/superAdmin/vault/page.tsx + app/admin/vault/page.tsx
+              (resolve caller's active session, redirect to session-
+              scoped URL) and app/superAdmin/vault/[slug]/page.tsx +
+              app/admin/vault/[slug]/page.tsx (server-fetch session,
+              render shared components/vault/VaultPage.tsx). Section
+              1 (slug display + copy) and Section 2 (generate →
+              display once → client-side SHA-256 via lib/clientHash.ts
+              → confirm/store) are live; Section 3 (Emergency Actions)
+              is a stub pending task-33. Linked from both dashboards.
+       Still not started: task-33 (Gatekeeper/Emergency Actions
+       backend + shared viewer page).
 [~] 7. gatekeeper_specification.md — IN PROGRESS (corrected here
        2026-09-06 — this item previously said middleware.ts wasn't
        wired yet; it now is). Built: DeviceBan table, lib/gatekeeper.ts
