@@ -458,8 +458,19 @@ block revenue-generating pages from shipping first)
               to lib/vaultHelpers.ts) and logs vault_slug_generated/
               _reused; logout route expires all active AdminSession
               rows for the caller and logs vault_slug_expired.
-       Still not started: task-30 (vault API routes), task-31
-       (middleware slug validation), task-32 (vault page UI), task-33
+       [DONE] task-30 — vault API routes (GET /api/vault/slug/validate,
+              POST /api/vault/credentials/generate, POST
+              /api/vault/credentials/store). Corrected here 2026-09-07:
+              this item previously read "not started," which was
+              stale — Layer-3 check confirms all three route files
+              exist on disk and are wired to lib/vaultHelpers.ts.
+       [DONE] task-31 — middleware.ts vault slug validation (Section
+              7.1), evaluated ahead of the generic role-based routing
+              block. Confirms the AdminSession is active/unexpired
+              (validateSlugActive), owned by the requesting user, and
+              role-matched to the route, before allowing
+              /superAdmin/vault/[slug] or /admin/vault/[slug] through.
+       Still not started: task-32 (vault page UI), task-33
        (Gatekeeper/Emergency Actions backend + shared viewer page).
 [~] 7. gatekeeper_specification.md — IN PROGRESS (corrected here
        2026-09-06 — this item previously said middleware.ts wasn't

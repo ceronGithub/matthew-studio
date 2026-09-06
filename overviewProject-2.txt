@@ -451,3 +451,26 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   lib/vaultHelpers.ts:18 instead of :21 (line shift from the new
   export, not a new error). eslint clean on all 3 touched files.
   Checked off task-29 in docs/taskPlan.md.
+
+[2026-09-07] Reconciled Section 5C's stale task-30 status (was marked
+  "not started" despite all three vault API route files already
+  existing on disk and wired -- corrected to [DONE] after a Layer-3
+  check). Built task-31: middleware.ts vault slug validation
+  (vault_specification.md Section 7.1) -- added a vault-route branch,
+  evaluated ahead of the existing generic /buyer, /superAdmin, /admin
+  role checks, that validates any /superAdmin/vault/[slug] or
+  /admin/vault/[slug] request against lib/vaultHelpers.ts's
+  validateSlugActive (active + unexpired), an ownership check
+  (session.userId must match the authenticated user, closing an IDOR
+  gap not spelled out in the spec's literal snippet), and a role
+  match (with the existing superAdmin-can-reach-admin-tooling
+  exception). Failed checks redirect to /auth/login via the existing
+  redirectToLogin helper. eslint clean on middleware.ts. npx tsc
+  --noEmit could not be fully verified in this sandbox -- npx prisma
+  generate is blocked by the binaries.prisma.sh network restriction
+  (same pre-existing environment limitation noted in prior entries),
+  so @prisma/client has no generated types; middleware.ts does not
+  appear among the reported errors, and the AdminSession field names
+  used (userId, role) were confirmed directly against
+  prisma/schema.prisma. Run npx prisma generate && npx tsc --noEmit
+  locally before deploying. Checked off task-31 in docs/taskPlan.md.

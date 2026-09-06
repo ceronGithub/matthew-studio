@@ -27,6 +27,19 @@
  * Also issues the CSRF double-submit cookie (Rule 32.2) for every
  * matched request that doesn't already have one, so it's in place
  * before any auth form or Sign Out call ever submits.
+ *
+ * Vault Slug Validation (vault_specification.md Section 7.1, task-31)
+ * runs ahead of the generic role-based routing block below: any
+ * request under /superAdmin/vault/[slug] or /admin/vault/[slug] must
+ * resolve to an AdminSession row that is (a) still active and
+ * unexpired, per lib/vaultHelpers.ts's validateSlugActive, (b) owned
+ * by the currently authenticated user — not just role-matched, since
+ * two admins could otherwise guess/swap each other's session id in
+ * the URL (Rule 6's ownership-vs-authentication distinction), and
+ * (c) tagged with a role that matches the route's role segment. A
+ * super-admin's slug is honored on /admin/vault (Section 12.3: super-
+ * admin can reach admin tooling), but an admin's slug is never
+ * honored on /superAdmin/vault.
  */
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
@@ -35,6 +48,13 @@ import { CSRF_COOKIE_NAME, generateCsrfToken } from "@/lib/csrf";
 import { getDashboardPathForRole } from "@/lib/roleRouting";
 import { generateDeviceFingerprint } from "@/lib/deviceFingerprint";
 import { checkDeviceBan } from "@/lib/gatekeeper";
+import { validateSlugActive } from "@/lib/vaultHelpers";
+
+// Matches /superAdmin/vault/<slug> or /admin/vault/<slug> and captures
+// the route's role segment plus the AdminSession id carried in the
+// URL. Vault pages (task-32) are session-scoped per Rule 47.2 — the
+// slug segment IS the AdminSession row's id, not the raw slug string.
+const VAULT_ROUTE_PATTERN = /^\/(superAdmin|admin)\/vault\/([^/]+)$/;
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -76,7 +96,35 @@ export async function middleware(request: NextRequest) {
 
   let response: NextResponse;
 
-  if (pathname.startsWith("/buyer") && role !== "buyer") {
+  // --- Vault Slug Validation: ahead of the generic role-based routing
+  // below, since a request can pass the plain "/admin/*" or
+  // "/superAdmin/*" role check yet still carry an expired, foreign, or
+  // mismatched-role AdminSession slug in the URL. ---
+  const vaultMatch = pathname.match(VAULT_ROUTE_PATTERN);
+  if (vaultMatch) {
+    const [, vaultRouteRole, vaultSessionId] = vaultMatch;
+    const session = accessToken ? await validateSlugActive(vaultSessionId) : null;
+
+    // Ownership check: the slug must belong to the signed-in user —
+    // never just role-matched, or one admin could open another
+    // admin's vault by swapping the session id in the URL.
+    const isOwnSession = session !== null && session.userId === data.user?.id;
+
+    // Role check: a superAdmin's slug is honored on /admin/vault
+    // (Section 12.3 — superAdmin can reach admin tooling), but an
+    // admin's slug is never honored on /superAdmin/vault.
+    const isRoleAllowed =
+      session !== null &&
+      (session.role === vaultRouteRole || (vaultRouteRole === "admin" && session.role === "superAdmin"));
+
+    if (!role || !session || !isOwnSession || !isRoleAllowed) {
+      response = redirectToLogin(request, pathname);
+    } else {
+      const forwardedHeaders = new Headers(request.headers);
+      forwardedHeaders.set("x-pathname", pathname);
+      response = NextResponse.next({ request: { headers: forwardedHeaders } });
+    }
+  } else if (pathname.startsWith("/buyer") && role !== "buyer") {
     response = redirectToLogin(request, pathname);
   } else if (pathname.startsWith("/superAdmin") && role !== "superAdmin") {
     response = redirectToLogin(request, pathname);

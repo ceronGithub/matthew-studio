@@ -47,7 +47,7 @@ see Section 5C / 8 in that file.
       slug (5.1/5.2) — built 2026-09-07, see
       docs/tasks/task-29-wire-login-logout-slug.md
 - [ ] task-30 — Vault API routes: slug validate, credentials generate, credentials store (5.3/5.4/5.5)
-- [ ] task-31 — Middleware slug validation (7.1), ahead of role-based routing
+- [x] task-31 — Middleware slug validation (7.1), ahead of role-based routing
 - [ ] task-32 — Vault page UI: `/superAdmin/vault/[slug]` + `/admin/vault/[slug]` (6.1/6.2)
 - [ ] task-33 — Gatekeeper & Emergency Actions backend (12.2-12.7) — shared
       deliverable with item 7 below; do this once, wire from both specs
