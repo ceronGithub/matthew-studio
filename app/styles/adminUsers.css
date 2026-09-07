@@ -1,0 +1,557 @@
+/**
+ * FILE: app/styles/adminUsers.css
+ * PURPOSE:
+ * Styles for app/admin/users/page.tsx and
+ * components/admin/AdminUsersList.tsx (task-87). References the
+ * design tokens in app/globals.css — never hardcoded colors or
+ * spacing. Responsive breakpoints live in app/styles/mediaQueries.css,
+ * not inline here. Table layout mirrors app/styles/adminOrders.css
+ * (task-80) for visual consistency across admin list pages.
+ *
+ * Also carries its own copy of the shared ConfirmationModal's classes
+ * (.confirmationModal*), same per-page-duplication pattern as
+ * adminOrderDetail.css / buyerOrderDetail.css / buyerPaymentMethods.css
+ * / buyerSubscription.css, plus the extra classes for this page's
+ * compose-email modal built on top of that same dialog shell.
+ */
+
+.adminUsersPage {
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.adminUsersHeader {
+  margin-bottom: var(--space-xl);
+}
+
+.adminUsersEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.adminUsersTitle {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-top: var(--space-xs);
+}
+
+.adminUsersSubtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+  max-width: 70ch;
+}
+
+/* Filter + export toolbar */
+.adminUsersToolbar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.adminUsersFilters {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.adminUsersFilterSelect,
+.adminUsersFilterInput {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  touch-action: manipulation;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+.adminUsersFilterSelect:hover,
+.adminUsersFilterSelect:focus-visible,
+.adminUsersFilterInput:hover,
+.adminUsersFilterInput:focus-visible {
+  border-color: var(--color-border-hover);
+  background-color: var(--color-surface-hover);
+}
+
+.adminUsersSearchInput {
+  flex: 1 1 220px;
+}
+
+.adminUsersClearFiltersButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: color var(--transition-fast);
+}
+.adminUsersClearFiltersButton:hover,
+.adminUsersClearFiltersButton:focus-visible {
+  color: var(--color-text-primary);
+}
+
+.adminUsersExportButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.adminUsersExportButton:hover,
+.adminUsersExportButton:focus-visible {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-accent);
+}
+.adminUsersExportButton:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Bulk action bar — appears only when 1+ rows are selected */
+.adminUsersBulkBar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-lg);
+  margin-bottom: var(--space-md);
+  border: 1px solid var(--color-accent);
+  border-radius: 12px;
+  background-color: var(--color-surface-active);
+}
+
+.adminUsersBulkCount {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.adminUsersBulkApplyButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--color-error);
+  border-radius: 8px;
+  background-color: var(--color-error);
+  color: var(--color-text-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.adminUsersBulkApplyButton:hover,
+.adminUsersBulkApplyButton:focus-visible {
+  background-color: #dc2626;
+}
+
+/* Reactivate is the non-destructive half of the pair — accent, not error, styling */
+.adminUsersBulkApplyButton--secondary {
+  border: 1px solid var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+.adminUsersBulkApplyButton--secondary:hover,
+.adminUsersBulkApplyButton--secondary:focus-visible {
+  background-color: var(--color-accent-hover);
+}
+
+.adminUsersBulkClearButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-md);
+  border: none;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: color var(--transition-fast);
+}
+.adminUsersBulkClearButton:hover,
+.adminUsersBulkClearButton:focus-visible {
+  color: var(--color-text-primary);
+}
+
+/* Table */
+.adminUsersTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.adminUsersTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.adminUsersTable thead tr {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.adminUsersTable th {
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.adminUsersTable td {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.adminUsersTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.adminUsersTable tbody tr:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.adminUsersTableRow--selected {
+  background-color: var(--color-surface-active);
+}
+
+.adminUsersCheckboxCell {
+  width: 2.5rem;
+  text-align: center;
+}
+
+.adminUsersEmailCell {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.adminUsersStatusBadge {
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.adminUsersActionsCell {
+  text-align: right;
+}
+
+.adminUsersRowActions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-xs);
+}
+
+.adminUsersActionLink,
+.adminUsersActionButton {
+  border: none;
+  background: none;
+  color: var(--color-accent);
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  min-height: 44px;
+  padding: 0 var(--space-xs);
+  display: inline-flex;
+  align-items: center;
+}
+.adminUsersActionLink:hover,
+.adminUsersActionLink:focus-visible,
+.adminUsersActionButton:hover,
+.adminUsersActionButton:focus-visible {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+/* Loading skeleton */
+.adminUsersGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.adminUsersRow--skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.adminUsersSkeletonLine {
+  height: 1rem;
+  border-radius: 4px;
+}
+.adminUsersSkeletonLine--short {
+  width: 40%;
+}
+
+/* Empty / error state */
+.adminUsersEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.adminUsersRetryButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.adminUsersRetryButton:hover,
+.adminUsersRetryButton:focus-visible {
+  background-color: var(--color-surface-hover);
+}
+
+/* Footer: total count + pagination */
+.adminUsersFooter {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.adminUsersTotalCount {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.adminUsersPagination {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.adminUsersPageButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.adminUsersPageButton:hover:not(:disabled),
+.adminUsersPageButton:focus-visible:not(:disabled) {
+  background-color: var(--color-surface-hover);
+}
+.adminUsersPageButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.adminUsersPageLabel {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+/* ---------- Confirmation Modal (Rule 34.4 shared component) ---------- */
+
+.confirmationModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  z-index: var(--z-modal-backdrop);
+}
+
+.confirmationModalDialog {
+  width: 100%;
+  max-width: 420px;
+  padding: var(--space-lg) var(--space-xl);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-bg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  z-index: var(--z-modal);
+  transition: transform var(--transition-slow), opacity var(--transition-slow);
+}
+
+.confirmationModalTitle {
+  font-size: 1.1rem;
+  color: var(--color-text-primary);
+}
+
+.confirmationModalDescription {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+}
+
+.confirmationModalActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.confirmationModalCancelButton {
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.confirmationModalCancelButton:hover,
+.confirmationModalCancelButton:focus-visible,
+.confirmationModalCancelButton:active {
+  background-color: var(--color-surface-hover);
+}
+
+.confirmationModalConfirmButton {
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-error);
+  background-color: var(--color-error);
+  color: var(--color-text-primary);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.confirmationModalConfirmButton:hover,
+.confirmationModalConfirmButton:focus-visible,
+.confirmationModalConfirmButton:active {
+  background-color: #dc2626;
+}
+
+.confirmationModalCancelButton:disabled,
+.confirmationModalConfirmButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---------- Compose-email modal (built on the dialog shell above) ---------- */
+
+.adminUsersEmailModalDialog {
+  max-width: 480px;
+}
+
+.adminUsersEmailForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.adminUsersEmailInput {
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  touch-action: manipulation;
+  transition: border-color var(--transition-fast);
+}
+.adminUsersEmailInput:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.adminUsersEmailTextarea {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  line-height: 1.65;
+  resize: vertical;
+  touch-action: manipulation;
+  transition: border-color var(--transition-fast);
+}
+.adminUsersEmailTextarea:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.adminUsersEmailSendButton {
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  font-weight: 600;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.adminUsersEmailSendButton:hover,
+.adminUsersEmailSendButton:focus-visible,
+.adminUsersEmailSendButton:active {
+  background-color: var(--color-accent-hover);
+}
+.adminUsersEmailSendButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
