@@ -422,8 +422,15 @@ means testing against fixtures instead of the real flow)
               status/refund/notes, buyer email, t-shirt production
               tracking). [DONE] task-74 (schema: Order.statusHistory/
               internalNotes/refundReason/refundedAt) — see
-              docs/tasks/task-74-orders-schema.md. task-75 through
-              task-82 not started.
+              docs/tasks/task-74-orders-schema.md. [DONE] task-75
+              (GET /api/admin/orders — list, filter, pagination, CSV
+              export) — see docs/tasks/task-75-api-admin-orders-list.md.
+              [DONE] task-76 (GET /api/admin/orders/[orderId] — full
+              detail: items joined to Product for category, buyer
+              info, payment, timeline, notes, refund/shipping/
+              production-stage) — see
+              docs/tasks/task-76-api-admin-order-detail.md. task-77
+              through task-82 not started.
        Rest of this spec (orders, users, analytics, security logs,
        vault, profile — Sections 3.3-3.8) not started — still [~]
        overall for that reason, but the Product CRUD + Dashboard

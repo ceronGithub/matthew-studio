@@ -163,12 +163,20 @@ see Section 5C / 8 in that file.
         refundReason / refundedAt fields. Built 2026-09-07, see
         docs/tasks/task-74-orders-schema.md. Run
         `npx prisma db push && npx prisma generate` before task-75.
-  - [ ] task-75 (API) — GET /api/admin/orders — list, filter
-        (status/date range/search by ID or email), pagination (25/page),
-        CSV export (Section 3.3.1)
-  - [ ] task-76 (API) — GET /api/admin/orders/[orderId] — full detail
-        (buyer info via Supabase Auth, items, payment, timeline
-        derived from statusHistory) (Section 3.3.2 #1-5)
+  - [DONE] task-75 (API) — GET /api/admin/orders — list, filter
+        (status/date range/search by ID or guest email), pagination
+        (25/page), CSV export (format=csv, capped 5000 rows) (Section
+        3.3.1). Built 2026-09-07, see
+        docs/tasks/task-75-api-admin-orders-list.md. Note: registered-
+        buyer email search isn't feasible server-side without scanning
+        all Supabase Auth users, so search is limited to order ID +
+        guest email — flagged in the route's own comments.
+  - [DONE] task-76 (API) — GET /api/admin/orders/[orderId] — full detail
+        (buyer info via Supabase Auth, items joined to Product for
+        category, payment, timeline derived from statusHistory,
+        internal notes, refund/shipping/production-stage fields)
+        (Section 3.3.2 #1-5). Built 2026-09-07, see
+        docs/tasks/task-76-api-admin-order-detail.md.
   - [ ] task-77 (API) — PATCH .../status, POST .../refund,
         POST .../notes — status update (+SecurityLog+notification),
         refund (+notification), internal note — grouped as one task,
