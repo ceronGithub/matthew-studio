@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-93 — admin analytics UI page (task-65's split: task-92 API is DONE, this is the remaining UI half)
+**NEXT UP:** task-42 — Admin Security Logs page (Section 3.6, reuses Rule 38.9 pattern already designed for super-admin)
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -286,7 +286,7 @@ see Section 5C / 8 in that file.
         info, order history, activity trail, notes, action buttons
         wired to task-86 (Section 3.4.2). Built 2026-09-08, see
         docs/tasks/task-88-ui-admin-user-detail.md.
-- [~] task-65 — Analytics (Section 3.5) — depended on item 11's traffic
+- [DONE] task-65 — Analytics (Section 3.5) — depended on item 11's traffic
       table (already renumbered from task-41 per prior NOTES entry);
       that table is now DONE (task-89/90/91) so this item unblocked
       and was split into task-92/task-93 per Rule 49 Step 4 (spans
@@ -299,8 +299,12 @@ see Section 5C / 8 in that file.
         Rule 49.1 (Layer-3 confirmed live and non-stub via the route's
         own header comment, which names task-92/task-93 explicitly).
         See docs/tasks/task-92-api-admin-analytics.md (back-filled).
-  - [ ] task-93 (UI) — `app/admin/analytics/page.tsx`, reading from
-        task-92's route. Not yet built — **this is next up**.
+  - [DONE] task-93 (UI) — `app/admin/analytics/page.tsx` +
+        `components/admin/AdminAnalytics.tsx` +
+        `lib/hooks/useAdminAnalytics.ts`, reading from task-92's
+        route. Built 2026-09-08 — did not meet the micro-task split
+        threshold (single file set, single UI layer, single role), so
+        built as one task per Rule 49.1.
 - [ ] task-42 — Admin Security Logs page (Section 3.6) — reuses Rule 38.9
       pattern already designed for super-admin; confirm if admin gets a
       scoped view or the same page with permission check

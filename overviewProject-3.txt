@@ -201,3 +201,20 @@ file holds change-log entries only.
   it listed separately as not-started. Section 5C item 4 and
   docs/taskPlan.md updated in place same turn per Rule 16.1/49.1. No
   code files changed -- documentation/tracking reconciliation only.
+
+[2026-09-08] Built task-93 -- Admin Analytics UI page (task-65's
+  remaining half, admin_account_specification.md Section 3.5).
+  New files: lib/hooks/useAdminAnalytics.ts (fetch/filter hook for
+  GET /api/admin/analytics), components/admin/AdminAnalytics.tsx
+  (filters, time-series line/bar chart, category revenue pie chart,
+  orders-by-category + top-10-products ranked lists, buyer metrics
+  cards -- handles loading/empty/error states per Rule 25),
+  app/admin/analytics/page.tsx (thin Server Component wrapper, same
+  split as app/admin/orders/page.tsx), app/styles/adminAnalytics.css.
+  No new schema/API -- task-92 already covers that layer. `npx tsc
+  --noEmit` run clean against the new files (pre-existing unrelated
+  errors in the repo are all from prisma generate being blocked by
+  this sandbox's network allowlist, not from this change). Task-93
+  did not meet Rule 49 Step 4's micro-task split threshold (single
+  file set, single UI layer, single role) so it was built as one
+  task rather than fragmented further.

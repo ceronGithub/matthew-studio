@@ -1,0 +1,234 @@
+/**
+ * FILE: app/styles/adminAnalytics.css
+ * PURPOSE:
+ * Styles specific to app/admin/analytics/page.tsx (task-93) that
+ * app/styles/analytics.css (task-91, shared panel/chart/ranked-list
+ * shell) doesn't already cover: sticky filters, buyer-metric cards,
+ * the category pie chart, and the line-chart variant. References
+ * app/globals.css tokens only — responsive breakpoints live in
+ * app/styles/mediaQueries.css, never inline here.
+ */
+
+/* --- Sticky filters (Section 3.5.4) --- */
+.adminAnalyticsFilters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  position: sticky;
+  top: var(--space-md);
+  z-index: var(--z-sticky);
+}
+
+.adminAnalyticsPresetGroup,
+.adminAnalyticsCategoryGroup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.adminAnalyticsPresetButton,
+.adminAnalyticsCategoryChip {
+  padding: var(--space-xs) var(--space-sm);
+  min-height: 44px;
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.adminAnalyticsPresetButton:hover,
+.adminAnalyticsPresetButton:focus,
+.adminAnalyticsCategoryChip:hover,
+.adminAnalyticsCategoryChip:focus {
+  border-color: var(--color-border-hover);
+  color: var(--color-text-primary);
+}
+
+.adminAnalyticsPresetButtonActive,
+.adminAnalyticsCategoryChipActive {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #09090b;
+}
+
+.adminAnalyticsCustomDaysInput {
+  width: 5rem;
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-sm);
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+/* --- Buyer metrics cards (Section 3.5.3) --- */
+.adminAnalyticsMetricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-lg);
+}
+
+.adminAnalyticsMetricCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.adminAnalyticsMetricValue {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+}
+
+.adminAnalyticsMetricLabel {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+/* --- Time-series panel toolbar (metric select + chart-type toggle) --- */
+.adminAnalyticsPanelToolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.adminAnalyticsPanelControls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.adminAnalyticsMetricSelect {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-sm);
+  font-size: 0.85rem;
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.adminAnalyticsChartTypeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.adminAnalyticsChartTypeButton:hover,
+.adminAnalyticsChartTypeButton:focus {
+  color: var(--color-text-primary);
+  border-color: var(--color-border-hover);
+}
+
+/* --- Line chart variant (task-93 adds this; task-91 only had bars) --- */
+.adminAnalyticsLineChart {
+  width: 100%;
+  height: 160px;
+}
+
+/* --- Category revenue pie chart --- */
+.adminAnalyticsPieRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.adminAnalyticsPie {
+  flex: 0 0 auto;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+}
+
+.adminAnalyticsPieLegend {
+  flex: 1 1 160px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.adminAnalyticsPieLegendRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.8rem;
+}
+
+.adminAnalyticsPieSwatch {
+  flex: 0 0 auto;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.adminAnalyticsPieLegendLabel {
+  flex: 1 1 auto;
+  color: var(--color-text-primary);
+}
+
+.adminAnalyticsPieLegendValue {
+  flex: 0 0 auto;
+  font-family: var(--font-geist-mono);
+  color: var(--color-text-secondary);
+}
+
+/* --- Loading skeleton --- */
+.adminAnalyticsSkeletonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-lg);
+}
+
+.adminAnalyticsSkeletonBlock {
+  height: 100px;
+  border-radius: 12px;
+}
+
+/* --- Error retry button --- */
+.adminAnalyticsRetryButton {
+  align-self: flex-start;
+  padding: var(--space-xs) var(--space-md);
+  min-height: 44px;
+  font-size: 0.85rem;
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.adminAnalyticsRetryButton:hover,
+.adminAnalyticsRetryButton:focus {
+  border-color: var(--color-border-hover);
+}
