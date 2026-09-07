@@ -146,10 +146,14 @@ see Section 5C / 8 in that file.
 
 ## PHASE 3 (remainder) — ADMIN & SUPER-ADMIN OVERSIGHT
 
-### [~] 4. admin_account_specification.md — Product CRUD done; rest not started
-- [ ] task-71 — Admin dashboard (Section 3.1) — renumbered 2026-09-07 from
+### [~] 4. admin_account_specification.md — Product CRUD + Dashboard done; rest not started
+- [DONE] task-71 — Admin dashboard (Section 3.1) — renumbered 2026-09-07 from
       task-38, which collided with the (already DONE) buyer-recovery
-      Telegram schema task of the same number; see NOTES.
+      Telegram schema task of the same number; see NOTES. Built
+      2026-09-07: Quick Stats, Alerts (pending orders only —
+      inventory/promotions alerts not applicable, no such models
+      exist), Recent Orders + Recent Products, Quick Actions. See
+      overviewProject-2.txt's 2026-09-07 CHANGE LOG entry.
 - [ ] task-72 — Orders management (Section 3.3) — renumbered 2026-09-07
       from task-39, same Telegram-split collision; see NOTES.
 - [ ] task-73 — Users management (Section 3.4) — renumbered 2026-09-07

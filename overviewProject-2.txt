@@ -830,3 +830,30 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   sub-tasks (task-28 through task-33 for item 6; task-34 through
   task-70 for item 8) were already all [DONE], the section header
   itself just hadn't been synced. No code changed.
+
+[2026-09-07] Task 71 complete: built the real admin dashboard home
+  (admin_account_specification.md Section 3.1), replacing the
+  "coming soon" placeholder at app/admin/dashboard/page.tsx. Added
+  lib/adminDashboardStats.ts (getAdminQuickStats, getRecentOrders,
+  getRecentProducts, getAdminDashboardAlerts -- all fail-soft) and
+  app/styles/adminDashboard.css. Renders Quick Stats (total
+  products, orders/revenue last 7 days, pending orders, average
+  order value), an Alerts panel (pending orders only -- no
+  inventory or promotions model exists in this schema, so those two
+  spec alerts are structurally skipped rather than faked), Recent
+  Orders (last 10, customer resolved via Supabase Auth lookup or
+  guestEmail, same dedup pattern as the admin support tickets
+  route) and Recently Modified Products (last 5), and Quick Actions
+  linking to the areas that are actually live (products, support,
+  vault) plus greyed-out entries for users/analytics, which are not
+  built yet. Section 5C item 4 updated in place to add task-71
+  DONE and shrink the "not started" list to Sections 3.3-3.8 only.
+  Note: could not run `npx prisma generate` in this sandbox (network
+  egress to binaries.prisma.sh is blocked here), so `npx tsc
+  --noEmit` could not be fully verified end-to-end -- the resulting
+  errors were the same "implicit any / no exported member" pattern
+  already present in sibling files (buyer/orders, support/tickets,
+  retry-payment, etc.) that also depend on the generated Prisma
+  client, not new errors introduced by this task. Developer should
+  run `npx prisma generate && npx tsc --noEmit` locally before
+  merging to confirm zero errors.
