@@ -1,16 +1,22 @@
 /**
  * FILE: app/auth/reset-password/page.tsx
- * ROLE: Public — served at "/auth/reset-password". This is the link
- * destination in the password-reset email sent from
- * /api/auth/forgot-password.
+ * ROLE: Public — served at "/auth/reset-password?token=...". This is
+ * the link destination in the password-reset email/step sent from
+ * the /auth/forgot-password wizard (task-69).
  *
  * PURPOSE:
  * Same glass-card-over-slideshow shell as /auth/login. Renders
- * ResetPasswordForm, which verifies the Supabase recovery session
- * from the email link and collects the new password.
+ * ResetPasswordForm (task-70), which consumes the `?token=` query
+ * param directly against /api/auth/forgot-password/reset — no
+ * Supabase recovery session involved anymore.
+ *
+ * Wrapped in <Suspense> because ResetPasswordForm calls
+ * useSearchParams(), which Next.js requires to sit below a Suspense
+ * boundary even on a fully "use client" page.
  */
 "use client";
 
+import { Suspense } from "react";
 import { useToast } from "@/components/shared/useToast";
 import ToastStack from "@/components/shared/ToastStack";
 import AuthBackgroundSlideshow from "@/components/auth/AuthBackgroundSlideshow";
@@ -26,7 +32,9 @@ export default function ResetPasswordPage() {
 
       <div className="authGlassCard">
         <h1 className="authPageHeading">Reset your password</h1>
-        <ResetPasswordForm showToast={showToast} />
+        <Suspense fallback={<p className="authPageDescription">Loading…</p>}>
+          <ResetPasswordForm showToast={showToast} />
+        </Suspense>
       </div>
     </>
   );

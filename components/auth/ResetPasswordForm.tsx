@@ -3,22 +3,22 @@
  * ROLE: Auth — form rendered on /auth/reset-password.
  *
  * PURPOSE:
- * Sets a new password for the account that requested a reset. Supabase's
- * browser SDK detects the recovery token in the URL fragment on page
- * load (detectSessionInUrl, on by default) and establishes a temporary
- * session for exactly this purpose — so the actual update goes straight
- * through supabaseBrowserClient.auth.updateUser(), not our own API.
- * A background call to /api/auth/reset-password only records the
- * event to SecurityLog; it never gates the password change itself.
+ * Sets a new password using the single-use `resetToken` minted by
+ * /api/auth/forgot-password/verify (task-67) and consumed by
+ * /api/auth/forgot-password/reset (task-68). Replaces the legacy
+ * Supabase-session-based version — the token now arrives as a
+ * `?token=` query param on the link sent by the new forgot-password
+ * wizard (task-69), not as a URL fragment Supabase's SDK auto-detects.
+ * Task-70 (this file) closes buyer_password_recovery_specification.md
+ * end to end (Section 8 of docs/taskPlan.md).
  */
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
+import { useState, type FormEvent } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import PasswordStrengthMeter from "./PasswordStrengthMeter";
 import { PASSWORD_REQUIREMENTS_HINT } from "@/lib/authData";
-import { supabaseBrowserClient } from "@/lib/supabase/browserClient";
 import { getCsrfHeader } from "@/lib/csrf";
 import type { ToastType } from "@/components/shared/useToast";
 
@@ -37,25 +37,18 @@ function isPasswordStrongEnough(password: string): boolean {
 
 export default function ResetPasswordForm({ showToast }: ResetPasswordFormProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const resetToken = searchParams.get("token");
 
-  // "checking" until we confirm Supabase actually attached a recovery
-  // session from the link — "invalid" means the link is missing, used,
-  // or expired, and the form is replaced with a message instead.
-  const [sessionState, setSessionState] = useState<"checking" | "valid" | "invalid">("checking");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  useEffect(() => {
-    // Give the SDK a moment to parse the URL fragment and set the
-    // session before checking — it runs synchronously on client init,
-    // but getSession() still confirms it landed correctly.
-    supabaseBrowserClient.auth.getSession().then(({ data }) => {
-      setSessionState(data.session ? "valid" : "invalid");
-    });
-  }, []);
+  // Flips true only after the server itself rejects the token
+  // (invalid/expired/already-used) — a missing token in the URL is
+  // treated the same way, without a round trip.
+  const [tokenRejected, setTokenRejected] = useState(false);
 
   function validate(): boolean {
     const errors: Record<string, string> = {};
@@ -67,27 +60,35 @@ export default function ResetPasswordForm({ showToast }: ResetPasswordFormProps)
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!validate() || isSubmitting) return;
+    if (!resetToken || !validate() || isSubmitting) return;
 
     setIsSubmitting(true);
     try {
-      const { data, error } = await supabaseBrowserClient.auth.updateUser({ password });
+      const response = await fetch("/api/auth/forgot-password/reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...getCsrfHeader() },
+        body: JSON.stringify({ resetToken, newPassword: password }),
+      });
+      const result = await response.json();
 
-      if (error) {
-        showToast(error.message || "Could not reset your password. Please request a new link.", "error");
+      if (!result.success) {
+        // The reset route returns one generic message for any
+        // invalid/expired/already-used token (Rule 32.4's spirit —
+        // no need to distinguish which, per task-68's own note).
+        // Swap to the "request a new link" state instead of just
+        // toasting, since retrying the same submit can never work.
+        setTokenRejected(true);
+        showToast(result.message || "This reset link is invalid or has expired.", "error");
         return;
       }
 
-      // Fire-and-forget — this only records the event for security
-      // visibility, it never blocks the redirect below.
-      fetch("/api/auth/reset-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", ...getCsrfHeader() },
-        body: JSON.stringify({ email: data.user?.email ?? "" }),
-      }).catch(() => {});
-
-      showToast("Password updated. Signing you in…", "success");
-      router.push("/buyer/dashboard");
+      // Rule 44 already terminated any live session server-side
+      // (task-68) — this flow never had one to begin with in the
+      // typical case (buyer arrived via an emailed/Telegrammed link,
+      // not a logged-in tab), so send them to log in fresh rather
+      // than assuming a dashboard redirect.
+      showToast("Password updated. Please log in with your new password.", "success");
+      router.push("/auth/login");
     } catch {
       showToast("Couldn't reach the server. Check your connection and try again.", "error");
     } finally {
@@ -95,15 +96,7 @@ export default function ResetPasswordForm({ showToast }: ResetPasswordFormProps)
     }
   }
 
-  if (sessionState === "checking") {
-    return (
-      <div className="authForm">
-        <p className="authPageDescription">Verifying your reset link…</p>
-      </div>
-    );
-  }
-
-  if (sessionState === "invalid") {
+  if (!resetToken || tokenRejected) {
     return (
       <div className="authForm">
         <p className="authPageDescription">
@@ -153,7 +146,9 @@ export default function ResetPasswordForm({ showToast }: ResetPasswordFormProps)
           onChange={(event) => setConfirmPassword(event.target.value)}
           placeholder="Re-enter new password"
         />
-        {fieldErrors.confirmPassword && <span className="authFieldError">{fieldErrors.confirmPassword}</span>}
+        {fieldErrors.confirmPassword && (
+          <span className="authFieldError">{fieldErrors.confirmPassword}</span>
+        )}
       </div>
 
       <button type="submit" className="authSubmitButton" disabled={isSubmitting}>
