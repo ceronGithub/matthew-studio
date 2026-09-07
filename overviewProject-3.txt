@@ -26,3 +26,28 @@ file holds change-log entries only.
   in a real dev environment before task-84. taskPlan.md and
   overviewProject.txt's Section 5C updated in place same turn per Rule
   16.1.
+
+[2026-09-07] task-84 (API) -- built GET /api/admin/users (Section 3.4.1):
+  merges Supabase Auth buyer accounts (Admin API listUsers, paged up to
+  10,000 users, filtered to role "buyer" -- admins/super-admins are
+  Supabase Auth users too) with per-buyer Order aggregates (count +
+  lifetime value via one groupBy, never per-row queries) and last-login
+  (most recent SecurityLog login_success row per email, one batched
+  query). Status (Active/Inactive) derived from Supabase's own
+  banned_until rather than a new flag, matching task-83's decision not
+  to duplicate that as local schema. Status/date-range/search filters and
+  sort/pagination run in memory against the fetched buyer list, since
+  Supabase's Admin API has no server-side full-text filter (same "list
+  and match" precedent as lib/getUserByEmail.ts) -- documented as an
+  acceptable-at-this-scale limitation in the route's own header comment.
+  CSV export at format=csv, capped 5000 rows, same pattern as task-75's
+  orders CSV. Dropped the "note presence" column mentioned when the
+  task-73 split was planned -- not actually in the spec's column list
+  (Section 3.4.1), left out per Rule 2 rather than adding an unrequested
+  feature. New file: app/api/admin/users/route.ts. `npx tsc --noEmit`
+  shows 3 new errors, all the same "Prisma client not generated" class as
+  every prior entry (groupBy's _count/_sum untyped without a generated
+  client) -- run `npx prisma generate && npx tsc --noEmit` in a real dev
+  environment to confirm a clean baseline. taskPlan.md and
+  overviewProject.txt's Section 5C updated in place same turn per Rule
+  16.1.

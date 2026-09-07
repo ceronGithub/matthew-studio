@@ -241,11 +241,12 @@ see Section 5C / 8 in that file.
         a buyer-verified one. Built 2026-09-07, see
         docs/tasks/task-83-schema-buyer-admin-meta.md. Run
         `npx prisma db push && npx prisma generate` before task-84.
-  - [ ] task-84 (API) — GET /api/admin/users — list: merges Supabase
+  - [DONE] task-84 (API) — GET /api/admin/users — list: merges Supabase
         Auth users with per-buyer Order aggregates (total orders,
-        lifetime value) and BuyerAdminMeta note presence; filters
+        lifetime value) via one groupBy query; filters
         (status/date range/search), pagination, CSV export
-        (Section 3.4.1)
+        (Section 3.4.1). Built 2026-09-07, see
+        docs/tasks/task-84-api-admin-users-list.md.
   - [ ] task-85 (API) — GET /api/admin/users/[buyerId] — detail:
         account info + last login/IP/city from SecurityLog, 5 most
         recent orders, last 10 AccountActivityLog entries, internal

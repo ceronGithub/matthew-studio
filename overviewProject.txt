@@ -474,8 +474,16 @@ means testing against fixtures instead of the real flow)
               deactivation reuses Supabase's own ban_duration instead
               of a new flag; password-reset reuses BuyerRecovery's
               existing reset-token fields) — see
-              docs/tasks/task-83-schema-buyer-admin-meta.md. task-84
-              through task-88 not started.
+              docs/tasks/task-83-schema-buyer-admin-meta.md. [DONE]
+              task-84 (GET /api/admin/users — list: merges Supabase
+              Auth buyer accounts with Order aggregates via one
+              groupBy query; status/date-range/search filters,
+              pagination, CSV export) — see
+              docs/tasks/task-84-api-admin-users-list.md. Dropped the
+              "note presence" column mentioned when this split was
+              planned — not in the spec's actual column list (Section
+              3.4.1), so left out per Rule 2. task-85 through task-88
+              not started.
        Rest of this spec (orders, users, analytics, security logs,
        vault, profile — Sections 3.3-3.8) not started — still [~]
        overall for that reason, but the Product CRUD + Dashboard
