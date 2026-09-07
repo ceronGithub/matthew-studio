@@ -206,24 +206,3 @@
   color: var(--color-text-muted);
 }
 
-/* --- Analytics stub --- */
-.dashboardAnalyticsStub {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--space-md);
-  padding: var(--space-lg);
-  border: 1px dashed var(--color-border);
-  border-radius: 10px;
-}
-
-.dashboardAnalyticsStubIcon {
-  flex: 0 0 auto;
-  color: var(--color-text-muted);
-}
-
-.dashboardAnalyticsStubText {
-  font-size: 0.9rem;
-  color: var(--color-text-secondary);
-  margin: 0;
-}

@@ -157,3 +157,32 @@ file holds change-log entries only.
   Section 5C updated in place same turn per Rule 16.1. `npx tsc
   --noEmit` could not be run (no node_modules in this environment) --
   run locally before merging.
+
+[2026-09-08] Built task-91 (sitewide_technical_seo_specification.md,
+  Rule 41 anonymized traffic analytics -- super-admin dashboard UI,
+  final task of the task-53 split). New lib/analyticsStats.ts ->
+  getAnalyticsSummary(days = 30): parallel PageViewDaily aggregate/
+  groupBy queries (total views, visits-by-date with zero-view days
+  filled in, top pages, top referrers, device breakdown, top
+  countries), fail-soft to an empty shape on error -- same contract as
+  lib/dashboardStats.ts. New app/superAdmin/analytics/page.tsx: Server
+  Component (Rule 31.1/31.2, no client component or API route needed
+  for this read-only view), plain-CSS bar chart (no new charting
+  dependency added) plus four ranked-list panels sharing one local
+  RankedList helper. New app/styles/analytics.css, tokens-only. Wired
+  an "Analytics" entry into app/superAdmin/dashboard/page.tsx's
+  QUICK_ACTIONS and replaced its stale "Phase 9" Analytics Summary
+  stub with a real link to the new page; removed the now-dead
+  .dashboardAnalyticsStub* rules from app/styles/superAdminDashboard.css.
+  No middleware.ts change needed -- /superAdmin/:path* already covers
+  the new route. task-53 (and item 11's traffic-analytics sub-scope)
+  is now fully closed; item 11 itself stays [~] pending task-50/51/52
+  (sitemap/robots, global error boundaries, idle session timeout). New
+  files: lib/analyticsStats.ts, app/superAdmin/analytics/page.tsx,
+  app/styles/analytics.css, docs/tasks/task-91-ui-analytics-dashboard.md.
+  Modified: app/superAdmin/dashboard/page.tsx,
+  app/styles/superAdminDashboard.css. `npx tsc --noEmit` could not be
+  run (no node_modules in this environment, same constraint as
+  task-84 through task-90) -- run locally before merging.
+  taskPlan.md and overviewProject.txt's Section 5C updated in place
+  same turn per Rule 16.1.

@@ -10,7 +10,9 @@
  *   - Health widget: live counts from SecurityLog/DeviceBan
  *   - Recent Activity: latest AccountActivityLog rows
  *   - Quick Actions: links to the Phase 2 viewer pages
- *   - Analytics summary: stub — real charts land in Phase 9
+ *   - Analytics summary: links out to the real /superAdmin/analytics
+ *     page (task-91) — no longer a stub now that PageViewDaily has
+ *     data flowing into it (task-89/90).
  * Data fetching happens directly in this Server Component (Rule
  * 31.1/31.2) — no client-side fetch, no API route needed for
  * read-only dashboard data.
@@ -50,6 +52,12 @@ const QUICK_ACTIONS = [
     label: "Gatekeeper / Device Bans",
     description: "Review and manually unban flagged devices",
     icon: Ban,
+  },
+  {
+    href: "/superAdmin/analytics",
+    label: "Analytics",
+    description: "Visits over time, top pages, referrers, and devices",
+    icon: BarChart3,
   },
 ];
 
@@ -136,15 +144,19 @@ export default async function SuperAdminDashboardPage() {
         </section>
       </div>
 
-      {/* Analytics summary — stub, real charts arrive in Phase 9 */}
+      {/* Analytics summary — links out to the full dashboard (task-91) */}
       <section aria-label="Analytics summary" className="dashboardPanel">
         <h2 className="dashboardPanelTitle">Analytics Summary</h2>
-        <div className="dashboardAnalyticsStub">
-          <BarChart3 size={24} className="dashboardAnalyticsStubIcon" />
-          <p className="dashboardAnalyticsStubText">
-            Traffic and reporting charts are built in Phase 9 (Analytics &amp; Reporting).
-          </p>
-        </div>
+        <Link href="/superAdmin/analytics" className="dashboardQuickActionLink">
+          <BarChart3 size={18} className="dashboardQuickActionIcon" />
+          <span className="dashboardQuickActionText">
+            <span className="dashboardQuickActionLabel">View full Analytics dashboard</span>
+            <span className="dashboardQuickActionDescription">
+              Visits over time, top pages, referrers, device mix, and countries
+            </span>
+          </span>
+          <ArrowRight size={16} className="dashboardQuickActionArrow" />
+        </Link>
       </section>
     </section>
   );

@@ -316,7 +316,7 @@ see Section 5C / 8 in that file.
 - [ ] task-50 — Sitemap/robots.txt
 - [ ] task-51 — Global 404/error boundaries (Rule 31.10 pattern)
 - [ ] task-52 — Idle session timeout (Rule 32.5) — apply per account layout
-- [~] task-53 — Anonymized traffic analytics (Rule 41) — `PageViewDaily`
+- [DONE] task-53 — Anonymized traffic analytics (Rule 41) — `PageViewDaily`
       table + super-admin Analytics dashboard (feeds task-65 above). Split
       into task-89/90/91 per Rule 49 Step 4 (spans schema + beacon/API +
       UI — same splitting pattern as the task-72→74-82 and task-36→66-70
@@ -332,9 +332,12 @@ see Section 5C / 8 in that file.
         layouts — that's AccountActivityLog/Rule 42's job). Built
         2026-09-08, see
         docs/tasks/task-90-analytics-beacon-write-path.md.
-  - [ ] task-91 — UI: super-admin Analytics dashboard page reading
+  - [DONE] task-91 — UI: super-admin Analytics dashboard page reading
         from the aggregate table only (total visits over time, top
-        pages, top referrers, device breakdown, country list)
+        pages, top referrers, device breakdown, country list). Built
+        2026-09-08, see docs/tasks/task-91-ui-analytics-dashboard.md.
+        task-53 (and its parent item 11 sub-scope) is now fully
+        closed — task-89/90/91 all done.
 
 ### [ ] 12. additional_platform_gaps_specification.md
 - [ ] task-54 — Coupons (needs Phase 1 checkout totals — already available)

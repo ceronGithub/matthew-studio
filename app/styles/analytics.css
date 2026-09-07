@@ -1,0 +1,183 @@
+/**
+ * FILE: app/styles/analytics.css
+ * PURPOSE:
+ * Styles for app/superAdmin/analytics/page.tsx (task-91). References
+ * app/globals.css tokens only — responsive breakpoints live in
+ * app/styles/mediaQueries.css, never inline here.
+ */
+
+.analyticsPage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.analyticsPageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.analyticsPageEyebrow {
+  font-family: var(--font-geist-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.analyticsPageTitle {
+  font-size: 1.8rem;
+  color: var(--color-text-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.analyticsPageSubtitle {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  max-width: 60ch;
+}
+
+/* --- Total-visits summary card --- */
+.analyticsTotalCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xs);
+  padding: var(--space-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  max-width: 320px;
+}
+
+.analyticsTotalValue {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+}
+
+.analyticsTotalLabel {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+/* --- Shared panel shell for chart/list sections --- */
+.analyticsPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.analyticsPanelTitle {
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.analyticsEmptyState {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  padding: var(--space-md) 0;
+}
+
+/* --- Visits-over-time bar chart (no charting library — plain CSS) --- */
+.analyticsChart {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 160px;
+  padding: 0 var(--space-xs);
+  overflow-x: auto;
+}
+
+.analyticsChartBarWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1 1 6px;
+  min-width: 6px;
+  height: 100%;
+}
+
+.analyticsChartBar {
+  width: 100%;
+  min-height: 2px;
+  background-color: var(--color-accent);
+  border-radius: 2px 2px 0 0;
+  transition: background-color var(--transition-fast);
+}
+
+.analyticsChartBarWrapper:hover .analyticsChartBar {
+  background-color: var(--color-accent-hover);
+}
+
+.analyticsChartFooter {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-geist-mono);
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+}
+
+/* --- Two/three-column grid for the breakdown panels --- */
+.analyticsBreakdownGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-lg);
+}
+
+/* --- Ranked list rows (top pages / referrers / countries) --- */
+.analyticsRankedList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.analyticsRankedRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.analyticsRankedLabel {
+  flex: 1 1 auto;
+  font-size: 0.85rem;
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.analyticsRankedBarTrack {
+  flex: 1 1 120px;
+  height: 6px;
+  background-color: var(--color-surface-active);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.analyticsRankedBarFill {
+  height: 100%;
+  background-color: var(--color-accent);
+  border-radius: 4px;
+}
+
+.analyticsRankedValue {
+  flex: 0 0 auto;
+  font-family: var(--font-geist-mono);
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  min-width: 3ch;
+  text-align: right;
+}

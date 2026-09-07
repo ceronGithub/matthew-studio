@@ -824,8 +824,12 @@ Order.status)
                POST /api/analytics/pageview, AnalyticsBeacon mounted
                in app/(public)/layout.tsx only) — built 2026-09-08, see
                docs/tasks/task-90-analytics-beacon-write-path.md.
-        [ ] task-91 (super-admin Analytics dashboard UI) — not yet
-               built.
+        [DONE] task-91 (super-admin Analytics dashboard UI:
+               app/superAdmin/analytics/page.tsx +
+               lib/analyticsStats.ts, reads PageViewDaily only) —
+               built 2026-09-08, see
+               docs/tasks/task-91-ui-analytics-dashboard.md. task-53
+               (and its 3-way split) is now fully closed.
 [ ] 12. additional_platform_gaps_specification.md
         Coupons, Refund processing, OAuth login, Buyer 2FA,
         transactional emails, shop filtering, dev env setup.
