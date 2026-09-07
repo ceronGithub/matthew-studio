@@ -482,7 +482,15 @@ means testing against fixtures instead of the real flow)
               docs/tasks/task-84-api-admin-users-list.md. Dropped the
               "note presence" column mentioned when this split was
               planned — not in the spec's actual column list (Section
-              3.4.1), so left out per Rule 2. task-85 through task-88
+              3.4.1), so left out per Rule 2. [DONE] task-85 (GET
+              /api/admin/users/[buyerId] — detail: account info, last
+              login/IP/city from SecurityLog, 5 most recent orders,
+              last 10 AccountActivityLog entries, internal notes) —
+              see docs/tasks/task-85-api-admin-user-detail.md. Flags a
+              known gap: recordAccountActivity() isn't wired into any
+              buyer-facing layout yet (only app/superAdmin/layout.tsx),
+              so the Account Activity section returns empty until
+              that's added as its own task. task-86 through task-88
               not started.
        Rest of this spec (orders, users, analytics, security logs,
        vault, profile — Sections 3.3-3.8) not started — still [~]

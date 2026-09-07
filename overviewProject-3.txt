@@ -51,3 +51,26 @@ file holds change-log entries only.
   environment to confirm a clean baseline. taskPlan.md and
   overviewProject.txt's Section 5C updated in place same turn per Rule
   16.1.
+
+[2026-09-08] Built task-85 (admin_account_specification.md Section
+  3.4.2) -- GET /api/admin/users/[buyerId], one call returning: account
+  info (email/name/createdAt/isActive off the Supabase Auth user record,
+  phone left null -- not collected anywhere in this app's flow, same gap
+  task-76/84 already flag), last login (most recent SecurityLog
+  login_success row for that email, with IP + city-level geo), 5 most
+  recent (non-soft-deleted) Orders newest-first, last 10
+  AccountActivityLog entries, and internal notes off task-83's
+  BuyerAdminMeta. Buyer lookup rejects any id whose role isn't "buyer"
+  (an admin/super-admin id typed into the URL 404s instead of leaking
+  that account's info through this endpoint). Flags a known data-source
+  gap: recordAccountActivity() (Rule 42.3) is only wired into
+  app/superAdmin/layout.tsx right now -- no buyer-facing layout calls it
+  yet, so this route's Account Activity section returns an empty array
+  for every buyer until that instrumentation is added as its own task;
+  the endpoint itself is correct and ready. New file:
+  app/api/admin/users/[buyerId]/route.ts. `npx tsc --noEmit` clean for
+  this file (explicit param types added on the two .map() callbacks to
+  avoid the implicit-any this sandbox's un-generated Prisma client would
+  otherwise cause -- same class of pre-existing gap noted in the task-84
+  entry above). taskPlan.md and overviewProject.txt's Section 5C updated
+  in place same turn per Rule 16.1.

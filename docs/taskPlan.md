@@ -247,10 +247,14 @@ see Section 5C / 8 in that file.
         (status/date range/search), pagination, CSV export
         (Section 3.4.1). Built 2026-09-07, see
         docs/tasks/task-84-api-admin-users-list.md.
-  - [ ] task-85 (API) — GET /api/admin/users/[buyerId] — detail:
+  - [DONE] task-85 (API) — GET /api/admin/users/[buyerId] — detail:
         account info + last login/IP/city from SecurityLog, 5 most
         recent orders, last 10 AccountActivityLog entries, internal
-        notes (Section 3.4.2 Display Sections 1-3)
+        notes (Section 3.4.2 Display Sections 1-3). Built 2026-09-08,
+        see docs/tasks/task-85-api-admin-user-detail.md. Flags a known
+        gap: recordAccountActivity() isn't wired into any buyer layout
+        yet, so the Account Activity section returns empty until that
+        instrumentation lands.
   - [ ] task-86 (API) — POST /api/admin/users/[buyerId]/actions —
         `action` discriminator: deactivate/reactivate (Supabase
         `ban_duration`), reset_password (admin-initiated reset token
