@@ -43,7 +43,7 @@ export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
 import { prisma } from "@/services/prisma";
 import { getSessionAdmin } from "@/lib/getSessionAdmin";
-import { supabaseAdminClient } from "@/lib/supabase/serverClient";
+import { getBuyerAuthUser } from "@/lib/getBuyerAuthUser";
 
 interface InternalNoteEntry {
   note: string;
@@ -68,19 +68,11 @@ export async function GET(
 
     // Resolve the buyer's Supabase Auth user — this is the primary
     // source of truth for account info since there is no local
-    // Buyer/User table (same constraint as task-76/84).
-    const { data: authData, error: authError } = await supabaseAdminClient.auth.admin.getUserById(buyerId);
-    const authUser = authData?.user;
-
-    if (authError || !authUser) {
-      return NextResponse.json(
-        { success: false, data: null, message: "We couldn't find that buyer. They may have been removed." },
-        { status: 404 }
-      );
-    }
-
-    const role = (authUser.user_metadata?.role as string | undefined) ?? "buyer";
-    if (role !== "buyer") {
+    // Buyer/User table (same constraint as task-76/84). Rejects any
+    // id that isn't role "buyer" (lib/getBuyerAuthUser.ts, shared
+    // with task-86's actions route).
+    const authUser = await getBuyerAuthUser(buyerId);
+    if (!authUser) {
       return NextResponse.json(
         { success: false, data: null, message: "We couldn't find that buyer. They may have been removed." },
         { status: 404 }

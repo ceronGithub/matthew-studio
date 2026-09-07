@@ -255,13 +255,19 @@ see Section 5C / 8 in that file.
         gap: recordAccountActivity() isn't wired into any buyer layout
         yet, so the Account Activity section returns empty until that
         instrumentation lands.
-  - [ ] task-86 (API) — POST /api/admin/users/[buyerId]/actions —
+  - [DONE] task-86 (API) — POST /api/admin/users/[buyerId]/actions —
         `action` discriminator: deactivate/reactivate (Supabase
         `ban_duration`), reset_password (admin-initiated reset token
         + EmailJS, reuses task-66/68's fields/helpers), send_email
-        (EmailJS, reuses task-78's preset pattern), add_note
-        (BuyerAdminMeta.internalNotes) — grouped per task-30/77
-        precedent (Section 3.4.1 Row Actions / 3.4.2 Actions)
+        (EmailJS, new EMAILJS_TEMPLATE_ID_ADMIN_BUYER_EMAIL template
+        rather than reusing task-78's order-scoped one), add_note
+        (BuyerAdminMeta.internalNotes, upserted) — grouped per
+        task-30/77 precedent (Section 3.4.1 Row Actions / 3.4.2
+        Actions). Built 2026-09-08, see
+        docs/tasks/task-86-api-admin-user-actions.md. New env vars:
+        APP_URL, EMAILJS_TEMPLATE_ID_ADMIN_PASSWORD_RESET,
+        EMAILJS_TEMPLATE_ID_ADMIN_BUYER_EMAIL. Extracted
+        lib/getBuyerAuthUser.ts, shared with (and now used by) task-85.
   - [ ] task-87 (UI) — /admin/users list page: table, filters, bulk
         deactivate/reactivate + CSV export (Section 3.4.1)
   - [ ] task-88 (UI) — /admin/users/[buyerId] detail page: account

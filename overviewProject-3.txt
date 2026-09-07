@@ -74,3 +74,29 @@ file holds change-log entries only.
   otherwise cause -- same class of pre-existing gap noted in the task-84
   entry above). taskPlan.md and overviewProject.txt's Section 5C updated
   in place same turn per Rule 16.1.
+
+[2026-09-08] Built task-86 (admin_account_specification.md Sections
+  3.4.1/3.4.2) -- POST /api/admin/users/[buyerId]/actions, one route
+  grouping 5 buyer-account actions behind an `action` discriminator
+  (same precedent as task-30/77): deactivate/reactivate (Supabase Auth
+  ban_duration flip -- no new local active/inactive flag, matches
+  task-83/84's existing source of truth), reset_password
+  (admin-initiated; reuses BuyerRecovery's forgot-password reset-token
+  fields from task-66 rather than new schema, emails a link to the
+  existing /auth/reset-password page), send_email (custom
+  compose-a-message via a new EMAILJS_TEMPLATE_ID_ADMIN_BUYER_EMAIL
+  template, kept separate from task-78's order-scoped template since
+  this one isn't tied to an order), add_note
+  (BuyerAdminMeta.internalNotes, upserted since a buyer may not have a
+  row yet). All 5 log a SecurityLog admin_action event. Extracted
+  lib/getBuyerAuthUser.ts (buyer-role-checked Supabase Auth lookup,
+  rejects admin/super-admin ids) and refactored task-85's route to use
+  it instead of its own inline copy -- targeted change, no other lines
+  in that file touched. New env vars added to Section 7: APP_URL,
+  EMAILJS_TEMPLATE_ID_ADMIN_PASSWORD_RESET,
+  EMAILJS_TEMPLATE_ID_ADMIN_BUYER_EMAIL -- both EmailJS templates still
+  need manual creation in the EmailJS dashboard before use. New files:
+  app/api/admin/users/[buyerId]/actions/route.ts,
+  lib/getBuyerAuthUser.ts. `npx tsc --noEmit` clean for both new/
+  modified files. taskPlan.md and overviewProject.txt's Section 5C
+  updated in place same turn per Rule 16.1.

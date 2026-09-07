@@ -490,8 +490,20 @@ means testing against fixtures instead of the real flow)
               known gap: recordAccountActivity() isn't wired into any
               buyer-facing layout yet (only app/superAdmin/layout.tsx),
               so the Account Activity section returns empty until
-              that's added as its own task. task-86 through task-88
-              not started.
+              that's added as its own task. [DONE] task-86 (POST
+              /api/admin/users/[buyerId]/actions — grouped
+              deactivate/reactivate (Supabase ban_duration, no new
+              local flag)/reset_password (reuses BuyerRecovery's
+              forgot-password reset-token fields, admin-initiated
+              instead of buyer-verified)/send_email (new
+              EMAILJS_TEMPLATE_ID_ADMIN_BUYER_EMAIL template)/add_note
+              (BuyerAdminMeta.internalNotes, upserted) — grouped per
+              task-30/77 precedent) — see
+              docs/tasks/task-86-api-admin-user-actions.md. Extracted
+              lib/getBuyerAuthUser.ts (buyer-role-checked Supabase Auth
+              lookup) shared with task-85's route, which was refactored
+              to use it (targeted change, no other lines touched).
+              task-87/88 not started.
        Rest of this spec (orders, users, analytics, security logs,
        vault, profile — Sections 3.3-3.8) not started — still [~]
        overall for that reason, but the Product CRUD + Dashboard
@@ -893,6 +905,9 @@ referenced in the codebase today (grep-verified) is added below.
   PAYMONGO_WEBHOOK_SECRET=   # server-only -- app/api/paymongo/webhook/route.ts, added 2026-09-05
   TELEGRAM_BOT_TOKEN=        # server-only, from @BotFather (Rule 48.5) -- still not called by any route (task-35's Telegram-linking half, not yet built)
   TELEGRAM_BOT_USERNAME=     # e.g. "MatthewStudioBot" -- builds the deep link https://t.me/<username>?start=<linkToken>, added 2026-09-07
+  APP_URL=                  # server-only -- builds the absolute /auth/reset-password link emailed by task-86's admin-initiated reset_password action
+  EMAILJS_TEMPLATE_ID_ADMIN_PASSWORD_RESET=  # template vars: to_email, reset_link -- app/api/admin/users/[buyerId]/actions/route.ts, added 2026-09-08 (task-86)
+  EMAILJS_TEMPLATE_ID_ADMIN_BUYER_EMAIL=     # template vars: to_email, subject, message -- same route, added 2026-09-08 (task-86)
 
 .env (Prisma CLI -- generate/db push/migrate, read via prisma.config.mjs):
   DATABASE_URL=
