@@ -610,3 +610,14 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   sandbox (no DB credentials, binaries.prisma.sh blocked) -- run both
   locally before testing. See docs/tasks/task-35-email-security-question.md.
   Checked off task-35 (this half) in docs/taskPlan.md.
+
+[2026-09-07] task-35 Telegram half split into task-38 through task-41
+  (schema/API/UI/middleware -- 4 layers, per Rule 49 Step 4). Built
+  task-38: BuyerRecovery gained telegramLinkToken/telegramLinkTokenExpiresAt
+  and telegramOtpCodeHash/telegramOtpExpiresAt/telegramOtpSentAt fields
+  (deep-link + manual-fallback secrets, Section 2.2.1); added
+  lib/telegramLink.ts (token/OTP generation, hashing, deep-link URL
+  builder -- returns null if TELEGRAM_BOT_USERNAME isn't set). Run
+  npx prisma db push && npx prisma generate before task-39. See
+  docs/tasks/task-38-schema-telegram-link.md. Checked off task-38,
+  added task-39/40/41 as [ ] in docs/taskPlan.md.

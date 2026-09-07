@@ -518,6 +518,18 @@ model BuyerRecovery {
   telegramChatId           String?   @unique
   telegramLinkedAt         DateTime?
 
+  // Telegram linking in progress (Section 2.2.1) — two paths, same
+  // result. linkToken is embedded in the deep-link URL and matched
+  // by the bot webhook; otpCodeHash is the manual-fallback 6-digit
+  // code the bot DMs back when a buyer opens the bot without the
+  // deep link. Both are ephemeral (SHA-256, same convention as
+  // emailOtpCodeHash above) and cleared once linking succeeds.
+  telegramLinkToken        String?   @unique
+  telegramLinkTokenExpiresAt DateTime?
+  telegramOtpCodeHash      String?
+  telegramOtpExpiresAt     DateTime?
+  telegramOtpSentAt        DateTime?
+
   // Security question recovery (Section 2.3 / 4.5) — securityQuestionId
   // is a stable key into the shared Question Bank (2.3.1), not free
   // text; securityAnswerHash is bcrypt, compared case-insensitively

@@ -80,10 +80,19 @@ see Section 5C / 8 in that file.
       recovery-setup` wizard: Email OTP (send/verify) + Security
       Question steps, `RegisterForm` now redirects there post-signup.
       Built 2026-09-07, see docs/tasks/task-35-email-security-question.md.
-- [ ] task-35 (Telegram half, remaining) — Telegram bot deep-link +
-      OTP capture, final `recoverySetupComplete = true` flip, and the
-      `middleware.ts` blocking gate (needs TELEGRAM_BOT_TOKEN/
-      TELEGRAM_BOT_USERNAME from the developer)
+- [ ] task-35 (Telegram half, remaining) — split into task-38 through
+      task-41 (schema/API/UI/middleware) since it spans 4 layers.
+- [x] task-38 (schema + lib) — `telegramLinkToken`/`telegramOtpCodeHash`
+      fields on BuyerRecovery + `lib/telegramLink.ts`. Built 2026-09-07,
+      see docs/tasks/task-38-schema-telegram-link.md. Run
+      `npx prisma db push && npx prisma generate` before task-39.
+- [ ] task-39 (API) — bot webhook, link-status poll, manual-code verify
+      routes (needs TELEGRAM_BOT_TOKEN/TELEGRAM_BOT_USERNAME from the
+      developer to test live; code will be written against the env
+      var names regardless)
+- [ ] task-40 (UI) — re-enable Telegram step in RecoverySetupWizard.tsx
+- [ ] task-41 (middleware) — flip recoverySetupComplete after step 3 +
+      middleware.ts blocking gate on /buyer/dashboard
 - [ ] task-36 — `/auth/forgot-password` flow (3 recovery methods, anti-
       enumeration responses, single-use reset token)
 - [ ] task-37 — `/auth/reset-password` page + rate limiting (5/15min across
