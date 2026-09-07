@@ -814,9 +814,14 @@ independent — good filler work between the phases above, but
 additional_platform_gaps' Coupons/Refunds sub-items specifically
 need Phase 1 done first since they hook into checkout totals and
 Order.status)
-[ ] 11. sitewide_technical_seo_specification.md
+[~] 11. sitewide_technical_seo_specification.md
         Sitemap/robots, global 404/error boundaries, idle session
         timeout, anonymized traffic analytics.
+        [DONE] task-89 (PageViewDaily schema) — built 2026-09-08, see
+               docs/tasks/task-89-schema-pageviewdaily.md. Split from
+               task-53 into task-89/90/91 per Rule 49 Step 4.
+        [ ] task-90 (beacon + write path), [ ] task-91 (super-admin
+               Analytics dashboard UI) — not yet built.
 [ ] 12. additional_platform_gaps_specification.md
         Coupons, Refund processing, OAuth login, Buyer 2FA,
         transactional emails, shop filtering, dev env setup.

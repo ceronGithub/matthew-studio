@@ -312,12 +312,27 @@ see Section 5C / 8 in that file.
 
 ## PHASE 6 — SITEWIDE POLISH & PLATFORM HARDENING
 
-### [ ] 11. sitewide_technical_seo_specification.md
+### [~] 11. sitewide_technical_seo_specification.md
 - [ ] task-50 — Sitemap/robots.txt
 - [ ] task-51 — Global 404/error boundaries (Rule 31.10 pattern)
 - [ ] task-52 — Idle session timeout (Rule 32.5) — apply per account layout
-- [ ] task-53 — Anonymized traffic analytics (Rule 41) — `PageViewDaily`
-      table + super-admin Analytics dashboard (feeds task-41 above)
+- [~] task-53 — Anonymized traffic analytics (Rule 41) — `PageViewDaily`
+      table + super-admin Analytics dashboard (feeds task-65 above). Split
+      into task-89/90/91 per Rule 49 Step 4 (spans schema + beacon/API +
+      UI — same splitting pattern as the task-72→74-82 and task-36→66-70
+      splits above).
+  - [DONE] task-89 — Schema: `PageViewDaily` model added (2026-09-08),
+        see docs/tasks/task-89-schema-pageviewdaily.md. Run
+        `npx prisma db push && npx prisma generate` before task-90.
+  - [ ] task-90 — Beacon + write path: `services/analytics.ts`
+        (`recordPageView()`, never-break-the-request pattern per Rule
+        41.3) + `POST /api/analytics/pageview` route + client-side
+        beacon mounted in the public root layout only (never the
+        authenticated layouts — that's AccountActivityLog/Rule 42's
+        job, already covered elsewhere)
+  - [ ] task-91 — UI: super-admin Analytics dashboard page reading
+        from the aggregate table only (total visits over time, top
+        pages, top referrers, device breakdown, country list)
 
 ### [ ] 12. additional_platform_gaps_specification.md
 - [ ] task-54 — Coupons (needs Phase 1 checkout totals — already available)

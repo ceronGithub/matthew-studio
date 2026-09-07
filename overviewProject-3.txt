@@ -124,3 +124,16 @@ file holds change-log entries only.
   constraint as task-84/85/86/87) -- run locally before merging.
   taskPlan.md and overviewProject.txt's Section 5C updated in place
   same turn per Rule 16.1.
+
+[2026-09-08] Built task-89 (sitewide_technical_seo_specification.md,
+  Rule 41 anonymized traffic analytics) -- added PageViewDaily model to
+  prisma/schema.prisma: one row per (date, path, referrerHost,
+  deviceType, countryCode) daily-aggregated counter, no IP/session/
+  visitor ID ever stored, matching Rule 41's no-PII constraint. Split
+  from task-53 into task-89 (this schema task) / task-90 (beacon +
+  write path) / task-91 (super-admin dashboard UI) per Rule 49 Step 4 --
+  same splitting pattern as the task-72->74-82 and task-36->66-70
+  splits. New file: docs/tasks/task-89-schema-pageviewdaily.md.
+  taskPlan.md and overviewProject.txt's Section 5C updated in place
+  same turn per Rule 16.1. Run `npx prisma db push && npx prisma
+  generate` before task-90.

@@ -101,6 +101,32 @@ model AccountActivityLog {
   @@index([createdAt])
 }
 
+/// PageViewDaily
+/// Rule 41 — anonymized, aggregate-only public traffic analytics.
+/// Deliberately the opposite shape of SecurityLog/AccountActivityLog:
+/// every row is a pre-aggregated daily counter, never a per-visitor
+/// event. The raw IP is resolved to a country code in-memory by the
+/// beacon route and immediately discarded — it is never written here
+/// or anywhere else. No session ID, no visitor ID, no clickstream —
+/// this table cannot be used to reconstruct what any single anonymous
+/// person did. (Authenticated-account navigation is a different
+/// concern, already covered by AccountActivityLog above per Rule 42.)
+model PageViewDaily {
+  id           String   @id @default(cuid())
+  date         DateTime @db.Date
+  path         String
+  viewCount    Int      @default(0)
+  referrerHost String? // e.g. "google.com", null for direct traffic
+  deviceType   String? // mobile | tablet | desktop
+  countryCode  String? // ISO 3166-1 alpha-2, e.g. "PH" — city/country granularity only
+
+  createdAt DateTime @default(now())
+
+  @@unique([date, path, referrerHost, deviceType, countryCode])
+  @@index([date])
+  @@index([path])
+}
+
 /// AuditLog
 /// Rule 6: content-change audit trail — WHO changed WHAT content
 /// (products, and any future admin-managed entity), separate from
