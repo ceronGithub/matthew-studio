@@ -222,7 +222,8 @@ see Section 5C / 8 in that file.
         revert note, photo upload) embedded in task-81's page,
         `tshirts`-category orders only (Section 3.3.3). Built
         2026-09-07, see docs/tasks/task-82-ui-production-tracker.md.
-- [~] task-73 — Users management (Section 3.4) — renumbered 2026-09-07
+- [DONE] task-73 — Users management (Section 3.4) — CLOSED 2026-09-08,
+      all micro-tasks (83-88) done — renumbered 2026-09-07
       from task-40, same Telegram-split collision; see NOTES. Split
       into task-83 through task-88 per Rule 49 Step 4 (spans
       schema+API+UI across 6 distinct sub-features: list, detail,
@@ -268,11 +269,16 @@ see Section 5C / 8 in that file.
         APP_URL, EMAILJS_TEMPLATE_ID_ADMIN_PASSWORD_RESET,
         EMAILJS_TEMPLATE_ID_ADMIN_BUYER_EMAIL. Extracted
         lib/getBuyerAuthUser.ts, shared with (and now used by) task-85.
-  - [ ] task-87 (UI) — /admin/users list page: table, filters, bulk
-        deactivate/reactivate + CSV export (Section 3.4.1)
-  - [ ] task-88 (UI) — /admin/users/[buyerId] detail page: account
+  - [DONE] task-87 (UI) — /admin/users list page: table, filters, bulk
+        deactivate/reactivate + CSV export (Section 3.4.1). Built
+        2026-09-08, see docs/tasks/task-87-ui-admin-users-list.md.
+        Corrected here 2026-09-08 — this line was stale (still `[ ]`)
+        even though the file itself already said DONE; Layer-3
+        confirmed live before flipping, per Rule 49.1.
+  - [DONE] task-88 (UI) — /admin/users/[buyerId] detail page: account
         info, order history, activity trail, notes, action buttons
-        wired to task-86 (Section 3.4.2)
+        wired to task-86 (Section 3.4.2). Built 2026-09-08, see
+        docs/tasks/task-88-ui-admin-user-detail.md.
 - [ ] task-65 — Analytics (Section 3.5) — depends on item 11's traffic
       table (already renumbered from task-41 per prior NOTES entry)
 - [ ] task-42 — Admin Security Logs page (Section 3.6) — reuses Rule 38.9

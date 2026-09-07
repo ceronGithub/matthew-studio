@@ -1,0 +1,398 @@
+/**
+ * FILE: app/styles/adminUserDetail.css
+ * PURPOSE:
+ * Styles for app/admin/users/[buyerId]/page.tsx and
+ * AdminUserDetail.tsx (task-88). References the design tokens in
+ * app/globals.css only — no hardcoded colors/spacing. Responsive
+ * breakpoints live in app/styles/mediaQueries.css, not here.
+ * Includes its own copy of the shared ConfirmationModal's styles
+ * (.confirmationModal*), same per-page-duplication pattern as
+ * adminOrderDetail.css / buyerOrderDetail.css / buyerSubscription.css.
+ */
+
+.adminUserDetailPage {
+  width: 100%;
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* ---------- Top row / header ---------- */
+
+.adminUserDetailTopRow {
+  display: flex;
+}
+
+.adminUserDetailBackLink {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-accent);
+  font-size: 0.9rem;
+}
+
+.adminUserDetailHeaderRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.adminUserDetailEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.adminUserDetailTitle {
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+.adminUserDetailMeta {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-xs);
+}
+
+.adminUserDetailStatusBadge {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* ---------- Info cards grid (account / last login) ---------- */
+
+.adminUserDetailGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-md);
+}
+
+.adminUserDetailCard {
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+}
+
+.adminUserDetailSectionTitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.adminUserDetailLine {
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+.adminUserDetailLineMuted {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+}
+
+/* ---------- Orders / Activity lists ---------- */
+
+.adminUserDetailListSection {
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+}
+
+.adminUserDetailOrdersList,
+.adminUserDetailActivityList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.adminUserDetailOrderRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background-color: var(--color-bg);
+}
+
+.adminUserDetailOrderLink {
+  font-size: 0.9rem;
+  color: var(--color-accent);
+}
+
+.adminUserDetailOrderTotal {
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  flex-shrink: 0;
+}
+
+.adminUserDetailActivityRow {
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background-color: var(--color-bg);
+}
+
+/* ---------- Actions (deactivate/reactivate / reset / notes / email) ---------- */
+
+.adminUserDetailActionsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+}
+
+.adminUserDetailActionRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.adminUserDetailInput {
+  flex: 1 1 160px;
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-md);
+  font-size: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  transition: border-color var(--transition-fast);
+}
+
+.adminUserDetailInput:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+.adminUserDetailTextarea {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  font-size: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  resize: vertical;
+  transition: border-color var(--transition-fast);
+}
+
+.adminUserDetailTextarea:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+.adminUserDetailEmailForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.adminUserDetailButton {
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.adminUserDetailButton--primary {
+  border: 1px solid var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.adminUserDetailButton--primary:hover,
+.adminUserDetailButton--primary:focus-visible,
+.adminUserDetailButton--primary:active {
+  background-color: var(--color-accent-hover);
+}
+
+.adminUserDetailButton--secondary {
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+  color: var(--color-text-secondary);
+}
+
+.adminUserDetailButton--secondary:hover,
+.adminUserDetailButton--secondary:focus-visible,
+.adminUserDetailButton--secondary:active {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.adminUserDetailButton--destructive {
+  border: 1px solid var(--color-error);
+  background-color: transparent;
+  color: var(--color-error);
+}
+
+.adminUserDetailButton--destructive:hover,
+.adminUserDetailButton--destructive:focus-visible,
+.adminUserDetailButton--destructive:active {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.adminUserDetailButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.adminUserDetailNotesList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.adminUserDetailNoteRow {
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-bg);
+  font-size: 0.85rem;
+  color: var(--color-text-primary);
+}
+
+/* ---------- Skeleton / empty states (Rule 25) ---------- */
+
+.adminUserDetailSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-xl) var(--space-lg);
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+}
+
+.adminUserDetailSkeletonBlock {
+  height: 96px;
+  border-radius: 12px;
+}
+
+.adminUserDetailEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  color: var(--color-text-secondary);
+  text-align: center;
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+}
+
+/* ---------- Confirmation Modal (Rule 34.4 shared component) ---------- */
+
+.confirmationModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  z-index: var(--z-modal-backdrop);
+}
+
+.confirmationModalDialog {
+  width: 100%;
+  max-width: 420px;
+  padding: var(--space-lg) var(--space-xl);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-bg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  z-index: var(--z-modal);
+  transition: transform var(--transition-slow), opacity var(--transition-slow);
+}
+
+.confirmationModalTitle {
+  font-size: 1.1rem;
+  color: var(--color-text-primary);
+}
+
+.confirmationModalDescription {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+}
+
+.confirmationModalActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.confirmationModalCancelButton {
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+
+.confirmationModalCancelButton:hover,
+.confirmationModalCancelButton:focus-visible,
+.confirmationModalCancelButton:active {
+  background-color: var(--color-surface-hover);
+}
+
+.confirmationModalConfirmButton {
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-error);
+  background-color: var(--color-error);
+  color: var(--color-text-primary);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+
+.confirmationModalConfirmButton:hover,
+.confirmationModalConfirmButton:focus-visible,
+.confirmationModalConfirmButton:active {
+  background-color: #dc2626;
+}
+
+.confirmationModalCancelButton:disabled,
+.confirmationModalConfirmButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

@@ -100,3 +100,27 @@ file holds change-log entries only.
   lib/getBuyerAuthUser.ts. `npx tsc --noEmit` clean for both new/
   modified files. taskPlan.md and overviewProject.txt's Section 5C
   updated in place same turn per Rule 16.1.
+
+[2026-09-08] Built task-88 (admin_account_specification.md Section
+  3.4.2) -- /admin/users/[buyerId] Buyer Details page: account info
+  card, last-login card (city/country + IP from SecurityLog),
+  5-most-recent orders list linking to /admin/orders/[orderId],
+  account-activity trail (empty for now -- recordAccountActivity()
+  still isn't wired into any buyer-facing layout, same flagged gap as
+  task-85), internal notes list + add-note form, and
+  deactivate/reactivate + reset-password actions (behind
+  ConfirmationModal, Rule 34.4) plus a direct-submit email-buyer form
+  (Rule 34.3), all wired to task-85/86's existing endpoints -- no new
+  API routes or schema changes. New files: app/admin/users/[buyerId]/
+  page.tsx, components/admin/AdminUserDetail.tsx,
+  lib/hooks/useAdminUserDetail.ts, app/styles/adminUserDetail.css.
+  Rule 49.1 Step -1 audit for this task also found and corrected a
+  stale docs/taskPlan.md line: task-87 was still shown [ ] even though
+  its own file already said DONE and Layer-3 verification (page.tsx,
+  AdminUsersList.tsx, useAdminUsers.ts, adminUsers.css all present and
+  wired) confirmed it. task-73 (Users Management) is now fully closed
+  -- task-83 through task-88 all done. `npx tsc --noEmit` could not be
+  run in this environment (node_modules not installed, same
+  constraint as task-84/85/86/87) -- run locally before merging.
+  taskPlan.md and overviewProject.txt's Section 5C updated in place
+  same turn per Rule 16.1.

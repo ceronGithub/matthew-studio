@@ -503,12 +503,23 @@ means testing against fixtures instead of the real flow)
               lib/getBuyerAuthUser.ts (buyer-role-checked Supabase Auth
               lookup) shared with task-85's route, which was refactored
               to use it (targeted change, no other lines touched).
-              task-87/88 not started.
-       Rest of this spec (orders, users, analytics, security logs,
-       vault, profile — Sections 3.3-3.8) not started — still [~]
-       overall for that reason, but the Product CRUD + Dashboard
-       slices needed to unblock item 9 and give admins a working
-       home screen are complete.
+              [DONE] task-87 (UI) — /admin/users list page: table,
+              filters, bulk deactivate/reactivate, CSV export — see
+              docs/tasks/task-87-ui-admin-users-list.md. This line was
+              stale (still shown not-started) until corrected here
+              2026-09-08 per Rule 16.1 — Layer-3 confirmed live before
+              flipping. [DONE] task-88 (UI) — /admin/users/[buyerId]
+              detail page: account info, last-login card, recent
+              orders, activity trail, internal notes, deactivate/
+              reactivate + reset-password (behind ConfirmationModal)/
+              add-note/send-email actions wired to task-85/86 — see
+              docs/tasks/task-88-ui-admin-user-detail.md. task-73
+              (Users Management) is now fully closed — all of task-83
+              through task-88 done.
+       Rest of this spec (analytics, security logs, vault, profile —
+       Sections 3.5-3.8) not started — still [~] overall for that
+       reason, but the Product CRUD + Dashboard + Order Management +
+       Users Management slices are complete.
 [~] 5. super_admin_account_specification.md — IN PROGRESS (corrected
        here 2026-09-06). Per its own Section 12 internal phasing:
        - Phase 2 (Dashboard Shell + Security/Activity Logging) is
