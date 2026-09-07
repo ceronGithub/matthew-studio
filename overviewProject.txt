@@ -416,6 +416,14 @@ means testing against fixtures instead of the real flow)
               2026-09-07). Low-inventory and expiring-promotion
               alerts from the spec are structurally skipped — no
               inventory or promotions model exists in this schema.
+       [~]    task-72 (Order Management, Section 3.3) split into
+              task-74 through task-82 per Rule 49 Step 4 — spans
+              schema+API+UI across 5+ sub-features (list, detail,
+              status/refund/notes, buyer email, t-shirt production
+              tracking). [DONE] task-74 (schema: Order.statusHistory/
+              internalNotes/refundReason/refundedAt) — see
+              docs/tasks/task-74-orders-schema.md. task-75 through
+              task-82 not started.
        Rest of this spec (orders, users, analytics, security logs,
        vault, profile — Sections 3.3-3.8) not started — still [~]
        overall for that reason, but the Product CRUD + Dashboard

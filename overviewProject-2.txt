@@ -857,3 +857,20 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   client, not new errors introduced by this task. Developer should
   run `npx prisma generate && npx tsc --noEmit` locally before
   merging to confirm zero errors.
+
+[2026-09-07] Task 72 (Order Management, admin_account_specification.md
+  Section 3.3) split into micro-tasks task-74 through task-82 per
+  Rule 49 Step 4 -- the line item spans schema+API+UI across 5+
+  distinct sub-features (order list, order detail, status/refund/
+  notes, buyer email, t-shirt production tracking), same pattern as
+  the earlier task-36->66-70 and task-35(remaining)->38-41 splits.
+  Built task-74 (schema): added Order.statusHistory, internalNotes,
+  refundReason, refundedAt -- all nullable/additive, no migration
+  risk. statusHistory reuses the existing productionStageHistory
+  JSON-array-of-events convention rather than introducing per-status
+  DateTime columns. Could not run `npx prisma validate` in this
+  sandbox (network egress to binaries.prisma.sh is blocked here) --
+  reviewed the diff manually for balanced braces/valid types.
+  Developer should run `npx prisma db push && npx prisma generate`
+  locally before task-75 (order list API) starts reading/writing
+  these fields.

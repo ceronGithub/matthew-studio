@@ -146,7 +146,7 @@ see Section 5C / 8 in that file.
 
 ## PHASE 3 (remainder) — ADMIN & SUPER-ADMIN OVERSIGHT
 
-### [~] 4. admin_account_specification.md — Product CRUD + Dashboard done; rest not started
+### [~] 4. admin_account_specification.md — Product CRUD + Dashboard done; Orders in progress
 - [DONE] task-71 — Admin dashboard (Section 3.1) — renumbered 2026-09-07 from
       task-38, which collided with the (already DONE) buyer-recovery
       Telegram schema task of the same number; see NOTES. Built
@@ -154,8 +154,42 @@ see Section 5C / 8 in that file.
       inventory/promotions alerts not applicable, no such models
       exist), Recent Orders + Recent Products, Quick Actions. See
       overviewProject-2.txt's 2026-09-07 CHANGE LOG entry.
-- [ ] task-72 — Orders management (Section 3.3) — renumbered 2026-09-07
-      from task-39, same Telegram-split collision; see NOTES.
+- [~] task-72 — Order management (Section 3.3) — split into task-74
+      through task-82 per Rule 49 Step 4 (spans schema+API+UI across
+      5+ distinct sub-features: list, detail, status/refund/notes,
+      buyer email, t-shirt production tracking), same pattern as the
+      task-36→66-70 and task-35(remaining)→38-41 splits above.
+  - [DONE] task-74 (schema) — Order.statusHistory / internalNotes /
+        refundReason / refundedAt fields. Built 2026-09-07, see
+        docs/tasks/task-74-orders-schema.md. Run
+        `npx prisma db push && npx prisma generate` before task-75.
+  - [ ] task-75 (API) — GET /api/admin/orders — list, filter
+        (status/date range/search by ID or email), pagination (25/page),
+        CSV export (Section 3.3.1)
+  - [ ] task-76 (API) — GET /api/admin/orders/[orderId] — full detail
+        (buyer info via Supabase Auth, items, payment, timeline
+        derived from statusHistory) (Section 3.3.2 #1-5)
+  - [ ] task-77 (API) — PATCH .../status, POST .../refund,
+        POST .../notes — status update (+SecurityLog+notification),
+        refund (+notification), internal note — grouped as one task,
+        same precedent as task-30's grouped vault routes (Section
+        3.3.1 Row Actions / 3.3.2 Actions)
+  - [ ] task-78 (API) — POST .../send-email — custom buyer email via
+        EmailJS preset templates (Section 3.3.1 Row Actions)
+  - [ ] task-79 (API) — PATCH .../production-stage — advance/revert
+        t-shirt stage (revert requires note), optional R2 proof-photo
+        attach, SecurityLog `order_production_stage_updated`
+        (Section 3.3.3)
+  - [ ] task-80 (UI) — /admin/orders list page: table, filters,
+        status badges, bulk actions, CSV export button, row actions
+        (Section 3.3.1)
+  - [ ] task-81 (UI) — /admin/orders/[orderId] detail page: header,
+        buyer info, items table, payment info, timeline, action
+        buttons wired to task-77/78 (Section 3.3.2)
+  - [ ] task-82 (UI) — T-shirt production tracker component
+        (horizontal stepper, advance/revert modals with required
+        revert note, photo upload) embedded in task-81's page,
+        `tshirts`-category orders only (Section 3.3.3)
 - [ ] task-73 — Users management (Section 3.4) — renumbered 2026-09-07
       from task-40, same Telegram-split collision; see NOTES.
 - [ ] task-65 — Analytics (Section 3.5) — depends on item 11's traffic

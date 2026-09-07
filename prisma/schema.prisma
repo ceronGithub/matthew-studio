@@ -204,6 +204,10 @@ model Order {
   paidAt            DateTime? // set by webhook, Rule 30.1
   productionStage   String? // t-shirt orders only, per buyer_order_tracking_specification.md
   productionStageHistory Json? // timestamped stage transitions incl. reverts (admin spec Section 3.3.3); buyer-facing GET /api/buyer/orders/[orderId] filters reverts out per tracking spec Section 3.2/4. Null until the admin production-stage endpoint (not yet built) starts writing to it.
+  statusHistory     Json? // task-74: timestamped top-level status transitions — [{status, adminId, note, createdAt}] — feeds admin spec Section 3.3.2 #5 Timeline (Created/Confirmed/Shipped/Delivered dates) without adding a dedicated column per stage. Null until task-77's status-update route starts writing to it.
+  internalNotes     Json? // task-74: admin-only notes, never shown to buyer — [{note, adminId, createdAt}] — admin spec Section 3.3.2 "Add Note" action. Null until task-77 starts writing to it.
+  refundReason      String? // task-74: set alongside refundedAt by task-77's refund route, admin spec Section 3.3.2 "Issue Refund"
+  refundedAt        DateTime? // task-74: set by task-77's refund route
   courier           String?   // set by admin once shipped, per admin spec Section 3.3.2 "Send Tracking Email" trigger
   trackingNumber    String?   // set alongside courier
   shippingAddress   Json?     // t-shirt orders only — delivery address on file
