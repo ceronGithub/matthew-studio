@@ -93,7 +93,9 @@ see Section 5C / 8 in that file.
       run `npx prisma db push && npx prisma generate` again before
       task-40. Flags a spec deviation (optional TELEGRAM_WEBHOOK_SECRET)
       for developer review.
-- [ ] task-40 (UI) — re-enable Telegram step in RecoverySetupWizard.tsx
+- [x] task-40 (UI) — re-enabled Telegram step in RecoverySetupWizard.tsx
+      (deep link + polling + manual-code fallback). Built 2026-09-07,
+      see docs/tasks/task-40-ui-wire-telegram-step.md.
 - [ ] task-41 (middleware) — flip recoverySetupComplete after step 3 +
       middleware.ts blocking gate on /buyer/dashboard
 - [ ] task-36 — `/auth/forgot-password` flow (3 recovery methods, anti-

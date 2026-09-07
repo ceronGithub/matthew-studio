@@ -635,3 +635,13 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   skipped if unset. Run npx prisma db push && npx prisma generate
   before task-40. See docs/tasks/task-39-api-telegram-webhook-and-link.md.
   Checked off task-39 in docs/taskPlan.md.
+
+[2026-09-07] task-40: RecoverySetupWizard.tsx rewritten to a 3-step
+  flow (email -> telegram -> security-question -> done). New Telegram
+  step auto-starts a deep link on entry, polls link status every 3s,
+  and offers a manual 6-digit code fallback -- either path advances
+  the wizard once linked. Added .recoverySetupTelegramSteps to
+  recoverySetup.css for the numbered instructions. recoverySetupComplete
+  flip and the middleware.ts gate remain task-41. See
+  docs/tasks/task-40-ui-wire-telegram-step.md. Checked off task-40 in
+  docs/taskPlan.md.

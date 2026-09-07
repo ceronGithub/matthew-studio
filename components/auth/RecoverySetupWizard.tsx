@@ -4,40 +4,46 @@
  *
  * PURPOSE:
  * buyer_password_recovery_specification.md Section 2's mandatory
- * post-registration recovery setup. This wizard currently implements
- * two of the three steps: Email OTP (2.1) and Security Question
- * (2.3). Telegram linking (2.2) and the final
- * recoverySetupComplete=true flip (2.4) are a separate, not-yet-built
- * piece (task-35's remainder — needs TELEGRAM_BOT_TOKEN wiring +
- * middleware.ts gate) — deliberately left out of the step indicator's
- * total count comment below rather than shown as a broken third step.
+ * post-registration recovery setup. All three steps are now live:
+ * Email OTP (2.1), Telegram linking (2.2), Security Question (2.3).
+ * The final recoverySetupComplete=true flip and the middleware.ts
+ * blocking gate (2.4) are task-41, the last remaining piece of
+ * task-35 — deliberately not flipped here, since flipping it after
+ * only these three steps but before the gate exists would let the
+ * flag say "complete" while nothing actually enforces it yet.
  *
  * DATA FLOW:
- * 1. On mount: nothing auto-sent — buyer taps "Send code" themselves
- *    (matches the Resend cooldown UX better than an invisible
- *    auto-send on page load).
- * 2. Step "email": POST /api/auth/recovery-setup/email — action
- *    "send" then "verify". On success, advance to "security-question".
+ * 1. Step "email": POST /api/auth/recovery-setup/email — action
+ *    "send" then "verify". On success, advance to "telegram".
+ * 2. Step "telegram": on entering the step, POST .../telegram/link
+ *    { action: "start" } to get a deep link + begin polling
+ *    { action: "status" } every 3s. A buyer who opened the bot
+ *    without the deep link instead types the 6-digit code the bot
+ *    DMed them into the manual-fallback field, which calls
+ *    { action: "verify-code" }. Either path advances to
+ *    "security-question" once telegramLinked is true.
  * 3. Step "security-question": POST
  *    /api/auth/recovery-setup/security-question. On success, advance
  *    to "done".
- * 4. Step "done": interim screen — explains Telegram linking is
+ * 4. Step "done": interim screen — explains the dashboard gate is
  *    coming, offers a manual continue link (no middleware gate exists
- *    yet to block this, since that's the remaining half of task-35).
+ *    yet to block this — that's task-41).
  */
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Loader2, Check } from "lucide-react";
 import type { ToastType } from "@/components/shared/useToast";
 import { getCsrfHeader } from "@/lib/csrf";
 import { SECURITY_QUESTION_BANK } from "@/lib/securityQuestions";
 
-type WizardStep = "email" | "security-question" | "done";
+type WizardStep = "email" | "telegram" | "security-question" | "done";
 
 interface RecoverySetupWizardProps {
   showToast: (message: string, type: ToastType) => void;
 }
+
+const TELEGRAM_STATUS_POLL_INTERVAL_MS = 3000;
 
 export default function RecoverySetupWizard({ showToast }: RecoverySetupWizardProps) {
   const [step, setStep] = useState<WizardStep>("email");
@@ -49,6 +55,16 @@ export default function RecoverySetupWizard({ showToast }: RecoverySetupWizardPr
   const [isSendingOtp, setIsSendingOtp] = useState(false);
   const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(0);
+
+  // --- Telegram step state ---
+  const [deepLink, setDeepLink] = useState<string | null>(null);
+  const [botConfigured, setBotConfigured] = useState(true);
+  const [isStartingLink, setIsStartingLink] = useState(false);
+  const [telegramLinked, setTelegramLinked] = useState(false);
+  const [manualCode, setManualCode] = useState("");
+  const [manualCodeError, setManualCodeError] = useState<string | undefined>();
+  const [isVerifyingManualCode, setIsVerifyingManualCode] = useState(false);
+  const pollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // --- Security question step state ---
   const [questionId, setQuestionId] = useState(SECURITY_QUESTION_BANK[0].id);
@@ -123,11 +139,115 @@ export default function RecoverySetupWizard({ showToast }: RecoverySetupWizardPr
       }
 
       showToast("✓ Email verified successfully.", "success");
-      setStep("security-question");
+      setStep("telegram");
     } catch {
       showToast("Couldn't reach the server. Check your connection and try again.", "error");
     } finally {
       setIsVerifyingOtp(false);
+    }
+  }
+
+  // Requests a fresh deep link and begins polling for the webhook to
+  // mark this buyer as linked. Runs once on entering the "telegram"
+  // step (see the useEffect below) — this is a data fetch to prepare
+  // state the step needs to render, not a side effect reacting to a
+  // user action, so it belongs here rather than behind a button.
+  async function startTelegramLink() {
+    setIsStartingLink(true);
+    try {
+      const response = await fetch("/api/auth/recovery-setup/telegram/link", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...getCsrfHeader() },
+        body: JSON.stringify({ action: "start" }),
+      });
+      const result = await response.json();
+
+      if (!result.success) {
+        showToast(result.message ?? "Couldn't set up Telegram linking. Please try again.", "error");
+        return;
+      }
+
+      setBotConfigured(Boolean(result.data?.botConfigured));
+      setDeepLink(result.data?.deepLink ?? null);
+    } catch {
+      showToast("Couldn't reach the server. Check your connection and try again.", "error");
+    } finally {
+      setIsStartingLink(false);
+    }
+  }
+
+  async function pollTelegramStatus() {
+    try {
+      const response = await fetch("/api/auth/recovery-setup/telegram/link", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...getCsrfHeader() },
+        body: JSON.stringify({ action: "status" }),
+      });
+      const result = await response.json();
+      if (result.success && result.data?.telegramLinked) {
+        setTelegramLinked(true);
+      }
+    } catch {
+      // Silent — this is a background poll; a transient network blip
+      // here shouldn't interrupt the buyer or show an error toast.
+    }
+  }
+
+  // Starts the deep link + polling once, when the buyer reaches the
+  // Telegram step — mirrors the email step's "fetch what this step
+  // needs to render" pattern, just automatic instead of a button tap
+  // (there's no equivalent "Send code" action to gate it behind here).
+  useEffect(() => {
+    if (step !== "telegram") return;
+
+    startTelegramLink();
+    pollIntervalRef.current = setInterval(pollTelegramStatus, TELEGRAM_STATUS_POLL_INTERVAL_MS);
+
+    return () => {
+      if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step]);
+
+  // Once the poll (or the manual-code path below) confirms linking,
+  // stop polling and advance — separate effect so both paths share
+  // one exit point instead of duplicating the transition logic.
+  useEffect(() => {
+    if (!telegramLinked) return;
+    if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
+    showToast("✓ Telegram linked successfully.", "success");
+    setStep("security-question");
+  }, [telegramLinked, showToast]);
+
+  async function handleVerifyManualCode(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (isVerifyingManualCode) return;
+
+    if (manualCode.trim().length !== 6) {
+      setManualCodeError("Enter the 6-digit code the bot sent you.");
+      return;
+    }
+    setManualCodeError(undefined);
+    setIsVerifyingManualCode(true);
+
+    try {
+      const response = await fetch("/api/auth/recovery-setup/telegram/link", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...getCsrfHeader() },
+        body: JSON.stringify({ action: "verify-code", code: manualCode.trim() }),
+      });
+      const result = await response.json();
+
+      if (!result.success) {
+        showToast(result.message ?? "Incorrect or expired code. Please try again.", "error");
+        return;
+      }
+
+      setTelegramLinked(true);
+    } catch {
+      showToast("Couldn't reach the server. Check your connection and try again.", "error");
+    } finally {
+      setIsVerifyingManualCode(false);
     }
   }
 
@@ -164,17 +284,23 @@ export default function RecoverySetupWizard({ showToast }: RecoverySetupWizardPr
     }
   }
 
+  function stepState(target: WizardStep): "pending" | "active" | "done" {
+    const order: WizardStep[] = ["email", "telegram", "security-question", "done"];
+    const currentIndex = order.indexOf(step);
+    const targetIndex = order.indexOf(target);
+    if (targetIndex < currentIndex) return "done";
+    if (targetIndex === currentIndex) return "active";
+    return "pending";
+  }
+
   return (
     <>
-      {/* Step indicator — 2 of the 3 spec steps are live here; Telegram
-          linking is the remaining piece (task-35's other half). */}
       <div className="recoverySetupSteps">
-        <StepDot label="Email" state={step === "email" ? "active" : "done"} />
+        <StepDot label="Email" state={stepState("email")} />
         <div className="recoverySetupStepDivider" />
-        <StepDot
-          label="Security question"
-          state={step === "security-question" ? "active" : step === "done" ? "done" : "pending"}
-        />
+        <StepDot label="Telegram" state={stepState("telegram")} />
+        <div className="recoverySetupStepDivider" />
+        <StepDot label="Security question" state={stepState("security-question")} />
       </div>
 
       {step === "email" && (
@@ -228,6 +354,69 @@ export default function RecoverySetupWizard({ showToast }: RecoverySetupWizardPr
         </form>
       )}
 
+      {step === "telegram" && (
+        <div className="authForm">
+          <p className="authPageDescription">
+            Link your Telegram account — the fastest way back in if you ever lose access, since it
+            doesn&apos;t depend on remembering anything.
+          </p>
+
+          {!botConfigured && !isStartingLink && (
+            <p className="authFieldError">
+              Telegram linking isn&apos;t available yet. Please continue and finish this step later
+              from your account settings.
+            </p>
+          )}
+
+          <ol className="recoverySetupTelegramSteps">
+            <li>Open Telegram on any device (phone, tablet, or web.telegram.org)</li>
+            <li>
+              Search for the bot — or tap the button below to open it directly
+            </li>
+            <li>Tap &quot;Start&quot; (or send /start) in the chat with the bot</li>
+            <li>The bot will reply with a 6-digit code</li>
+            <li>Copy that code and paste it into the field below</li>
+          </ol>
+
+          {isStartingLink ? (
+            <div className="recoverySetupOtpRow">
+              <Loader2 size={18} className="authSpinner" />
+            </div>
+          ) : (
+            deepLink && (
+              <a href={deepLink} target="_blank" rel="noopener noreferrer" className="authSubmitButton">
+                Open Telegram
+              </a>
+            )
+          )}
+
+          <p className="recoverySetupHelperText">
+            Already tapped the button? This page updates automatically once linking completes — no
+            need to refresh.
+          </p>
+
+          <form onSubmit={handleVerifyManualCode} className="authForm" noValidate>
+            <div className="authField">
+              <label htmlFor="recoveryTelegramCode">6-digit code (if you opened Telegram manually)</label>
+              <input
+                id="recoveryTelegramCode"
+                type="text"
+                inputMode="numeric"
+                maxLength={6}
+                value={manualCode}
+                onChange={(event) => setManualCode(event.target.value.replace(/\D/g, ""))}
+                placeholder="123456"
+              />
+              {manualCodeError && <span className="authFieldError">{manualCodeError}</span>}
+            </div>
+
+            <button type="submit" className="authSubmitButton" disabled={isVerifyingManualCode}>
+              {isVerifyingManualCode ? <Loader2 size={18} className="authSpinner" /> : "Verify & link"}
+            </button>
+          </form>
+        </div>
+      )}
+
       {step === "security-question" && (
         <form onSubmit={handleSaveSecurityQuestion} className="authForm" noValidate>
           <p className="authPageDescription">
@@ -276,8 +465,7 @@ export default function RecoverySetupWizard({ showToast }: RecoverySetupWizardPr
       {step === "done" && (
         <div className="authForm">
           <p className="authPageDescription">
-            Email and security question are set up. Telegram linking (the third recovery method)
-            is coming soon — you can continue to your dashboard for now.
+            All three recovery methods are set up. You can continue to your dashboard now.
           </p>
           <a href="/buyer/dashboard" className="authSubmitButton authSubmitButton--link">
             Continue to dashboard
