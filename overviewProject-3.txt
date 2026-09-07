@@ -186,3 +186,18 @@ file holds change-log entries only.
   task-84 through task-90) -- run locally before merging.
   taskPlan.md and overviewProject.txt's Section 5C updated in place
   same turn per Rule 16.1.
+
+[2026-09-08] Rule 49 Step -1 audit on repo open: reconciled task-92
+  (Admin Analytics API, app/api/admin/analytics/route.ts) as already
+  built but undocumented -- it existed in code and git history ("done
+  task 92") with no docs/tasks/ file and no taskPlan.md entry, since
+  the file's own header comment shows it as the API half of task-65's
+  split (task-93 = UI half, app/admin/analytics/page.tsx, not yet
+  built). Also found and flipped two stale taskPlan.md parent
+  checkboxes ([~]/[ ] task-36 and task-35-Telegram-remaining) whose
+  child tasks were 100% [DONE] (Rule 6 parent auto-sync). Also
+  reconciled task-43 (Admin Vault page) as already satisfied by
+  task-32's earlier build of app/admin/vault/[slug] -- taskPlan.md had
+  it listed separately as not-started. Section 5C item 4 and
+  docs/taskPlan.md updated in place same turn per Rule 16.1/49.1. No
+  code files changed -- documentation/tracking reconciliation only.

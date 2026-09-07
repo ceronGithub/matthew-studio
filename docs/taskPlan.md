@@ -1,5 +1,7 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
+**NEXT UP:** task-93 — admin analytics UI page (task-65's split: task-92 API is DONE, this is the remaining UI half)
+
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
 (Layer-3 grep verification) before being trusted at face value.
@@ -83,7 +85,7 @@ see Section 5C / 8 in that file.
       recovery-setup` wizard: Email OTP (send/verify) + Security
       Question steps, `RegisterForm` now redirects there post-signup.
       Built 2026-09-07, see docs/tasks/task-35-email-security-question.md.
-- [ ] task-35 (Telegram half, remaining) — split into task-38 through
+- [DONE] task-35 (Telegram half, remaining) — split into task-38 through
       task-41 (schema/API/UI/middleware) since it spans 4 layers.
 - [x] task-38 (schema + lib) — `telegramLinkToken`/`telegramOtpCodeHash`
       fields on BuyerRecovery + `lib/telegramLink.ts`. Built 2026-09-07,
@@ -106,7 +108,12 @@ see Section 5C / 8 in that file.
       NOTE: this task number collides with item 4's "task-41 — Analytics"
       below — see NOTES at the bottom of this file, unresolved pending
       developer renumbering decision.
-- [~] task-36 — `/auth/forgot-password` flow — split into task-66
+      [Rule 6 auto-sync, 2026-09-08: task-35 (Telegram half) and
+      task-36 above were both left at [ ]/[~] even though every one of
+      their listed children (task-38 through task-41, task-66 through
+      task-70) was already [DONE]/[x] — flipped both parent lines to
+      [DONE] on sight during this session's Step -1 audit.]
+- [DONE] task-36 — `/auth/forgot-password` flow — split into task-66
       through task-70 (schema/API-verify/API-reset/UI-forgot-password/
       UI-reset-password, per Rule 49 Step 4: bundles 3+ distinct
       sub-features across schema+API+UI layers), same pattern as the
@@ -146,7 +153,7 @@ see Section 5C / 8 in that file.
 
 ## PHASE 3 (remainder) — ADMIN & SUPER-ADMIN OVERSIGHT
 
-### [~] 4. admin_account_specification.md — Product CRUD + Dashboard + Orders done; Users/Analytics/Security/Vault/Profile remain
+### [~] 4. admin_account_specification.md — Product CRUD + Dashboard + Orders + Users + Vault done; Analytics in progress (API done, UI next), Security/Profile remain
 - [DONE] task-71 — Admin dashboard (Section 3.1) — renumbered 2026-09-07 from
       task-38, which collided with the (already DONE) buyer-recovery
       Telegram schema task of the same number; see NOTES. Built
@@ -279,12 +286,30 @@ see Section 5C / 8 in that file.
         info, order history, activity trail, notes, action buttons
         wired to task-86 (Section 3.4.2). Built 2026-09-08, see
         docs/tasks/task-88-ui-admin-user-detail.md.
-- [ ] task-65 — Analytics (Section 3.5) — depends on item 11's traffic
-      table (already renumbered from task-41 per prior NOTES entry)
+- [~] task-65 — Analytics (Section 3.5) — depended on item 11's traffic
+      table (already renumbered from task-41 per prior NOTES entry);
+      that table is now DONE (task-89/90/91) so this item unblocked
+      and was split into task-92/task-93 per Rule 49 Step 4 (spans
+      API + UI layers):
+  - [DONE] task-92 (API) — `GET /api/admin/analytics`: getSessionAdmin()
+        auth + "view-analytics" permission check, days/categories
+        query params, delegates to `lib/adminAnalyticsStats.ts`. Built
+        and committed ("done task 92") but never given a docs/tasks/
+        file or reflected in this taskPlan — reconciled 2026-09-08 per
+        Rule 49.1 (Layer-3 confirmed live and non-stub via the route's
+        own header comment, which names task-92/task-93 explicitly).
+        See docs/tasks/task-92-api-admin-analytics.md (back-filled).
+  - [ ] task-93 (UI) — `app/admin/analytics/page.tsx`, reading from
+        task-92's route. Not yet built — **this is next up**.
 - [ ] task-42 — Admin Security Logs page (Section 3.6) — reuses Rule 38.9
       pattern already designed for super-admin; confirm if admin gets a
       scoped view or the same page with permission check
-- [ ] task-43 — Admin Vault page (Section 3.7) — depends on task-32
+- [DONE] task-43 — Admin Vault page (Section 3.7) — reconciled 2026-09-08:
+      already satisfied by task-32, which built both
+      `/superAdmin/vault/[slug]` and `/admin/vault/[slug]`
+      (`app/admin/vault/page.tsx` + `app/admin/vault/[slug]/page.tsx`
+      confirmed live on disk). This line was stale — task-32 already
+      covered this scope, it just wasn't cross-referenced here.
 - [ ] task-44 — Admin Profile page (Section 3.8)
 
 ### [~] 5. super_admin_account_specification.md

@@ -516,10 +516,31 @@ means testing against fixtures instead of the real flow)
               docs/tasks/task-88-ui-admin-user-detail.md. task-73
               (Users Management) is now fully closed — all of task-83
               through task-88 done.
-       Rest of this spec (analytics, security logs, vault, profile —
-       Sections 3.5-3.8) not started — still [~] overall for that
-       reason, but the Product CRUD + Dashboard + Order Management +
-       Users Management slices are complete.
+       [DONE] task-92 (API) — GET /api/admin/analytics (Section 3.5):
+              getSessionAdmin() auth + "view-analytics" permission
+              check, days/categories query params, delegates to
+              lib/adminAnalyticsStats.ts. Built and committed ("done
+              task 92") but never reflected in taskPlan.md or given a
+              docs/tasks/ file — reconciled here 2026-09-08 per Rule
+              49.1 after Layer-3 confirming the route exists and is
+              non-stub (its own header comment identifies it as the
+              API half of task-65's split, task-93 as the UI half).
+       [ ] task-93 (UI) — app/admin/analytics/page.tsx, the remaining
+              half of task-65's split. Not yet built — this is the
+              next item in the build sequence.
+       [DONE] Admin Vault page (Section 3.7, previously tracked as
+              task-43 "depends on task-32") — already satisfied:
+              task-32 built both /superAdmin/vault/[slug] and
+              /admin/vault/[slug] (see docs/tasks/task-32-ui-vault-
+              pages.md), and app/admin/vault/page.tsx +
+              app/admin/vault/[slug]/page.tsx are confirmed live on
+              disk. Reconciled here 2026-09-08 — taskPlan.md's task-43
+              line was stale.
+       Rest of this spec (admin security logs Section 3.6, admin
+       profile Section 3.8) not started — still [~] overall for that
+       reason, but Product CRUD + Dashboard + Order Management +
+       Users Management + Vault are complete, and Analytics is API-
+       done/UI-pending.
 [~] 5. super_admin_account_specification.md — IN PROGRESS (corrected
        here 2026-09-06). Per its own Section 12 internal phasing:
        - Phase 2 (Dashboard Shell + Security/Activity Logging) is
