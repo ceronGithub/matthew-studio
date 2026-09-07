@@ -142,7 +142,11 @@ export default function RegisterForm({ showToast }: RegisterFormProps) {
       // the dashboard's next mount, then cleared, so it never reappears
       // on a later refresh or a normal returning sign-in.
       sessionStorage.setItem("mtwOnboarding:justRegistered", "true");
-      router.push("/buyer/dashboard");
+      // Recovery setup (buyer_password_recovery_specification.md Section 2)
+      // runs before the dashboard — not yet enforced by middleware.ts
+      // (that gate is task-35's other half), but every new registration
+      // is routed there first regardless.
+      router.push("/auth/register/recovery-setup");
     } catch {
       showToast("Couldn't reach the server. Check your connection and try again.", "error");
     } finally {

@@ -579,3 +579,34 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   Checked off task-34 in docs/taskPlan.md. npx prisma generate/db push
   not run in this sandbox (no DB credentials here) -- run locally
   before deploying.
+
+[2026-09-07] task-35 (email + security-question half,
+  buyer_password_recovery_specification.md Section 2.1/2.3/5): added
+  emailOtpCodeHash/emailOtpExpiresAt/emailOtpSentAt to BuyerRecovery
+  (prisma/schema.prisma); lib/emailOtp.ts (SHA-256 code hashing, same
+  ephemeral-secret convention as VaultCredentials -- not bcrypt, since
+  this is a 10-minute code, not a long-lived credential);
+  lib/securityQuestions.ts (shared Question Bank, single source of
+  truth for UI + server validation); app/api/auth/recovery-setup/
+  email/route.ts (send/verify, 60s resend cooldown, 10-min expiry,
+  rate-limited 5/15min); app/api/auth/recovery-setup/security-question/
+  route.ts (bcrypt-hashed answer, Rule 18.2/32.4 discipline);
+  components/auth/RecoverySetupWizard.tsx (2-step UI, Telegram step
+  deliberately deferred); app/auth/register/recovery-setup/page.tsx;
+  app/styles/recoverySetup.css. RegisterForm.tsx now redirects to
+  /auth/register/recovery-setup instead of /buyer/dashboard after
+  signup. Added bcryptjs + @types/bcryptjs to package.json. Documented
+  EMAILJS_TEMPLATE_ID_RECOVERY_OTP in overviewProject.txt's env var
+  section. Deliberately did NOT build: Telegram linking (Section 2.2),
+  the recoverySetupComplete=true flip (spec requires all 3 steps), or
+  the middleware.ts blocking gate -- those need TELEGRAM_BOT_TOKEN/
+  TELEGRAM_BOT_USERNAME from the developer and are task-35's remaining
+  half. No Gatekeeper strike wiring here -- password_recovery_failed
+  strikes apply to the Section 4 forgot-password flow (task-36/37),
+  not this setup flow. npx tsc --noEmit: 21 pre-existing errors only
+  (ungenerated @prisma/client types + unrelated implicit-any in
+  lib/anomalyDetection.ts and lib/gatekeeper.ts), zero new errors from
+  files touched here. npx prisma generate/db push not runnable in this
+  sandbox (no DB credentials, binaries.prisma.sh blocked) -- run both
+  locally before testing. See docs/tasks/task-35-email-security-question.md.
+  Checked off task-35 (this half) in docs/taskPlan.md.

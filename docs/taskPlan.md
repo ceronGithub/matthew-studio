@@ -76,8 +76,14 @@ see Section 5C / 8 in that file.
       spec's literal `model Buyer` block, since this repo has no local
       Buyer/User table — see prisma/schema.prisma header comment and
       overviewProject-2.txt's 2026-09-07 entry.
-- [ ] task-35 — Post-registration setup flow (email OTP, Telegram link,
-      security question) + `recoverySetupComplete` middleware gate
+- [DONE] task-35 (email + security-question half) — `/auth/register/
+      recovery-setup` wizard: Email OTP (send/verify) + Security
+      Question steps, `RegisterForm` now redirects there post-signup.
+      Built 2026-09-07, see docs/tasks/task-35-email-security-question.md.
+- [ ] task-35 (Telegram half, remaining) — Telegram bot deep-link +
+      OTP capture, final `recoverySetupComplete = true` flip, and the
+      `middleware.ts` blocking gate (needs TELEGRAM_BOT_TOKEN/
+      TELEGRAM_BOT_USERNAME from the developer)
 - [ ] task-36 — `/auth/forgot-password` flow (3 recovery methods, anti-
       enumeration responses, single-use reset token)
 - [ ] task-37 — `/auth/reset-password` page + rate limiting (5/15min across

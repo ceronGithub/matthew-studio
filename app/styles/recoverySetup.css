@@ -1,0 +1,121 @@
+/**
+ * FILE: app/styles/recoverySetup.css
+ * PURPOSE: Styles for the /auth/register/recovery-setup wizard
+ * (RecoverySetupWizard.tsx). Extends the shared auth.css tokens/
+ * classes (authForm, authField, authFieldError) rather than
+ * duplicating them — this file only adds what auth.css doesn't
+ * already cover: the step progress indicator and a <select> field.
+ */
+
+/*
+ * .recoverySetupSteps
+ * Row of step labels above the active form, showing progress through
+ * the setup flow. Flex row, gap-separated — never fixed widths.
+ */
+.recoverySetupSteps {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.recoverySetupStep {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.recoverySetupStep--active {
+  color: var(--color-text-primary);
+}
+
+.recoverySetupStep--done {
+  color: var(--color-accent);
+}
+
+.recoverySetupStepDot {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.recoverySetupStep--active .recoverySetupStepDot {
+  border-color: var(--color-accent);
+}
+
+.recoverySetupStep--done .recoverySetupStepDot {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.recoverySetupStepDivider {
+  flex: 1 1 1.5rem;
+  height: 1px;
+  background: var(--color-border);
+}
+
+/* Select field — auth.css only styles text/email/password inputs. */
+.authField select {
+  width: 100%;
+  font-size: 1rem;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.authField select:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+/*
+ * .recoverySetupOtpRow
+ * Pairs the OTP code input with its Resend action on one line.
+ */
+.recoverySetupOtpRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.recoverySetupResendLink {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.8rem;
+  color: var(--color-accent);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.recoverySetupResendLink:hover:not(:disabled),
+.recoverySetupResendLink:focus-visible:not(:disabled) {
+  color: var(--color-accent-hover);
+}
+
+.recoverySetupResendLink:disabled {
+  color: var(--color-text-muted);
+  cursor: default;
+}
+
+.recoverySetupHelperText {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}

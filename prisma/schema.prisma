@@ -503,8 +503,14 @@ model BuyerRecovery {
 
   recoverySetupComplete    Boolean   @default(false)
 
-  // Email recovery (Section 2.1 / 4.3)
+  // Email recovery (Section 2.1 / 4.3) — codeHash is SHA-256 (same
+  // ephemeral-secret convention as VaultCredentials, not bcrypt: this
+  // is a 6-digit, 10-minute-lived code, not a long-lived credential).
+  // sentAt drives the 60-second resend cooldown (Section 2.1).
   emailVerifiedForRecovery Boolean   @default(false)
+  emailOtpCodeHash         String?
+  emailOtpExpiresAt        DateTime?
+  emailOtpSentAt           DateTime?
 
   // Telegram recovery (Section 2.2 / 4.4) — chat_id is the real
   // identifier the bot sends to; never the username (Telegram's Bot

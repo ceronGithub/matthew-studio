@@ -706,9 +706,10 @@ referenced in the codebase today (grep-verified) is added below.
   EMAILJS_SERVICE_ID=
   EMAILJS_TEMPLATE_ID_CONTACT=
   EMAILJS_TEMPLATE_ID_SUPPORT=
+  EMAILJS_TEMPLATE_ID_RECOVERY_OTP=  # template vars: to_email, otp_code -- app/api/auth/recovery-setup/email/route.ts, added 2026-09-07 (task-35, email+security-question half)
   PAYMONGO_SECRET_KEY=       # server-only, no NEXT_PUBLIC_ prefix (Rule 18.5) -- services/paymongo.ts, added 2026-09-05
   PAYMONGO_WEBHOOK_SECRET=   # server-only -- app/api/paymongo/webhook/route.ts, added 2026-09-05
-  TELEGRAM_BOT_TOKEN=        # server-only, from @BotFather (Rule 48.5) -- not yet called by any route (task-34 only added the field/schema; the bot webhook lands in task-35)
+  TELEGRAM_BOT_TOKEN=        # server-only, from @BotFather (Rule 48.5) -- still not called by any route (task-35's Telegram-linking half, not yet built)
   TELEGRAM_BOT_USERNAME=     # e.g. "MatthewStudioBot" -- builds the deep link https://t.me/<username>?start=<linkToken>, added 2026-09-07
 
 .env (Prisma CLI -- generate/db push/migrate, read via prisma.config.mjs):
