@@ -889,3 +889,19 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   registered buyer's email server-side without scanning all Supabase
   Auth users -- limited to order ID + guest email for now. taskPlan.md
   and this file's Section 5C updated in place same turn per Rule 16.1.
+
+[2026-09-07] Built task-77 and task-78 (admin_account_specification.md
+  Section 3.3.1/3.3.2, order-management split, continuing task-75/76):
+  POST /api/admin/orders/[orderId]/actions -- grouped update_status/
+  refund/add_note handlers (statusHistory/internalNotes append,
+  buyer notification via createNotification() for registered buyers
+  on status/refund, SecurityLog admin_action on every success) -- and
+  POST /api/admin/orders/[orderId]/send-email -- custom buyer email
+  via one shared EmailJS template (EMAILJS_TEMPLATE_ID_ADMIN_ORDER_
+  EMAIL, new env var, needs dashboard setup) with a preset-subject
+  variable instead of one template per preset. Both gated by
+  getSessionAdmin(). Documented gaps: guest orders (no userId) never
+  receive a notification for status/refund changes -- no notification
+  channel for guests in this app's design; send-email route works for
+  guests as a manual workaround. taskPlan.md and this file's Section
+  5C updated in place same turn per Rule 16.1.

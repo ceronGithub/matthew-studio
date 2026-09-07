@@ -177,13 +177,24 @@ see Section 5C / 8 in that file.
         internal notes, refund/shipping/production-stage fields)
         (Section 3.3.2 #1-5). Built 2026-09-07, see
         docs/tasks/task-76-api-admin-order-detail.md.
-  - [ ] task-77 (API) — PATCH .../status, POST .../refund,
-        POST .../notes — status update (+SecurityLog+notification),
-        refund (+notification), internal note — grouped as one task,
+  - [DONE] task-77 (API) — POST /api/admin/orders/[orderId]/actions —
+        `action` discriminator for update_status (+statusHistory
+        entry+SecurityLog+notification), refund (+refundReason/
+        refundedAt+status→Cancelled+notification), add_note
+        (internalNotes entry, never notifies) — grouped as one task,
         same precedent as task-30's grouped vault routes (Section
-        3.3.1 Row Actions / 3.3.2 Actions)
-  - [ ] task-78 (API) — POST .../send-email — custom buyer email via
-        EmailJS preset templates (Section 3.3.1 Row Actions)
+        3.3.1 Row Actions / 3.3.2 Actions). Built 2026-09-07, see
+        docs/tasks/task-77-api-admin-order-actions.md. Notifications
+        skipped for guest orders (no userId to notify).
+  - [DONE] task-78 (API) — POST /api/admin/orders/[orderId]/send-email
+        — custom buyer email via one shared EmailJS template
+        (EMAILJS_TEMPLATE_ID_ADMIN_ORDER_EMAIL) with a preset-subject
+        variable rather than one template per preset (Section 3.3.1
+        Row Actions). Works for guest orders too (email doesn't
+        require an account). Built 2026-09-07, see
+        docs/tasks/task-78-api-admin-order-send-email.md. New env var:
+        EMAILJS_TEMPLATE_ID_ADMIN_ORDER_EMAIL — needs to be created in
+        the EmailJS dashboard and added to .env/.env.local.
   - [ ] task-79 (API) — PATCH .../production-stage — advance/revert
         t-shirt stage (revert requires note), optional R2 proof-photo
         attach, SecurityLog `order_production_stage_updated`

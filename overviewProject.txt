@@ -429,7 +429,19 @@ means testing against fixtures instead of the real flow)
               detail: items joined to Product for category, buyer
               info, payment, timeline, notes, refund/shipping/
               production-stage) — see
-              docs/tasks/task-76-api-admin-order-detail.md. task-77
+              docs/tasks/task-76-api-admin-order-detail.md. [DONE]
+              task-77 (POST /api/admin/orders/[orderId]/actions —
+              update_status/refund/add_note, grouped per task-30
+              precedent) — see
+              docs/tasks/task-77-api-admin-order-actions.md. Guest
+              orders never get a notification (no userId) — flagged
+              gap. [DONE] task-78 (POST
+              /api/admin/orders/[orderId]/send-email — buyer email via
+              one shared EmailJS template with a preset-subject
+              variable) — see
+              docs/tasks/task-78-api-admin-order-send-email.md. New
+              env var EMAILJS_TEMPLATE_ID_ADMIN_ORDER_EMAIL needs
+              manual EmailJS dashboard setup before use. task-79
               through task-82 not started.
        Rest of this spec (orders, users, analytics, security logs,
        vault, profile — Sections 3.3-3.8) not started — still [~]
