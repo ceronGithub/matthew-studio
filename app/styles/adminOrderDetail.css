@@ -1,0 +1,489 @@
+/**
+ * FILE: app/styles/adminOrderDetail.css
+ * PURPOSE:
+ * Styles for app/admin/orders/[orderId]/page.tsx and
+ * AdminOrderDetail.tsx (task-81). References the design tokens in
+ * app/globals.css only — no hardcoded colors/spacing. Responsive
+ * breakpoints live in app/styles/mediaQueries.css, not here.
+ * Includes its own copy of the shared ConfirmationModal's styles
+ * (.confirmationModal*), same per-page-duplication pattern as
+ * buyerOrderDetail.css / buyerPaymentMethods.css / buyerSubscription.css.
+ */
+
+.adminOrderDetailPage {
+  width: 100%;
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* ---------- Top row / header ---------- */
+
+.adminOrderDetailTopRow {
+  display: flex;
+}
+
+.adminOrderDetailBackLink {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-accent);
+  font-size: 0.9rem;
+}
+
+.adminOrderDetailHeaderRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.adminOrderDetailEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.adminOrderDetailTitle {
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+.adminOrderDetailMeta {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-xs);
+}
+
+.adminOrderDetailStatusBadge {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.adminOrderDetailProductionNote {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+}
+
+/* ---------- Info cards grid (buyer / payment / shipping) ---------- */
+
+.adminOrderDetailGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-md);
+}
+
+.adminOrderDetailCard {
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+}
+
+.adminOrderDetailSectionTitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.adminOrderDetailLine {
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+.adminOrderDetailLineMuted {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+}
+
+/* ---------- Items ---------- */
+
+.adminOrderDetailItemsSection {
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+}
+
+.adminOrderDetailItemsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.adminOrderDetailItemRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background-color: var(--color-bg);
+}
+
+.adminOrderDetailItemBody {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.adminOrderDetailItemName {
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+.adminOrderDetailItemMeta {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+}
+
+.adminOrderDetailItemSubtotal {
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  flex-shrink: 0;
+}
+
+.adminOrderDetailSummary {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-sm);
+}
+
+.adminOrderDetailSummaryRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  padding: var(--space-xs) 0;
+}
+
+.adminOrderDetailSummaryRow--total {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  border-top: 1px solid var(--color-border);
+  margin-top: var(--space-xs);
+  padding-top: var(--space-sm);
+}
+
+.adminOrderDetailRefundNote {
+  font-size: 0.8rem;
+  color: var(--color-error);
+  margin-top: var(--space-sm);
+}
+
+/* ---------- Timeline ---------- */
+
+.adminOrderDetailTimelineSection {
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+}
+
+.adminOrderDetailTimeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.adminOrderDetailTimelineStep {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+
+.adminOrderDetailTimelineIcon {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.adminOrderDetailTimelineIcon--done {
+  color: var(--color-success);
+}
+
+.adminOrderDetailTimelineLabel {
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+}
+
+.adminOrderDetailTimelineNote {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-xs);
+}
+
+.adminOrderDetailTimelineTime {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+}
+
+/* ---------- Actions (status / refund / notes / email) ---------- */
+
+.adminOrderDetailActionsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+}
+
+.adminOrderDetailActionRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.adminOrderDetailSelect,
+.adminOrderDetailInput {
+  flex: 1 1 160px;
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-md);
+  font-size: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  transition: border-color var(--transition-fast);
+}
+
+.adminOrderDetailSelect:focus-visible,
+.adminOrderDetailInput:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+.adminOrderDetailTextarea {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  font-size: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  resize: vertical;
+  transition: border-color var(--transition-fast);
+}
+
+.adminOrderDetailTextarea:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+.adminOrderDetailEmailForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.adminOrderDetailButton {
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.adminOrderDetailButton--primary {
+  border: 1px solid var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.adminOrderDetailButton--primary:hover,
+.adminOrderDetailButton--primary:focus-visible,
+.adminOrderDetailButton--primary:active {
+  background-color: var(--color-accent-hover);
+}
+
+.adminOrderDetailButton--secondary {
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+  color: var(--color-text-secondary);
+}
+
+.adminOrderDetailButton--secondary:hover,
+.adminOrderDetailButton--secondary:focus-visible,
+.adminOrderDetailButton--secondary:active {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.adminOrderDetailButton--destructive {
+  border: 1px solid var(--color-error);
+  background-color: transparent;
+  color: var(--color-error);
+}
+
+.adminOrderDetailButton--destructive:hover,
+.adminOrderDetailButton--destructive:focus-visible,
+.adminOrderDetailButton--destructive:active {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.adminOrderDetailButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.adminOrderDetailNotesList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.adminOrderDetailNoteRow {
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-bg);
+  font-size: 0.85rem;
+  color: var(--color-text-primary);
+}
+
+/* ---------- Skeleton / empty states (Rule 25) ---------- */
+
+.adminOrderDetailSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-xl) var(--space-lg);
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+}
+
+.adminOrderDetailSkeletonBlock {
+  height: 96px;
+  border-radius: 12px;
+}
+
+.adminOrderDetailEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  color: var(--color-text-secondary);
+  text-align: center;
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+}
+
+/* ---------- Confirmation Modal (Rule 34.4 shared component) ---------- */
+
+.confirmationModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  z-index: var(--z-modal-backdrop);
+}
+
+.confirmationModalDialog {
+  width: 100%;
+  max-width: 420px;
+  padding: var(--space-lg) var(--space-xl);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-bg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  z-index: var(--z-modal);
+  transition: transform var(--transition-slow), opacity var(--transition-slow);
+}
+
+.confirmationModalTitle {
+  font-size: 1.1rem;
+  color: var(--color-text-primary);
+}
+
+.confirmationModalDescription {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+}
+
+.confirmationModalActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.confirmationModalCancelButton {
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+
+.confirmationModalCancelButton:hover,
+.confirmationModalCancelButton:focus-visible,
+.confirmationModalCancelButton:active {
+  background-color: var(--color-surface-hover);
+}
+
+.confirmationModalConfirmButton {
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-error);
+  background-color: var(--color-error);
+  color: var(--color-text-primary);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+
+.confirmationModalConfirmButton:hover,
+.confirmationModalConfirmButton:focus-visible,
+.confirmationModalConfirmButton:active {
+  background-color: #dc2626;
+}
+
+.confirmationModalCancelButton:disabled,
+.confirmationModalConfirmButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

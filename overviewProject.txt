@@ -453,7 +453,14 @@ means testing against fixtures instead of the real flow)
               of top-level status to "Shipped" + buyer notification,
               SecurityLog order_production_stage_updated) — see
               docs/tasks/task-79-api-admin-order-production-stage.md.
-              task-80 through task-82 not started.
+              [DONE] task-81 (UI) — /admin/orders/[orderId] detail
+              page: header, buyer/payment/shipping cards, items table,
+              status timeline, internal notes, update-status/refund
+              (behind ConfirmationModal)/add-note/send-email actions
+              wired to task-76/77/78 — see
+              docs/tasks/task-81-ui-admin-order-detail.md. T-shirt
+              production stage shown as a read-only label only;
+              task-82 (interactive stepper) not started.
        Rest of this spec (orders, users, analytics, security logs,
        vault, profile — Sections 3.3-3.8) not started — still [~]
        overall for that reason, but the Product CRUD + Dashboard

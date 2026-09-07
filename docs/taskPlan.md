@@ -211,9 +211,12 @@ see Section 5C / 8 in that file.
         fans out to the existing per-order actions endpoint (task-77)
         rather than a new bulk API route — UI-only scope per Rule 49
         Step 4.
-  - [ ] task-81 (UI) — /admin/orders/[orderId] detail page: header,
-        buyer info, items table, payment info, timeline, action
-        buttons wired to task-77/78 (Section 3.3.2)
+  - [DONE] task-81 (UI) — /admin/orders/[orderId] detail page: header,
+        buyer/payment/shipping cards, items table, status timeline,
+        internal notes, update-status/refund (behind
+        ConfirmationModal)/add-note/send-email actions wired to
+        task-76/77/78 (Section 3.3.2). Built 2026-09-07, see
+        docs/tasks/task-81-ui-admin-order-detail.md.
   - [ ] task-82 (UI) — T-shirt production tracker component
         (horizontal stepper, advance/revert modals with required
         revert note, photo upload) embedded in task-81's page,

@@ -945,3 +945,23 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   generated @prisma/client types -- see prior entry's documented gap).
   taskPlan.md and overviewProject.txt's Section 5C updated in place
   same turn per Rule 16.1.
+
+[2026-09-07] task-81 (UI) — built /admin/orders/[orderId] detail page:
+  header (order id, status badge, back link), buyer/payment/shipping
+  info cards, items table with per-line subtotal + order summary,
+  status timeline (from task-77's statusHistory), internal notes list
+  + add-note form, and an email-buyer panel wired to task-78's preset
+  templates. Update Status and Refund both go behind the shared
+  ConfirmationModal (same precedent as task-80's bulk status change);
+  Add Note and Send Email submit directly (non-destructive). T-shirt
+  orders show productionStage as a read-only label only -- the
+  interactive stepper is task-82, not built here, per Rule 49 Step 4's
+  split. New files: lib/hooks/useAdminOrderDetail.ts, components/
+  admin/AdminOrderDetail.tsx, app/admin/orders/[orderId]/page.tsx,
+  app/styles/adminOrderDetail.css. `npx tsc --noEmit` shows zero
+  errors in these 4 new files; pre-existing repo-wide errors are
+  unrelated (missing generated @prisma/client types in this sandbox --
+  `npx prisma generate` can't reach binaries.prisma.sh here -- run it
+  in a real dev environment before merging). taskPlan.md and
+  overviewProject.txt's Section 5C updated in place same turn per Rule
+  16.1.
