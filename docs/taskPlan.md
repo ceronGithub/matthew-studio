@@ -36,7 +36,7 @@ see Section 5C / 8 in that file.
 
 ## PHASE 4 — SECURITY & ACCESS HARDENING (next up — commerce phases 1-3 are done)
 
-### [~] 6. vault_specification.md — split into micro-tasks (schema already exists)
+### [DONE] 6. vault_specification.md — CLOSED 2026-09-07, all micro-tasks (28-33) done
 - [DONE] task-28 — Slug + vault-credentials utility functions (Sections
       2.2/2.3/3.1) — `lib/slugGenerator.ts` + `lib/vaultHelpers.ts`,
       built 2026-09-07. Also corrected a stale "front-end mockup
@@ -69,7 +69,7 @@ see Section 5C / 8 in that file.
       to the now-live API. Everything is done: instant-ban, 3-strike logic,
       middleware wiring, manual ban/unban backend, and the viewer page.
 
-### [~] 8. buyer_password_recovery_specification.md
+### [DONE] 8. buyer_password_recovery_specification.md — CLOSED 2026-09-07 (task-70)
 - [DONE] task-34 — Data model additions (recoverySetupComplete, telegramChatId,
       securityQuestionId/Hash fields per Rule 48.2) + Telegram bot env vars.
       Built as a new `BuyerRecovery` table (userId-keyed) rather than the

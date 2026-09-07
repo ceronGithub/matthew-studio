@@ -441,7 +441,8 @@ means testing against fixtures instead of the real flow)
 PHASE 4 — SECURITY & ACCESS HARDENING (independent of commerce;
 sequenced after core buyer flow so login/vault hardening doesn't
 block revenue-generating pages from shipping first)
-[~] 6. vault_specification.md — IN PROGRESS (2026-09-07). Corrected
+[DONE] 6. vault_specification.md — CLOSED 2026-09-07 (task-28 through
+       task-33 all done). Corrected
        here: the "front-end mockup already done" note was itself
        stale — vault_specification.md's own Section 13 was corrected
        2026-09-05 to say NONE of the mockup files ever existed; there

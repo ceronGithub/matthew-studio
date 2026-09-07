@@ -821,3 +821,12 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   buyer_password_recovery_specification.md end to end (task-66
   through task-70 all DONE); Section 5C's item 8 line should be
   flipped to [DONE] on next audit pass.
+
+[2026-09-07] Section 5C correction pass (developer asked "what's
+  next" -- checking taskPlan.md's phase order surfaced two stale
+  headers): flipped item 8 (buyer_password_recovery_specification.md)
+  and item 6 (vault_specification.md) from [~] to [DONE] in both
+  overviewProject.txt and docs/taskPlan.md -- both items' individual
+  sub-tasks (task-28 through task-33 for item 6; task-34 through
+  task-70 for item 8) were already all [DONE], the section header
+  itself just hadn't been synced. No code changed.
