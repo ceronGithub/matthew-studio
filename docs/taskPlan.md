@@ -222,8 +222,46 @@ see Section 5C / 8 in that file.
         revert note, photo upload) embedded in task-81's page,
         `tshirts`-category orders only (Section 3.3.3). Built
         2026-09-07, see docs/tasks/task-82-ui-production-tracker.md.
-- [ ] task-73 — Users management (Section 3.4) — renumbered 2026-09-07
-      from task-40, same Telegram-split collision; see NOTES.
+- [~] task-73 — Users management (Section 3.4) — renumbered 2026-09-07
+      from task-40, same Telegram-split collision; see NOTES. Split
+      into task-83 through task-88 per Rule 49 Step 4 (spans
+      schema+API+UI across 6 distinct sub-features: list, detail,
+      deactivate/reactivate, reset-password, send-email/add-note,
+      same pattern as the task-72→74-82 and task-36→66-70 splits
+      above). No local Buyer/User table exists — buyers are Supabase
+      Auth users, same constraint task-34/76 already worked around.
+  - [DONE] task-83 (schema) — `BuyerAdminMeta` model (userId-keyed,
+        `internalNotes` Json array, same shape/convention as
+        `Order.internalNotes`). Deliberately does NOT add an
+        active/inactive flag — deactivation reuses Supabase Admin
+        API's own `ban_duration` (task-86) rather than a second
+        source of truth. Password-reset needs no new fields either —
+        reuses `BuyerRecovery.forgotPasswordResetTokenHash`/
+        `ExpiresAt` (task-66) with an admin-initiated token instead of
+        a buyer-verified one. Built 2026-09-07, see
+        docs/tasks/task-83-schema-buyer-admin-meta.md. Run
+        `npx prisma db push && npx prisma generate` before task-84.
+  - [ ] task-84 (API) — GET /api/admin/users — list: merges Supabase
+        Auth users with per-buyer Order aggregates (total orders,
+        lifetime value) and BuyerAdminMeta note presence; filters
+        (status/date range/search), pagination, CSV export
+        (Section 3.4.1)
+  - [ ] task-85 (API) — GET /api/admin/users/[buyerId] — detail:
+        account info + last login/IP/city from SecurityLog, 5 most
+        recent orders, last 10 AccountActivityLog entries, internal
+        notes (Section 3.4.2 Display Sections 1-3)
+  - [ ] task-86 (API) — POST /api/admin/users/[buyerId]/actions —
+        `action` discriminator: deactivate/reactivate (Supabase
+        `ban_duration`), reset_password (admin-initiated reset token
+        + EmailJS, reuses task-66/68's fields/helpers), send_email
+        (EmailJS, reuses task-78's preset pattern), add_note
+        (BuyerAdminMeta.internalNotes) — grouped per task-30/77
+        precedent (Section 3.4.1 Row Actions / 3.4.2 Actions)
+  - [ ] task-87 (UI) — /admin/users list page: table, filters, bulk
+        deactivate/reactivate + CSV export (Section 3.4.1)
+  - [ ] task-88 (UI) — /admin/users/[buyerId] detail page: account
+        info, order history, activity trail, notes, action buttons
+        wired to task-86 (Section 3.4.2)
 - [ ] task-65 — Analytics (Section 3.5) — depends on item 11's traffic
       table (already renumbered from task-41 per prior NOTES entry)
 - [ ] task-42 — Admin Security Logs page (Section 3.6) — reuses Rule 38.9

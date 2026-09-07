@@ -1,0 +1,28 @@
+CHANGE LOG (continued from overviewProject-2.txt, closed at the
+1000-line cap per Rule 45.3). Full project overview (stack, file map,
+Section 5C, etc.) remains authoritative in overviewProject.txt — this
+file holds change-log entries only.
+
+---
+
+[2026-09-07] task-73 (Users Management, Section 3.4) split into task-83
+  through task-88 per Rule 49 Step 4 -- spans schema+API+UI across 6
+  sub-features (list, detail, deactivate/reactivate, reset-password,
+  send-email/add-note), same pattern as task-72's split into 74-82. No
+  local Buyer/User table exists in this schema (same constraint task-34/
+  76 already worked around) -- buyers are Supabase Auth users, so this
+  feature reads/writes Supabase Admin API + Order aggregates + a new
+  lightweight local table. task-83 (schema): added BuyerAdminMeta model
+  (userId-keyed, internalNotes Json array, same shape as
+  Order.internalNotes). Deliberately does NOT add an isActive flag --
+  deactivation will reuse Supabase Admin API's own ban_duration (task-86)
+  rather than a second source of truth Supabase already enforces at
+  sign-in. Password-reset needs no new fields either -- will reuse
+  BuyerRecovery.forgotPasswordResetTokenHash/ExpiresAt (task-66) with an
+  admin-initiated token instead of a buyer-verified one. Modified:
+  prisma/schema.prisma. Could not run `npx prisma validate` in this
+  sandbox (binaries.prisma.sh unreachable, same limitation as every prior
+  schema-change entry) -- run `npx prisma db push && npx prisma generate`
+  in a real dev environment before task-84. taskPlan.md and
+  overviewProject.txt's Section 5C updated in place same turn per Rule
+  16.1.

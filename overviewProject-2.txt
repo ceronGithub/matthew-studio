@@ -986,3 +986,6 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   errors (same 38 pre-existing, Prisma-client-generation-related errors
   as before -- see task-80/81 entries). taskPlan.md and overviewProject.txt's
   Section 5C updated in place same turn per Rule 16.1.
+
+[FILE CLOSED at 1000-line cap -- Rule 45.3. Change log continues in
+  overviewProject-3.txt.]

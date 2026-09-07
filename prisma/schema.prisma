@@ -596,6 +596,32 @@ model TelegramPendingLink {
   @@index([expiresAt])
 }
 
+/// BuyerAdminMeta
+/// admin_account_specification.md Section 3.4.2 — "Add Internal Note
+/// (optional, visible to other admins)". One row per buyer who has
+/// ever had a note added, same lazy-creation pattern as
+/// BuyerPaymentProfile (no local User/Buyer table exists — userId is
+/// only ever a plain string referencing Supabase Auth, same as
+/// Order.userId elsewhere). Deliberately does NOT hold an
+/// active/inactive flag: account deactivation (Section 3.4.1/3.4.2)
+/// is handled via Supabase Admin API's own ban_duration on the auth
+/// user directly (task-86) — Supabase already enforces that at
+/// sign-in, so duplicating it here would be a second source of truth
+/// that could drift out of sync.
+model BuyerAdminMeta {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+
+  // Json array of { note, adminId, createdAt } entries — same shape
+  // and append-only convention as Order.internalNotes (task-74/77).
+  internalNotes Json?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+}
+
 /// SupportTicket
 /// buyer_account_specification.md Section 4.5 — a persistent,
 /// per-buyer thread tied to their account, distinct from the public

@@ -467,6 +467,15 @@ means testing against fixtures instead of the real flow)
               route — see docs/tasks/task-82-ui-production-tracker.md.
               task-72 (Order Management) is now fully closed — all of
               task-74 through task-82 done.
+       [~]    task-73 (Users Management, Section 3.4) split into
+              task-83 through task-88 per Rule 49 Step 4 — same pattern
+              as task-72's split. [DONE] task-83 (schema:
+              BuyerAdminMeta model for admin-only internal notes;
+              deactivation reuses Supabase's own ban_duration instead
+              of a new flag; password-reset reuses BuyerRecovery's
+              existing reset-token fields) — see
+              docs/tasks/task-83-schema-buyer-admin-meta.md. task-84
+              through task-88 not started.
        Rest of this spec (orders, users, analytics, security logs,
        vault, profile — Sections 3.3-3.8) not started — still [~]
        overall for that reason, but the Product CRUD + Dashboard
