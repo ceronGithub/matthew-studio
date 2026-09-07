@@ -96,8 +96,13 @@ see Section 5C / 8 in that file.
 - [x] task-40 (UI) — re-enabled Telegram step in RecoverySetupWizard.tsx
       (deep link + polling + manual-code fallback). Built 2026-09-07,
       see docs/tasks/task-40-ui-wire-telegram-step.md.
-- [ ] task-41 (middleware) — flip recoverySetupComplete after step 3 +
-      middleware.ts blocking gate on /buyer/dashboard
+- [DONE] task-41 (middleware) — security-question route now checks
+      all 3 steps and flips recoverySetupComplete = true; middleware.ts
+      gates every /buyer/* route behind it via lib/recoverySetup.ts.
+      Built 2026-09-07, see docs/tasks/task-41-recovery-setup-gate.md.
+      NOTE: this task number collides with item 4's "task-41 — Analytics"
+      below — see NOTES at the bottom of this file, unresolved pending
+      developer renumbering decision.
 - [ ] task-36 — `/auth/forgot-password` flow (3 recovery methods, anti-
       enumeration responses, single-use reset token)
 - [ ] task-37 — `/auth/reset-password` page + rate limiting (5/15min across
@@ -169,6 +174,17 @@ see Section 5C / 8 in that file.
 
 ## NOTES
 
+- **UNRESOLVED — task-41 numbering collision (flagged 2026-09-07):**
+  `task-41` was used twice in this file — once under item 8
+  (buyer_password_recovery_specification.md, middleware gate, now
+  [DONE], see docs/tasks/task-41-recovery-setup-gate.md) and once
+  under item 4 (admin_account_specification.md, Analytics, still
+  [ ] and blocked on task-53's traffic table). Developer confirmed
+  the item 8 one should proceed under the number 41. The item 4
+  Analytics task still needs a real, non-colliding number
+  (task-65+, since 61-64 are already spoken for in Phase 6) before
+  its own docs/tasks/ file is created — do not create
+  docs/tasks/task-41-analytics.md; renumber it first.
 - Task numbering continues from the highest existing file (`task-27`) —
   next new task file is `task-28`.
 - `task-33` is listed under both item 6 and item 7 deliberately — it is

@@ -645,3 +645,24 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   flip and the middleware.ts gate remain task-41. See
   docs/tasks/task-40-ui-wire-telegram-step.md. Checked off task-40 in
   docs/taskPlan.md.
+
+[2026-09-07] task-41: security-question route (last of the 3 setup
+  steps) now checks emailVerifiedForRecovery + telegramChatId before
+  its upsert and flips recoverySetupComplete = true only when all 3
+  steps are confirmed server-side; logs a separate
+  recovery_setup_completed SecurityLog event on the flip. Added
+  lib/recoverySetup.ts (isRecoverySetupComplete, fails open on DB
+  error per the checkDeviceBan convention). middleware.ts gates every
+  /buyer/* route (not just /buyer/dashboard) behind that flag,
+  redirecting to /auth/register/recovery-setup otherwise -- placed
+  right after the existing /buyer role-mismatch check. Flagged and
+  resolved (per developer confirmation) a task-41 numbering collision
+  with item 4's Analytics task -- see docs/taskPlan.md NOTES; that
+  Analytics task still needs a real renumber before its own file is
+  created. npx tsc --noEmit: same pre-existing unrelated errors only
+  (ungenerated @prisma/client -- binaries.prisma.sh still blocked in
+  this sandbox), zero new errors from lib/recoverySetup.ts,
+  middleware.ts, or the security-question route. See
+  docs/tasks/task-41-recovery-setup-gate.md. Checked off task-41 in
+  docs/taskPlan.md; item 8's Section 5C block corrected in place
+  (was stale since task-35/38/39/40 had landed without updating it).

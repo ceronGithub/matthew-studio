@@ -40,6 +40,15 @@
  * super-admin's slug is honored on /admin/vault (Section 12.3: super-
  * admin can reach admin tooling), but an admin's slug is never
  * honored on /superAdmin/vault.
+ *
+ * Recovery Setup Gate (buyer_password_recovery_specification.md
+ * Section 2, task-41) runs right after the buyer role check, ahead of
+ * letting any /buyer/* request through: a buyer whose
+ * recoverySetupComplete flag is still false is redirected to
+ * /auth/register/recovery-setup instead of reaching /buyer/dashboard
+ * or any other buyer page. /auth/register/recovery-setup itself is
+ * under the /auth/* matcher, not /buyer/*, so it is never caught by
+ * its own gate.
  */
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
@@ -49,6 +58,7 @@ import { getDashboardPathForRole } from "@/lib/roleRouting";
 import { generateDeviceFingerprint } from "@/lib/deviceFingerprint";
 import { checkDeviceBan } from "@/lib/gatekeeper";
 import { validateSlugActive } from "@/lib/vaultHelpers";
+import { isRecoverySetupComplete } from "@/lib/recoverySetup";
 
 // Matches /superAdmin/vault/<slug> or /admin/vault/<slug> and captures
 // the route's role segment plus the AdminSession id carried in the
@@ -126,6 +136,13 @@ export async function middleware(request: NextRequest) {
     }
   } else if (pathname.startsWith("/buyer") && role !== "buyer") {
     response = redirectToLogin(request, pathname);
+  } else if (pathname.startsWith("/buyer") && role === "buyer" && !(await isRecoverySetupComplete(data.user?.id ?? null))) {
+    // Buyer is authenticated but hasn't finished the mandatory 3-step
+    // recovery setup (Section 2) yet — blocked from every /buyer/*
+    // page, not just /buyer/dashboard, until recoverySetupComplete is
+    // true. RecoverySetupWizard.tsx itself lives under /auth/*, so it
+    // is unaffected by this branch.
+    response = NextResponse.redirect(new URL("/auth/register/recovery-setup", request.url));
   } else if (pathname.startsWith("/superAdmin") && role !== "superAdmin") {
     response = redirectToLogin(request, pathname);
   } else if (pathname.startsWith("/admin") && role !== "admin" && role !== "superAdmin") {
