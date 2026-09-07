@@ -3,16 +3,20 @@
  * ROLE: Public — served at "/auth/forgot-password".
  *
  * PURPOSE:
- * Single-form page (no tabs) inside the same glass-card-over-slideshow
- * shell as /auth/login. Collects an email and requests a Supabase
- * password-reset link via ForgotPasswordForm.
+ * Single-page wizard inside the same glass-card-over-slideshow shell
+ * as /auth/login. Drives buyer_password_recovery_specification.md
+ * Section 4's 3-method forgot-password flow (email / Telegram /
+ * security question) via ForgotPasswordWizard — replaces the retired
+ * Supabase-native ForgotPasswordForm (task-69).
  */
 "use client";
 
 import { useToast } from "@/components/shared/useToast";
 import ToastStack from "@/components/shared/ToastStack";
 import AuthBackgroundSlideshow from "@/components/auth/AuthBackgroundSlideshow";
-import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm";
+import ForgotPasswordWizard from "@/components/auth/ForgotPasswordWizard";
+import "@/app/styles/recoverySetup.css";
+import "@/app/styles/forgotPassword.css";
 
 export default function ForgotPasswordPage() {
   const { toasts, showToast, dismissToast } = useToast();
@@ -24,7 +28,7 @@ export default function ForgotPasswordPage() {
 
       <div className="authGlassCard">
         <h1 className="authPageHeading">Forgot password?</h1>
-        <ForgotPasswordForm showToast={showToast} />
+        <ForgotPasswordWizard showToast={showToast} />
       </div>
     </>
   );

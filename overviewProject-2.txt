@@ -757,3 +757,32 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   in docs/taskPlan.md; item 8's Section 5C block in overviewProject.txt
   corrected in place (task-68 flipped to [DONE], summary line updated
   to reflect task-66/67/68 all complete, only task-69/70 UI remaining).
+
+[2026-09-07] task-69 (UI) -- built ForgotPasswordWizard.tsx (identify ->
+  pick method -> verify -> done) at /auth/forgot-password, consuming
+  /api/auth/forgot-password/initiate + /verify (task-66/67). Retired
+  the legacy Supabase-native flow: deleted components/auth/
+  ForgotPasswordForm.tsx and app/api/auth/forgot-password/route.ts
+  (only referenced by the page this task repointed) per developer
+  confirmation to replace rather than run a parallel URL. Added
+  app/styles/forgotPassword.css for the method-selection cards;
+  reused recoverySetup.css's step-dot/OTP-row/resend-link classes
+  rather than duplicating them. "Done" step links to /auth/reset-
+  password?token=... -- that page still runs the legacy
+  ResetPasswordForm (Supabase session-based, doesn't consume ?token=
+  yet) until task-70 ships; flagged as a placeholder handoff, not a
+  working one, in docs/tasks/task-69-ui-forgot-password-page.md and
+  in this file's item 8 Section 5C block (task-69 flipped to [DONE]
+  in place, same entry). Checked off task-69 in docs/taskPlan.md.
+
+[2026-09-07] Reconciliation (Rule 49.1): task-34 was marked [DONE] in
+  docs/taskPlan.md with no corresponding docs/tasks/task-34-*.md file
+  -- a traceability gap, not a build gap. Three-Layer Audit confirmed
+  the work is genuinely live: BuyerRecovery model in schema.prisma
+  (line 500) queried across 8 files (forgot-password initiate/verify/
+  reset routes, all 3 recovery-setup routes, the Telegram webhook, and
+  lib/recoverySetup.ts), plus TELEGRAM_BOT_TOKEN/TELEGRAM_BOT_USERNAME
+  documented in this file's env vars section. Back-filled
+  docs/tasks/task-34-buyer-recovery-schema.md, marked reconciled per
+  Rule 49.1's required note. No code changed. No other numbering gaps
+  found in docs/tasks/ during this pass.

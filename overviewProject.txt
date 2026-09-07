@@ -618,14 +618,27 @@ block revenue-generating pages from shipping first)
               STRIKE_EVENT_TYPES -- no change needed for 3-strike
               wiring on invalid/expired-token attempts. See docs/tasks/
               task-68-forgot-password-reset-api.md.
-       [ ] task-69 (UI) -- /auth/forgot-password page
+       [DONE] task-69 (UI) -- /auth/forgot-password page. New
+              ForgotPasswordWizard.tsx (identify -> pick method ->
+              verify -> done), replacing the retired Supabase-native
+              ForgotPasswordForm.tsx + its /api/auth/forgot-password
+              route (both deleted -- only referenced by the page this
+              task repointed). Developer confirmed retiring the legacy
+              flow rather than adding a parallel URL. See docs/tasks/
+              task-69-ui-forgot-password-page.md.
+              NOTE: the "done" step links to /auth/reset-password?
+              token=... but that page still runs the legacy Supabase
+              session-based ResetPasswordForm as of this entry -- it
+              does not yet consume ?token=. That's task-70. Until then
+              this is a placeholder link, not a working handoff --
+              flagged, not solved silently.
        [ ] task-70 (UI) -- /auth/reset-password page
        Post-registration setup + the dashboard blocking gate are fully
        built end to end (task-34/35/38/39/40/41). The forgot-password
-       flow's schema, API-verify, and API-reset slices (task-66/67/68)
-       are now all done -- what's left is the two UI pages (task-69/70)
-       for buyers who are locked out, not the post-registration setup
-       covered above.
+       flow's schema, API-verify, API-reset, and UI-forgot-password
+       slices (task-66/67/68/69) are now all done -- what's left is
+       the UI-reset-password page (task-70) for buyers who are locked
+       out, not the post-registration setup covered above.
 
 PHASE 5 — CATALOG & PRODUCT FEATURES (independent of commerce
 plumbing; can slot in whenever bandwidth allows — but item 9 needs

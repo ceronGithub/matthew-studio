@@ -75,7 +75,10 @@ see Section 5C / 8 in that file.
       Built as a new `BuyerRecovery` table (userId-keyed) rather than the
       spec's literal `model Buyer` block, since this repo has no local
       Buyer/User table — see prisma/schema.prisma header comment and
-      overviewProject-2.txt's 2026-09-07 entry.
+      overviewProject-2.txt's 2026-09-07 entry. Traceability file was
+      missing (numbering gap, no code gap) — back-filled 2026-09-07 via
+      Rule 49.1 reconciliation, see
+      docs/tasks/task-34-buyer-recovery-schema.md.
 - [DONE] task-35 (email + security-question half) — `/auth/register/
       recovery-setup` wizard: Email OTP (send/verify) + Security
       Question steps, `RegisterForm` now redirects there post-signup.
@@ -122,8 +125,14 @@ see Section 5C / 8 in that file.
   - [DONE] task-68 (API) — /api/auth/forgot-password/reset + session
         invalidation (Rule 44). Built 2026-09-07, see
         docs/tasks/task-68-forgot-password-reset-api.md.
-  - [ ] task-69 (UI) — /auth/forgot-password page (identify → pick
-        method → verify, one wizard component)
+  - [DONE] task-69 (UI) — /auth/forgot-password page (identify → pick
+        method → verify → done, one wizard component). Retired the
+        legacy Supabase-native ForgotPasswordForm + its API route
+        (developer confirmed: replace, don't run a parallel URL).
+        Built 2026-09-07, see
+        docs/tasks/task-69-ui-forgot-password-page.md. NOTE: links to
+        /auth/reset-password?token=... which task-70 hasn't wired up
+        yet — placeholder handoff until then.
   - [ ] task-70 (UI) — /auth/reset-password page
 
 ---
