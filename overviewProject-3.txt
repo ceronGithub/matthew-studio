@@ -137,3 +137,23 @@ file holds change-log entries only.
   taskPlan.md and overviewProject.txt's Section 5C updated in place
   same turn per Rule 16.1. Run `npx prisma db push && npx prisma
   generate` before task-90.
+
+[2026-09-08] Built task-90 (sitewide_technical_seo_specification.md,
+  Rule 41 anonymized traffic analytics -- beacon + write path).
+  services/analytics.ts recordPageView() upserts PageViewDaily buckets,
+  never-break-the-request pattern; discards every geoip.ts field except
+  country code (city/lat/long/accuracy never written). New public route
+  app/api/analytics/pageview/route.ts reads IP/User-Agent server-side
+  (never trusts client for deviceType), Rule 18.1 sanitizes path/
+  referrerHost, always returns 204. New client component
+  components/shared/AnalyticsBeacon.tsx (sendBeacon, fetch fallback)
+  mounted only in app/(public)/layout.tsx -- deliberately excluded from
+  every authenticated layout, since those are AccountActivityLog/Rule
+  42's job. New files: services/analytics.ts,
+  app/api/analytics/pageview/route.ts,
+  components/shared/AnalyticsBeacon.tsx,
+  docs/tasks/task-90-analytics-beacon-write-path.md. Modified:
+  app/(public)/layout.tsx. taskPlan.md and overviewProject.txt's
+  Section 5C updated in place same turn per Rule 16.1. `npx tsc
+  --noEmit` could not be run (no node_modules in this environment) --
+  run locally before merging.

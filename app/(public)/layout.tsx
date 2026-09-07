@@ -11,16 +11,22 @@
  * state (context/CartContext.tsx). Kept out of the true root layout
  * (app/layout.tsx) so the admin area doesn't inherit public marketing
  * chrome or a shopping cart it has no use for.
+ *
+ * Also mounts AnalyticsBeacon (Rule 41, task-90) here and only here —
+ * anonymized public traffic counting must never extend into the
+ * authenticated account layouts.
  */
 import "../styles/shared.css";
 import NavBar from "@/components/shared/NavBar";
 import Footer from "@/components/shared/Footer";
 import CartDrawer from "@/components/cart/CartDrawer";
+import AnalyticsBeacon from "@/components/shared/AnalyticsBeacon";
 import { CartProvider } from "@/context/CartContext";
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
     <CartProvider>
+      <AnalyticsBeacon />
       {/*
         Skip-to-content link (Rule 17.6 / IMPROVEMENTS.md Section 13
         accessibility checklist). Visually hidden by default via the

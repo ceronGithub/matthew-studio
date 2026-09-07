@@ -324,12 +324,14 @@ see Section 5C / 8 in that file.
   - [DONE] task-89 — Schema: `PageViewDaily` model added (2026-09-08),
         see docs/tasks/task-89-schema-pageviewdaily.md. Run
         `npx prisma db push && npx prisma generate` before task-90.
-  - [ ] task-90 — Beacon + write path: `services/analytics.ts`
+  - [DONE] task-90 — Beacon + write path: `services/analytics.ts`
         (`recordPageView()`, never-break-the-request pattern per Rule
         41.3) + `POST /api/analytics/pageview` route + client-side
-        beacon mounted in the public root layout only (never the
-        authenticated layouts — that's AccountActivityLog/Rule 42's
-        job, already covered elsewhere)
+        beacon (`components/shared/AnalyticsBeacon.tsx`) mounted in
+        `app/(public)/layout.tsx` only (never the authenticated
+        layouts — that's AccountActivityLog/Rule 42's job). Built
+        2026-09-08, see
+        docs/tasks/task-90-analytics-beacon-write-path.md.
   - [ ] task-91 — UI: super-admin Analytics dashboard page reading
         from the aggregate table only (total visits over time, top
         pages, top referrers, device breakdown, country list)

@@ -820,8 +820,12 @@ Order.status)
         [DONE] task-89 (PageViewDaily schema) — built 2026-09-08, see
                docs/tasks/task-89-schema-pageviewdaily.md. Split from
                task-53 into task-89/90/91 per Rule 49 Step 4.
-        [ ] task-90 (beacon + write path), [ ] task-91 (super-admin
-               Analytics dashboard UI) — not yet built.
+        [DONE] task-90 (beacon + write path: services/analytics.ts,
+               POST /api/analytics/pageview, AnalyticsBeacon mounted
+               in app/(public)/layout.tsx only) — built 2026-09-08, see
+               docs/tasks/task-90-analytics-beacon-write-path.md.
+        [ ] task-91 (super-admin Analytics dashboard UI) — not yet
+               built.
 [ ] 12. additional_platform_gaps_specification.md
         Coupons, Refund processing, OAuth login, Buyer 2FA,
         transactional emails, shop filtering, dev env setup.
