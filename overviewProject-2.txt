@@ -786,3 +786,38 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   docs/tasks/task-34-buyer-recovery-schema.md, marked reconciled per
   Rule 49.1's required note. No code changed. No other numbering gaps
   found in docs/tasks/ during this pass.
+
+[2026-09-07] Fuller Rule 49.1 reconciliation pass (developer-requested
+  follow-up): the prior entry's "no other numbering gaps found" was
+  incomplete -- a wider scan of docs/taskPlan.md against docs/tasks/
+  turned up two more issues. (1) task-04 through task-10 (7 files) and
+  task-19 through task-23 (5 files) were cited by name in this file's
+  own CHANGE LOG as if written, but never actually existed in
+  docs/tasks/ -- same traceability-gap pattern as task-34, all 12 now
+  back-filled with the Rule 49.1 Rule 3 header (spec section / phase /
+  dependency) and a reconciled-after-the-fact note; code for all 12
+  was already confirmed done via git history + Section 5C, so no
+  feature code changed. (2) task-38/39/40 were each in use twice --
+  once for the DONE buyer-recovery Telegram split, once for the still-
+  open admin_account_specification.md dashboard/orders/users items --
+  a second collision the earlier task-41 fix (renumbered to task-65)
+  didn't catch. Renumbered the still-open admin items to
+  task-71/72/73 in docs/taskPlan.md; the Telegram-split files are
+  unaffected. docs/taskPlan.md's NOTES section updated in place with
+  both findings. Section 5C unchanged -- no spec/phase status actually
+  moved, this was traceability/numbering housekeeping only.
+
+[2026-09-07] Task 70 complete: built the reset-password page UI per
+  docs/tasks/task-70-ui-reset-password-page.md. Replaced
+  components/auth/ResetPasswordForm.tsx (was Supabase-session/URL-
+  fragment based) with a version that reads `?token=` via
+  useSearchParams() and posts to task-68's
+  /api/auth/forgot-password/reset. Wrapped app/auth/reset-password/
+  page.tsx's form in <Suspense> per Next.js's useSearchParams
+  requirement. Retired app/api/auth/reset-password/route.ts (legacy
+  logging-only endpoint, confirmed single caller was the replaced
+  form) -- same "replace, don't run a parallel URL" precedent task-69
+  set for the sibling forgot-password flow. This closes
+  buyer_password_recovery_specification.md end to end (task-66
+  through task-70 all DONE); Section 5C's item 8 line should be
+  flipped to [DONE] on next audit pass.

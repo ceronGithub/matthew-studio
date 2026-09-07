@@ -522,7 +522,8 @@ block revenue-generating pages from shipping first)
        role-based routing and into app/api/auth/login/route.ts (built
        2026-09-06, see e775106). Manual ban / unban backend (Section
        5.2 / Section 8) and the viewer page (Section 9) are both live.
-[~] 8. buyer_password_recovery_specification.md — IN PROGRESS (2026-09-07)
+[DONE] 8. buyer_password_recovery_specification.md — CLOSED 2026-09-07,
+       task-70 (reset-password page UI) was the last open piece
        Corrected here 2026-09-07 (this turn) — task-35/38/39/40 had
        landed in the repo (per docs/taskPlan.md) without this section
        being updated to match; also task-35 was split into task-38

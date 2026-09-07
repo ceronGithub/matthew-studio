@@ -133,17 +133,29 @@ see Section 5C / 8 in that file.
         docs/tasks/task-69-ui-forgot-password-page.md. NOTE: links to
         /auth/reset-password?token=... which task-70 hasn't wired up
         yet — placeholder handoff until then.
-  - [ ] task-70 (UI) — /auth/reset-password page
+  - [DONE] task-70 (UI) — /auth/reset-password page: reads `?token=`
+        via useSearchParams (wrapped in Suspense), submits to
+        task-68's /api/auth/forgot-password/reset. Replaced the
+        legacy Supabase-session ResetPasswordForm and retired the
+        now-dead app/api/auth/reset-password/route.ts logging-only
+        route (only caller was the file just replaced). Closes
+        buyer_password_recovery_specification.md end to end
+        (task-66 through task-70 all DONE).
 
 ---
 
 ## PHASE 3 (remainder) — ADMIN & SUPER-ADMIN OVERSIGHT
 
 ### [~] 4. admin_account_specification.md — Product CRUD done; rest not started
-- [ ] task-38 — Admin dashboard (Section 3.1)
-- [ ] task-39 — Orders management (Section 3.3)
-- [ ] task-40 — Users management (Section 3.4)
-- [ ] task-41 — Analytics (Section 3.5) — depends on item 11's traffic table
+- [ ] task-71 — Admin dashboard (Section 3.1) — renumbered 2026-09-07 from
+      task-38, which collided with the (already DONE) buyer-recovery
+      Telegram schema task of the same number; see NOTES.
+- [ ] task-72 — Orders management (Section 3.3) — renumbered 2026-09-07
+      from task-39, same Telegram-split collision; see NOTES.
+- [ ] task-73 — Users management (Section 3.4) — renumbered 2026-09-07
+      from task-40, same Telegram-split collision; see NOTES.
+- [ ] task-65 — Analytics (Section 3.5) — depends on item 11's traffic
+      table (already renumbered from task-41 per prior NOTES entry)
 - [ ] task-42 — Admin Security Logs page (Section 3.6) — reuses Rule 38.9
       pattern already designed for super-admin; confirm if admin gets a
       scoped view or the same page with permission check
@@ -201,6 +213,24 @@ see Section 5C / 8 in that file.
 
 ## NOTES
 
+- **RESOLVED — task-04/10 and task-19/23 traceability gap (found +
+  fixed 2026-09-07, Rule 49.1 reconciliation):** `docs/tasks/task-04`
+  through `task-10` (7 files) and `task-19` through `task-23` (5
+  files) were cited by name in `overviewProject.txt`'s CHANGE LOG as
+  if they existed, but were never actually written to `docs/tasks/`.
+  The underlying code for all 12 was confirmed done and Layer-3
+  verified (git history + Section 5C) — this was a documentation gap
+  only, not unfinished work. All 12 files have been back-filled with
+  the Rule 49.1 Rule 3 traceability header (spec section / phase /
+  dependency) and a note marking them as reconciled after the fact.
+- **RESOLVED — task-38/39/40 numbering collision (found + fixed
+  2026-09-07, Rule 49.1 reconciliation):** these three numbers were
+  each used twice — once for the (DONE) buyer-recovery Telegram split
+  (schema/API/UI), and again for still-open Admin dashboard/Orders/
+  Users management items under item 4 below. Only the sibling task-41
+  collision had been caught previously. Renumbered the still-open
+  admin items to task-71/72/73 (see item 4). The Telegram-split
+  task-38/39/40 files are unaffected and remain as-is.
 - **UNRESOLVED — task-41 numbering collision (flagged 2026-09-07):**
   `task-41` was used twice in this file — once under item 8
   (buyer_password_recovery_specification.md, middleware gate, now
