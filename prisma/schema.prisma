@@ -543,6 +543,25 @@ model BuyerRecovery {
   @@index([userId])
 }
 
+/// TelegramPendingLink
+/// Manual-fallback path only (Section 2.2.1) — when a buyer messages
+/// the bot without the deep link, the webhook knows the chat_id but
+/// not which buyer it belongs to (Telegram never round-trips the
+/// linkToken in that case). Holds the OTP + chat_id pairing until the
+/// logged-in buyer submits the code on the website, at which point
+/// it's claimed into their BuyerRecovery row and this row is deleted.
+/// Not stored on BuyerRecovery directly -- userId is unknown at
+/// webhook time for this path.
+model TelegramPendingLink {
+  id        String   @id @default(cuid())
+  chatId    String   @unique
+  codeHash  String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([expiresAt])
+}
+
 /// SupportTicket
 /// buyer_account_specification.md Section 4.5 — a persistent,
 /// per-buyer thread tied to their account, distinct from the public

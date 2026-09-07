@@ -621,3 +621,17 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   npx prisma db push && npx prisma generate before task-39. See
   docs/tasks/task-38-schema-telegram-link.md. Checked off task-38,
   added task-39/40/41 as [ ] in docs/taskPlan.md.
+
+[2026-09-07] task-39: Telegram bot webhook (app/api/telegram/webhook/
+  route.ts, public, handles /start deep-link and manual paths per
+  Section 2.2.1) and authenticated link route
+  (app/api/auth/recovery-setup/telegram/link/route.ts -- start/status/
+  verify-code actions). Added lib/telegramBot.ts (sendMessage wrapper).
+  Schema addendum beyond task-38: TelegramPendingLink model (chatId +
+  codeHash + expiresAt) to hold the manual-fallback OTP until a
+  logged-in buyer claims it -- webhook has no userId at that point.
+  Flagged spec deviation: optional TELEGRAM_WEBHOOK_SECRET header
+  check on the public webhook (not in Section 8's env var list),
+  skipped if unset. Run npx prisma db push && npx prisma generate
+  before task-40. See docs/tasks/task-39-api-telegram-webhook-and-link.md.
+  Checked off task-39 in docs/taskPlan.md.

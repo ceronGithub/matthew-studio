@@ -86,10 +86,13 @@ see Section 5C / 8 in that file.
       fields on BuyerRecovery + `lib/telegramLink.ts`. Built 2026-09-07,
       see docs/tasks/task-38-schema-telegram-link.md. Run
       `npx prisma db push && npx prisma generate` before task-39.
-- [ ] task-39 (API) — bot webhook, link-status poll, manual-code verify
-      routes (needs TELEGRAM_BOT_TOKEN/TELEGRAM_BOT_USERNAME from the
-      developer to test live; code will be written against the env
-      var names regardless)
+- [x] task-39 (API) — bot webhook, link-status poll, manual-code verify
+      routes. Built 2026-09-07, see
+      docs/tasks/task-39-api-telegram-webhook-and-link.md. Also added
+      `TelegramPendingLink` schema model (addendum, not in task-38) —
+      run `npx prisma db push && npx prisma generate` again before
+      task-40. Flags a spec deviation (optional TELEGRAM_WEBHOOK_SECRET)
+      for developer review.
 - [ ] task-40 (UI) — re-enable Telegram step in RecoverySetupWizard.tsx
 - [ ] task-41 (middleware) — flip recoverySetupComplete after step 3 +
       middleware.ts blocking gate on /buyer/dashboard
