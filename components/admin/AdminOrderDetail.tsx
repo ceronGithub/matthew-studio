@@ -16,10 +16,9 @@
  * change, since both notify the buyer and/or move money. Add Note and
  * Send Email are non-destructive and submit directly (Rule 34.3).
  *
- * T-shirt production tracker (task-82) is NOT built here — this page
- * only shows the current productionStage as a read-only label when
- * hasTshirtItem is true. The interactive stepper is its own
- * micro-task per Rule 49 Step 4, embedded into this page later.
+ * T-shirt production tracker (task-82) is embedded below via
+ * ProductionStageTracker.tsx, rendered only when hasTshirtItem is
+ * true.
  */
 "use client";
 
@@ -37,10 +36,11 @@ import {
   Circle,
 } from "lucide-react";
 import { useAdminOrderDetail } from "@/lib/hooks/useAdminOrderDetail";
-import { getOrderStatusDisplay, PRODUCTION_STAGE_LABELS } from "@/lib/orderStatus";
+import { getOrderStatusDisplay } from "@/lib/orderStatus";
 import { useToast } from "@/components/shared/useToast";
 import ToastStack from "@/components/shared/ToastStack";
 import ConfirmationModal from "@/components/shared/ConfirmationModal";
+import ProductionStageTracker from "@/components/admin/ProductionStageTracker";
 
 const STATUS_OPTIONS = ["pending", "Confirmed", "Shipped", "Delivered", "Cancelled"];
 const EMAIL_PRESETS = [
@@ -75,10 +75,12 @@ export default function AdminOrderDetail({ orderId }: { orderId: string }) {
     isRefunding,
     isAddingNote,
     isSendingEmail,
+    isUpdatingStage,
     updateStatus,
     refund,
     addNote,
     sendBuyerEmail,
+    updateProductionStage,
   } = useAdminOrderDetail(orderId);
 
   const { toasts, showToast, dismissToast } = useToast();
@@ -201,10 +203,14 @@ export default function AdminOrderDetail({ orderId }: { orderId: string }) {
         </span>
       </div>
 
-      {order.hasTshirtItem && order.productionStage && (
-        <p className="adminOrderDetailProductionNote">
-          T-shirt production stage: {PRODUCTION_STAGE_LABELS[order.productionStage] ?? order.productionStage}
-        </p>
+      {order.hasTshirtItem && (
+        <ProductionStageTracker
+          currentStage={order.productionStage}
+          history={order.productionStageHistory}
+          isUpdating={isUpdatingStage}
+          onUpdate={updateProductionStage}
+          onResult={(success, message) => showToast(`${success ? "✓" : "✕"} ${message}`, success ? "success" : "error")}
+        />
       )}
 
       <div className="adminOrderDetailGrid">

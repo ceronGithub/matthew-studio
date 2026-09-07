@@ -15,6 +15,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { getCsrfHeader } from "@/lib/csrf";
 
 export interface AdminOrderDetailItem {
   id: string;
@@ -41,6 +42,15 @@ export interface InternalNoteEntry {
   createdAt: string;
 }
 
+export interface ProductionStageHistoryEntry {
+  productionStage: string;
+  note: string | null;
+  isRevert: boolean;
+  changedAt: string;
+  adminId: string;
+  photoUrl: string | null;
+}
+
 export interface AdminOrderDetail {
   order: { id: string; status: string; createdAt: string; updatedAt: string };
   buyer: { userId: string | null; email: string | null; isGuest: boolean; accountCreatedAt: string | null };
@@ -53,6 +63,7 @@ export interface AdminOrderDetail {
   refund: { refundReason: string | null; refundedAt: string | null };
   shipping: { courier: string | null; trackingNumber: string | null; address: unknown };
   productionStage: string | null;
+  productionStageHistory: ProductionStageHistoryEntry[];
 }
 
 interface FetchState {
@@ -73,6 +84,7 @@ export function useAdminOrderDetail(orderId: string) {
   const [isRefunding, setIsRefunding] = useState(false);
   const [isAddingNote, setIsAddingNote] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [isUpdatingStage, setIsUpdatingStage] = useState(false);
 
   const fetchOrder = useCallback(async () => {
     setState((current) => ({ ...current, isLoading: true, notFound: false, error: null }));
@@ -236,16 +248,77 @@ export function useAdminOrderDetail(orderId: string) {
     [orderId]
   );
 
+  /**
+   * updateProductionStage
+   * Calls task-79's PATCH .../production-stage route (t-shirt orders
+   * only). Requires the CSRF header — unlike its task-77/78 siblings,
+   * that route checks isValidCsrfRequest(). Sends multipart form data
+   * so the optional proof photo can ride along; merges the new stage
+   * onto local state and appends a best-effort history entry so the
+   * tracker updates immediately without a full refetch (the server's
+   * own R2 photoUrl and exact timestamp are reconciled on next load).
+   */
+  const updateProductionStage = useCallback(
+    async (stage: string, note: string, photo: File | null, isRevert: boolean): Promise<ActionResult> => {
+      setIsUpdatingStage(true);
+      try {
+        const formData = new FormData();
+        formData.append("productionStage", stage);
+        if (note.trim()) formData.append("note", note.trim());
+        if (photo) formData.append("photo", photo);
+
+        const response = await fetch(`/api/admin/orders/${orderId}/production-stage`, {
+          method: "PATCH",
+          headers: getCsrfHeader(),
+          body: formData,
+        });
+        const result = await response.json();
+        if (result.success) {
+          setState((current) =>
+            current.order
+              ? {
+                  ...current,
+                  order: {
+                    ...current.order,
+                    productionStage: result.data.productionStage,
+                    productionStageHistory: [
+                      ...current.order.productionStageHistory,
+                      {
+                        productionStage: result.data.productionStage,
+                        note: note.trim() || null,
+                        isRevert,
+                        changedAt: new Date().toISOString(),
+                        adminId: "",
+                        photoUrl: result.data.photoUrl ?? null,
+                      },
+                    ],
+                  },
+                }
+              : current
+          );
+        }
+        return { success: result.success, message: result.message };
+      } catch {
+        return { success: false, message: "We couldn't reach the server. Please try again." };
+      } finally {
+        setIsUpdatingStage(false);
+      }
+    },
+    [orderId]
+  );
+
   return {
     ...state,
     isUpdatingStatus,
     isRefunding,
     isAddingNote,
     isSendingEmail,
+    isUpdatingStage,
     refetch: fetchOrder,
     updateStatus,
     refund,
     addNote,
     sendBuyerEmail,
+    updateProductionStage,
   };
 }

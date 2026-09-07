@@ -69,13 +69,122 @@
   font-weight: 600;
 }
 
-.adminOrderDetailProductionNote {
-  font-size: 0.85rem;
-  color: var(--color-text-secondary);
+/* ---------- Production tracker (task-82) ---------- */
+
+.productionTrackerSection {
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.productionTrackerStepper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.productionTrackerStep {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-text-muted);
+}
+
+.productionTrackerStepIcon {
+  flex-shrink: 0;
+}
+
+.productionTrackerStepIcon--done {
+  color: var(--color-success);
+}
+
+.productionTrackerStep--current .productionTrackerStepIcon {
+  color: var(--color-accent);
+}
+
+.productionTrackerStepLabel {
+  font-size: 0.8rem;
+}
+
+.productionTrackerStep--current .productionTrackerStepLabel {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.productionTrackerForm {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.productionTrackerPhotoLabel {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
   padding: var(--space-sm) var(--space-md);
   border: 1px solid var(--color-border);
   border-radius: 8px;
-  background-color: var(--color-surface);
+  background-color: var(--color-bg);
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.productionTrackerPhotoLabel:hover,
+.productionTrackerPhotoLabel:focus-within {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.productionTrackerSpin {
+  animation: productionTrackerSpin 0.8s linear infinite;
+}
+
+@keyframes productionTrackerSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.productionTrackerHistoryList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-md);
+}
+
+.productionTrackerHistoryRow {
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-bg);
+}
+
+.productionTrackerHistoryPhoto {
+  width: 100%;
+  max-width: 160px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: var(--space-sm);
+  display: block;
 }
 
 /* ---------- Info cards grid (buyer / payment / shipping) ---------- */

@@ -458,9 +458,15 @@ means testing against fixtures instead of the real flow)
               status timeline, internal notes, update-status/refund
               (behind ConfirmationModal)/add-note/send-email actions
               wired to task-76/77/78 — see
-              docs/tasks/task-81-ui-admin-order-detail.md. T-shirt
-              production stage shown as a read-only label only;
-              task-82 (interactive stepper) not started.
+              docs/tasks/task-81-ui-admin-order-detail.md. [DONE]
+              task-82 (UI) — ProductionStageTracker.tsx: horizontal
+              6-stage stepper embedded in task-81's page (tshirts-
+              category orders only), advance directly / revert behind
+              ConfirmationModal with a required note, optional proof
+              photo at quality_check/packed wired to task-79's PATCH
+              route — see docs/tasks/task-82-ui-production-tracker.md.
+              task-72 (Order Management) is now fully closed — all of
+              task-74 through task-82 done.
        Rest of this spec (orders, users, analytics, security logs,
        vault, profile — Sections 3.3-3.8) not started — still [~]
        overall for that reason, but the Product CRUD + Dashboard

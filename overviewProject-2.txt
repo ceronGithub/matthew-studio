@@ -965,3 +965,24 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   in a real dev environment before merging). taskPlan.md and
   overviewProject.txt's Section 5C updated in place same turn per Rule
   16.1.
+
+[2026-09-07] task-82 (UI) -- built ProductionStageTracker.tsx: horizontal
+  6-stage stepper (Design Review -> Design Approved -> Printing -> Quality
+  Check -> Packed -> Shipped) embedded in task-81's AdminOrderDetail.tsx,
+  rendered only for hasTshirtItem orders. Advancing submits directly;
+  reverting requires a note and goes behind the shared ConfirmationModal
+  (Rule 34.4). Optional proof photo attaches only when the target stage is
+  Quality Check or Packed, wired to task-79's PATCH .../production-stage
+  route with the CSRF header that route checks (getCsrfHeader(), unlike
+  its task-77/78 siblings). Also extended GET /api/admin/orders/[orderId]
+  (task-76) to return productionStageHistory (one added field -- Order
+  model already had it, route just wasn't returning it yet) and extended
+  task-81's useAdminOrderDetail.ts with updateProductionStage(). This
+  closes task-72 (Order Management) end to end -- task-74 through task-82
+  all DONE. New file: components/admin/ProductionStageTracker.tsx.
+  Modified: app/api/admin/orders/[orderId]/route.ts, lib/hooks/
+  useAdminOrderDetail.ts, components/admin/AdminOrderDetail.tsx,
+  app/styles/adminOrderDetail.css. `npx tsc --noEmit` shows zero new
+  errors (same 38 pre-existing, Prisma-client-generation-related errors
+  as before -- see task-80/81 entries). taskPlan.md and overviewProject.txt's
+  Section 5C updated in place same turn per Rule 16.1.

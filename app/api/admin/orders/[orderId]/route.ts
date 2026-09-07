@@ -170,6 +170,7 @@ export async function GET(
           address: order.shippingAddress,
         },
         productionStage: order.productionStage,
+        productionStageHistory: order.productionStageHistory ?? [],
       },
       message: "Order details retrieved.",
     });

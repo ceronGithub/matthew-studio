@@ -146,7 +146,7 @@ see Section 5C / 8 in that file.
 
 ## PHASE 3 (remainder) — ADMIN & SUPER-ADMIN OVERSIGHT
 
-### [~] 4. admin_account_specification.md — Product CRUD + Dashboard done; Orders in progress
+### [~] 4. admin_account_specification.md — Product CRUD + Dashboard + Orders done; Users/Analytics/Security/Vault/Profile remain
 - [DONE] task-71 — Admin dashboard (Section 3.1) — renumbered 2026-09-07 from
       task-38, which collided with the (already DONE) buyer-recovery
       Telegram schema task of the same number; see NOTES. Built
@@ -154,7 +154,7 @@ see Section 5C / 8 in that file.
       inventory/promotions alerts not applicable, no such models
       exist), Recent Orders + Recent Products, Quick Actions. See
       overviewProject-2.txt's 2026-09-07 CHANGE LOG entry.
-- [~] task-72 — Order management (Section 3.3) — split into task-74
+- [DONE] task-72 — Order management (Section 3.3) — split into task-74
       through task-82 per Rule 49 Step 4 (spans schema+API+UI across
       5+ distinct sub-features: list, detail, status/refund/notes,
       buyer email, t-shirt production tracking), same pattern as the
@@ -217,10 +217,11 @@ see Section 5C / 8 in that file.
         ConfirmationModal)/add-note/send-email actions wired to
         task-76/77/78 (Section 3.3.2). Built 2026-09-07, see
         docs/tasks/task-81-ui-admin-order-detail.md.
-  - [ ] task-82 (UI) — T-shirt production tracker component
+  - [DONE] task-82 (UI) — T-shirt production tracker component
         (horizontal stepper, advance/revert modals with required
         revert note, photo upload) embedded in task-81's page,
-        `tshirts`-category orders only (Section 3.3.3)
+        `tshirts`-category orders only (Section 3.3.3). Built
+        2026-09-07, see docs/tasks/task-82-ui-production-tracker.md.
 - [ ] task-73 — Users management (Section 3.4) — renumbered 2026-09-07
       from task-40, same Telegram-split collision; see NOTES.
 - [ ] task-65 — Analytics (Section 3.5) — depends on item 11's traffic
