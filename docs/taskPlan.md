@@ -115,9 +115,10 @@ see Section 5C / 8 in that file.
         lib/passwordResetToken.ts. Built 2026-09-07, see
         docs/tasks/task-66-forgot-password-schema.md. Run
         `npx prisma db push && npx prisma generate` before task-67.
-  - [ ] task-67 (API) — /api/auth/forgot-password/initiate + /verify
+  - [DONE] task-67 (API) — /api/auth/forgot-password/initiate + /verify
         (all 3 methods) + rate limiting (per-IP and per-account,
-        combined) + SecurityLog + Gatekeeper strike wiring
+        combined) + SecurityLog + Gatekeeper strike wiring. Built
+        2026-09-07, see docs/tasks/task-67-forgot-password-api.md.
   - [ ] task-68 (API) — /api/auth/forgot-password/reset + session
         invalidation (Rule 44)
   - [ ] task-69 (UI) — /auth/forgot-password page (identify → pick

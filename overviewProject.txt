@@ -578,20 +578,33 @@ block revenue-generating pages from shipping first)
               purpose. Added lib/passwordResetToken.ts. Run
               npx prisma db push && npx prisma generate before
               task-67. See docs/tasks/task-66-forgot-password-schema.md.
-       [ ] task-67 (API) -- /api/auth/forgot-password/initiate +
+       [DONE] task-67 (API) -- /api/auth/forgot-password/initiate +
               /verify (all 3 methods), rate limiting (per-IP and
               per-account via lib/rateLimit.ts's existing generic
               key param, no schema change needed), SecurityLog,
-              Gatekeeper strike wiring
+              Gatekeeper strike wiring (password_recovery_failed was
+              already in lib/gatekeeper.ts's STRIKE_EVENT_TYPES from
+              an earlier pass -- no change needed there). Added
+              lib/getUserByEmail.ts (shared Supabase email lookup,
+              same listUsers-and-match approach as check-email/
+              route.ts). /verify adds an action:"send"|"verify"
+              dispatch (spec deviation, documented in the route's own
+              header and in docs/tasks/task-67-forgot-password-api.md
+              -- Section 5 has no distinct "send OTP" endpoint, so
+              this reuses recovery-setup/email's existing action
+              pattern). Run npx prisma db push && npx prisma generate
+              if not already done for task-66. See docs/tasks/
+              task-67-forgot-password-api.md.
        [ ] task-68 (API) -- /api/auth/forgot-password/reset + session
               invalidation (Rule 44)
        [ ] task-69 (UI) -- /auth/forgot-password page
        [ ] task-70 (UI) -- /auth/reset-password page
        Post-registration setup + the dashboard blocking gate are fully
-       built end to end (task-34/35/38/39/40/41). What's left in this
-       spec is the separate forgot-password flow (now task-66..70) for
-       buyers who are locked out, not the post-registration setup
-       covered above.
+       built end to end (task-34/35/38/39/40/41). The forgot-password
+       flow's schema and API halves (task-66/67) are now also done --
+       what's left is the reset endpoint + session invalidation and
+       the two UI pages (task-68/69/70), for buyers who are locked
+       out, not the post-registration setup covered above.
 
 PHASE 5 — CATALOG & PRODUCT FEATURES (independent of commerce
 plumbing; can slot in whenever bandwidth allows — but item 9 needs

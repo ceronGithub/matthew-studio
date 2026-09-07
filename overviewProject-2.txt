@@ -690,3 +690,34 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   blocked in this sandbox (binaries.prisma.sh network-blocked). See
   docs/tasks/task-66-forgot-password-schema.md. Checked off task-66
   in docs/taskPlan.md; item 8's Section 5C block corrected in place.
+
+[2026-09-07] Built task-67 (buyer_password_recovery_specification.md
+  Section 4/5): /api/auth/forgot-password/initiate and /verify.
+  /initiate resolves the submitted email against Supabase Auth (new
+  lib/getUserByEmail.ts, same listUsers-and-match approach as
+  check-email/route.ts) and BuyerRecovery.securityQuestionId, always
+  returning the same 3-method-card shape + either the real question
+  text or a generic placeholder -- identical timing/shape whether or
+  not the account exists (Section 4.1/4.2 anti-enumeration). /verify
+  adds an action:"send"|"verify" dispatch (documented spec deviation
+  in the route's own header -- Section 5 has no separate "send OTP"
+  endpoint, so this reuses recovery-setup/email's existing action
+  pattern); "send" emails or Telegram-DMs a fresh OTP via
+  lib/passwordResetToken.ts + services/emailjs.ts/lib/telegramBot.ts,
+  "verify" checks the OTP or bcrypt-compares the security answer
+  (against a dummy hash when no real one exists, Rule 32.4) and, on
+  success, issues + hashes a 10-minute resetToken. Both routes share
+  one 5-attempts/15-min rate-limit budget (per-IP and per-email, via
+  lib/rateLimit.ts's existing generic key param) and log
+  password_recovery_initiated/_succeeded/_failed to SecurityLog --
+  password_recovery_failed was already in lib/gatekeeper.ts's
+  STRIKE_EVENT_TYPES from an earlier pass, so no Gatekeeper wiring
+  change was needed. npx tsc --noEmit: zero new error categories --
+  only the same pre-existing "Cannot find module" errors from this
+  sandbox's ungenerated node_modules (no network access to install
+  here); syntax-checked cleanly with node's own parser. Run
+  npx prisma db push && npx prisma generate before task-68 if not
+  already done for task-66. See
+  docs/tasks/task-67-forgot-password-api.md. Checked off task-67 in
+  docs/taskPlan.md; item 8's Section 5C block in overviewProject.txt
+  corrected in place.
