@@ -561,15 +561,37 @@ block revenue-generating pages from shipping first)
               error, same convention as lib/gatekeeper.ts's
               checkDeviceBan). See docs/tasks/task-41-recovery-setup-
               gate.md.
-       [ ] task-36 — /auth/forgot-password flow (3 recovery methods,
-              anti-enumeration responses, single-use reset token)
-       [ ] task-37 — /auth/reset-password page + rate limiting (5/15min
-              across all 3 methods combined) + SecurityLog + Gatekeeper
-              strike wiring
-       Post-registration setup + the dashboard blocking gate are now
-       fully built end to end. What's left in this spec is the
-       separate forgot-password flow (task-36/37) for buyers who are
-       locked out, not the post-registration setup covered above.
+       [~] task-36 — /auth/forgot-password flow: split into task-66
+              through task-70 (schema/API-verify/API-reset/
+              UI-forgot-password/UI-reset-password) 2026-09-07, per
+              Rule 49 Step 4 -- bundles 3+ sub-features across
+              schema+API+UI layers, same pattern as the task-38..41
+              Telegram split. task-37 folded into this range (its
+              scope is now API-reset + UI-reset-password below).
+       [DONE] task-66 (schema + lib) -- forgotPasswordOtpMethod/
+              forgotPasswordOtpCodeHash/forgotPasswordOtpExpiresAt/
+              forgotPasswordOtpSentAt (one shared triplet for
+              whichever OTP method the buyer picks) and
+              forgotPasswordResetTokenHash(unique)/
+              forgotPasswordResetTokenExpiresAt on BuyerRecovery,
+              kept separate from the Section 2 setup fields on
+              purpose. Added lib/passwordResetToken.ts. Run
+              npx prisma db push && npx prisma generate before
+              task-67. See docs/tasks/task-66-forgot-password-schema.md.
+       [ ] task-67 (API) -- /api/auth/forgot-password/initiate +
+              /verify (all 3 methods), rate limiting (per-IP and
+              per-account via lib/rateLimit.ts's existing generic
+              key param, no schema change needed), SecurityLog,
+              Gatekeeper strike wiring
+       [ ] task-68 (API) -- /api/auth/forgot-password/reset + session
+              invalidation (Rule 44)
+       [ ] task-69 (UI) -- /auth/forgot-password page
+       [ ] task-70 (UI) -- /auth/reset-password page
+       Post-registration setup + the dashboard blocking gate are fully
+       built end to end (task-34/35/38/39/40/41). What's left in this
+       spec is the separate forgot-password flow (now task-66..70) for
+       buyers who are locked out, not the post-registration setup
+       covered above.
 
 PHASE 5 — CATALOG & PRODUCT FEATURES (independent of commerce
 plumbing; can slot in whenever bandwidth allows — but item 9 needs

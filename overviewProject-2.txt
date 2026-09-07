@@ -666,3 +666,27 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   docs/tasks/task-41-recovery-setup-gate.md. Checked off task-41 in
   docs/taskPlan.md; item 8's Section 5C block corrected in place
   (was stale since task-35/38/39/40 had landed without updating it).
+
+[2026-09-07] task-66: split task-36 (/auth/forgot-password flow) into
+  task-66 through task-70 (schema/API-verify/API-reset/
+  UI-forgot-password/UI-reset-password) per Rule 49 Step 4, folding
+  old task-37's scope into the API-reset + UI-reset-password pieces.
+  Reserved task-65 for the still-open admin_account_specification.md
+  Analytics numbering collision (flagged during task-41) so the two
+  ranges don't overlap. Built the schema half: BuyerRecovery gained
+  forgotPasswordOtpMethod/forgotPasswordOtpCodeHash/
+  forgotPasswordOtpExpiresAt/forgotPasswordOtpSentAt (one shared
+  triplet for whichever OTP method the buyer picks at Step 2) and
+  forgotPasswordResetTokenHash(unique)/forgotPasswordResetTokenExpiresAt
+  -- kept separate from the Section 2 setup fields since they prove
+  identity in a different security context. Added
+  lib/passwordResetToken.ts (OTP + reset-token generate/hash/match
+  helpers, SHA-256 convention, 5-min OTP / 10-min token expiry per
+  Section 4.3/4.4/6). No new rate-limit schema needed --
+  lib/rateLimit.ts's existing generic key param already supports a
+  per-account check by calling it with the email as the key,
+  reserved for task-67. npx tsc --noEmit: zero new errors from
+  lib/passwordResetToken.ts; npx prisma validate/generate still
+  blocked in this sandbox (binaries.prisma.sh network-blocked). See
+  docs/tasks/task-66-forgot-password-schema.md. Checked off task-66
+  in docs/taskPlan.md; item 8's Section 5C block corrected in place.

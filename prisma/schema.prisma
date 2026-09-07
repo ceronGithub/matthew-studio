@@ -537,6 +537,36 @@ model BuyerRecovery {
   securityQuestionId       String?
   securityAnswerHash       String?
 
+  // Forgot-password flow (Section 4, task-66/67) — separate from the
+  // Section 2 setup fields above on purpose: those prove ownership
+  // during setup (paired with telegramLinkToken/TelegramPendingLink),
+  // these prove identity during an actual recovery attempt months
+  // later. Reusing the setup fields would conflate two different
+  // security contexts and could race if a buyer somehow re-triggered
+  // Telegram linking while also recovering their password.
+  //
+  // One shared triplet for whichever of the two OTP-based methods
+  // (email or telegram, Section 4.3/4.4) the buyer picks at Step 2 —
+  // the spec has the buyer choose exactly ONE method per attempt, so
+  // only one OTP is ever in flight; forgotPasswordOtpMethod records
+  // which one, so /verify can't be tricked into accepting an email
+  // code against a telegram-labeled request or vice versa.
+  // SHA-256 (same ephemeral-secret convention as the Section 2 codes
+  // above), 5-minute expiry per Section 4.3/4.4 (not the 10-minute
+  // setup expiry — a different constant at the call site, same field
+  // shape).
+  forgotPasswordOtpMethod     String?   // "email" | "telegram"
+  forgotPasswordOtpCodeHash   String?
+  forgotPasswordOtpExpiresAt  DateTime?
+  forgotPasswordOtpSentAt     DateTime?
+
+  // Issued once Step 3 (any of the 3 methods) succeeds (Section 4.6).
+  // Single-use: cleared to null the moment /reset consumes it
+  // successfully, same "cleared once used" convention as the Section
+  // 2.2.1 Telegram link fields. 10-minute expiry per Section 6.
+  forgotPasswordResetTokenHash      String?   @unique
+  forgotPasswordResetTokenExpiresAt DateTime?
+
   createdAt                DateTime  @default(now())
   updatedAt                DateTime  @updatedAt
 

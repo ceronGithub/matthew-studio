@@ -103,10 +103,26 @@ see Section 5C / 8 in that file.
       NOTE: this task number collides with item 4's "task-41 — Analytics"
       below — see NOTES at the bottom of this file, unresolved pending
       developer renumbering decision.
-- [ ] task-36 — `/auth/forgot-password` flow (3 recovery methods, anti-
-      enumeration responses, single-use reset token)
-- [ ] task-37 — `/auth/reset-password` page + rate limiting (5/15min across
-      all 3 methods combined) + SecurityLog + Gatekeeper strike wiring
+- [~] task-36 — `/auth/forgot-password` flow — split into task-66
+      through task-70 (schema/API-verify/API-reset/UI-forgot-password/
+      UI-reset-password, per Rule 49 Step 4: bundles 3+ distinct
+      sub-features across schema+API+UI layers), same pattern as the
+      task-38→41 Telegram split. task-37 folded into this split
+      (API-reset = old task-37's reset-page backend + session
+      invalidation; UI-reset-password = old task-37's page).
+  - [DONE] task-66 (schema + lib) — forgotPasswordOtp*/
+        forgotPasswordResetToken* fields on BuyerRecovery +
+        lib/passwordResetToken.ts. Built 2026-09-07, see
+        docs/tasks/task-66-forgot-password-schema.md. Run
+        `npx prisma db push && npx prisma generate` before task-67.
+  - [ ] task-67 (API) — /api/auth/forgot-password/initiate + /verify
+        (all 3 methods) + rate limiting (per-IP and per-account,
+        combined) + SecurityLog + Gatekeeper strike wiring
+  - [ ] task-68 (API) — /api/auth/forgot-password/reset + session
+        invalidation (Rule 44)
+  - [ ] task-69 (UI) — /auth/forgot-password page (identify → pick
+        method → verify, one wizard component)
+  - [ ] task-70 (UI) — /auth/reset-password page
 
 ---
 
@@ -180,11 +196,12 @@ see Section 5C / 8 in that file.
   [DONE], see docs/tasks/task-41-recovery-setup-gate.md) and once
   under item 4 (admin_account_specification.md, Analytics, still
   [ ] and blocked on task-53's traffic table). Developer confirmed
-  the item 8 one should proceed under the number 41. The item 4
-  Analytics task still needs a real, non-colliding number
-  (task-65+, since 61-64 are already spoken for in Phase 6) before
-  its own docs/tasks/ file is created — do not create
-  docs/tasks/task-41-analytics.md; renumber it first.
+  the item 8 one should proceed under the number 41. **Reserved
+  number for the Analytics task: `task-65`** (reserved, not yet
+  built — do not reuse) — chosen so it doesn't collide with the
+  task-66 through task-70 range just minted below for the
+  forgot-password split. Do not create docs/tasks/task-41-analytics.md
+  under the old number; use task-65 whenever that item is picked up.
 - Task numbering continues from the highest existing file (`task-27`) —
   next new task file is `task-28`.
 - `task-33` is listed under both item 6 and item 7 deliberately — it is
