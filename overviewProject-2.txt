@@ -905,3 +905,27 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   channel for guests in this app's design; send-email route works for
   guests as a manual workaround. taskPlan.md and this file's Section
   5C updated in place same turn per Rule 16.1.
+
+[2026-09-07] Built task-79 (admin_account_specification.md Section
+  3.3.3, continuing the task-72 order-management split): PATCH
+  /api/admin/orders/[orderId]/production-stage -- advances/reverts a
+  tshirts-category order's productionStage through the 6-stage
+  pipeline (design_review -> design_approved -> printing ->
+  quality_check -> packed -> shipped), appends to
+  productionStageHistory, requires a note on any revert (direction is
+  computed server-side from pipeline position, never trusted from the
+  client), optionally uploads a proof photo to R2 at quality_check/
+  packed via the existing processImage()/uploadToR2() helpers, and
+  auto-syncs the top-level status to "Shipped" (+ statusHistory entry
+  + buyer notification) when the stage reaches shipped. Gated by
+  getSessionAdmin() + hasAdminPermission(admin, "manage-orders") --
+  the first order route in this split to check a named permission,
+  per this endpoint's explicit spec line. Logs SecurityLog
+  order_production_stage_updated. Documented gap: could not get a
+  clean `npx tsc --noEmit` pass in this build session -- the sandbox
+  network blocks binaries.prisma.sh so @prisma/client has no generated
+  types, producing the same implicit-any/"Property does not exist"
+  errors on every Prisma-touching file (including already-DONE ones);
+  run `npx prisma generate && npx tsc --noEmit` in a real dev
+  environment before merging. taskPlan.md and overviewProject.txt's
+  Section 5C updated in place same turn per Rule 16.1.

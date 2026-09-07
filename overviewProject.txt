@@ -441,8 +441,15 @@ means testing against fixtures instead of the real flow)
               variable) — see
               docs/tasks/task-78-api-admin-order-send-email.md. New
               env var EMAILJS_TEMPLATE_ID_ADMIN_ORDER_EMAIL needs
-              manual EmailJS dashboard setup before use. task-79
-              through task-82 not started.
+              manual EmailJS dashboard setup before use. [DONE]
+              task-79 (PATCH /api/admin/orders/[orderId]/production-stage
+              — advance/revert t-shirt production stage, direction
+              computed server-side, required note on revert, optional
+              R2 proof-photo attach at quality_check/packed, auto-sync
+              of top-level status to "Shipped" + buyer notification,
+              SecurityLog order_production_stage_updated) — see
+              docs/tasks/task-79-api-admin-order-production-stage.md.
+              task-80 through task-82 not started.
        Rest of this spec (orders, users, analytics, security logs,
        vault, profile — Sections 3.3-3.8) not started — still [~]
        overall for that reason, but the Product CRUD + Dashboard

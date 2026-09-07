@@ -195,10 +195,15 @@ see Section 5C / 8 in that file.
         docs/tasks/task-78-api-admin-order-send-email.md. New env var:
         EMAILJS_TEMPLATE_ID_ADMIN_ORDER_EMAIL — needs to be created in
         the EmailJS dashboard and added to .env/.env.local.
-  - [ ] task-79 (API) — PATCH .../production-stage — advance/revert
-        t-shirt stage (revert requires note), optional R2 proof-photo
-        attach, SecurityLog `order_production_stage_updated`
-        (Section 3.3.3)
+  - [DONE] task-79 (API) — PATCH .../production-stage — advance/revert
+        t-shirt stage (revert requires note, direction computed
+        server-side from pipeline position — never trusts a
+        client-supplied isRevert flag), optional R2 proof-photo
+        attach (quality_check/packed only), auto-syncs top-level
+        status to "Shipped" + buyer notification when stage reaches
+        shipped, SecurityLog `order_production_stage_updated`
+        (Section 3.3.3). Built 2026-09-07, see
+        docs/tasks/task-79-api-admin-order-production-stage.md.
   - [ ] task-80 (UI) — /admin/orders list page: table, filters,
         status badges, bulk actions, CSV export button, row actions
         (Section 3.3.1)
