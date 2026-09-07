@@ -721,3 +721,39 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   docs/tasks/task-67-forgot-password-api.md. Checked off task-67 in
   docs/taskPlan.md; item 8's Section 5C block in overviewProject.txt
   corrected in place.
+
+[2026-09-07] Built task-68 (buyer_password_recovery_specification.md
+  Section 4.6/5): /api/auth/forgot-password/reset. Takes { resetToken,
+  newPassword }, hashes the submitted token and looks it up directly
+  against BuyerRecovery.forgotPasswordResetTokenHash (@unique -- no
+  anti-enumeration needed here, unlike task-67's email-based routes,
+  since a resetToken is high-entropy and single-use rather than an
+  email address that could reveal account existence). Validates
+  password strength server-side (same rule set as register/route.ts),
+  updates the password via supabaseAdminClient.auth.admin.
+  updateUserById(), clears the consumed resetToken fields (single-use),
+  logs password_recovery_succeeded + password_reset_completed (the
+  latter reused from the legacy Supabase-native reset-password/route.ts
+  so both flows land under one eventType for Security Logs review),
+  and applies Rule 44 Origin-Scoped Session Termination to the response
+  (expires sb-access-token/sb-refresh-token + Clear-Site-Data header in
+  production -- identical pattern to auth/logout/route.ts). Fetched and
+  inspected @supabase/auth-js 2.112.0's own type declarations directly
+  to confirm updateUserById() changing a password auto-revokes that
+  user's existing refresh tokens server-side across every device --
+  documented in the route's header comment as the real multi-device
+  termination mechanism, with Rule 44's cookie/header step applied on
+  top unconditionally per Rule 44.4 (no lighter-weight version).
+  password_recovery_failed was already in lib/gatekeeper.ts's
+  STRIKE_EVENT_TYPES from task-67 -- no Gatekeeper change needed; 3
+  invalid/expired-token attempts in 24h from one device already trigger
+  an automatic ban. Could not run npx tsc --noEmit, npx prisma db push,
+  or install node_modules in this sandbox (no network access, same
+  limitation as every prior task) -- manually verified brace/paren
+  balance and that every import resolves to an existing export. No new
+  schema fields added; run npx prisma db push && npx prisma generate
+  locally only if not already current since task-66. See
+  docs/tasks/task-68-forgot-password-reset-api.md. Checked off task-68
+  in docs/taskPlan.md; item 8's Section 5C block in overviewProject.txt
+  corrected in place (task-68 flipped to [DONE], summary line updated
+  to reflect task-66/67/68 all complete, only task-69/70 UI remaining).

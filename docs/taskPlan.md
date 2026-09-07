@@ -119,8 +119,9 @@ see Section 5C / 8 in that file.
         (all 3 methods) + rate limiting (per-IP and per-account,
         combined) + SecurityLog + Gatekeeper strike wiring. Built
         2026-09-07, see docs/tasks/task-67-forgot-password-api.md.
-  - [ ] task-68 (API) — /api/auth/forgot-password/reset + session
-        invalidation (Rule 44)
+  - [DONE] task-68 (API) — /api/auth/forgot-password/reset + session
+        invalidation (Rule 44). Built 2026-09-07, see
+        docs/tasks/task-68-forgot-password-reset-api.md.
   - [ ] task-69 (UI) — /auth/forgot-password page (identify → pick
         method → verify, one wizard component)
   - [ ] task-70 (UI) — /auth/reset-password page
