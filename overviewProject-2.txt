@@ -929,3 +929,19 @@ CHANGE LOG (continued from overviewProject-1.txt, closed at 1000-line cap)
   run `npx prisma generate && npx tsc --noEmit` in a real dev
   environment before merging. taskPlan.md and overviewProject.txt's
   Section 5C updated in place same turn per Rule 16.1.
+
+[2026-09-07] task-80 (UI) — built /admin/orders list page: table with
+  checkbox row-select, status/date-range/search filters, status badges
+  (reuses lib/orderStatus.ts), CSV export button (streams the existing
+  GET /api/admin/orders?format=csv endpoint as a browser download),
+  and a bulk status-update bar gated behind ConfirmationModal that
+  fans out to the existing per-order actions endpoint (task-77) rather
+  than a new bulk API route -- UI-only scope per Rule 49 Step 4. Row
+  "View" links to /admin/orders/[orderId] (task-81, not yet built).
+  New files: lib/hooks/useAdminOrders.ts, components/admin/
+  AdminOrdersList.tsx, app/admin/orders/page.tsx, app/styles/
+  adminOrders.css. `npx tsc --noEmit` shows zero errors in these 3 new
+  TS/TSX files; pre-existing repo-wide errors are unrelated (missing
+  generated @prisma/client types -- see prior entry's documented gap).
+  taskPlan.md and overviewProject.txt's Section 5C updated in place
+  same turn per Rule 16.1.

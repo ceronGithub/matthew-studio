@@ -1,0 +1,374 @@
+/**
+ * FILE: app/styles/adminOrders.css
+ * PURPOSE:
+ * Styles for app/admin/orders/page.tsx and
+ * components/admin/AdminOrdersList.tsx (task-80). References the
+ * design tokens in app/globals.css — never hardcoded colors or
+ * spacing. Responsive breakpoints live in app/styles/mediaQueries.css,
+ * not inline here. Table layout (rather than a card grid) since this
+ * page is a dense, scannable list of every order across every buyer.
+ */
+
+.adminOrdersPage {
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.adminOrdersHeader {
+  margin-bottom: var(--space-xl);
+}
+
+.adminOrdersEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.adminOrdersTitle {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-top: var(--space-xs);
+}
+
+.adminOrdersSubtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+  max-width: 70ch;
+}
+
+/* Filter + export toolbar */
+.adminOrdersToolbar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.adminOrdersFilters {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.adminOrdersFilterSelect,
+.adminOrdersFilterInput {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  touch-action: manipulation;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+.adminOrdersFilterSelect:hover,
+.adminOrdersFilterSelect:focus-visible,
+.adminOrdersFilterInput:hover,
+.adminOrdersFilterInput:focus-visible {
+  border-color: var(--color-border-hover);
+  background-color: var(--color-surface-hover);
+}
+
+.adminOrdersSearchInput {
+  flex: 1 1 220px;
+}
+
+.adminOrdersClearFiltersButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: color var(--transition-fast);
+}
+.adminOrdersClearFiltersButton:hover,
+.adminOrdersClearFiltersButton:focus-visible {
+  color: var(--color-text-primary);
+}
+
+.adminOrdersExportButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.adminOrdersExportButton:hover,
+.adminOrdersExportButton:focus-visible {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-accent);
+}
+.adminOrdersExportButton:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Bulk action bar — appears only when 1+ rows are selected */
+.adminOrdersBulkBar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-lg);
+  margin-bottom: var(--space-md);
+  border: 1px solid var(--color-accent);
+  border-radius: 12px;
+  background-color: var(--color-surface-active);
+}
+
+.adminOrdersBulkCount {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.adminOrdersBulkApplyButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--color-accent);
+  border-radius: 8px;
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.adminOrdersBulkApplyButton:hover,
+.adminOrdersBulkApplyButton:focus-visible {
+  background-color: var(--color-accent-hover);
+}
+
+.adminOrdersBulkClearButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-md);
+  border: none;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: color var(--transition-fast);
+}
+.adminOrdersBulkClearButton:hover,
+.adminOrdersBulkClearButton:focus-visible {
+  color: var(--color-text-primary);
+}
+
+/* Table */
+.adminOrdersTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.adminOrdersTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.adminOrdersTable thead tr {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.adminOrdersTable th {
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.adminOrdersTable td {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.adminOrdersTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.adminOrdersTable tbody tr:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.adminOrdersTableRow--selected {
+  background-color: var(--color-surface-active);
+}
+
+.adminOrdersCheckboxCell {
+  width: 2.5rem;
+  text-align: center;
+}
+
+.adminOrdersIdCell {
+  font-family: var(--font-mono, monospace);
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.adminOrdersStatusBadge {
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.adminOrdersPaymentCell {
+  text-transform: capitalize;
+}
+
+.adminOrdersActionsCell {
+  text-align: right;
+}
+
+.adminOrdersViewLink {
+  color: var(--color-accent);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+.adminOrdersViewLink:hover,
+.adminOrdersViewLink:focus-visible {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+/* Loading skeleton */
+.adminOrdersGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.adminOrdersRow--skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.adminOrdersSkeletonLine {
+  height: 1rem;
+  border-radius: 4px;
+}
+.adminOrdersSkeletonLine--short {
+  width: 40%;
+}
+
+/* Empty / error state */
+.adminOrdersEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.adminOrdersRetryButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.adminOrdersRetryButton:hover,
+.adminOrdersRetryButton:focus-visible {
+  background-color: var(--color-surface-hover);
+}
+
+/* Footer: total count + pagination */
+.adminOrdersFooter {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.adminOrdersTotalCount {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.adminOrdersPagination {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.adminOrdersPageButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.adminOrdersPageButton:hover:not(:disabled),
+.adminOrdersPageButton:focus-visible:not(:disabled) {
+  background-color: var(--color-surface-hover);
+}
+.adminOrdersPageButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.adminOrdersPageLabel {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}

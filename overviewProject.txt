@@ -416,6 +416,10 @@ means testing against fixtures instead of the real flow)
               2026-09-07). Low-inventory and expiring-promotion
               alerts from the spec are structurally skipped — no
               inventory or promotions model exists in this schema.
+       [DONE] task-80 (UI) — /admin/orders list page (table, filters,
+              status badges, bulk status update, CSV export, row
+              actions) — built 2026-09-07, see
+              docs/tasks/task-80-ui-admin-orders-list.md.
        [~]    task-72 (Order Management, Section 3.3) split into
               task-74 through task-82 per Rule 49 Step 4 — spans
               schema+API+UI across 5+ sub-features (list, detail,

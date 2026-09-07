@@ -204,9 +204,13 @@ see Section 5C / 8 in that file.
         shipped, SecurityLog `order_production_stage_updated`
         (Section 3.3.3). Built 2026-09-07, see
         docs/tasks/task-79-api-admin-order-production-stage.md.
-  - [ ] task-80 (UI) — /admin/orders list page: table, filters,
+  - [DONE] task-80 (UI) — /admin/orders list page: table, filters,
         status badges, bulk actions, CSV export button, row actions
-        (Section 3.3.1)
+        (Section 3.3.1). Built 2026-09-07, see
+        docs/tasks/task-80-ui-admin-orders-list.md. Bulk status update
+        fans out to the existing per-order actions endpoint (task-77)
+        rather than a new bulk API route — UI-only scope per Rule 49
+        Step 4.
   - [ ] task-81 (UI) — /admin/orders/[orderId] detail page: header,
         buyer info, items table, payment info, timeline, action
         buttons wired to task-77/78 (Section 3.3.2)
