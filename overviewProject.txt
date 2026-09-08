@@ -617,8 +617,13 @@ means testing against fixtures instead of the real flow)
          micro-tasks 2026-09-08 (task-47-schema-totp through
          task-47-totp-setup-gate, see docs/tasks/task-47-*.md).
          task-47-schema-totp [DONE]: AdminTotpCredential model +
-         lib/totpCrypto.ts (see overviewProject-3.txt). Remaining 5
-         micro-tasks not started; not blocking, just noting progress.
+         lib/totpCrypto.ts (see overviewProject-3.txt).
+         task-47-api-totp-enroll [DONE] 2026-09-08: enrollment API —
+         GET/POST app/api/auth/totp/enroll/route.ts (status check,
+         generate secret+QR, verify code to activate) — see
+         docs/tasks/task-47-api-totp-enroll.md. Remaining 4
+         micro-tasks (login-verify, both UI screens, setup gate) not
+         started; not blocking, just noting progress.
        - Phases 3+ (admin management, vault, buyer management, etc.)
          not started.
 

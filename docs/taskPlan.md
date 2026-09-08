@@ -1,8 +1,11 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-47-api-totp-enroll — enrollment API routes, part 2 of 6
-for task-47 (2FA/TOTP enrollment). task-47-schema-totp closed 2026-09-08 —
-see docs/tasks/task-47-schema-totp.md.
+**NEXT UP:** task-47-api-totp-login-verify — login flow TOTP gate +
+verify endpoint, part 3 of 6 for task-47 (2FA/TOTP enrollment).
+task-47-api-totp-enroll closed 2026-09-08 — see
+docs/tasks/task-47-api-totp-enroll.md. Note: it lives at
+app/api/auth/totp/*, not /api/admin/* as originally scoped — follow
+the same namespace for this next micro-task.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -380,7 +383,11 @@ see Section 5C / 8 in that file.
       skipped indefinitely). Broken into 6 micro-tasks 2026-09-08 (Rule 49
       Step 4 — touches 4+ layers): see docs/tasks/task-47-*.md.
       - [DONE] task-47-schema-totp — AdminTotpCredential model + otplib/qrcode deps
-      - [ ] task-47-api-totp-enroll — enrollment API (generate + verify)
+      - [DONE] task-47-api-totp-enroll — enrollment API (generate + verify) —
+            built 2026-09-08 at app/api/auth/totp/enroll/route.ts (not
+            /api/admin/* as originally scoped — see
+            docs/tasks/task-47-api-totp-enroll.md for why), see also
+            overviewProject-3.txt's matching CHANGE LOG entry
       - [ ] task-47-api-totp-login-verify — login flow TOTP gate + verify endpoint
       - [ ] task-47-ui-totp-enrollment — enrollment screen
       - [ ] task-47-ui-totp-login-step — login page TOTP prompt

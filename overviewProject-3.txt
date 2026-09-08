@@ -302,3 +302,33 @@ file holds change-log entries only.
   docs/taskPlan.md updated in place same turn: task-47-schema-totp
   flipped to [DONE], NEXT-UP pointer now points to
   task-47-api-totp-enroll.
+
+[2026-09-08] Built task-47-api-totp-enroll (super_admin_account_specification.md
+  Section 9.1, Section 12 Phase 1) — second of 6 micro-tasks for 2FA/TOTP
+  enrollment. Added app/api/auth/totp/enroll/route.ts: GET returns the
+  calling admin/superAdmin's current enrollment status; POST handles
+  { action: "generate" } (refuses if already enabled, clears any stale
+  unverified attempt, issues a new otplib secret + otpauth URI + QR
+  code data URL, stores it encrypted via lib/totpCrypto.ts with
+  enabled=false) and { action: "verify", code } (decrypts the pending
+  secret, checks the 6-digit code with a 30s epoch tolerance, and on
+  success flips enabled=true + stamps enrolledAt/lastVerifiedAt — the
+  only place enabled ever turns on). Auth via lib/getSessionAdmin.ts,
+  CSRF via lib/csrf.ts, rate-limited 5/15min via lib/rateLimit.ts
+  (mirrors the recovery-setup routes' shape), every attempt logged to
+  SecurityLog (totp_enrollment_initiated/_completed/_failed) via
+  lib/securityLog.ts. otplib v13.5.0 turned out to have fully removed
+  the old `authenticator` singleton (v12 API) in favor of a standalone
+  async functional API (generateSecret/generateURI/verify) — code
+  written against the newer API, noted inline so the next micro-task
+  (task-47-api-totp-login-verify, which also calls verify()) doesn't
+  rediscover this. `npx tsc --noEmit`: zero errors on the new file;
+  the ~44 remaining errors project-wide are the same pre-existing
+  ungenerated-Prisma-client errors seen in prior entries (binaries.
+  prisma.sh still blocked in this sandbox) — run `npx prisma generate`
+  locally before testing, no db push needed since the schema didn't
+  change this pass. `npx eslint` clean on the new file. No UI yet —
+  see docs/tasks/task-47-ui-totp-enrollment.md for that micro-task.
+  docs/taskPlan.md and this file's Section 5C updated in place same
+  turn per Rule 16.1/49.1: task-47-api-totp-enroll flipped to [DONE],
+  NEXT-UP pointer now points to task-47-api-totp-login-verify.
