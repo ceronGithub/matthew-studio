@@ -41,9 +41,60 @@ no TOTP step):
   gate is what forces them to `/admin/security/totp-setup` before they
   can reach any other protected page.
 
+## What was built (2026-09-08)
+
+- `app/api/auth/login/route.ts` — after `detectAnomalies()` passes,
+  queries `AdminTotpCredential` for the account (admin/superAdmin
+  only). If an `enabled: true` row exists, no cookies or Vault slug
+  are issued; instead a pendingToken is returned with `{ totpRequired:
+  true, pendingToken }` and the message "Enter the 6-digit code from
+  your authenticator app." Logs `totp_login_pending`.
+- `lib/pendingTotpLogin.ts` (new) — `createPendingTotpLoginToken()` /
+  `parsePendingTotpLoginToken()`. AES-256-GCM (same primitive as
+  `lib/totpCrypto.ts`) over a JSON payload (userId, email, role, the
+  Supabase access/refresh tokens, and a 5-minute `expiresAt`), keyed
+  by a **new, dedicated** `PENDING_TOTP_LOGIN_KEY` env var — never
+  reuses `TOTP_ENCRYPTION_KEY` (key separation). Self-contained: no
+  new Prisma model or migration, since the pending state lives entirely
+  inside the encrypted token itself. `parse` never throws — any
+  malformed/tampered/wrong-key/expired token returns `null`.
+- `lib/loginSession.ts` (new) — `buildLoginResponseData()`,
+  `setSessionCookies()`, and `createLoginSuccessResponse()`, extracted
+  verbatim (behavior-preserving) from what used to be inline in
+  `login/route.ts`. This is the single "grant a session" implementation
+  both `login/route.ts` (non-2FA accounts) and the new verify-login
+  route below call — no duplicated cookie-setting code, per this
+  task's scope.
+- `app/api/auth/totp/verify-login/route.ts` (new) — `POST` only, under
+  the same `/api/auth/totp/*` namespace as `enroll` (per that task's
+  routing note). CSRF check, then a 5/15min rate limit (label
+  `"totp-login-verify"` — this is the "existing lockout logic" the
+  scope called for, not a new Gatekeeper strike category). Decrypts
+  the pendingToken, re-confirms the credential is still `enabled:
+  true` (it could have been disabled in the few minutes since /login),
+  checks the code via otplib's `verify()` (30s `epochTolerance`,
+  matching `task-47-api-totp-enroll`'s handling), stamps
+  `lastVerifiedAt`, logs `totp_login_verified`, and calls
+  `createLoginSuccessResponse()` using the session tokens carried
+  inside the pendingToken. A bad/expired/tampered token and a wrong
+  code both return the same generic message (Rule 34.1) and both log
+  `totp_login_failed`.
+- Verification: `npx tsc --noEmit` — zero new errors (the 45
+  project-wide errors are the same pre-existing ungenerated-Prisma-
+  client baseline; `binaries.prisma.sh` still blocked in this sandbox
+  — run `npx prisma generate` locally, no `db push` needed since the
+  schema didn't change this pass). `npx eslint` clean on every
+  new/changed file.
+- New required env var: `PENDING_TOTP_LOGIN_KEY` (documented in
+  `overviewProject.txt` Section 7) — must be set before this flow can
+  be exercised locally or in any deploy environment.
+
 ## Explicitly out of scope
 
 - The enrollment endpoints themselves (task-47-api-totp-enroll)
 - The gate that forces un-enrolled admins to set up TOTP
   (task-47-totp-setup-gate) — this task only handles the case where
   TOTP is already enabled and must be verified at login.
+- No UI — the login page's TOTP prompt (task-47-ui-totp-login-step)
+  is a separate micro-task; this task only built the API contract it
+  will call (`{ pendingToken, code }` → session or generic error).

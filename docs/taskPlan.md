@@ -1,11 +1,8 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-47-api-totp-login-verify — login flow TOTP gate +
-verify endpoint, part 3 of 6 for task-47 (2FA/TOTP enrollment).
-task-47-api-totp-enroll closed 2026-09-08 — see
-docs/tasks/task-47-api-totp-enroll.md. Note: it lives at
-app/api/auth/totp/*, not /api/admin/* as originally scoped — follow
-the same namespace for this next micro-task.
+**NEXT UP:** task-47-ui-totp-enrollment — enrollment screen, part 4 of
+6 for task-47 (2FA/TOTP enrollment). task-47-api-totp-login-verify
+closed 2026-09-08 — see docs/tasks/task-47-api-totp-login-verify.md.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -386,9 +383,15 @@ see Section 5C / 8 in that file.
       - [DONE] task-47-api-totp-enroll — enrollment API (generate + verify) —
             built 2026-09-08 at app/api/auth/totp/enroll/route.ts (not
             /api/admin/* as originally scoped — see
-            docs/tasks/task-47-api-totp-enroll.md for why), see also
+            docs/tasks/task-47-api-totp-enroll.md for why)
+      - [DONE] task-47-api-totp-login-verify — login flow TOTP gate + verify
+            endpoint, built 2026-09-08: app/api/auth/login/route.ts now
+            issues a pending token instead of a session for TOTP-enabled
+            accounts; new POST /api/auth/totp/verify-login confirms the
+            code and grants the session via lib/loginSession.ts (shared
+            with the non-2FA path) — see
+            docs/tasks/task-47-api-totp-login-verify.md and
             overviewProject-3.txt's matching CHANGE LOG entry
-      - [ ] task-47-api-totp-login-verify — login flow TOTP gate + verify endpoint
       - [ ] task-47-ui-totp-enrollment — enrollment screen
       - [ ] task-47-ui-totp-login-step — login page TOTP prompt
       - [ ] task-47-totp-setup-gate — middleware forced-enrollment redirect

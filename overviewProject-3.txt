@@ -332,3 +332,44 @@ file holds change-log entries only.
   docs/taskPlan.md and this file's Section 5C updated in place same
   turn per Rule 16.1/49.1: task-47-api-totp-enroll flipped to [DONE],
   NEXT-UP pointer now points to task-47-api-totp-login-verify.
+
+[2026-09-08] Built task-47-api-totp-login-verify (super_admin_account_specification.md
+  Section 9.1, Section 12 Phase 1) — third of 6 micro-tasks for 2FA/TOTP.
+  app/api/auth/login/route.ts: after password auth + the anomaly check
+  both pass, an admin/superAdmin account with an enabled
+  AdminTotpCredential row no longer receives cookies or a Vault slug —
+  instead it gets an opaque, short-lived pendingToken (new
+  lib/pendingTotpLogin.ts, AES-256-GCM via a dedicated
+  PENDING_TOTP_LOGIN_KEY env var, distinct from TOTP_ENCRYPTION_KEY for
+  key separation) packing the account identity plus the in-flight
+  Supabase session tokens, self-expiring after 5 minutes — no new
+  Prisma model/migration needed since nothing is persisted server-side.
+  New route app/api/auth/totp/verify-login/route.ts (CSRF + 5/15min
+  rate limit, same shape as login itself) decrypts the pendingToken,
+  re-confirms the credential is still enabled, checks the 6-digit code
+  via otplib's verify() (30s epochTolerance, matching
+  task-47-api-totp-enroll), stamps lastVerifiedAt, and only then grants
+  the real session. Extracted the former inline buildLoginResponseData
+  + cookie-setting code out of login/route.ts into new
+  lib/loginSession.ts (buildLoginResponseData, setSessionCookies,
+  createLoginSuccessResponse) so both the non-2FA login path and this
+  new verify-login route call the exact same "grant a session"
+  implementation — no duplicated cookie logic. SecurityLog events added:
+  totp_login_pending (token issued), totp_login_verified (success),
+  totp_login_failed (bad/expired/tampered token or wrong code) — failed
+  attempts are covered by the same IP-based rate limit as login itself,
+  not a new Gatekeeper strike category (task spec scoped it to Rule
+  32.1, not Rule 47.3). `npx tsc --noEmit`: zero new errors — the 45
+  remaining are the same pre-existing ungenerated-Prisma-client errors
+  seen in prior entries (binaries.prisma.sh still blocked in this
+  sandbox; run `npx prisma generate` locally, no db push needed since
+  the schema didn't change this pass). `npx eslint` clean on all
+  new/changed files. No UI yet — see
+  docs/tasks/task-47-ui-totp-enrollment.md and
+  docs/tasks/task-47-ui-totp-login-step.md for those micro-tasks.
+  docs/taskPlan.md and overviewProject.txt's Section 5C updated in
+  place same turn per Rule 16.1/49.1: task-47-api-totp-login-verify
+  flipped to [DONE], NEXT-UP pointer now points to
+  task-47-ui-totp-enrollment. New required env var
+  PENDING_TOTP_LOGIN_KEY documented in overviewProject.txt Section 7 —
+  must be set locally/in deploy env before this flow can be exercised.

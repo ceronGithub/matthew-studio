@@ -10,71 +10,38 @@
  * For admin/superAdmin roles only, also issues or reuses the Vault
  * session slug (vault_specification.md Section 5.1, task-29) via
  * lib/vaultHelpers.ts's getOrCreateAdminSession — buyers never get an
- * AdminSession row.
+ * AdminSession row. Cookie-issuance + Vault slug logic now lives in
+ * lib/loginSession.ts (task-47-api-totp-login-verify) so
+ * app/api/auth/totp/verify-login/route.ts can grant a session the
+ * exact same way once a TOTP code is confirmed — never a second copy
+ * of this logic.
+ *
+ * TOTP gate (super_admin_account_specification.md Section 9.1,
+ * task-47-api-totp-login-verify, part 3 of 6): once password auth AND
+ * the anomaly check both pass, an admin/superAdmin account that
+ * already has TOTP enabled is NOT granted a session here. Instead a
+ * short-lived pending token is issued (lib/pendingTotpLogin.ts) and
+ * the response tells the client to submit the 6-digit code to
+ * POST /api/auth/totp/verify-login next — no cookies, no Vault slug,
+ * no `/superAdmin/*`/`/admin/*` access until that succeeds. An account
+ * that has never enrolled TOTP is unaffected by this branch — forcing
+ * enrollment itself is task-47-totp-setup-gate's job, a separate
+ * middleware redirect that runs once they DO have a session.
  */
 export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
+import { prisma } from "@/services/prisma";
 import { supabaseServerClient } from "@/lib/supabase/serverClient";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { logSecurityEvent } from "@/lib/securityLog";
 import { isValidCsrfRequest } from "@/lib/csrf";
 import { detectAnomalies } from "@/lib/anomalyDetection";
-import { getOrCreateAdminSession } from "@/lib/vaultHelpers";
-import { UAParser } from "ua-parser-js";
+import { createLoginSuccessResponse } from "@/lib/loginSession";
+import { createPendingTotpLoginToken } from "@/lib/pendingTotpLogin";
 
-const isProduction = process.env.NODE_ENV === "production";
 const LOGIN_MAX_ATTEMPTS = 5;
 const LOGIN_WINDOW_MINUTES = 15;
-
-/**
- * buildLoginResponseData
- * Base response is just { userId, email, role } for buyers. For
- * admin/superAdmin roles, also issues (or reuses) the Vault session
- * slug (vault_specification.md Section 5.1) and logs which happened
- * (Section 8.3: vault_slug_generated vs. vault_slug_reused). Never
- * throws — a slug issuance failure logs and falls back to the base
- * shape rather than blocking a successful login.
- */
-async function buildLoginResponseData(
-  user: { userId: string; email: string | null; role: string },
-  request: Request
-) {
-  const baseData = { userId: user.userId, email: user.email, role: user.role };
-
-  if (user.role !== "admin" && user.role !== "superAdmin") {
-    return baseData;
-  }
-
-  try {
-    const userAgent = request.headers.get("user-agent");
-    const parsed = userAgent ? new UAParser(userAgent).getResult() : null;
-
-    const { session, reused } = await getOrCreateAdminSession(user.userId, user.role, {
-      ipAddress: getClientIp(request),
-      userAgent,
-      deviceType: parsed?.device.type ?? "desktop",
-    });
-
-    await logSecurityEvent({
-      eventType: reused ? "vault_slug_reused" : "vault_slug_generated",
-      actor: user.email,
-      request,
-      details: `AdminSession ${session.id} ${reused ? "reused" : "generated"} for role ${user.role}`,
-    });
-
-    return {
-      ...baseData,
-      adminSessionId: session.id,
-      slug: session.slug,
-    };
-  } catch (error) {
-    // A slug failure should never block an otherwise-successful login —
-    // the account just won't have vault access until the next attempt.
-    console.error("[auth/login] Vault slug issuance failed:", (error as Error).message);
-    return baseData;
-  }
-}
 
 export async function POST(request: Request) {
   try {
@@ -153,29 +120,46 @@ export async function POST(request: Request) {
       );
     }
 
-    const response = NextResponse.json({
-      success: true,
-      data: await buildLoginResponseData({ userId: data.user.id, email: data.user.email ?? null, role }, request),
-      message: "Signed in successfully.",
-    });
+    // TOTP gate — only admin/superAdmin roles can ever have a row
+    // here; buyers are never queried (mirrors lib/loginSession.ts's
+    // own role check inside buildLoginResponseData).
+    const totpCredential =
+      role === "admin" || role === "superAdmin"
+        ? await prisma.adminTotpCredential.findFirst({ where: { userId: data.user.id, enabled: true } })
+        : null;
 
-    // HttpOnly session cookies — read by middleware.ts on every protected request.
-    response.cookies.set("sb-access-token", data.session.access_token, {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: "strict",
-      path: "/",
-      maxAge: data.session.expires_in,
-    });
-    response.cookies.set("sb-refresh-token", data.session.refresh_token, {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: "strict",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-    });
+    if (totpCredential) {
+      const pendingToken = createPendingTotpLoginToken({
+        userId: data.user.id,
+        email: data.user.email ?? null,
+        role: role as "admin" | "superAdmin",
+        sessionAccessToken: data.session.access_token,
+        sessionRefreshToken: data.session.refresh_token,
+        sessionExpiresIn: data.session.expires_in,
+      });
 
-    return response;
+      await logSecurityEvent({
+        eventType: "totp_login_pending",
+        actor: data.user.email ?? email,
+        request,
+        details: `Password verified for ${role} account; awaiting TOTP code.`,
+      });
+
+      // No cookies, no Vault slug — a real session is only granted
+      // once POST /api/auth/totp/verify-login confirms the code.
+      return NextResponse.json({
+        success: true,
+        data: { totpRequired: true, pendingToken },
+        message: "Enter the 6-digit code from your authenticator app.",
+      });
+    }
+
+    return await createLoginSuccessResponse(
+      { userId: data.user.id, email: data.user.email ?? null, role },
+      data.session,
+      request,
+      "Signed in successfully."
+    );
   } catch (error) {
     console.error("[auth/login] Unexpected error:", (error as Error).message);
     return NextResponse.json(

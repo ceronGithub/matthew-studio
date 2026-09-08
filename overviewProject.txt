@@ -621,8 +621,15 @@ means testing against fixtures instead of the real flow)
          task-47-api-totp-enroll [DONE] 2026-09-08: enrollment API —
          GET/POST app/api/auth/totp/enroll/route.ts (status check,
          generate secret+QR, verify code to activate) — see
-         docs/tasks/task-47-api-totp-enroll.md. Remaining 4
-         micro-tasks (login-verify, both UI screens, setup gate) not
+         docs/tasks/task-47-api-totp-enroll.md.
+         task-47-api-totp-login-verify [DONE] 2026-09-08: login flow
+         TOTP gate — app/api/auth/login/route.ts now withholds the
+         session (pending token instead, lib/pendingTotpLogin.ts) for
+         any admin/superAdmin with TOTP enabled; new POST
+         /api/auth/totp/verify-login confirms the code and grants the
+         session via lib/loginSession.ts (shared with the non-2FA
+         path) — see docs/tasks/task-47-api-totp-login-verify.md.
+         Remaining 3 micro-tasks (both UI screens, setup gate) not
          started; not blocking, just noting progress.
        - Phases 3+ (admin management, vault, buyer management, etc.)
          not started.
@@ -1014,6 +1021,7 @@ referenced in the codebase today (grep-verified) is added below.
   EMAILJS_TEMPLATE_ID_ADMIN_PASSWORD_RESET=  # template vars: to_email, reset_link -- app/api/admin/users/[buyerId]/actions/route.ts, added 2026-09-08 (task-86)
   EMAILJS_TEMPLATE_ID_ADMIN_BUYER_EMAIL=     # template vars: to_email, subject, message -- same route, added 2026-09-08 (task-86)
   TOTP_ENCRYPTION_KEY=       # server-only, 32-byte key base64-encoded -- lib/totpCrypto.ts, added 2026-09-08 (task-47-schema-totp). Generate with: node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+  PENDING_TOTP_LOGIN_KEY=    # server-only, 32-byte key base64-encoded, distinct from TOTP_ENCRYPTION_KEY (key separation) -- lib/pendingTotpLogin.ts, added 2026-09-08 (task-47-api-totp-login-verify). Generate with: node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 
 .env (Prisma CLI -- generate/db push/migrate, read via prisma.config.mjs):
   DATABASE_URL=
