@@ -613,9 +613,12 @@ means testing against fixtures instead of the real flow)
          Section 3.6) and task-45/task-46 (Super-Admin Security Logs
          + Account Activity pages) are now all [DONE] for this
          internal phase; task-47 (2FA/TOTP enrollment) is next.
-       - Phase 1 (2FA/TOTP enrollment) not found in the repo
-         (grep-verified) — flagging since Phase 2 work is already
-         ahead of it; not blocking, just noting the gap.
+       - Phase 1 (2FA/TOTP enrollment) [~] in progress — broken into 6
+         micro-tasks 2026-09-08 (task-47-schema-totp through
+         task-47-totp-setup-gate, see docs/tasks/task-47-*.md).
+         task-47-schema-totp [DONE]: AdminTotpCredential model +
+         lib/totpCrypto.ts (see overviewProject-3.txt). Remaining 5
+         micro-tasks not started; not blocking, just noting progress.
        - Phases 3+ (admin management, vault, buyer management, etc.)
          not started.
 
@@ -1005,6 +1008,7 @@ referenced in the codebase today (grep-verified) is added below.
   APP_URL=                  # server-only -- builds the absolute /auth/reset-password link emailed by task-86's admin-initiated reset_password action
   EMAILJS_TEMPLATE_ID_ADMIN_PASSWORD_RESET=  # template vars: to_email, reset_link -- app/api/admin/users/[buyerId]/actions/route.ts, added 2026-09-08 (task-86)
   EMAILJS_TEMPLATE_ID_ADMIN_BUYER_EMAIL=     # template vars: to_email, subject, message -- same route, added 2026-09-08 (task-86)
+  TOTP_ENCRYPTION_KEY=       # server-only, 32-byte key base64-encoded -- lib/totpCrypto.ts, added 2026-09-08 (task-47-schema-totp). Generate with: node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 
 .env (Prisma CLI -- generate/db push/migrate, read via prisma.config.mjs):
   DATABASE_URL=

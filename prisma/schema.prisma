@@ -414,6 +414,37 @@ model AdminSession {
   @@index([expiresAt])
 }
 
+/// AdminTotpCredential
+/// TOTP (RFC 6238) secret for admin/superAdmin 2FA
+/// (super_admin_account_specification.md Section 9.1, task-47). Follows
+/// the AdminSession/VaultCredentials pattern above — userId is a plain
+/// string referencing Supabase auth.users.id, no local User table.
+/// secretEncrypted is reversible (AES-256-GCM via lib/totpCrypto.ts),
+/// never a hash — a login-time TOTP check must decrypt and re-derive
+/// the current code, unlike VaultCredentials' one-way SHA-256 hashes
+/// above, which are only ever compared, never decrypted back.
+/// enabled starts false at enrollment and only flips true once the
+/// enrollment verification step (task-47-api-totp-enroll) confirms the
+/// admin actually has the secret loaded in their authenticator app —
+/// an unconfirmed secret must never gate login.
+model AdminTotpCredential {
+  id     String @id @default(cuid())
+  userId String
+  role   String // "admin" | "superAdmin"
+
+  secretEncrypted String // AES-256-GCM ciphertext, see lib/totpCrypto.ts
+  enabled         Boolean @default(false)
+
+  enrolledAt     DateTime?
+  lastVerifiedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([enabled])
+}
+
 /// VaultCredentials
 /// Metadata only for offline emergency-access credentials
 /// (vault_specification.md Section 3) — the actual 15 words + 15

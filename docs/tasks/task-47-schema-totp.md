@@ -40,6 +40,28 @@ this one covers ONLY the data model.
 - Migration commands per Rule 21/37.2 (Supabase-safe): `npx prisma db
   push` then `npx prisma generate` — never `migrate dev`/`migrate deploy`.
 
+## What was built (2026-09-08)
+
+- `prisma/schema.prisma` — added `AdminTotpCredential` model, placed
+  between `AdminSession` and `VaultCredentials`: `userId` (indexed),
+  `role`, `secretEncrypted` (String — AES-256-GCM ciphertext, never
+  plaintext), `enabled` (default false), `enrolledAt`,
+  `lastVerifiedAt`, timestamps, `@@index([userId])`,
+  `@@index([enabled])`.
+- `lib/totpCrypto.ts` (new) — `encryptTotpSecret()` /
+  `decryptTotpSecret()`, AES-256-GCM keyed by `TOTP_ENCRYPTION_KEY`
+  (32-byte, base64, server-only per Rule 18.5). Reversible by design —
+  unlike `lib/vaultHelpers.ts`'s one-way SHA-256 hashing, a TOTP check
+  at login must recover the raw secret to re-derive the current code.
+  IV + auth tag + ciphertext are packed into one base64 string so the
+  column stays a single `String` field.
+- `package.json` — added `otplib` (RFC 6238 code generation/verification)
+  and `qrcode` + `@types/qrcode` (enrollment QR code) — none of these
+  existed before (grep-verified 2026-09-08). Not yet installed in this
+  sandbox; run `npm install` locally before the next micro-task.
+- `overviewProject.txt` Section 7 — added `TOTP_ENCRYPTION_KEY` to the
+  required env var list, with the generation command inline.
+
 ## Explicitly out of scope for this sub-task
 
 - No API routes (task-47-api-totp-enroll, task-47-api-totp-login-verify)
