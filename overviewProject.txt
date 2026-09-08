@@ -396,18 +396,10 @@ PHASE 2 — CORE BUYER EXPERIENCE (needs Phase 1's Order model to exist)
 PHASE 3 — ADMIN & OVERSIGHT (needs real orders from Phase 1-2 to
 manage against; building admin UI before there's data to manage
 means testing against fixtures instead of the real flow)
-[~] 4. admin_account_specification.md — Product CRUD DONE (2026-09-06).
-       Base Product CRUD (create/edit/list/delete a product) is now
-       fully built end to end — this unblocks item 9 below, since
-       product_media_upload_specification.md only adds media fields
-       to an already-existing product, it doesn't create one.
-       docs/tasks/task-19 through task-23:
-       [DONE] task-19 (Product.createdBy/updatedBy + AuditLog model)
-       [DONE] task-20 (GET list + detail routes, "manage-products"
-              permission check via new lib/hasAdminPermission.ts)
-       [DONE] task-21 (POST/PUT/DELETE routes)
-       [DONE] task-22 (admin product list UI)
-       [DONE] task-23 (admin product create/edit form UI)
+[DONE] 4. admin_account_specification.md — CLOSED 2026-09-08. All
+       sections done: Product CRUD, Dashboard, Order Management,
+       Users Management, Vault, Analytics, Security Logs, and Admin
+       Profile (task-44, the last remaining line, closed 2026-09-08).
        [DONE] task-71 (Admin Dashboard, Section 3.1 — real Quick
               Stats/Recent Orders/Recent Products/Alerts/Quick
               Actions replacing the "coming soon" placeholder;
@@ -553,8 +545,8 @@ means testing against fixtures instead of the real flow)
               those are the super-admin view's extras). Quick Action
               link added to app/admin/dashboard/page.tsx. See
               docs/tasks/task-42-ui-admin-security-logs.md.
-       [~] Admin Profile page (Section 3.8, task-44) — API half done
-              2026-09-08: GET/PUT /api/admin/profile (fullName,
+       [DONE] Admin Profile page (Section 3.8, task-44) — API half
+              done 2026-09-08: GET/PUT /api/admin/profile (fullName,
               read-only email/role/permissions/createdAt,
               notificationPrefs), POST /api/admin/profile/avatar (R2
               upload mirroring the buyer route), PUT
@@ -563,12 +555,17 @@ means testing against fixtures instead of the real flow)
               updateUserById — see file header for the "current
               session stays active" caveat), PUT
               /api/admin/profile/notifications (single-toggle save).
-              UI half not started. See
-              docs/tasks/task-44-api-admin-profile.md.
+              UI half done 2026-09-08: lib/hooks/useAdminProfile.ts +
+              components/admin/ProfileForm.tsx (Profile Information /
+              Change Password / Notification Preferences sections) +
+              app/admin/profile/page.tsx + app/styles/adminProfile.css.
+              Quick Action link added to app/admin/dashboard/page.tsx.
+              See docs/tasks/task-44-api-admin-profile.md and
+              docs/tasks/task-44-ui-admin-profile.md.
        Rest of this spec is complete — Product CRUD + Dashboard +
        Order Management + Users Management + Vault + Analytics +
-       Security Logs are all done; only Admin Profile's UI half
-       remains, so this item stays [~] overall.
+       Security Logs + Admin Profile are all done. Item 4 is now
+       fully [DONE] as of 2026-09-08.
 [~] 5. super_admin_account_specification.md — IN PROGRESS (corrected
        here 2026-09-06). Per its own Section 12 internal phasing:
        - Phase 2 (Dashboard Shell + Security/Activity Logging) is

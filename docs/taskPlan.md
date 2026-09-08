@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-44 (UI half) — Admin Profile page (Section 3.8). API half is [DONE] (see docs/tasks/task-44-api-admin-profile.md); the UI half is the first remaining unchecked item in item 4 (admin_account_specification.md).
+**NEXT UP:** task-46 — Account Activity page (Section 3.4, Rule 42.3), item 5 (super_admin_account_specification.md). Item 4 (admin_account_specification.md) is now fully [DONE] — task-44 (UI half) was the last remaining line and closed 2026-09-08.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -153,7 +153,7 @@ see Section 5C / 8 in that file.
 
 ## PHASE 3 (remainder) — ADMIN & SUPER-ADMIN OVERSIGHT
 
-### [~] 4. admin_account_specification.md — Product CRUD + Dashboard + Orders + Users + Vault done; Analytics in progress (API done, UI next), Security/Profile remain
+### [DONE] 4. admin_account_specification.md — CLOSED 2026-09-08, all items (dashboard, orders, users, analytics, vault, security logs, profile) done
 - [DONE] task-71 — Admin dashboard (Section 3.1) — renumbered 2026-09-07 from
       task-38, which collided with the (already DONE) buyer-recovery
       Telegram schema task of the same number; see NOTES. Built
@@ -333,8 +333,19 @@ see Section 5C / 8 in that file.
       updateUserById), `PUT /api/admin/profile/notifications`
       (single-toggle save). Built 2026-09-08, see
       docs/tasks/task-44-api-admin-profile.md.
-- [ ] task-44 (UI half) — `/admin/profile` page + form components,
-      same shape as the buyer profile page
+- [DONE] task-44 (UI half) — `/admin/profile` page + form components,
+      same shape as the buyer profile page. Built 2026-09-08:
+      `lib/hooks/useAdminProfile.ts` + `components/admin/ProfileForm.tsx`
+      + `app/admin/profile/page.tsx` + `app/styles/adminProfile.css`,
+      wired to task-44 (API half)'s four routes. Three sections per
+      Section 3.8: Profile Information (name/avatar/read-only role &
+      permissions), Change Password (current-password re-entry,
+      client-side strength pre-check mirroring the server rule),
+      Notification Preferences (each toggle saves immediately, no
+      batch save). Quick Action link added to
+      `app/admin/dashboard/page.tsx`. This was the last remaining line
+      in item 4 — parent flipped to [DONE] same turn per Rule 49.1
+      Rule 6. See docs/tasks/task-44-ui-admin-profile.md.
 
 ### [~] 5. super_admin_account_specification.md
 - [DONE] task-45 (API half) — lib/securityLogsQuery.ts (shared query,

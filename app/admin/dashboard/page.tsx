@@ -35,6 +35,7 @@ import {
   Ticket,
   KeyRound,
   ShieldAlert,
+  UserRound,
   ArrowRight,
 } from "lucide-react";
 import { getAdminQuickStats, getRecentOrders, getRecentProducts, getAdminDashboardAlerts } from "@/lib/adminDashboardStats";
@@ -51,6 +52,7 @@ const QUICK_ACTIONS = [
   { href: "/admin/support", label: "Support Tickets", description: "Reply to open buyer tickets", icon: Ticket, live: true },
   { href: "/admin/vault", label: "Security Vault", description: "Session slug and emergency backup credentials", icon: KeyRound, live: true },
   { href: "/admin/security-logs", label: "Security Logs", description: "Your own login attempts and security events", icon: ShieldAlert, live: true },
+  { href: "/admin/profile", label: "My Profile", description: "Name, avatar, password, and notification preferences", icon: UserRound, live: true },
   { href: "#", label: "Manage Users", description: "Not built yet", icon: Users, live: false },
   { href: "#", label: "View Analytics", description: "Not built yet", icon: BarChart3, live: false },
 ];
