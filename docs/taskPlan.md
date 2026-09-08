@@ -1,6 +1,10 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-47 — Phase 1: 2FA/TOTP enrollment (super_admin_account_specification.md, item 5, flagged as a not-blocking gap). task-46 (Account Activity page) closed 2026-09-08 — see docs/tasks/task-46-account-activity-page.md.
+**NEXT UP:** task-47-schema-totp — AdminTotpCredential model, part 1 of 6 for
+task-47 (2FA/TOTP enrollment). task-47 was broken into 6 micro-tasks on
+2026-09-08 per Rule 49 Step 4 (touches schema + 2 API surfaces + 2 UI
+surfaces + middleware) — see docs/tasks/task-47-*.md. task-46 (Account
+Activity page) closed 2026-09-08 — see docs/tasks/task-46-account-activity-page.md.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -375,7 +379,14 @@ see Section 5C / 8 in that file.
       3's note bundling gatekeeper_specification.md into this phase)
 - [ ] task-47 — Phase 1: 2FA/TOTP enrollment (flagged as missing even though
       later phases are already built — not blocking, but should not be
-      skipped indefinitely)
+      skipped indefinitely). Broken into 6 micro-tasks 2026-09-08 (Rule 49
+      Step 4 — touches 4+ layers): see docs/tasks/task-47-*.md.
+      - [ ] task-47-schema-totp — AdminTotpCredential model + otplib/qrcode deps
+      - [ ] task-47-api-totp-enroll — enrollment API (generate + verify)
+      - [ ] task-47-api-totp-login-verify — login flow TOTP gate + verify endpoint
+      - [ ] task-47-ui-totp-enrollment — enrollment screen
+      - [ ] task-47-ui-totp-login-step — login page TOTP prompt
+      - [ ] task-47-totp-setup-gate — middleware forced-enrollment redirect
 - [ ] task-48+ — Phases 3+: admin management, vault, buyer management
       (break down further once task-47 scope is confirmed)
 
