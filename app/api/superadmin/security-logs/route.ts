@@ -34,13 +34,15 @@ export async function GET(request: Request) {
     const page = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10) || 1);
     const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") ?? String(PAGE_SIZE), 10) || PAGE_SIZE));
     const eventType = searchParams.get("eventType") ?? undefined;
+    const deviceType = searchParams.get("deviceType") ?? undefined;
+    const geoCountry = searchParams.get("geoCountry") ?? undefined;
     const dateFromParam = searchParams.get("dateFrom");
     const dateToParam = searchParams.get("dateTo");
     const dateFrom = dateFromParam ? new Date(dateFromParam) : undefined;
     const dateTo = dateToParam ? new Date(dateToParam) : undefined;
 
     // No actorEmail passed — super-admin sees every account's events.
-    const result = await listSecurityLogs({ page, limit, eventType, dateFrom, dateTo });
+    const result = await listSecurityLogs({ page, limit, eventType, deviceType, geoCountry, dateFrom, dateTo });
 
     return NextResponse.json({
       success: true,

@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-45 (UI half) — Super-Admin Security Logs viewer page (Section 3.3, Rule 38.9). API half done 2026-09-08; task-42 (Admin Security Logs) follows once this UI half ships a component it can reuse.
+**NEXT UP:** task-42 — Admin Security Logs page (Section 3.6). Reuses SecurityLogsList/SecurityLogRow's pattern, self-scoped to the calling admin's own email via the already-live API half.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -327,10 +327,14 @@ see Section 5C / 8 in that file.
       optional actorEmail param) + GET /api/superadmin/security-logs
       (unscoped). Built 2026-09-08, see
       docs/tasks/task-45-api-security-logs.md.
-- [ ] task-45 (UI half) — /superAdmin/security-logs viewer page:
-      DataTable, filters, export, expandable rows (Section 3.3, Rule
-      38.9) — same visual pattern as GatekeeperBansList
-      (components/gatekeeper/GatekeeperBansList.tsx)
+- [DONE] task-45 (UI half) — /superAdmin/security-logs viewer page:
+      DataTable, filters (eventType/deviceType/geoCountry/date range),
+      CSV export, expandable rows (Section 3.3, Rule 38.9) — built
+      2026-09-08, see docs/tasks/task-45-ui-security-logs.md. Also
+      extended lib/securityLogsQuery.ts + the superadmin route with
+      deviceType/geoCountry params, which the API half's original
+      scope hadn't covered — needed to satisfy Section 3.3's full
+      filter list.
 - [ ] task-46 — Account Activity page (Section 3.4, Rule 42.3)
 - [DONE] task-33 (shared, see Phase 4) — Gatekeeper/device-bans page (Section
       3's note bundling gatekeeper_specification.md into this phase)

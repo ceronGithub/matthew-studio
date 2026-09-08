@@ -545,10 +545,10 @@ means testing against fixtures instead of the real flow)
               via lib/securityLogsQuery.ts's actorEmail param (never
               relies on frontend filtering, per Section 3.6's own
               wording) — see docs/tasks/task-45-api-security-logs.md.
-              UI half still not built; also depends on the super-admin
-              Security Logs page (task-45, UI half) existing first so
-              the admin route has a component to reuse, per Rule 49
-              Step 4 sequencing.
+              UI half still not built; its blocker (the super-admin
+              Security Logs page, task-45 UI half) shipped 2026-09-08,
+              so this route now has a component (SecurityLogsList/
+              SecurityLogRow) to reuse — no longer blocked.
        Rest of this spec (admin profile Section 3.8) not started —
        still [~] overall for that reason, but Product CRUD + Dashboard
        + Order Management + Users Management + Vault + Analytics are
@@ -572,18 +572,24 @@ means testing against fixtures instead of the real flow)
          live on disk — a device ban CAN be lifted via the UI today,
          with the required note, per this phase's acceptance
          criteria.
-         [~] Security Logs page (Section 3.3, Rule 38.9) — API half
+         [DONE] Security Logs page (Section 3.3, Rule 38.9) — API half
          done 2026-09-08 (task-45, API half): lib/securityLogsQuery.ts
-         (shared, filterable-by-eventType/date-range paginated query)
-         + GET /api/superadmin/security-logs (unscoped, platform-
-         wide). UI half (the /superAdmin/security-logs viewer page
-         itself) still not built — see docs/tasks/task-45-api-
-         security-logs.md.
-         STILL MISSING from this same internal phase: the Security
-         Logs UI page above, and the Account Activity page (Section
-         3.4) — the logging infrastructure for the latter exists
-         (AccountActivityLog + recordAccountActivity()) but has no
-         viewer UI yet.
+         (shared, filterable paginated query) + GET
+         /api/superadmin/security-logs (unscoped, platform-wide). UI
+         half done 2026-09-08 (task-45, UI half): DataTable-style
+         viewer at /superAdmin/security-logs (toolbar with eventType/
+         deviceType/geoCountry/date-range filters, expandable rows,
+         CSV export, loading/empty/error states) — see docs/tasks/
+         task-45-ui-security-logs.md. lib/securityLogsQuery.ts and the
+         superadmin route were also extended with deviceType/
+         geoCountry params during this pass, which the API half's
+         original scope hadn't covered.
+         STILL MISSING from this same internal phase: the Account
+         Activity page (Section 3.4) — the logging infrastructure
+         exists (AccountActivityLog + recordAccountActivity()) but has
+         no viewer UI yet. task-42 (Admin Security Logs page, Section
+         3.6) is next — its API half is already done and it can now
+         reuse this task's SecurityLogsList/SecurityLogRow pattern.
        - Phase 1 (2FA/TOTP enrollment) not found in the repo
          (grep-verified) — flagging since Phase 2 work is already
          ahead of it; not blocking, just noting the gap.

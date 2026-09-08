@@ -257,3 +257,23 @@ file holds change-log entries only.
   turn per Rule 16.1/49.1. Next up: task-45 UI half (super-admin
   viewer page), then task-42 (admin viewer page, reusing that
   component).
+
+[2026-09-08] Built task-45 (UI half): super-admin Security Logs
+  viewer page at /superAdmin/security-logs (Section 3.3, Rule 38.9).
+  Added lib/hooks/useSecurityLogs.ts, components/security-logs/
+  SecurityLogsList.tsx + SecurityLogRow.tsx, app/superAdmin/
+  security-logs/page.tsx, and app/styles/securityLogs.css. Toolbar
+  filters by eventType/deviceType/geoCountry/date range; rows expand
+  to show device fingerprint, geolocation, user-agent, browser/OS;
+  client-side CSV export of the current filtered page; loading/empty/
+  error states per Rule 25. Extended lib/securityLogsQuery.ts and
+  app/api/superadmin/security-logs/route.ts with deviceType/
+  geoCountry filter params, which the API half (task-45) hadn't
+  covered but Section 3.3 requires. docs/taskPlan.md and
+  overviewProject.txt's Section 5C updated in place same turn per
+  Rule 16.1/49.1 -- task-45 line flipped to [DONE], admin_account_
+  specification.md's task-42 note updated to reflect its blocker
+  shipped. NEXT-UP pointer now points to task-42 (Admin Security Logs
+  page), which can reuse this task's component pattern, self-scoped
+  server-side to the calling admin's own email via the already-live
+  API half.

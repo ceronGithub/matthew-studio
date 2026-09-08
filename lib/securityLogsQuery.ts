@@ -29,6 +29,8 @@ export interface ListSecurityLogsParams {
   limit: number;
   eventType?: string;
   actorEmail?: string; // when set, scopes results to this actor only (admin self-view)
+  deviceType?: string; // mobile | tablet | desktop (Section 3.3 filter)
+  geoCountry?: string; // ISO 3166-1 alpha-2 (Section 3.3 filter)
   dateFrom?: Date;
   dateTo?: Date;
 }
@@ -38,12 +40,16 @@ export async function listSecurityLogs({
   limit,
   eventType,
   actorEmail,
+  deviceType,
+  geoCountry,
   dateFrom,
   dateTo,
 }: ListSecurityLogsParams) {
   const where: {
     eventType?: string;
     actor?: string;
+    deviceType?: string;
+    geoCountry?: string;
     createdAt?: { gte?: Date; lte?: Date };
   } = {};
 
@@ -53,6 +59,9 @@ export async function listSecurityLogs({
   // admin can never see another admin's or super-admin's events
   // (admin_account_specification.md Section 3.6's scope restriction).
   if (actorEmail) where.actor = actorEmail;
+
+  if (deviceType) where.deviceType = deviceType;
+  if (geoCountry) where.geoCountry = geoCountry.toUpperCase();
 
   if (dateFrom || dateTo) {
     where.createdAt = {};
