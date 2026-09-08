@@ -553,10 +553,22 @@ means testing against fixtures instead of the real flow)
               those are the super-admin view's extras). Quick Action
               link added to app/admin/dashboard/page.tsx. See
               docs/tasks/task-42-ui-admin-security-logs.md.
-       Rest of this spec (admin profile Section 3.8) not started —
-       still [~] overall for that reason, but Product CRUD + Dashboard
-       + Order Management + Users Management + Vault + Analytics +
-       Security Logs are complete.
+       [~] Admin Profile page (Section 3.8, task-44) — API half done
+              2026-09-08: GET/PUT /api/admin/profile (fullName,
+              read-only email/role/permissions/createdAt,
+              notificationPrefs), POST /api/admin/profile/avatar (R2
+              upload mirroring the buyer route), PUT
+              /api/admin/profile/password (current-password
+              verification via signInWithPassword, then Supabase
+              updateUserById — see file header for the "current
+              session stays active" caveat), PUT
+              /api/admin/profile/notifications (single-toggle save).
+              UI half not started. See
+              docs/tasks/task-44-api-admin-profile.md.
+       Rest of this spec is complete — Product CRUD + Dashboard +
+       Order Management + Users Management + Vault + Analytics +
+       Security Logs are all done; only Admin Profile's UI half
+       remains, so this item stays [~] overall.
 [~] 5. super_admin_account_specification.md — IN PROGRESS (corrected
        here 2026-09-06). Per its own Section 12 internal phasing:
        - Phase 2 (Dashboard Shell + Security/Activity Logging) is

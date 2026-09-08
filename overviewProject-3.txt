@@ -279,3 +279,5 @@ file holds change-log entries only.
   API half.
 
 [2026-09-08] Added the admin-scoped Security Logs page (task-42) — self-scoped viewer at /admin/security-logs reusing the existing SecurityLogRow component (Event Type + Date Range filters only), plus a Quick Action link on the admin dashboard.
+
+[2026-09-08] Built task-44 (API half) — Admin Profile settings (admin_account_specification.md Section 3.8): GET/PUT /api/admin/profile (fullName + read-only email/role/permissions/createdAt + notificationPrefs), POST /api/admin/profile/avatar (R2 upload, mirrors the buyer avatar route), PUT /api/admin/profile/password (current-password re-verification via signInWithPassword, then Supabase updateUserById; logs to both SecurityLog and the Rule 42 Account Activity Log), PUT /api/admin/profile/notifications (single-toggle save). No new Prisma models — all fields live in Supabase user_metadata, same convention as the buyer profile route. docs/taskPlan.md and overviewProject.txt's Section 5C updated in place same turn; NEXT-UP pointer now points to task-44's UI half.

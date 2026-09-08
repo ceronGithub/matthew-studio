@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-44 — Admin Profile page (Section 3.8). task-42 and task-43 are both [DONE]; this is the first remaining unchecked item in item 4 (admin_account_specification.md).
+**NEXT UP:** task-44 (UI half) — Admin Profile page (Section 3.8). API half is [DONE] (see docs/tasks/task-44-api-admin-profile.md); the UI half is the first remaining unchecked item in item 4 (admin_account_specification.md).
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -324,7 +324,17 @@ see Section 5C / 8 in that file.
       (`app/admin/vault/page.tsx` + `app/admin/vault/[slug]/page.tsx`
       confirmed live on disk). This line was stale — task-32 already
       covered this scope, it just wasn't cross-referenced here.
-- [ ] task-44 — Admin Profile page (Section 3.8)
+- [DONE] task-44 (API half) — Admin Profile settings: GET/PUT
+      `/api/admin/profile` (fullName, read-only email/role/
+      permissions/createdAt, notificationPrefs), `POST
+      /api/admin/profile/avatar` (R2 upload, mirrors buyer's),
+      `PUT /api/admin/profile/password` (current-password
+      verification via signInWithPassword, then Supabase
+      updateUserById), `PUT /api/admin/profile/notifications`
+      (single-toggle save). Built 2026-09-08, see
+      docs/tasks/task-44-api-admin-profile.md.
+- [ ] task-44 (UI half) — `/admin/profile` page + form components,
+      same shape as the buyer profile page
 
 ### [~] 5. super_admin_account_specification.md
 - [DONE] task-45 (API half) — lib/securityLogsQuery.ts (shared query,
