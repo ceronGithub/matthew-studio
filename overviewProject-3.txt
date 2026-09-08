@@ -277,3 +277,5 @@ file holds change-log entries only.
   page), which can reuse this task's component pattern, self-scoped
   server-side to the calling admin's own email via the already-live
   API half.
+
+[2026-09-08] Added the admin-scoped Security Logs page (task-42) — self-scoped viewer at /admin/security-logs reusing the existing SecurityLogRow component (Event Type + Date Range filters only), plus a Quick Action link on the admin dashboard.

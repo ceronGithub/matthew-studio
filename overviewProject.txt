@@ -539,20 +539,24 @@ means testing against fixtures instead of the real flow)
               app/admin/vault/[slug]/page.tsx are confirmed live on
               disk. Reconciled here 2026-09-08 — taskPlan.md's task-43
               line was stale.
-       [~] Admin Security Logs (Section 3.6, task-42) — API half done
+       [DONE] Admin Security Logs (Section 3.6, task-42) — API half done
               2026-09-08: GET /api/admin/security-logs, gated on the
               "view-security-logs" permission, self-scoped server-side
               via lib/securityLogsQuery.ts's actorEmail param (never
               relies on frontend filtering, per Section 3.6's own
               wording) — see docs/tasks/task-45-api-security-logs.md.
-              UI half still not built; its blocker (the super-admin
-              Security Logs page, task-45 UI half) shipped 2026-09-08,
-              so this route now has a component (SecurityLogsList/
-              SecurityLogRow) to reuse — no longer blocked.
+              UI half done 2026-09-08: lib/hooks/useAdminSecurityLogs.ts
+              + components/security-logs/AdminSecurityLogsList.tsx
+              (reuses SecurityLogRow) + app/admin/security-logs/page.tsx,
+              restricted to the Event Type + Date Range filters Section
+              3.6 calls for (no device/country filter, no CSV export —
+              those are the super-admin view's extras). Quick Action
+              link added to app/admin/dashboard/page.tsx. See
+              docs/tasks/task-42-ui-admin-security-logs.md.
        Rest of this spec (admin profile Section 3.8) not started —
        still [~] overall for that reason, but Product CRUD + Dashboard
-       + Order Management + Users Management + Vault + Analytics are
-       complete, and Security Logs is API-done/UI-pending.
+       + Order Management + Users Management + Vault + Analytics +
+       Security Logs are complete.
 [~] 5. super_admin_account_specification.md — IN PROGRESS (corrected
        here 2026-09-06). Per its own Section 12 internal phasing:
        - Phase 2 (Dashboard Shell + Security/Activity Logging) is
@@ -588,8 +592,8 @@ means testing against fixtures instead of the real flow)
          Activity page (Section 3.4) — the logging infrastructure
          exists (AccountActivityLog + recordAccountActivity()) but has
          no viewer UI yet. task-42 (Admin Security Logs page, Section
-         3.6) is next — its API half is already done and it can now
-         reuse this task's SecurityLogsList/SecurityLogRow pattern.
+         3.6) is now [DONE] — see item 4 above; task-46 (Account
+         Activity page) is next.
        - Phase 1 (2FA/TOTP enrollment) not found in the repo
          (grep-verified) — flagging since Phase 2 work is already
          ahead of it; not blocking, just noting the gap.

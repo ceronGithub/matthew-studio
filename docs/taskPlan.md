@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-42 — Admin Security Logs page (Section 3.6). Reuses SecurityLogsList/SecurityLogRow's pattern, self-scoped to the calling admin's own email via the already-live API half.
+**NEXT UP:** task-44 — Admin Profile page (Section 3.8). task-42 and task-43 are both [DONE]; this is the first remaining unchecked item in item 4 (admin_account_specification.md).
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -305,15 +305,19 @@ see Section 5C / 8 in that file.
         route. Built 2026-09-08 — did not meet the micro-task split
         threshold (single file set, single UI layer, single role), so
         built as one task per Rule 49.1.
-- [ ] task-42 — Admin Security Logs page (Section 3.6) — depends on
-      task-45 (UI half) shipping first, so this reuses an actual
-      component instead of one that doesn't exist yet (2026-09-08
-      audit caught this — task-42's old note assumed the super-admin
-      pattern already existed; it didn't). Scoping confirmed from
-      spec: self-scoped, `WHERE actor = currentAdmin.email` server-
-      side (Section 3.6's own wording), gated on "view-security-logs"
-      permission. API half already done as part of task-45's API
-      work — see docs/tasks/task-45-api-security-logs.md.
+- [DONE] task-42 — Admin Security Logs page (Section 3.6). API half
+      already done as part of task-45's API work — see
+      docs/tasks/task-45-api-security-logs.md. UI half built
+      2026-09-08: `lib/hooks/useAdminSecurityLogs.ts` +
+      `components/security-logs/AdminSecurityLogsList.tsx` (reuses
+      `SecurityLogRow` per Rule 2 — no rewrite) + `app/admin/security-
+      logs/page.tsx`, restricted to the Event Type + Date Range
+      filters Section 3.6 calls for (no device/country filter, no CSV
+      export — those stay super-admin-only extras). Quick Action link
+      added to `app/admin/dashboard/page.tsx`. Self-scoped server-side
+      via `WHERE actor = currentAdmin.email` (Section 3.6's own
+      wording) — never relies on frontend filtering. See
+      docs/tasks/task-42-ui-admin-security-logs.md.
 - [DONE] task-43 — Admin Vault page (Section 3.7) — reconciled 2026-09-08:
       already satisfied by task-32, which built both
       `/superAdmin/vault/[slug]` and `/admin/vault/[slug]`
