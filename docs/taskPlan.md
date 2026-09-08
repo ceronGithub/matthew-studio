@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-42 — Admin Security Logs page (Section 3.6, reuses Rule 38.9 pattern already designed for super-admin)
+**NEXT UP:** task-45 (UI half) — Super-Admin Security Logs viewer page (Section 3.3, Rule 38.9). API half done 2026-09-08; task-42 (Admin Security Logs) follows once this UI half ships a component it can reuse.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -305,9 +305,15 @@ see Section 5C / 8 in that file.
         route. Built 2026-09-08 — did not meet the micro-task split
         threshold (single file set, single UI layer, single role), so
         built as one task per Rule 49.1.
-- [ ] task-42 — Admin Security Logs page (Section 3.6) — reuses Rule 38.9
-      pattern already designed for super-admin; confirm if admin gets a
-      scoped view or the same page with permission check
+- [ ] task-42 — Admin Security Logs page (Section 3.6) — depends on
+      task-45 (UI half) shipping first, so this reuses an actual
+      component instead of one that doesn't exist yet (2026-09-08
+      audit caught this — task-42's old note assumed the super-admin
+      pattern already existed; it didn't). Scoping confirmed from
+      spec: self-scoped, `WHERE actor = currentAdmin.email` server-
+      side (Section 3.6's own wording), gated on "view-security-logs"
+      permission. API half already done as part of task-45's API
+      work — see docs/tasks/task-45-api-security-logs.md.
 - [DONE] task-43 — Admin Vault page (Section 3.7) — reconciled 2026-09-08:
       already satisfied by task-32, which built both
       `/superAdmin/vault/[slug]` and `/admin/vault/[slug]`
@@ -317,8 +323,14 @@ see Section 5C / 8 in that file.
 - [ ] task-44 — Admin Profile page (Section 3.8)
 
 ### [~] 5. super_admin_account_specification.md
-- [ ] task-45 — Security Logs page (Section 3.3, Rule 38.9) — DataTable,
-      filters, export, expandable rows
+- [DONE] task-45 (API half) — lib/securityLogsQuery.ts (shared query,
+      optional actorEmail param) + GET /api/superadmin/security-logs
+      (unscoped). Built 2026-09-08, see
+      docs/tasks/task-45-api-security-logs.md.
+- [ ] task-45 (UI half) — /superAdmin/security-logs viewer page:
+      DataTable, filters, export, expandable rows (Section 3.3, Rule
+      38.9) — same visual pattern as GatekeeperBansList
+      (components/gatekeeper/GatekeeperBansList.tsx)
 - [ ] task-46 — Account Activity page (Section 3.4, Rule 42.3)
 - [DONE] task-33 (shared, see Phase 4) — Gatekeeper/device-bans page (Section
       3's note bundling gatekeeper_specification.md into this phase)

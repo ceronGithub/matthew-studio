@@ -525,9 +525,12 @@ means testing against fixtures instead of the real flow)
               49.1 after Layer-3 confirming the route exists and is
               non-stub (its own header comment identifies it as the
               API half of task-65's split, task-93 as the UI half).
-       [ ] task-93 (UI) — app/admin/analytics/page.tsx, the remaining
-              half of task-65's split. Not yet built — this is the
-              next item in the build sequence.
+       [DONE] task-93 (UI) — app/admin/analytics/page.tsx +
+              components/admin/AdminAnalytics.tsx +
+              lib/hooks/useAdminAnalytics.ts, the remaining half of
+              task-65's split. Corrected here 2026-09-08 — this line
+              was stale (still shown not-started); Layer-3 confirmed
+              the page file live on disk before flipping.
        [DONE] Admin Vault page (Section 3.7, previously tracked as
               task-43 "depends on task-32") — already satisfied:
               task-32 built both /superAdmin/vault/[slug] and
@@ -536,11 +539,20 @@ means testing against fixtures instead of the real flow)
               app/admin/vault/[slug]/page.tsx are confirmed live on
               disk. Reconciled here 2026-09-08 — taskPlan.md's task-43
               line was stale.
-       Rest of this spec (admin security logs Section 3.6, admin
-       profile Section 3.8) not started — still [~] overall for that
-       reason, but Product CRUD + Dashboard + Order Management +
-       Users Management + Vault are complete, and Analytics is API-
-       done/UI-pending.
+       [~] Admin Security Logs (Section 3.6, task-42) — API half done
+              2026-09-08: GET /api/admin/security-logs, gated on the
+              "view-security-logs" permission, self-scoped server-side
+              via lib/securityLogsQuery.ts's actorEmail param (never
+              relies on frontend filtering, per Section 3.6's own
+              wording) — see docs/tasks/task-45-api-security-logs.md.
+              UI half still not built; also depends on the super-admin
+              Security Logs page (task-45, UI half) existing first so
+              the admin route has a component to reuse, per Rule 49
+              Step 4 sequencing.
+       Rest of this spec (admin profile Section 3.8) not started —
+       still [~] overall for that reason, but Product CRUD + Dashboard
+       + Order Management + Users Management + Vault + Analytics are
+       complete, and Security Logs is API-done/UI-pending.
 [~] 5. super_admin_account_specification.md — IN PROGRESS (corrected
        here 2026-09-06). Per its own Section 12 internal phasing:
        - Phase 2 (Dashboard Shell + Security/Activity Logging) is
@@ -552,15 +564,26 @@ means testing against fixtures instead of the real flow)
          services/geoip.ts, lib/anomalyDetection.ts, built
          2026-09-06), AccountActivityLog model + recordAccountActivity()
          (Rule 42, lib/accountActivity.ts).
+         [DONE] Gatekeeper/device-bans page (Section 12's note that
+         gatekeeper_specification.md belongs bundled into this phase)
+         — corrected here 2026-09-08: this line was stale. task-33
+         (UI half) already built /superAdmin/gatekeeper (DataTable,
+         filters, manual-ban modal, unban-with-note modal) confirmed
+         live on disk — a device ban CAN be lifted via the UI today,
+         with the required note, per this phase's acceptance
+         criteria.
+         [~] Security Logs page (Section 3.3, Rule 38.9) — API half
+         done 2026-09-08 (task-45, API half): lib/securityLogsQuery.ts
+         (shared, filterable-by-eventType/date-range paginated query)
+         + GET /api/superadmin/security-logs (unscoped, platform-
+         wide). UI half (the /superAdmin/security-logs viewer page
+         itself) still not built — see docs/tasks/task-45-api-
+         security-logs.md.
          STILL MISSING from this same internal phase: the Security
-         Logs page (Section 3.3), the Account Activity page (Section
-         3.4), and the Gatekeeper/device-bans page (Section 12's own
-         note that gatekeeper_specification.md belongs bundled into
-         this phase) — the logging/ban infrastructure exists but has
-         no viewer UI yet, so a device ban today can only be lifted
-         by hand in the DB, not via "only a super-admin can unban,
-         and only with a note" as this phase's acceptance criteria
-         requires.
+         Logs UI page above, and the Account Activity page (Section
+         3.4) — the logging infrastructure for the latter exists
+         (AccountActivityLog + recordAccountActivity()) but has no
+         viewer UI yet.
        - Phase 1 (2FA/TOTP enrollment) not found in the repo
          (grep-verified) — flagging since Phase 2 work is already
          ahead of it; not blocking, just noting the gap.

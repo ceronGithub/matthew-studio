@@ -218,3 +218,42 @@ file holds change-log entries only.
   did not meet Rule 49 Step 4's micro-task split threshold (single
   file set, single UI layer, single role) so it was built as one
   task rather than fragmented further.
+
+[2026-09-08] Rule 49 Step -1 audit on repo open (this session): user
+  asked "ano ang next na ibubuild" and NEXT UP pointer named task-42
+  (Admin Security Logs). Flagged a real inconsistency before
+  building: task-42's own note said it "reuses Rule 38.9 pattern
+  already designed for super-admin", but grep (find app/superAdmin,
+  find app/admin) confirmed no security-logs viewer page exists
+  anywhere yet -- task-45 (Security Logs, super_admin_account_
+  specification.md Section 3.3) is also still open. Also caught two
+  more Section 5C lines stale from before this session: the
+  Gatekeeper/device-bans page was listed as missing a viewer UI, but
+  task-33's UI half already shipped /superAdmin/gatekeeper; and
+  task-93 (Admin Analytics UI) was listed as "not yet built" despite
+  a 2026-09-08 change log entry above confirming it shipped the same
+  day. Both corrected in place in Section 5C, no code changed for
+  those two.
+
+  Decided (developer confirmed): build task-45 (Security Logs) before
+  task-42 (Admin Security Logs), split as API half now / UI halves
+  next, so task-42 has an actual shared component to reuse instead of
+  building in isolation.
+
+  Built task-45, API half. New files: lib/securityLogsQuery.ts
+  (shared paginated/filterable SecurityLog query, optional actorEmail
+  param for self-scoping), app/api/superadmin/security-logs/route.ts
+  (super-admin only, unscoped), app/api/admin/security-logs/route.ts
+  (admin/super-admin, gated on "view-security-logs" permission,
+  always self-scoped via actorEmail per admin_account_specification.md
+  Section 3.6's "never rely on frontend filtering alone" requirement).
+  No schema change -- SecurityLog model already existed. `npx tsc
+  --noEmit` run: zero new errors from these 3 files (pre-existing
+  errors elsewhere are from `npx prisma generate` being blocked by
+  this sandbox's network allowlist -- binaries.prisma.sh is not on
+  it -- same recurring constraint noted in task-84 through task-93's
+  entries above; regenerate locally before relying on tsc fully).
+  docs/taskPlan.md and this file's Section 5C updated in place same
+  turn per Rule 16.1/49.1. Next up: task-45 UI half (super-admin
+  viewer page), then task-42 (admin viewer page, reusing that
+  component).
