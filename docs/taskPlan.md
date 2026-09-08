@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-46 — Account Activity page (Section 3.4, Rule 42.3), item 5 (super_admin_account_specification.md). Item 4 (admin_account_specification.md) is now fully [DONE] — task-44 (UI half) was the last remaining line and closed 2026-09-08.
+**NEXT UP:** task-47 — Phase 1: 2FA/TOTP enrollment (super_admin_account_specification.md, item 5, flagged as a not-blocking gap). task-46 (Account Activity page) closed 2026-09-08 — see docs/tasks/task-46-account-activity-page.md.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -360,7 +360,17 @@ see Section 5C / 8 in that file.
       deviceType/geoCountry params, which the API half's original
       scope hadn't covered — needed to satisfy Section 3.3's full
       filter list.
-- [ ] task-46 — Account Activity page (Section 3.4, Rule 42.3)
+- [DONE] task-46 — Account Activity page (Section 3.4, Rule 42.3) —
+      lib/accountActivityQuery.ts (paginated/filterable query +
+      distinct-accounts lookup) + GET
+      /api/superadmin/account-activity (superAdmin-only) +
+      lib/hooks/useAccountActivity.ts +
+      components/account-activity/{AccountActivityList,
+      AccountActivityRow}.tsx + /superAdmin/account-activity page +
+      app/styles/accountActivity.css. No schema change — read/display
+      path only, AccountActivityLog + recordAccountActivity() were
+      already live. Built 2026-09-08, see
+      docs/tasks/task-46-account-activity-page.md.
 - [DONE] task-33 (shared, see Phase 4) — Gatekeeper/device-bans page (Section
       3's note bundling gatekeeper_specification.md into this phase)
 - [ ] task-47 — Phase 1: 2FA/TOTP enrollment (flagged as missing even though

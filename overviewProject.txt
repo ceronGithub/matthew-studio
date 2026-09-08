@@ -597,12 +597,22 @@ means testing against fixtures instead of the real flow)
          superadmin route were also extended with deviceType/
          geoCountry params during this pass, which the API half's
          original scope hadn't covered.
-         STILL MISSING from this same internal phase: the Account
-         Activity page (Section 3.4) — the logging infrastructure
-         exists (AccountActivityLog + recordAccountActivity()) but has
-         no viewer UI yet. task-42 (Admin Security Logs page, Section
-         3.6) is now [DONE] — see item 4 above; task-46 (Account
-         Activity page) is next.
+         [DONE] Account Activity page (Section 3.4, Rule 42.3) —
+         built 2026-09-08 (task-46): lib/accountActivityQuery.ts
+         (paginated/filterable query against AccountActivityLog, plus
+         a distinct-accounts lookup for the dropdown) + GET
+         /api/superadmin/account-activity (superAdmin-only) +
+         DataTable-style viewer at /superAdmin/account-activity
+         (account dropdown, action contains-match filter, date-range
+         filter, expandable rows showing full user-agent + city-level
+         geolocation, loading/empty/error states) — see docs/tasks/
+         task-46-account-activity-page.md. No schema change — the
+         AccountActivityLog model and recordAccountActivity() write
+         path (Rule 42) were already live; this closed the missing
+         read/display side only. task-42 (Admin Security Logs page,
+         Section 3.6) and task-45/task-46 (Super-Admin Security Logs
+         + Account Activity pages) are now all [DONE] for this
+         internal phase; task-47 (2FA/TOTP enrollment) is next.
        - Phase 1 (2FA/TOTP enrollment) not found in the repo
          (grep-verified) — flagging since Phase 2 work is already
          ahead of it; not blocking, just noting the gap.
