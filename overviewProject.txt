@@ -629,7 +629,13 @@ means testing against fixtures instead of the real flow)
          /api/auth/totp/verify-login confirms the code and grants the
          session via lib/loginSession.ts (shared with the non-2FA
          path) — see docs/tasks/task-47-api-totp-login-verify.md.
-         Remaining 3 micro-tasks (both UI screens, setup gate) not
+         task-47-ui-totp-enrollment [DONE] 2026-09-12: enrollment
+         screen — app/admin/security/totp-setup/page.tsx +
+         components/admin/TotpEnrollmentForm.tsx +
+         lib/hooks/useTotpEnrollment.ts (QR display, manual-entry
+         secret fallback, 6-digit confirm) — see docs/tasks/
+         task-47-ui-totp-enrollment.md.
+         Remaining 2 micro-tasks (login TOTP prompt, setup gate) not
          started; not blocking, just noting progress.
        - Phases 3+ (admin management, vault, buyer management, etc.)
          not started.

@@ -1,8 +1,8 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-47-ui-totp-enrollment — enrollment screen, part 4 of
-6 for task-47 (2FA/TOTP enrollment). task-47-api-totp-login-verify
-closed 2026-09-08 — see docs/tasks/task-47-api-totp-login-verify.md.
+**NEXT UP:** task-47-ui-totp-login-step — login page TOTP prompt,
+part 5 of 6 for task-47 (2FA/TOTP enrollment). task-47-ui-totp-enrollment
+closed 2026-09-12 — see docs/tasks/task-47-ui-totp-enrollment.md.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -392,7 +392,11 @@ see Section 5C / 8 in that file.
             with the non-2FA path) — see
             docs/tasks/task-47-api-totp-login-verify.md and
             overviewProject-3.txt's matching CHANGE LOG entry
-      - [ ] task-47-ui-totp-enrollment — enrollment screen
+      - [DONE] task-47-ui-totp-enrollment — enrollment screen, built
+            2026-09-12: app/admin/security/totp-setup/page.tsx +
+            components/admin/TotpEnrollmentForm.tsx +
+            lib/hooks/useTotpEnrollment.ts — see
+            docs/tasks/task-47-ui-totp-enrollment.md
       - [ ] task-47-ui-totp-login-step — login page TOTP prompt
       - [ ] task-47-totp-setup-gate — middleware forced-enrollment redirect
 - [ ] task-48+ — Phases 3+: admin management, vault, buyer management

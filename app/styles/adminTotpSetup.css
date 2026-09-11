@@ -1,0 +1,255 @@
+/**
+ * FILE: app/styles/adminTotpSetup.css
+ * PURPOSE:
+ * Styles for app/admin/security/totp-setup/page.tsx and
+ * components/admin/TotpEnrollmentForm.tsx. References the design
+ * tokens in app/globals.css — never hardcoded colors or spacing.
+ * Mirrors app/styles/adminProfile.css's naming convention
+ * (totpSetup* instead of adminProfile*) and card/button/field/
+ * skeleton/empty-state patterns for visual consistency across the
+ * admin security section.
+ */
+
+.totpSetupPage {
+  width: 100%;
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.totpSetupHeader {
+  margin-bottom: var(--space-xl);
+}
+
+.totpSetupEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.totpSetupTitle {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-top: var(--space-xs);
+}
+
+.totpSetupSubtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+}
+
+.totpSetupCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-xl);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  text-align: center;
+}
+
+.totpSetupSectionTitle {
+  font-size: 1.1rem;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+.totpSetupHint {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  max-width: 42ch;
+}
+
+.totpSetupIntroIcon,
+.totpSetupAlreadyEnabledIcon {
+  color: var(--color-accent);
+}
+
+/* --- QR code display --- */
+.totpSetupQrWrapper {
+  padding: var(--space-md);
+  border-radius: 12px;
+  background-color: #ffffff;
+}
+.totpSetupQrImage {
+  display: block;
+  width: 200px;
+  height: 200px;
+}
+
+/* --- Manual-entry secret fallback --- */
+.totpSetupSecretRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+.totpSetupSecretLabel {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+.totpSetupSecretValueRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+.totpSetupSecretCode {
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  padding: 6px var(--space-sm);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface-active);
+  color: var(--color-text-primary);
+  word-break: break-all;
+}
+.totpSetupCopyButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+.totpSetupCopyButton:hover,
+.totpSetupCopyButton:focus-visible,
+.totpSetupCopyButton:active {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+/* --- 6-digit code form --- */
+.totpSetupForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  width: 100%;
+}
+.totpSetupField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+.totpSetupField label {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+.totpSetupField input {
+  width: 100%;
+  min-height: 44px;
+  font-size: 1.25rem;
+  letter-spacing: 0.3em;
+  text-align: center;
+  padding: 0 var(--space-sm);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+}
+.totpSetupField input:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+.totpSetupFieldError {
+  font-size: 0.75rem;
+  color: var(--color-error);
+}
+
+.totpSetupSaveButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  width: 100%;
+  padding: var(--space-sm) var(--space-lg);
+  border: none;
+  border-radius: 8px;
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  font-size: 0.875rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.totpSetupSaveButton:hover,
+.totpSetupSaveButton:focus-visible,
+.totpSetupSaveButton:active {
+  background-color: var(--color-accent-hover);
+}
+.totpSetupSaveButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.totpSetupSpin {
+  animation: totpSetupSpin 0.8s linear infinite;
+}
+@keyframes totpSetupSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* --- Empty / error state --- */
+.totpSetupEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+.totpSetupRetryButton {
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.totpSetupRetryButton:hover,
+.totpSetupRetryButton:focus-visible,
+.totpSetupRetryButton:active {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+/* --- Loading skeleton --- */
+.totpSetupSkeletonQr {
+  width: 200px;
+  height: 200px;
+  border-radius: 12px;
+}
+.totpSetupSkeletonLine {
+  width: 100%;
+  height: 2.5rem;
+  border-radius: 8px;
+}
+.totpSetupSkeletonLine--short {
+  width: 60%;
+}

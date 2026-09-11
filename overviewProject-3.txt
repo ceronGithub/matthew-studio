@@ -373,3 +373,32 @@ file holds change-log entries only.
   task-47-ui-totp-enrollment. New required env var
   PENDING_TOTP_LOGIN_KEY documented in overviewProject.txt Section 7 —
   must be set locally/in deploy env before this flow can be exercised.
+
+[2026-09-12] Built task-47-ui-totp-enrollment (super_admin_account_specification.md
+  Section 12 Phase 1) — fourth of 6 micro-tasks for 2FA/TOTP enrollment.
+  Added app/admin/security/totp-setup/page.tsx (Server Component shell,
+  same split as app/admin/profile/page.tsx), components/admin/
+  TotpEnrollmentForm.tsx (client component: already-enabled state, intro +
+  "Generate QR Code", then QR display + manual-entry secret with
+  copy-to-clipboard + 6-digit code confirm — reuses components/shared/
+  useToast + ToastStack and the manual useState + validate() pattern from
+  ProfileForm.tsx, no React Hook Form anywhere in this codebase), and
+  lib/hooks/useTotpEnrollment.ts (status/generate/verify against the
+  existing GET/POST app/api/auth/totp/enroll/route.ts, mirroring
+  useAdminProfile.ts's shape). Also added app/styles/adminTotpSetup.css
+  mirroring adminProfile.css's token/card/button/field conventions. Reads
+  an optional ?redirectTo= query param (falls back to /admin/dashboard)
+  for the future task-47-totp-setup-gate to use; page wrapped in
+  <Suspense> per the same convention as app/auth/reset-password/page.tsx
+  since useSearchParams requires it. No schema change, no new env var. No
+  nav link added yet pointing to this page — out of scope for this
+  micro-task; still reachable directly at the URL for now. `npx tsc
+  --noEmit`: zero new errors — same 45 pre-existing ungenerated-Prisma-
+  client errors as prior entries (binaries.prisma.sh still blocked in
+  this sandbox; run npx prisma generate locally, no db push needed).
+  `npx eslint` on the 3 new files surfaces one react-hooks/set-state-in-
+  effect finding in useTotpEnrollment.ts, confirmed pre-existing on
+  lib/hooks/useAdminProfile.ts's identical pattern — not a regression.
+  docs/taskPlan.md and overviewProject.txt's Section 5C updated in place
+  same turn per Rule 16.1/49.1: task-47-ui-totp-enrollment flipped to
+  [DONE], NEXT-UP pointer now points to task-47-ui-totp-login-step.
