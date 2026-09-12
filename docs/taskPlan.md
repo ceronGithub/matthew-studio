@@ -1,11 +1,10 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** Phase 5 — Buyer Management (Section 3.8,
-`/superAdmin/buyer-management/*`) — not yet split into micro-tasks;
-first step is a Layer-3 verification pass before splitting per Rule
-49 Step 4.
-Phase 4 is now fully [DONE] (task-100 through task-105 all closed
-this pass — see the Backups line below).
+**NEXT UP:** task-106 — api-buyer-delete-action (no dependency — 
+extends the existing actions route; unblocks task-108).
+Phase 4 is fully [DONE] (task-100 through task-105 all closed). Phase
+5 is now split into 3 micro-tasks (task-106/107/108) this pass — see
+the Buyer Management line below.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -604,12 +603,33 @@ see Section 5C / 8 in that file.
               client; verify with a clean `npx prisma generate` in a
               real dev environment). See
               docs/tasks/task-105-ui-admin-backups-page.md.
-  - [ ] Phase 5 — Buyer Management (Section 3.8, `/superAdmin/
+  - [~] Phase 5 — Buyer Management (Section 3.8, `/superAdmin/
         buyer-management/*`) — distinct from admin_account_
         specification.md's task-84-88 (that's the regular ADMIN role's
         own buyer list, `/api/admin/users`); this is the SUPER-ADMIN's
-        own list/deactivate/reactivate/reset/delete page. Verified NOT
-        built: no `buyer-management` route found. Not yet split.
+        own list/deactivate/reactivate/reset/delete page. Layer-3
+        audit this pass: list/deactivate/reactivate/reset already
+        exist via the shared `/api/admin/users*` routes (already
+        admin+superAdmin accessible) — only `delete` and the
+        super-admin's own UI route tree are missing. Split into 3
+        micro-tasks per Rule 49 Step 4 (spans API + UI, 3+ distinct
+        sub-features: list, detail, delete):
+        - [ ] task-106 — API: add "delete" action to the existing
+              `app/api/admin/users/[buyerId]/actions/route.ts`
+              (extends, doesn't duplicate — Supabase Auth
+              deleteUser + soft-deletes owned Orders per Rule 6).
+              See docs/tasks/task-106-api-buyer-delete-action.md.
+        - [ ] task-107 — UI: `/superAdmin/buyer-management` list page,
+              mirrors `/admin/users`'s existing list pattern, reuses
+              the existing list API (no new route). See
+              docs/tasks/task-107-ui-buyer-management-list.md.
+        - [ ] task-108 — UI: `/superAdmin/buyer-management/[buyerId]`
+              detail page, mirrors `/admin/users/[buyerId]`, adds the
+              Delete Account button + ConfirmationModal (Rule 34.4)
+              wired to task-106, plus the dashboard QUICK_ACTIONS
+              entry (folded in per task-105's precedent). Depends on
+              task-106 + task-107. See
+              docs/tasks/task-108-ui-buyer-management-detail.md.
   - [ ] Phase 6 — Product & Order Management w/ approval flow (Section
         3.10/3.11, 9.2) — admin_account_specification.md's own
         product/order pages (task-19-27, task-74-82) are done, but the
