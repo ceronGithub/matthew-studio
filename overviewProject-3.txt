@@ -451,3 +451,25 @@ file holds change-log entries only.
   points to task-48+ (Phases 3+ — admin management, vault, buyer
   management), which needs its own Rule 4 micro-task breakdown before
   building.
+
+[2026-09-12] Corrected a stale taskPlan.md/Section 5C placeholder
+  ("task-48+ — Phases 3+: admin management, vault, buyer management")
+  found while answering a "what's next" status question — per Rule
+  0D, verified against super_admin_account_specification.md's own
+  Phase summary table and actual code rather than trusting the old
+  text. Findings: vault is already [DONE] under item 6 and doesn't
+  belong in this remaining list; Phase 3 (Admin Management,
+  /superAdmin/admin-management/*) has zero code (`find app -ipath
+  "*admin-management*"` returns no matches) despite
+  lib/hasAdminPermission.ts already existing as a permission-checking
+  consumer with no producer UI yet. Split Phase 3 into 6 micro-tasks
+  (task-93 api-create-admin, task-94 api-list-detail, task-95
+  api-actions, task-96 ui-list, task-97 ui-create, task-98 ui-edit —
+  see docs/tasks/task-93 through task-98). Phases 4 (remainder —
+  Backups/BackupLog/runbooks, vault half already done), 5 (Buyer
+  Management, distinct from admin_account_specification.md's own
+  task-84-88 buyer list), and 6-10 flagged as not-yet-audited this
+  pass rather than assumed done or not done. No code changed this
+  turn — planning/reconciliation only. docs/taskPlan.md and
+  overviewProject.txt's Section 5C updated in place same turn per
+  Rule 16.1/49.1; NEXT-UP now points to task-93.

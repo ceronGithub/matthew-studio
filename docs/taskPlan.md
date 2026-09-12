@@ -1,11 +1,14 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-48+ — Phases 3+: admin management, vault, buyer
-management. task-47 (2FA/TOTP enrollment, all 6 parts) is now fully
-[DONE] — task-47-totp-setup-gate closed 2026-09-12, see
-docs/tasks/task-47-totp-setup-gate.md. task-48+ needs its own Rule 4
-micro-task breakdown before building (not yet split — scope was
-pending on task-47's closure, which just happened).
+**NEXT UP:** task-93 — API: POST /api/admin/create-admin (Section 3.2.2
+of super_admin_account_specification.md, Phase 3 — Admin Management,
+part 1 of 6). The old "task-48+" placeholder was corrected this pass:
+verified against the spec's own Phase summary table and actual code
+that vault is already [DONE] (it doesn't belong in this remaining
+list) and that Admin Management (Section 3.2, `/superAdmin/
+admin-management/*`) genuinely has zero code — `find app -ipath
+"*admin-management*"` returns no matches. Split into 6 micro-tasks
+(task-93 through task-98) per Rule 4.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -412,8 +415,64 @@ see Section 5C / 8 in that file.
             role checks, redirecting to /admin/security/totp-setup when
             AdminTotpCredential.enabled is false — see
             docs/tasks/task-47-totp-setup-gate.md
-- [ ] task-48+ — Phases 3+: admin management, vault, buyer management
-      (break down further once task-47 scope is confirmed)
+- [~] task-48+ — super_admin_account_specification.md Phases 3-10
+      (corrected 2026-09-12 — old text said "admin management, vault,
+      buyer management" as one lump; verified against the spec's own
+      Phase summary table + actual code, since vault is already [DONE]
+      under item 6 above and doesn't belong in this remaining list):
+  - [ ] Phase 3 — Admin Management (Section 3.2, `/superAdmin/
+        admin-management/*`) — verified NOT built: `find app -ipath
+        "*admin-management*"` returns no matches. Broken into 6
+        micro-tasks (Rule 49 Step 4 — spans API + UI, 3+ distinct
+        sub-features: list, create, edit/actions):
+      - [ ] task-93 — API: POST /api/admin/create-admin (Section 3.2.2
+            — create Supabase user w/ role=admin + permissions in
+            user_metadata, temp password, EmailJS credentials email,
+            `admin_created` SecurityLog event)
+      - [ ] task-94 — API: GET /api/superadmin/admin-management (list,
+            paginated/filtered) + GET /api/superadmin/admin-management/
+            [adminId] (detail) — Section 3.2.1/3.2.3
+      - [ ] task-95 — API: admin actions — edit (name/permissions),
+            deactivate/reactivate, reset-password, delete (Section
+            3.2.1/3.2.3, 5-second-delay confirmation on delete per
+            Rule 34.4)
+      - [ ] task-96 — UI: `/superAdmin/admin-management` list page —
+            DataTable, filters, CSV export, row actions (Section 3.2.1)
+      - [ ] task-97 — UI: `/superAdmin/admin-management/create` page —
+            form w/ permission checkboxes (Section 3.2.2)
+      - [ ] task-98 — UI: `/superAdmin/admin-management/[adminId]/edit`
+            page — view + edit (Section 3.2.3)
+  - [ ] Phase 4 (remainder) — Backups (Section 3.5, Rule 40) — vault
+        half of this phase is already [DONE] (item 6 above); Backups
+        page, `BackupLog` model, `scripts/runBackup.js`, and the
+        break-glass/restore runbooks are verified NOT built: no
+        `BackupLog` model in schema.prisma, no `scripts/*backup*` file,
+        no `app/**/backup*` route. Not yet split into micro-tasks —
+        do after Phase 3 per the spec's own dependency order.
+  - [ ] Phase 5 — Buyer Management (Section 3.8, `/superAdmin/
+        buyer-management/*`) — distinct from admin_account_
+        specification.md's task-84-88 (that's the regular ADMIN role's
+        own buyer list, `/api/admin/users`); this is the SUPER-ADMIN's
+        own list/deactivate/reactivate/reset/delete page. Verified NOT
+        built: no `buyer-management` route found. Not yet split.
+  - [ ] Phase 6 — Product & Order Management w/ approval flow (Section
+        3.10/3.11, 9.2) — admin_account_specification.md's own
+        product/order pages (task-19-27, task-74-82) are done, but the
+        super-admin-only `pending-review` approval flow (Section 9.2)
+        is not yet confirmed wired — needs a Layer-3 check before
+        splitting.
+  - [ ] Phase 7 — CMS, Announcements, Media Library (Section 3.7/3.9,
+        9.3) — not yet audited this pass.
+  - [ ] Phase 8 — Task Assignment, Customer Assignment, Notifications
+        (Section 3.12/3.13, 9.2/9.4) — general Notifications (task-11-
+        14) are done; Task/Customer Assignment specifically not yet
+        audited this pass.
+  - [ ] Phase 9 — Analytics & Reporting (Section 9.5) — task-89-91
+        built the Rule 41 aggregate traffic dashboard; Section 9.5's
+        fuller revenue-trend + per-buyer export scope not yet audited
+        this pass.
+  - [ ] Phase 10 — Remaining Hardening (IP allowlist, Section 9.1) —
+        not yet built.
 
 ---
 

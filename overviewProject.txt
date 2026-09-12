@@ -650,9 +650,18 @@ means testing against fixtures instead of the real flow)
          excluded from the redirect so it never loops — see docs/tasks/
          task-47-totp-setup-gate.md. task-47 is now fully [DONE], all
          6 parts closed.
-       - Phases 3+ (admin management, vault, buyer management, etc.)
-         not started — needs its own Rule 4 micro-task breakdown before
-         building (task-48+, see docs/taskPlan.md's NEXT-UP pointer).
+       - Phases 3-10 (super_admin_account_specification.md's own Phase
+         summary table) — corrected 2026-09-12: old note said "admin
+         management, vault, buyer management" as one lump; vault is
+         already [DONE] (see item 6) and doesn't belong here. Verified
+         Phase 3 (Admin Management, /superAdmin/admin-management/*)
+         has zero code (`find app -ipath "*admin-management*"` — no
+         matches) and is now split into 6 micro-tasks (task-93 through
+         task-98, see docs/taskPlan.md). Phases 4 (remainder —
+         Backups/BackupLog/runbooks), 5 (Buyer Management, distinct
+         from admin_account_specification.md's own task-84-88 buyer
+         list), 6-10 not yet split — see docs/taskPlan.md's task-48+
+         section for the full per-phase verification notes.
 
 PHASE 4 — SECURITY & ACCESS HARDENING (independent of commerce;
 sequenced after core buyer flow so login/vault hardening doesn't
