@@ -707,3 +707,23 @@ file holds change-log entries only.
   signatures match the five existing sibling handlers exactly.
   docs/taskPlan.md updated in place same turn (task-106 -> [DONE],
   NEXT-UP now points to task-107 — buyer-management list page UI).
+
+[2026-09-13] task-107 built: app/superAdmin/buyer-management/page.tsx +
+  components/buyer-management/BuyerManagementList.tsx +
+  app/styles/buyerManagement.css. Reuses lib/hooks/useAdminUsers.ts
+  as-is (already fetches the shared admin+superAdmin GET
+  /api/admin/users endpoint — no new API route, no duplicate hook,
+  Rule 2). Deliberately narrower than /admin/users's own
+  AdminUsersList: row actions are View Details / Deactivate-
+  Reactivate / Reset Password only (spec Section 3.8's set) — no
+  bulk-selection bar, no Send Email (those belong to
+  admin_account_specification.md's own /admin/users page, not this
+  spec). Delete Account intentionally NOT on this page — deferred to
+  task-108's detail page per the task split. "View" links to
+  /superAdmin/buyer-management/[buyerId] (task-108, not yet built —
+  404s gracefully until then). middleware.ts already blanket-protects
+  /superAdmin/* for role "superAdmin" — no middleware change needed.
+  Not build-verified with npx tsc --noEmit in this sandbox (no
+  node_modules present). docs/taskPlan.md updated in place same turn
+  (task-107 -> [DONE], NEXT-UP now points to task-108 — buyer-
+  management detail page UI + Delete button).

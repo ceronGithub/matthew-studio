@@ -1,10 +1,11 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-107 — ui-buyer-management-list (no dependency —
-reuses the existing list API; task-106 is now [DONE]).
+**NEXT UP:** task-108 — ui-buyer-management-detail (depends on
+task-106 + task-107, both now [DONE] — detail page + Delete button
+is the only remaining Phase 5 item).
 Phase 4 is fully [DONE] (task-100 through task-105 all closed). Phase
-5 is now split into 3 micro-tasks (task-106/107/108) — task-106
-closed this pass, task-107/108 remain.
+5 is now split into 3 micro-tasks (task-106/107/108) — task-106 and
+task-107 closed, task-108 remains.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -619,7 +620,7 @@ see Section 5C / 8 in that file.
               (extends, doesn't duplicate — Supabase Auth
               deleteUser + soft-deletes owned Orders per Rule 6).
               See docs/tasks/task-106-api-buyer-delete-action.md.
-        - [ ] task-107 — UI: `/superAdmin/buyer-management` list page,
+        - [DONE] task-107 — UI: `/superAdmin/buyer-management` list page,
               mirrors `/admin/users`'s existing list pattern, reuses
               the existing list API (no new route). See
               docs/tasks/task-107-ui-buyer-management-list.md.
