@@ -1,12 +1,15 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** Phase 6 audit — Product & Order Management w/ approval
-flow (Section 9.2, under task-48+) needs a Layer-3 check before it
-can be split into numbered micro-tasks, same process Phase 4/5 went
-through before task-100+/task-106+ were minted.
-Phase 4 and Phase 5 are both now fully [DONE] (task-100 through
-task-108 all closed). task-48+'s remaining scope is Phases 6-10,
-none of which are audited/split yet.
+**NEXT UP:** task-109 — schema: add `pending-review` to `Product.status`
+(Phase 6, product approval flow — first of a 4-task split, see below).
+
+Phase 6 audit (Section 9.2 approval flow) completed this pass:
+Spec ✅ / Schema ❌ / Code Wired ❌ — `Product.status` only supports
+`draft`/`published`, no `/superAdmin/products` route exists, no
+`pending-review` references anywhere in the codebase. Split into
+task-109 through task-112 per Rule 49 Step 4 (spans schema + 2 API
+surfaces + UI). Phase 4 and Phase 5 remain fully [DONE] (task-100
+through task-108 closed). Phases 7-10 remain unaudited.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -637,12 +640,27 @@ see Section 5C / 8 in that file.
               the dashboard QUICK_ACTIONS entry (folded in per
               task-105's precedent). Built 2026-09-13, see
               docs/tasks/task-108-ui-buyer-management-detail.md.
-  - [ ] Phase 6 — Product & Order Management w/ approval flow (Section
+  - [~] Phase 6 — Product & Order Management w/ approval flow (Section
         3.10/3.11, 9.2) — admin_account_specification.md's own
-        product/order pages (task-19-27, task-74-82) are done, but the
-        super-admin-only `pending-review` approval flow (Section 9.2)
-        is not yet confirmed wired — needs a Layer-3 check before
-        splitting.
+        product/order pages (task-19-27, task-74-82) are done. Layer-3
+        audit completed 2026-09-13: super-admin `pending-review`
+        approval flow confirmed NOT wired (spec-only — see NEXT UP).
+        Split into 4 micro-tasks per Rule 49 Step 4 (schema + 2 API
+        surfaces + UI, each independently completable):
+      - [ ] task-109 — schema: add `pending-review` to `Product.status`
+            enum/default (Section 9.2). Migration only — no app code.
+      - [ ] task-110 — API: admin product create/edit routes save as
+            `pending-review` instead of `published` (extends existing
+            admin product write routes from task-21). Depends on
+            task-109.
+      - [ ] task-111 — API: super-admin approve/reject endpoints —
+            `PATCH /api/superadmin/products/[productId]/approve` and
+            `.../reject`, flips status to `published` or back to
+            `draft`, logs the action. Depends on task-109.
+      - [ ] task-112 — UI: `/superAdmin/products` page with a
+            "Pending Review" filter and approve/reject row actions
+            (ConfirmationModal per Rule 34.4 on reject). Depends on
+            task-110, task-111.
   - [ ] Phase 7 — CMS, Announcements, Media Library (Section 3.7/3.9,
         9.3) — not yet audited this pass.
   - [ ] Phase 8 — Task Assignment, Customer Assignment, Notifications

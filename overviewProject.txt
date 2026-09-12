@@ -796,8 +796,17 @@ means testing against fixtures instead of the real flow)
          again this pass via `npx prisma generate`). Phase 5 (Buyer
          Management) is now fully [DONE], all 3 parts closed
          (task-106, 107, 108).
-         Phases 6-10 not yet split — see docs/taskPlan.md's task-48+
-         section for the full per-phase verification notes.
+         Phase 6 (Product & Order Management w/ approval flow, Section
+         9.2) audited 2026-09-13: Spec present, but Schema and Code
+         Wired both fail — `Product.status` only supports
+         draft/published (no pending-review value), no
+         /superAdmin/products route exists, zero pending-review
+         references anywhere in the codebase. Split into task-109
+         (schema), task-110 (admin write routes → pending-review),
+         task-111 (super-admin approve/reject API), task-112
+         (/superAdmin/products UI) — see docs/taskPlan.md's task-48+
+         section. Phases 7-10 not yet split — see docs/taskPlan.md's
+         task-48+ section for the full per-phase verification notes.
 
 PHASE 4 — SECURITY & ACCESS HARDENING (independent of commerce;
 sequenced after core buyer flow so login/vault hardening doesn't

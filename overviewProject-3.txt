@@ -750,3 +750,15 @@ file holds change-log entries only.
   This closes Phase 5 (Buyer Management) end to end -- task-106, 107,
   108 all [DONE]. docs/taskPlan.md and overviewProject.txt's Section
   5C updated in place same turn per Rule 16.1.
+
+[2026-09-13] Ran the Phase 6 Layer-3 audit flagged by docs/taskPlan.md's
+  NEXT UP pointer (Product & Order Management approval flow, Section
+  9.2): confirmed spec-only -- Product.status has no pending-review
+  value, no /superAdmin/products route exists, zero pending-review
+  references in the codebase. Split into task-109 (schema),
+  task-110 (admin write routes), task-111 (super-admin approve/reject
+  API), task-112 (superAdmin products UI); wrote all 4 traceable
+  docs/tasks/ files. docs/taskPlan.md's NEXT UP pointer and Phase 6
+  line updated in place; overviewProject.txt's Section 5C corrected
+  in place to match (Rule 16.1). No code built yet -- planning/split
+  only, per Rule 49 Step 3/4.
