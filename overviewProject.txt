@@ -690,6 +690,20 @@ means testing against fixtures instead of the real flow)
          actions log their own SecurityLog eventType (admin_updated,
          admin_deactivated/admin_reactivated, admin_password_reset,
          admin_deleted).
+         [DONE] task-96 (admin-management list page UI) built
+         2026-09-12 — app/superAdmin/admin-management/page.tsx +
+         components/admin/AdminManagementList.tsx +
+         lib/hooks/useAdminManagement.ts + app/styles/
+         adminManagement.css, wired to task-94/95's API routes.
+         Extended components/shared/ConfirmationModal.tsx with an
+         optional confirmDelaySeconds prop (backward-compatible, all
+         15 prior callers unaffected) for Delete's Section 3.2.1
+         5-second-delay requirement. Status shown as a colored dot +
+         label (green/amber/red) rather than the spec's literal
+         emoji glyphs, per Rule 17.3 — same Active/Inactive/Locked
+         meaning. View/Edit row actions link to task-97/98's
+         not-yet-built routes (same precedent as AdminUsersList's
+         link to task-88).
          Phases 4 (remainder —
          Backups/BackupLog/runbooks), 5 (Buyer Management, distinct
          from admin_account_specification.md's own task-84-88 buyer

@@ -1,11 +1,11 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-96 — UI: `/superAdmin/admin-management` list page —
-DataTable, filters, CSV export, row actions (Section 3.2.1), Phase 3 —
-Admin Management, part 4 of 6. task-95 closed this pass — added
-PATCH/DELETE to app/api/superadmin/admin-management/[adminId]/route.ts
-plus two new sub-routes (toggle-status, reset-password); see NOTES
-below.
+**NEXT UP:** task-97 — UI: `/superAdmin/admin-management/create` page —
+form w/ permission checkboxes (Section 3.2.2), Phase 3 — Admin
+Management, part 5 of 6. task-96 closed this pass — built the list
+page (DataTable, filters, CSV export, row actions) and extended the
+shared ConfirmationModal with an optional confirmDelaySeconds prop for
+Delete's 5-second delay; see NOTES below.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -472,8 +472,18 @@ see Section 5C / 8 in that file.
             (distinct template from the buyer-facing
             EMAILJS_TEMPLATE_ID_ADMIN_PASSWORD_RESET — not yet created
             in the EmailJS dashboard, flagged for the developer).
-      - [ ] task-96 — UI: `/superAdmin/admin-management` list page —
-            DataTable, filters, CSV export, row actions (Section 3.2.1)
+      - [DONE] task-96 — UI: `/superAdmin/admin-management` list page —
+            DataTable, filters, CSV export, row actions (Section 3.2.1).
+            Built: lib/hooks/useAdminManagement.ts,
+            components/admin/AdminManagementList.tsx,
+            app/superAdmin/admin-management/page.tsx,
+            app/styles/adminManagement.css. Extended the shared
+            ConfirmationModal with an optional confirmDelaySeconds prop
+            (backward-compatible, all 15 prior callers unaffected) for
+            Delete's required 5-second delay. Status shown as a colored
+            dot + label rather than the spec's literal emoji glyphs, per
+            Rule 17.3. View/Edit link to task-97/98's not-yet-built
+            routes, same precedent as AdminUsersList → task-88.
       - [ ] task-97 — UI: `/superAdmin/admin-management/create` page —
             form w/ permission checkboxes (Section 3.2.2)
       - [ ] task-98 — UI: `/superAdmin/admin-management/[adminId]/edit`

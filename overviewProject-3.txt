@@ -509,3 +509,26 @@ file holds change-log entries only.
   log their own SecurityLog eventType. docs/taskPlan.md and
   overviewProject.txt's Section 5C updated in place same turn;
   NEXT-UP now points to task-96.
+
+[2026-09-13] Built task-96 (admin-management list page UI, Section
+  3.2.1): app/superAdmin/admin-management/page.tsx (Server Component
+  shell) + components/admin/AdminManagementList.tsx (client DataTable
+  with status/date-range/search filters, CSV export, and per-row
+  actions: View, Edit, Deactivate/Reactivate, Reset Password, Delete)
+  + lib/hooks/useAdminManagement.ts (fetch/filter/paginate/export,
+  wired to task-94/95's existing API routes, no CSRF header sent to
+  match those routes' own behavior) + app/styles/adminManagement.css.
+  Extended components/shared/ConfirmationModal.tsx with an optional
+  confirmDelaySeconds prop for Delete's required 5-second delay --
+  backward-compatible, verified against all 15 existing callers, none
+  of which pass the new prop. Status rendered as a colored dot + label
+  (green/amber/red via the existing --color-success/-warning/-error
+  tokens) rather than the spec's literal emoji glyphs, per Rule 17.3;
+  same Active/Inactive/Locked meaning preserved. View/Edit links point
+  to task-97/98's not-yet-built routes (same precedent as
+  AdminUsersList's link to task-88). npx tsc --noEmit run for
+  validation -- only the same pre-existing, unrelated errors from the
+  ungenerated Prisma client remain (npx prisma generate still blocked
+  by the binaries.prisma.sh sandbox restriction). docs/taskPlan.md and
+  overviewProject.txt's Section 5C updated in place same turn; NEXT-UP
+  now points to task-97.

@@ -9,10 +9,17 @@
  *
  * Shows a loading state on the confirm button while the action runs
  * and never auto-closes until the caller's onConfirm promise settles.
+ *
+ * Optional confirmDelaySeconds (added for task-96, Section 3.2.1's
+ * "Delete — confirmation modal with 5-second delay"): when provided,
+ * the confirm button stays disabled and counts down until the delay
+ * elapses, so an admin can't reflexively click through a permanent
+ * delete. Omitted entirely by every other caller — default behavior
+ * (button enabled immediately) is unchanged.
  */
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ConfirmationModalProps {
   isOpen: boolean;
@@ -21,6 +28,7 @@ interface ConfirmationModalProps {
   confirmLabel: string;
   onConfirm: () => Promise<void>;
   onCancel: () => void;
+  confirmDelaySeconds?: number;
 }
 
 export default function ConfirmationModal({
@@ -30,10 +38,27 @@ export default function ConfirmationModal({
   confirmLabel,
   onConfirm,
   onCancel,
+  confirmDelaySeconds,
 }: ConfirmationModalProps) {
   const [isExecuting, setIsExecuting] = useState(false);
+  const [secondsRemaining, setSecondsRemaining] = useState(confirmDelaySeconds ?? 0);
+
+  // Restart the countdown every time the modal opens — never carry a
+  // stale countdown over from a previous open of the same instance.
+  useEffect(() => {
+    if (!isOpen) return;
+    setSecondsRemaining(confirmDelaySeconds ?? 0);
+    if (!confirmDelaySeconds) return;
+
+    const intervalId = setInterval(() => {
+      setSecondsRemaining((current) => Math.max(0, current - 1));
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, [isOpen, confirmDelaySeconds]);
 
   if (!isOpen) return null;
+
+  const isCountingDown = Boolean(confirmDelaySeconds) && secondsRemaining > 0;
 
   async function handleConfirm() {
     setIsExecuting(true);
@@ -54,9 +79,9 @@ export default function ConfirmationModal({
             type="button"
             className="confirmationModalConfirmButton"
             onClick={handleConfirm}
-            disabled={isExecuting}
+            disabled={isExecuting || isCountingDown}
           >
-            {isExecuting ? "Processing…" : confirmLabel}
+            {isExecuting ? "Processing…" : isCountingDown ? `${confirmLabel} (${secondsRemaining})` : confirmLabel}
           </button>
         </div>
       </div>
