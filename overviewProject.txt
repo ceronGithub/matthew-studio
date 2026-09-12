@@ -953,7 +953,7 @@ block revenue-generating pages from shipping first)
        the UI-reset-password page (task-70) for buyers who are locked
        out, not the post-registration setup covered above.
 
-[ ] 9. Backups (Rule 40, operational protocol -- no repo spec .md
+[DONE] 9. Backups (Rule 40, operational protocol -- no repo spec .md
        file defines this; added as its own numbered item since the
        docs/taskPlan.md "Section 3.5" citation for it was a mislabel
        corrected this pass, and Section 5C previously omitted it
@@ -973,11 +973,12 @@ block revenue-generating pages from shipping first)
        [DONE] task-104 -- GET /api/superadmin/backups (lowercase path,
              corrected to match existing repo convention) + new
              lib/backupsQuery.ts, read-only
-       [ ] task-105 -- /superAdmin/backups page (read-only, no
+       [DONE] task-105 -- /superAdmin/backups page (read-only, no
              "Run Backup Now" button per Rule 40.6)
-       None of the six are built yet -- verified via grep this pass:
-       no BackupLog model in schema.prisma, no scripts/*backup* file,
-       no app/**/backup* route.
+       All six are now built and verified this pass -- BackupLog
+       model in schema.prisma, scripts/runBackup.ts, the CI workflow,
+       the list API + query helper, and the UI page/components/
+       styles all confirmed present via grep.
 
 PHASE 5 — CATALOG & PRODUCT FEATURES (independent of commerce
 plumbing; can slot in whenever bandwidth allows — but item 9 needs

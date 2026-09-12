@@ -672,3 +672,21 @@ file holds change-log entries only.
   docs/taskPlan.md and overviewProject.txt Section 5C updated in
   place same turn; NEXT-UP now points to task-105 (/superAdmin/backups
   page).
+
+[2026-09-13] task-105 built: /superAdmin/backups page (Rule 40.6),
+  completing Phase 4 (remainder) — Backups end to end (task-100
+  through task-105 all [DONE]). Added lib/hooks/useBackups.ts,
+  components/backups/BackupRow.tsx, components/backups/BackupsList.tsx,
+  app/superAdmin/backups/page.tsx, app/styles/backups.css — same
+  Server/Client split, DataTable + status-badge pattern, and Rule 25
+  loading/empty/error states as the Security Logs and Account
+  Activity pages. Status badge is 3-state (success/failed/running).
+  Strictly read-only — no "Run Backup Now" button; wired to the
+  existing task-104 API only. Added a "Backups" entry to the
+  dashboard's QUICK_ACTIONS list so the page is discoverable, same
+  as every other Phase 2-4 page. npx tsc --noEmit shows zero errors
+  in any new/changed file (pre-existing errors elsewhere are from
+  this sandbox being unable to fetch the Prisma engine binary — see
+  prior entries; run npx prisma generate locally before deploying).
+  docs/taskPlan.md and overviewProject.txt Section 5C updated in
+  place same turn; NEXT-UP now points to Phase 5 — Buyer Management.

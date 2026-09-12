@@ -1,0 +1,251 @@
+/**
+ * FILE: app/styles/backups.css
+ * PURPOSE:
+ * Styles for app/superAdmin/backups/page.tsx and
+ * components/backups/*.tsx (task-105). References the design tokens
+ * in app/globals.css — never hardcoded colors or spacing. Responsive
+ * breakpoints live in app/styles/mediaQueries.css, not inline here.
+ * Row/toolbar/pagination density deliberately matches
+ * accountActivity.css and securityLogs.css so every super-admin list
+ * page reads as one system (Rule 17).
+ */
+
+.backupsPage {
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.backupsPageHeader {
+  margin-bottom: var(--space-xl);
+}
+
+.backupsPageEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.backupsPageTitle {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-top: var(--space-xs);
+}
+
+.backupsPageSubtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+  max-width: 70ch;
+}
+
+/* Toolbar: a single status filter select — no other filters for this page. */
+.backupsToolbar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.backupsFilterSelect {
+  min-height: 44px;
+  flex: 0 1 220px;
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 1rem; /* never below 16px — prevents iOS auto-zoom (Rule 29.6) */
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.backupsFilterSelect:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+/* backupsGrid — single-column row list (Rule 23.2). */
+.backupsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* backupsRow — elevated row per Rule 23.10; not expandable, every
+ * field is short enough to show inline at all times. */
+.backupsRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+
+.backupsRowSummary {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  width: 100%;
+}
+
+/* backupsStatusBadge — three states (Rule 40.6): success/failed/running.
+ * Base state sets shape only; the modifier below sets the color. */
+.backupsStatusBadge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: capitalize;
+  padding: 2px var(--space-sm);
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  flex: 0 0 auto;
+}
+.backupsStatusBadge--success {
+  color: var(--color-success);
+  border-color: var(--color-success);
+}
+.backupsStatusBadge--failed {
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+.backupsStatusBadge--running {
+  color: var(--color-warning);
+  border-color: var(--color-warning);
+}
+
+.backupsRowSize {
+  font-family: var(--font-geist-mono);
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  flex: 0 1 90px;
+}
+
+.backupsRowDate {
+  font-size: 0.8rem;
+  color: var(--color-text-primary);
+  flex: 0 1 160px;
+  white-space: nowrap;
+}
+.backupsRowDate--muted {
+  color: var(--color-text-muted);
+}
+
+.backupsRowLinks {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+  flex: 1 1 auto;
+  justify-content: flex-end;
+}
+.backupsRowLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+.backupsRowLink:hover,
+.backupsRowLink:focus-visible {
+  color: var(--color-accent-hover);
+}
+.backupsRowLinksEmpty {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+/* Error message — only rendered when the run failed or partially failed. */
+.backupsRowError {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--color-error);
+  padding-top: var(--space-xs);
+  border-top: 1px solid var(--color-border);
+  margin-top: var(--space-xs);
+}
+
+/* Skeleton loading state (Rule 25.2). */
+.backupsRow--skeleton {
+  pointer-events: none;
+}
+.backupsSkeletonLine {
+  height: 14px;
+  width: 60%;
+  border-radius: 4px;
+}
+.backupsSkeletonLine--short {
+  width: 30%;
+}
+
+.backupsEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+.backupsRetryButton {
+  padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+.backupsRetryButton:hover {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.backupsPagination {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+}
+.backupsPageButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+.backupsPageButton:hover:not(:disabled) {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+.backupsPageButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.backupsPageLabel {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}

@@ -1,10 +1,11 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-105 — ui-admin-backups-page (Rule 40.6 — depends on
-task-104 [DONE]).
-Phase 3 — Admin Management is fully [DONE] (task-98 closed that
-pass, 6 of 6 parts). task-100/101/102/103/104 are now [DONE] this
-pass — see the Backups line below.
+**NEXT UP:** Phase 5 — Buyer Management (Section 3.8,
+`/superAdmin/buyer-management/*`) — not yet split into micro-tasks;
+first step is a Layer-3 verification pass before splitting per Rule
+49 Step 4.
+Phase 4 is now fully [DONE] (task-100 through task-105 all closed
+this pass — see the Backups line below).
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -530,8 +531,9 @@ see Section 5C / 8 in that file.
             side notFound state (not Rule 31.10's server notFound())
             used for consistency with AdminUserDetail.tsx, the
             established sibling pattern for admin detail pages.
-  - [ ] Phase 4 (remainder) — Backups (Rule 40) — vault half of this
-        phase is already [DONE] (item 6 above). CORRECTION this pass:
+  - [DONE] Phase 4 (remainder) — Backups (Rule 40) — all 6 micro-tasks
+        (task-100 through task-105) now closed; vault half of this
+        phase was already [DONE] (item 6 above). CORRECTION this pass:
         the prior "Section 3.5" citation here was a mislabel copied
         from the Analytics line above — no spec doc defines a
         Backups section; `infra_ops_specification.md` §4.1 only
@@ -584,8 +586,24 @@ see Section 5C / 8 in that file.
               other super-admin routes. Strictly read-only — no POST
               handler. `npx tsc --noEmit` shows zero errors in either
               new file. See docs/tasks/task-104-api-admin-backups-list.md.
-        - [ ] task-105 — UI: `/superAdmin/backups` page (read-only,
-              no "Run Backup Now" button per Rule 40.6)
+        - [DONE] task-105 — UI: `/superAdmin/backups` page. Added
+              `lib/hooks/useBackups.ts`, `components/backups/BackupRow.tsx`,
+              `components/backups/BackupsList.tsx`,
+              `app/superAdmin/backups/page.tsx`, `app/styles/backups.css` —
+              same Server/Client split, DataTable+status-badge pattern,
+              and Rule 25 loading/empty/error states as
+              security-logs/account-activity pages. Status badge is
+              3-state (success/failed/running) per Rule 40.6. Strictly
+              read-only — no "Run Backup Now" button; wired to the
+              existing task-104 API only. Also added a "Backups" entry
+              to the dashboard's QUICK_ACTIONS list so it's discoverable,
+              matching every other Phase 2-4 page. `npx tsc --noEmit`
+              shows zero errors in any new/changed file (pre-existing
+              errors elsewhere are unrelated — this sandbox couldn't
+              fetch the Prisma engine binary to fully regenerate the
+              client; verify with a clean `npx prisma generate` in a
+              real dev environment). See
+              docs/tasks/task-105-ui-admin-backups-page.md.
   - [ ] Phase 5 — Buyer Management (Section 3.8, `/superAdmin/
         buyer-management/*`) — distinct from admin_account_
         specification.md's task-84-88 (that's the regular ADMIN role's
