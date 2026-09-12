@@ -962,8 +962,10 @@ block revenue-generating pages from shipping first)
              @@index([status]) and @@index([startedAt])
        [DONE] task-101 -- services/googleDrive.ts upload helper
              (services/r2.ts already existed, reused as-is)
-       [ ] task-102 -- scripts/runBackup.js (pg_dump -> gzip -> R2 +
-             Drive, writes BackupLog rows)
+       [DONE] task-102 -- scripts/runBackup.ts (.ts not .js -- run via
+             tsx devDependency; pg_dump -> gzip -> R2 + Drive, writes
+             BackupLog rows). Not smoke-tested (no live DB/pg_dump in
+             this sandbox)
        [ ] task-103 -- .github/workflows/database-backup.yml nightly
              cron + workflow_dispatch
        [ ] task-104 -- GET /api/superAdmin/backups (read-only)

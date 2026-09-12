@@ -1,10 +1,10 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-102 — script-run-backup (Rule 40.5 — depends on
-task-100 [DONE] and task-101 [DONE], both now satisfied).
+**NEXT UP:** task-103 — ci-backup-workflow (Rule 40.1/40.5 — depends on
+task-102 [DONE]).
 Phase 3 — Admin Management is fully [DONE] (task-98 closed that
-pass, 6 of 6 parts). task-100 and task-101 are now [DONE] this pass
-— see the Backups line below.
+pass, 6 of 6 parts). task-100/101/102 are now [DONE] this pass — see
+the Backups line below.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -551,7 +551,19 @@ see Section 5C / 8 in that file.
               needed no changes. Requires `npm install googleapis`
               (not yet run — see Run in terminal). See
               docs/tasks/task-101-services-google-drive.md.
-        - [ ] task-102 — script: `scripts/runBackup.js`
+        - [DONE] task-102 — script: `scripts/runBackup.ts` (DEVIATION:
+              `.ts` not `.js` — this is a TS Next.js project, run via
+              `tsx`, added as a devDependency, so it can import the
+              existing typed services/prisma.ts, services/r2.ts,
+              services/googleDrive.ts directly). `npm run backup`
+              wired in package.json. `npx tsc --noEmit` shows zero
+              errors in this file (only pre-existing, unrelated
+              Prisma-client-generation errors remain elsewhere, same
+              sandbox restriction noted on task-98's entry). Not
+              smoke-tested end-to-end — no live DIRECT_URL/R2/Drive
+              credentials or pg_dump binary available in this
+              environment; verification steps are in the task file.
+              See docs/tasks/task-102-script-run-backup.md.
         - [ ] task-103 — CI: nightly `database-backup.yml` workflow
         - [ ] task-104 — API: `GET /api/superAdmin/backups` (read-only)
         - [ ] task-105 — UI: `/superAdmin/backups` page (read-only,

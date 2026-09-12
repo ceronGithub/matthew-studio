@@ -620,3 +620,25 @@ file holds change-log entries only.
   reused as-is by task-102. docs/taskPlan.md and overviewProject.txt
   Section 5C updated in place same turn; NEXT-UP now points to
   task-102 (scripts/runBackup.js).
+
+[2026-09-13] Built task-102 -- scripts/runBackup.ts added (dump via
+  pg_dump against DIRECT_URL, gzip, independent upload to R2 via
+  services/r2.ts and Google Drive via services/googleDrive.ts,
+  BackupLog row created "running" at start and finalized to
+  "success"/"failed" at end -- "failed" only if both destinations
+  failed). DEVIATION documented in the file's own header and in
+  docs/taskPlan.md: Rule 40.5's illustrative filename is
+  "runBackup.js" but this project is TypeScript, so the concrete file
+  is runBackup.ts, run via tsx (added as devDependency) so it can
+  import the existing typed service modules directly rather than
+  duplicating their logic in plain JS. npm run backup wired in
+  package.json. npx tsc --noEmit shows zero errors in the new file
+  (same pre-existing, unrelated Prisma-client-generation errors
+  remain elsewhere -- still blocked by the binaries.prisma.sh sandbox
+  restriction). Not smoke-tested end-to-end: no live DIRECT_URL, R2,
+  or Google Drive credentials, and no pg_dump binary, available in
+  this sandbox -- verification steps are documented in
+  docs/tasks/task-102-script-run-backup.md for the developer to run
+  locally. docs/taskPlan.md and overviewProject.txt Section 5C
+  updated in place same turn; NEXT-UP now points to task-103
+  (.github/workflows/database-backup.yml).
