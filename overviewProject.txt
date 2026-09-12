@@ -718,11 +718,36 @@ means testing against fixtures instead of the real flow)
          banner. On success: toast + a 900ms-delayed redirect to
          /superAdmin/admin-management/[newAdminId] (task-98's
          not-yet-built detail route).
-         Phases 4 (remainder —
-         Backups/BackupLog/runbooks), 5 (Buyer Management, distinct
-         from admin_account_specification.md's own task-84-88 buyer
-         list), 6-10 not yet split — see docs/taskPlan.md's task-48+
-         section for the full per-phase verification notes.
+         [DONE] task-98 (admin details & edit page UI) built
+         2026-09-13 — app/superAdmin/admin-management/[adminId]/
+         edit/page.tsx + components/admin/AdminManagementDetail.tsx +
+         lib/hooks/useAdminManagementDetail.ts + app/styles/
+         adminManagementDetail.css, wired to task-94's GET detail
+         route and task-95's PATCH/toggle-status/reset-password
+         routes. Reuses useCreateAdminForm.ts's PERMISSION_OPTIONS so
+         labels can't drift from the create form. Section 3.2.3's
+         "status toggle" and separate "Deactivate Account" button are
+         implemented as one status card with a single Deactivate/
+         Reactivate action (the API has no independent status field
+         to toggle — only the existing deactivate/reactivate action),
+         never two controls that could disagree. Save Changes only
+         touches name/permissions; status changes go through their
+         own confirmation modal and immediate API call. Client-side
+         notFound state used (not Rule 31.10's server notFound()) for
+         consistency with AdminUserDetail.tsx, the established
+         sibling pattern for every other admin/super-admin detail
+         page in this app. FIXED IN PASSING: AdminManagementList.tsx's
+         separate "View" link pointed at a bare `[adminId]` route
+         that was never built and isn't part of this spec — replaced
+         with a single "View / Edit" link to this page; useCreateAdminForm.ts's
+         post-create redirect corrected from `[adminId]` to
+         `[adminId]/edit`. Phase 3 — Admin Management is now fully
+         [DONE], all 6 parts closed (task-99, 94, 95, 96, 97, 98).
+         Phases 4 (remainder — Backups/BackupLog/runbooks), 5 (Buyer
+         Management, distinct from admin_account_specification.md's
+         own task-84-88 buyer list), 6-10 not yet split — see
+         docs/taskPlan.md's task-48+ section for the full per-phase
+         verification notes.
 
 PHASE 4 — SECURITY & ACCESS HARDENING (independent of commerce;
 sequenced after core buyer flow so login/vault hardening doesn't

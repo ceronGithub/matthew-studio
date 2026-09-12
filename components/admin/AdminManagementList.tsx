@@ -14,12 +14,13 @@
  * action bar and compose-email modal that page's spec calls for but
  * this one's Section 3.2.1 does not.
  *
- * "View Details" and "Edit" link to /superAdmin/admin-management/
- * [adminId] and its /edit sub-route (task-98 — not yet built, same
- * precedent as AdminUsersList's link to task-88). The toolbar's
- * "Create Admin" button links to task-97's page (added once that
- * task closed — task-96's own scope called for this link but it was
- * missed in the initial build).
+ * "View / Edit" links to /superAdmin/admin-management/[adminId]/edit
+ * (task-98's combined display+edit page, wired in once that task
+ * closed — a single link rather than separate View/Edit links, since
+ * task-98 built one combined page, not two). The toolbar's "Create
+ * Admin" button links to task-97's page (added once that task closed
+ * — task-96's own scope called for this link but it was missed in
+ * the initial build).
  *
  * Reuses the shared ConfirmationModal (Rule 34.4) before deactivating/
  * reactivating and before resetting a password, and the same modal's
@@ -253,14 +254,11 @@ export default function AdminManagementList() {
                       </td>
                       <td className="adminManagementActionsCell">
                         <div className="adminManagementRowActions">
-                          <Link href={`/superAdmin/admin-management/${admin.adminId}`} className="adminManagementActionLink">
-                            View
-                          </Link>
                           <Link
                             href={`/superAdmin/admin-management/${admin.adminId}/edit`}
                             className="adminManagementActionLink"
                           >
-                            Edit
+                            View / Edit
                           </Link>
                           <button
                             type="button"

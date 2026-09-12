@@ -557,3 +557,34 @@ file holds change-log entries only.
   errors remain (still blocked by the binaries.prisma.sh sandbox
   restriction). docs/taskPlan.md and overviewProject.txt's Section 5C
   updated in place same turn; NEXT-UP now points to task-98.
+
+[2026-09-13] Closed task-98 (super_admin_account_specification.md
+  Section 3.2.3, Admin Details & Edit page): new combined view+edit
+  route at /superAdmin/admin-management/[adminId]/edit --
+  app/superAdmin/admin-management/[adminId]/edit/page.tsx,
+  components/admin/AdminManagementDetail.tsx,
+  lib/hooks/useAdminManagementDetail.ts, app/styles/
+  adminManagementDetail.css. Wired to task-94's existing GET detail
+  route and task-95's PATCH/toggle-status/reset-password routes.
+  Reuses useCreateAdminForm.ts's PERMISSION_OPTIONS so permission
+  labels can't drift between the create and edit forms. Section
+  3.2.3's "status toggle" and separate "Deactivate Account" bullets
+  are implemented as a single status card with one Deactivate/
+  Reactivate action, since the API has only one such action, not two
+  independent controls. Fixed two dead links in passing: the list
+  page's separate "View" link pointed at a bare [adminId] route that
+  was never built and isn't part of this spec (replaced with a single
+  "View / Edit" link to this page), and useCreateAdminForm.ts's
+  post-create redirect pointed at the same non-existent route
+  (corrected to .../[adminId]/edit). Phase 3 -- Admin Management is
+  now fully [DONE], all 6 parts closed. npx tsc --noEmit shows zero
+  errors in any file this task touched (same pre-existing, unrelated
+  Prisma-client-generation errors remain elsewhere -- still blocked by
+  the binaries.prisma.sh sandbox restriction; run npx prisma db push
+  && npx prisma generate locally). eslint flagged one
+  react-hooks/set-state-in-effect warning in the new hook, confirmed
+  to be a pre-existing pattern already present in useAdminUserDetail.ts
+  (the sibling this was modeled after), not a new regression.
+  docs/taskPlan.md and overviewProject.txt's Section 5C updated in
+  place same turn; NEXT-UP now points to Phase 4 (remainder) --
+  Backups, which still needs its own micro-task breakdown.

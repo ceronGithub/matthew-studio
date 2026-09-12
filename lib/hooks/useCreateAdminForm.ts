@@ -119,7 +119,7 @@ export function useCreateAdminForm(showToast: (message: string, type: ToastType)
       showToast(`✓ Admin account created. Credentials sent to ${result.data.email}.`, "success");
       // Brief delay so the toast is visible before navigating away —
       // same precedent as useBuyerOrderDetail.ts's reorder() redirect.
-      setTimeout(() => router.push(`/superAdmin/admin-management/${result.data.adminId}`), 900);
+      setTimeout(() => router.push(`/superAdmin/admin-management/${result.data.adminId}/edit`), 900);
     } catch {
       showToast("✕ We couldn't reach the server. Check your connection and try again.", "error");
       setIsSubmitting(false);

@@ -1,10 +1,12 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-98 — UI: `/superAdmin/admin-management/[adminId]/edit`
-page — view + edit (Section 3.2.3), Phase 3 — Admin Management, part 6
-of 6 (last task in this phase). task-97 closed this pass — built the
-create-admin form page and, in passing, fixed task-96's own missed
-"Create Admin" toolbar button; see NOTES below.
+**NEXT UP:** Phase 4 (remainder) — Backups (Section 3.5, Rule 40).
+Phase 3 — Admin Management is now fully [DONE] (task-98 closed this
+pass, 6 of 6 parts). Backups has no micro-tasks yet — first step is
+its own Rule 49 Step 4 breakdown (BackupLog schema, scripts/runBackup.js,
+super-admin Backups page, break-glass/restore runbooks) before any
+code gets written; see its own line below for what's verified NOT
+built yet.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -416,11 +418,11 @@ see Section 5C / 8 in that file.
       buyer management" as one lump; verified against the spec's own
       Phase summary table + actual code, since vault is already [DONE]
       under item 6 above and doesn't belong in this remaining list):
-  - [ ] Phase 3 — Admin Management (Section 3.2, `/superAdmin/
-        admin-management/*`) — verified NOT built: `find app -ipath
-        "*admin-management*"` returns no matches. Broken into 6
-        micro-tasks (Rule 49 Step 4 — spans API + UI, 3+ distinct
-        sub-features: list, create, edit/actions):
+  - [DONE] Phase 3 — Admin Management (Section 3.2, `/superAdmin/
+        admin-management/*`) — all 6 parts closed (task-99, 94, 95,
+        96, 97, 98). Auto-flipped to [DONE] the same turn task-98
+        closed, per Rule 6 (parent checkbox auto-sync) — every listed
+        child below is [DONE], none partial.
       - [DONE] task-99 — API: POST /api/admin/create-admin (Section 3.2.2
             — create Supabase user w/ role=admin + permissions in
             user_metadata, temp password, EmailJS credentials email,
@@ -502,8 +504,34 @@ see Section 5C / 8 in that file.
             Also wired AdminManagementList.tsx's missing "Create Admin"
             toolbar button (task-96's own scope, corrected above) to
             this page.
-      - [ ] task-98 — UI: `/superAdmin/admin-management/[adminId]/edit`
-            page — view + edit (Section 3.2.3)
+      - [DONE] task-98 — UI: `/superAdmin/admin-management/[adminId]/edit`
+            page — combined view + edit (Section 3.2.3). Built:
+            lib/hooks/useAdminManagementDetail.ts,
+            components/admin/AdminManagementDetail.tsx,
+            app/superAdmin/admin-management/[adminId]/edit/page.tsx,
+            app/styles/adminManagementDetail.css, wired to task-94's
+            GET detail route and task-95's PATCH/toggle-status/
+            reset-password routes. Reuses useCreateAdminForm.ts's
+            PERMISSION_OPTIONS so labels can't drift out of sync with
+            the create form. Section 3.2.3 lists an editable "status
+            toggle" and a separate "Deactivate Account" button as two
+            bullets; since the API only exposes one deactivate/
+            reactivate action (no separate status field on the PATCH
+            route), both are implemented as a single status card with
+            one Deactivate/Reactivate button behind ConfirmationModal
+            — not two controls that could disagree. Save Changes only
+            ever touches name/permissions; status changes go through
+            their own confirmation + immediate API call, same as every
+            other status toggle in the app. FIXED IN PASSING (same
+            precedent as task-97 fixing task-96's missed button): the
+            list page's separate "View" link (pointing at a bare
+            `[adminId]` route that was never built and isn't in this
+            spec) was replaced with a single "View / Edit" link to
+            this page; useCreateAdminForm.ts's post-create redirect
+            was corrected from `[adminId]` to `[adminId]/edit`. Client-
+            side notFound state (not Rule 31.10's server notFound())
+            used for consistency with AdminUserDetail.tsx, the
+            established sibling pattern for admin detail pages.
   - [ ] Phase 4 (remainder) — Backups (Section 3.5, Rule 40) — vault
         half of this phase is already [DONE] (item 6 above); Backups
         page, `BackupLog` model, `scripts/runBackup.js`, and the
