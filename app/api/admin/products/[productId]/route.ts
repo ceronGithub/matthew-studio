@@ -33,7 +33,7 @@ import { prisma } from "@/services/prisma";
 import { getSessionAdmin } from "@/lib/getSessionAdmin";
 import { hasAdminPermission } from "@/lib/hasAdminPermission";
 import { isValidCsrfRequest } from "@/lib/csrf";
-import { CATEGORY_LABELS, validateProductInput } from "@/lib/adminProductValidation";
+import { CATEGORY_LABELS, validateProductInput, resolveProductStatus } from "@/lib/adminProductValidation";
 import { recordAuditLog, diffProductFields } from "@/lib/auditLog";
 
 export async function GET(
@@ -143,7 +143,11 @@ export async function PUT(
         name: cleaned.name,
         description: cleaned.description,
         startingPrice: cleaned.price,
-        status: cleaned.status,
+        // Section 9.2 approval flow (task-110): a regular admin's edit
+        // reverts to pending-review the same as a create does — an
+        // already-published product isn't exempt from re-review once
+        // touched. Super-admin edits bypass this as usual.
+        status: resolveProductStatus(admin.role, cleaned.status),
         badge: cleaned.featured ? "new" : existing.badge,
         updatedBy: admin.email ?? "unknown",
       },

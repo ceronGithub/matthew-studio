@@ -22,8 +22,41 @@ export const CATEGORY_LABELS: Record<string, string> = {
   "game-characters": "Game Characters",
 };
 
+// Mirrors the category -> iconName pairing already duplicated across
+// lib/productsData.ts, lib/categoryShowcaseData.ts, and others (Rule
+// 2 — no useless duplication; this is the first admin-write-side use
+// of it, so it lives here alongside CATEGORY_LABELS rather than a
+// fourth copy).
+export const CATEGORY_ICON_NAMES: Record<string, string> = {
+  templates: "layout-template",
+  tshirts: "shirt",
+  "ai-videos": "clapperboard",
+  "file-tools": "wrench",
+  tutorials: "book-open",
+  "game-characters": "box",
+};
+
 export const VALID_CATEGORIES = Object.keys(CATEGORY_LABELS);
 export const VALID_STATUSES = ["draft", "published"];
+
+/**
+ * resolveProductStatus
+ * Section 9.2 approval flow (task-110) — a regular admin's product
+ * create/edit always lands as "pending-review" instead of going live
+ * immediately, regardless of which status they picked in the form. A
+ * super-admin's own writes bypass this (Section 3.14's full-control
+ * principle) and use their requested status as-is. A "draft" request
+ * is never intercepted for either role — only "published" gets
+ * redirected to pending-review, since draft was never going live in
+ * the first place.
+ */
+export function resolveProductStatus(
+  role: "admin" | "superAdmin",
+  requestedStatus: string
+): string {
+  if (role === "superAdmin") return requestedStatus;
+  return requestedStatus === "published" ? "pending-review" : requestedStatus;
+}
 
 // Same first-line-of-defense regex already used on buyer profile /
 // registration text fields (Rule 18.1) — kept consistent rather than

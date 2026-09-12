@@ -1,13 +1,17 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-110 — API: admin product create/edit routes save as
-`pending-review` instead of `published` (Phase 6, 2nd of 4-task split).
+**NEXT UP:** task-111 — API: super-admin approve/reject endpoints for
+products (Phase 6, 3rd of 4-task split).
 
-task-109 (schema) is now [DONE] — `Product.status` comment documents
-`pending-review` as a valid value. Run `npx prisma db push && npx
-prisma generate` before starting task-110. Phase 4 and Phase 5 remain
-fully [DONE] (task-100 through task-108 closed). Phases 7-10 remain
-unaudited.
+task-109 (schema) and task-110 (admin write routes) are now [DONE].
+task-110 turned up two findings — see its entry below: (1) a fixed
+bug — the admin products collection route had no working create/list
+endpoint at all; (2) an unfixed, unscoped gap — the public storefront
+never reads from the Product DB table, so "hide pending-review
+products from the storefront" has nothing to hide from yet. Flagging
+for the developer before this becomes its own task. Phase 4 and
+Phase 5 remain fully [DONE] (task-100 through task-108 closed).
+Phases 7-10 remain unaudited.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -652,10 +656,32 @@ see Section 5C / 8 in that file.
             comment update). Built 2026-09-13, see
             docs/tasks/task-109-schema-product-pending-review.md. Run
             `npx prisma db push && npx prisma generate` before task-110.
-      - [ ] task-110 — API: admin product create/edit routes save as
-            `pending-review` instead of `published` (extends existing
-            admin product write routes from task-21). Depends on
-            task-109.
+      - [DONE] task-110 — API: admin product create/edit routes save as
+            `pending-review` instead of `published`. Built 2026-09-13,
+            see docs/tasks/task-110-api-admin-product-pending-review-write.md.
+            GAP FOUND & FIXED: `app/api/admin/products/route.ts` (the
+            collection route) was a byte-for-byte accidental copy of
+            `[productId]/route.ts` — no working GET (list) or POST
+            (create) handler ever existed, despite task-21/22 being
+            marked [DONE]. Rebuilt from scratch (mirrors
+            `app/api/admin/orders/route.ts`'s pagination pattern);
+            added `resolveProductStatus()` + `CATEGORY_ICON_NAMES` to
+            `lib/adminProductValidation.ts`, applied the same override
+            to the existing PUT (edit) handler.
+            GAP FOUND, NOT FIXED (out of scope — architecture, not
+            this task): the public storefront (`/pricing`, `/shop`
+            redirects there) reads product listings entirely from
+            static data (`lib/categoryShowcaseData.ts` /
+            `lib/productsData.ts`), never from the `Product` DB table
+            — confirmed via grep, zero `prisma.product.*` calls exist
+            outside `/api/admin/*` and `/api/buyer/downloads`. This
+            means task-110's own "exclude pending-review from the
+            storefront" sub-goal has no live query to exclude it
+            from yet — the admin-managed Product table isn't wired to
+            the public site at all. This is a pre-existing gap larger
+            than this split; **not numbered as a task yet** — flagged
+            here for the developer to confirm priority/scope before
+            it's added to the plan.
       - [ ] task-111 — API: super-admin approve/reject endpoints —
             `PATCH /api/superadmin/products/[productId]/approve` and
             `.../reject`, flips status to `published` or back to

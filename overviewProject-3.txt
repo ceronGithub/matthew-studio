@@ -770,3 +770,17 @@ file holds change-log entries only.
   needed beyond running db push/generate. docs/taskPlan.md's NEXT UP
   pointer advanced to task-110; overviewProject.txt's Section 5C
   corrected in place to match (Rule 16.1).
+
+[2026-09-13] Built task-110: admin product create/edit now saves as
+  pending-review instead of published for regular admins (super-admin
+  writes bypass, per Section 3.14). Added resolveProductStatus() +
+  CATEGORY_ICON_NAMES to lib/adminProductValidation.ts. GAP FOUND &
+  FIXED: app/api/admin/products/route.ts had no working GET/POST
+  handlers at all (accidental duplicate of the detail route) --
+  rebuilt with a proper paginated list + create handler. GAP FOUND,
+  NOT FIXED: the public storefront never queries the Product DB
+  table (static data only) -- pending-review exclusion from the
+  storefront has nothing to exclude from yet; flagged for the
+  developer, not yet a numbered task. docs/taskPlan.md's NEXT UP
+  pointer advanced to task-111; overviewProject.txt's Section 5C
+  corrected in place (Rule 16.1).

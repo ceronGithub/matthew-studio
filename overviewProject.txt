@@ -808,8 +808,18 @@ means testing against fixtures instead of the real flow)
          `Product.status` field comment in prisma/schema.prisma now
          documents draft | pending-review | published (String field,
          not a Prisma enum, so no structural migration needed beyond
-         the comment). Run `npx prisma db push && npx prisma generate`
-         before task-110. Phases 7-10 not yet split — see
+         the comment). [DONE] task-110 built 2026-09-13 —
+         resolveProductStatus() added to lib/adminProductValidation.ts,
+         wired into both the admin product create and edit routes.
+         GAP FOUND & FIXED: app/api/admin/products/route.ts had no
+         working GET/POST handlers (was an accidental byte-for-byte
+         copy of the [productId] detail route) — rebuilt from scratch.
+         GAP FOUND, NOT FIXED: the public storefront reads product
+         listings from static data files, never the Product DB table
+         — pending-review exclusion has no live storefront query to
+         apply to yet; flagged for the developer, not yet a numbered
+         task. Run `npx prisma db push && npx prisma generate` before
+         task-111. Phases 7-10 not yet split — see
          docs/taskPlan.md's task-48+ section for the full per-phase
          verification notes.
 
