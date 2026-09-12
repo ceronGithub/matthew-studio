@@ -764,10 +764,40 @@ means testing against fixtures instead of the real flow)
          Section 3.8) — no bulk bar, no Send Email, no Delete (Delete
          deferred to task-108). "View" links to /superAdmin/buyer-
          management/[buyerId] (404s until task-108 ships). Not yet
-         build-verified in this sandbox. task-108 (detail page UI +
-         delete button) is next; see docs/tasks/task-108-*.md. Phases
-         6-10 not yet split — see docs/taskPlan.md's task-48+ section
-         for the full per-phase verification notes.
+         build-verified in this sandbox.
+         [DONE] task-108 — UI: /superAdmin/buyer-management/[buyerId]
+         detail page — app/superAdmin/buyer-management/[buyerId]/
+         page.tsx + components/buyer-management/
+         BuyerManagementDetail.tsx + app/styles/
+         buyerManagementDetail.css, built 2026-09-13. Reuses
+         lib/hooks/useAdminUserDetail.ts as-is, extended with a new
+         deleteAccount() action (task-106's "delete" case) rather than
+         a second hook (Rule 2, same precedent as task-107 reusing
+         useAdminUsers.ts) — AdminUserDetail.tsx (regular admin scope,
+         no delete action) is unaffected since it simply never calls
+         the new function. Mirrors AdminUserDetail.tsx's account/
+         last-login/orders/activity layout, narrower per spec Section
+         3.8: no Internal Notes or Send Email sections (those are
+         admin_account_specification.md's own Section 3.4.2 scope).
+         Delete Account gated behind the shared ConfirmationModal's
+         confirmDelaySeconds=5 option (Rule 34.4, same
+         DELETE_CONFIRM_DELAY_SECONDS precedent as
+         AdminManagementList.tsx's admin delete) — on success,
+         900ms-delayed redirect back to the list (same precedent as
+         useCreateAdminForm.ts/TotpEnrollmentForm.tsx) so the success
+         toast is visible before the now-deleted buyer's page would
+         otherwise 404. Also added a "Buyer Management" entry to
+         app/superAdmin/dashboard/page.tsx's QUICK_ACTIONS list
+         (Users icon), same precedent as task-105 folding its own
+         dashboard link into the same task. `npx tsc --noEmit` shows
+         zero new errors in any new/changed file (same pre-existing
+         Prisma-client-generation errors as task-98/102/105 — this
+         sandbox's binaries.prisma.sh access is blocked, confirmed
+         again this pass via `npx prisma generate`). Phase 5 (Buyer
+         Management) is now fully [DONE], all 3 parts closed
+         (task-106, 107, 108).
+         Phases 6-10 not yet split — see docs/taskPlan.md's task-48+
+         section for the full per-phase verification notes.
 
 PHASE 4 — SECURITY & ACCESS HARDENING (independent of commerce;
 sequenced after core buyer flow so login/vault hardening doesn't

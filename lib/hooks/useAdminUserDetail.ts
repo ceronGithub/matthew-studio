@@ -12,6 +12,16 @@
  * state; add_note merges the returned notes array. reset_password and
  * send_email don't change any displayed field, so nothing is merged
  * for those beyond the action's own success/message result.
+ *
+ * Also wraps task-106's "delete" action (deleteAccount), added for
+ * task-108's super-admin-only detail page — this stays the single
+ * hook for both /admin/users/[buyerId] and /superAdmin/buyer-
+ * management/[buyerId] (both point at the same underlying
+ * /api/admin/users/[buyerId] routes), per Rule 2's no-duplication
+ * principle. AdminUserDetail.tsx simply never renders a Delete
+ * button, so deleteAccount being present here has no effect on the
+ * regular admin page's scope (admin_account_specification.md Section
+ * 3.4 has no delete action).
  */
 "use client";
 
@@ -76,6 +86,7 @@ export function useAdminUserDetail(buyerId: string) {
   const [isResettingPassword, setIsResettingPassword] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [isAddingNote, setIsAddingNote] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchBuyer = useCallback(async () => {
     setState((current) => ({ ...current, isLoading: true, notFound: false, error: null }));
@@ -199,16 +210,33 @@ export function useAdminUserDetail(buyerId: string) {
     [postAction]
   );
 
+  /**
+   * deleteAccount
+   * Calls task-106's "delete" action — permanently removes the
+   * buyer's Supabase Auth user (their Orders are soft-deleted first,
+   * server-side). Nothing to merge locally: the caller (task-108's
+   * BuyerManagementDetail) navigates away on success rather than
+   * re-rendering a now-deleted buyer.
+   */
+  const deleteAccount = useCallback(async (): Promise<ActionResult> => {
+    setIsDeleting(true);
+    const result = await postAction({ action: "delete" });
+    setIsDeleting(false);
+    return { success: result.success, message: result.message };
+  }, [postAction]);
+
   return {
     ...state,
     isTogglingActive,
     isResettingPassword,
     isSendingEmail,
     isAddingNote,
+    isDeleting,
     refetch: fetchBuyer,
     setActive,
     resetPassword,
     sendBuyerEmail,
     addNote,
+    deleteAccount,
   };
 }

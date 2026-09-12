@@ -1,0 +1,343 @@
+/**
+ * FILE: app/styles/buyerManagementDetail.css
+ * PURPOSE:
+ * Styles for app/superAdmin/buyer-management/[buyerId]/page.tsx and
+ * BuyerManagementDetail.tsx (task-108). References the design tokens
+ * in app/globals.css only — no hardcoded colors/spacing. Responsive
+ * breakpoints live in app/styles/mediaQueries.css, not here. Mirrors
+ * adminUserDetail.css's structure (same underlying data shape) minus
+ * the notes/email sections, which aren't in this page's scope
+ * (super_admin_account_specification.md Section 3.8). Includes its
+ * own copy of the shared ConfirmationModal's styles
+ * (.confirmationModal*), same per-page-duplication pattern as every
+ * other page using that component.
+ */
+
+.buyerManagementDetailPage {
+  width: 100%;
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* ---------- Top row / header ---------- */
+
+.buyerManagementDetailTopRow {
+  display: flex;
+}
+
+.buyerManagementDetailBackLink {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-accent);
+  font-size: 0.9rem;
+}
+
+.buyerManagementDetailHeaderRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.buyerManagementDetailEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.buyerManagementDetailTitle {
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+.buyerManagementDetailMeta {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-xs);
+}
+
+.buyerManagementDetailStatusBadge {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* ---------- Info cards grid (account / last login) ---------- */
+
+.buyerManagementDetailGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-md);
+}
+
+.buyerManagementDetailCard {
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+}
+
+.buyerManagementDetailSectionTitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.buyerManagementDetailLine {
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+.buyerManagementDetailLineMuted {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+}
+
+/* ---------- Orders / Activity lists ---------- */
+
+.buyerManagementDetailListSection {
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+}
+
+.buyerManagementDetailOrdersList,
+.buyerManagementDetailActivityList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.buyerManagementDetailOrderRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background-color: var(--color-bg);
+}
+
+.buyerManagementDetailOrderLink {
+  font-size: 0.9rem;
+  color: var(--color-accent);
+}
+
+.buyerManagementDetailOrderTotal {
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  flex-shrink: 0;
+}
+
+.buyerManagementDetailActivityRow {
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background-color: var(--color-bg);
+}
+
+/* ---------- Actions (deactivate/reactivate / reset / delete) ---------- */
+
+.buyerManagementDetailActionsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+}
+
+.buyerManagementDetailActionRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.buyerManagementDetailButton {
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.buyerManagementDetailButton--primary {
+  border: 1px solid var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.buyerManagementDetailButton--primary:hover,
+.buyerManagementDetailButton--primary:focus-visible,
+.buyerManagementDetailButton--primary:active {
+  background-color: var(--color-accent-hover);
+}
+
+.buyerManagementDetailButton--secondary {
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+  color: var(--color-text-secondary);
+}
+
+.buyerManagementDetailButton--secondary:hover,
+.buyerManagementDetailButton--secondary:focus-visible,
+.buyerManagementDetailButton--secondary:active {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.buyerManagementDetailButton--destructive {
+  border: 1px solid var(--color-error);
+  background-color: transparent;
+  color: var(--color-error);
+}
+
+.buyerManagementDetailButton--destructive:hover,
+.buyerManagementDetailButton--destructive:focus-visible,
+.buyerManagementDetailButton--destructive:active {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.buyerManagementDetailButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---------- Skeleton / empty states (Rule 25) ---------- */
+
+.buyerManagementDetailSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-xl) var(--space-lg);
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+}
+
+.buyerManagementDetailSkeletonBlock {
+  height: 96px;
+  border-radius: 12px;
+}
+
+.buyerManagementDetailEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  color: var(--color-text-secondary);
+  text-align: center;
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+}
+
+/* ---------- Confirmation Modal (Rule 34.4 shared component) ---------- */
+
+.confirmationModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  z-index: var(--z-modal-backdrop);
+}
+
+.confirmationModalDialog {
+  width: 100%;
+  max-width: 420px;
+  padding: var(--space-lg) var(--space-xl);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-bg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  z-index: var(--z-modal);
+  transition: transform var(--transition-slow), opacity var(--transition-slow);
+}
+
+.confirmationModalTitle {
+  font-size: 1.1rem;
+  color: var(--color-text-primary);
+}
+
+.confirmationModalDescription {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+}
+
+.confirmationModalActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.confirmationModalCancelButton {
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+
+.confirmationModalCancelButton:hover,
+.confirmationModalCancelButton:focus-visible,
+.confirmationModalCancelButton:active {
+  background-color: var(--color-surface-hover);
+}
+
+.confirmationModalConfirmButton {
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-error);
+  background-color: var(--color-error);
+  color: var(--color-text-primary);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+
+.confirmationModalConfirmButton:hover,
+.confirmationModalConfirmButton:focus-visible,
+.confirmationModalConfirmButton:active {
+  background-color: #dc2626;
+}
+
+.confirmationModalCancelButton:disabled,
+.confirmationModalConfirmButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

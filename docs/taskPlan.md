@@ -1,11 +1,12 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-108 — ui-buyer-management-detail (depends on
-task-106 + task-107, both now [DONE] — detail page + Delete button
-is the only remaining Phase 5 item).
-Phase 4 is fully [DONE] (task-100 through task-105 all closed). Phase
-5 is now split into 3 micro-tasks (task-106/107/108) — task-106 and
-task-107 closed, task-108 remains.
+**NEXT UP:** Phase 6 audit — Product & Order Management w/ approval
+flow (Section 9.2, under task-48+) needs a Layer-3 check before it
+can be split into numbered micro-tasks, same process Phase 4/5 went
+through before task-100+/task-106+ were minted.
+Phase 4 and Phase 5 are both now fully [DONE] (task-100 through
+task-108 all closed). task-48+'s remaining scope is Phases 6-10,
+none of which are audited/split yet.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -604,17 +605,17 @@ see Section 5C / 8 in that file.
               client; verify with a clean `npx prisma generate` in a
               real dev environment). See
               docs/tasks/task-105-ui-admin-backups-page.md.
-  - [~] Phase 5 — Buyer Management (Section 3.8, `/superAdmin/
+  - [DONE] Phase 5 — Buyer Management (Section 3.8, `/superAdmin/
         buyer-management/*`) — distinct from admin_account_
         specification.md's task-84-88 (that's the regular ADMIN role's
         own buyer list, `/api/admin/users`); this is the SUPER-ADMIN's
-        own list/deactivate/reactivate/reset/delete page. Layer-3
-        audit this pass: list/deactivate/reactivate/reset already
-        exist via the shared `/api/admin/users*` routes (already
-        admin+superAdmin accessible) — only `delete` and the
-        super-admin's own UI route tree are missing. Split into 3
-        micro-tasks per Rule 49 Step 4 (spans API + UI, 3+ distinct
-        sub-features: list, detail, delete):
+        own list/deactivate/reactivate/reset/delete page. All 3
+        micro-tasks now closed (task-106, 107, 108). Auto-flipped to
+        [DONE] the same turn task-108 closed, per Rule 6 (parent
+        checkbox auto-sync) — every listed child below is [DONE],
+        none partial. Split into 3 micro-tasks per Rule 49 Step 4
+        (spans API + UI, 3+ distinct sub-features: list, detail,
+        delete):
         - [DONE] task-106 — API: add "delete" action to the existing
               `app/api/admin/users/[buyerId]/actions/route.ts`
               (extends, doesn't duplicate — Supabase Auth
@@ -624,12 +625,17 @@ see Section 5C / 8 in that file.
               mirrors `/admin/users`'s existing list pattern, reuses
               the existing list API (no new route). See
               docs/tasks/task-107-ui-buyer-management-list.md.
-        - [ ] task-108 — UI: `/superAdmin/buyer-management/[buyerId]`
-              detail page, mirrors `/admin/users/[buyerId]`, adds the
-              Delete Account button + ConfirmationModal (Rule 34.4)
-              wired to task-106, plus the dashboard QUICK_ACTIONS
-              entry (folded in per task-105's precedent). Depends on
-              task-106 + task-107. See
+        - [DONE] task-108 — UI: `/superAdmin/buyer-management/[buyerId]`
+              detail page, mirrors `/admin/users/[buyerId]` (reuses
+              lib/hooks/useAdminUserDetail.ts as-is, extended with a
+              new deleteAccount() action rather than a second hook —
+              Rule 2). Delete Account button + ConfirmationModal
+              (Rule 34.4, confirmDelaySeconds=5) wired to task-106;
+              900ms-delayed redirect back to the list on success.
+              Omits Internal Notes/Send Email (admin_account_
+              specification.md's own scope, not Section 3.8). Added
+              the dashboard QUICK_ACTIONS entry (folded in per
+              task-105's precedent). Built 2026-09-13, see
               docs/tasks/task-108-ui-buyer-management-detail.md.
   - [ ] Phase 6 — Product & Order Management w/ approval flow (Section
         3.10/3.11, 9.2) — admin_account_specification.md's own

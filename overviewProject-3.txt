@@ -727,3 +727,26 @@ file holds change-log entries only.
   node_modules present). docs/taskPlan.md updated in place same turn
   (task-107 -> [DONE], NEXT-UP now points to task-108 — buyer-
   management detail page UI + Delete button).
+
+[2026-09-13] Built task-108 (super_admin_account_specification.md
+  Section 3.8): /superAdmin/buyer-management/[buyerId] detail page.
+  New: app/superAdmin/buyer-management/[buyerId]/page.tsx,
+  components/buyer-management/BuyerManagementDetail.tsx,
+  app/styles/buyerManagementDetail.css. Modified:
+  lib/hooks/useAdminUserDetail.ts (added deleteAccount() wrapping
+  task-106's "delete" action, reused as-is rather than a second hook
+  -- AdminUserDetail.tsx/regular admin scope unaffected),
+  app/superAdmin/dashboard/page.tsx (added "Buyer Management" to
+  QUICK_ACTIONS). Delete Account uses the shared ConfirmationModal's
+  confirmDelaySeconds=5 option (same precedent as
+  AdminManagementList.tsx's admin delete); on success, a 900ms-
+  delayed redirect back to /superAdmin/buyer-management (same
+  precedent as useCreateAdminForm.ts/TotpEnrollmentForm.tsx). Page
+  omits Internal Notes/Send Email (admin_account_specification.md's
+  own scope, not Section 3.8). `npx tsc --noEmit` shows zero new
+  errors in any new/changed file -- only the same pre-existing
+  Prisma-client-generation errors remain (binaries.prisma.sh still
+  blocked in this sandbox, reconfirmed via `npx prisma generate`).
+  This closes Phase 5 (Buyer Management) end to end -- task-106, 107,
+  108 all [DONE]. docs/taskPlan.md and overviewProject.txt's Section
+  5C updated in place same turn per Rule 16.1.
