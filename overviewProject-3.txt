@@ -588,3 +588,18 @@ file holds change-log entries only.
   docs/taskPlan.md and overviewProject.txt's Section 5C updated in
   place same turn; NEXT-UP now points to Phase 4 (remainder) --
   Backups, which still needs its own micro-task breakdown.
+
+[2026-09-13] Split Backups (Rule 40) into 6 micro-tasks per Rule 49
+  Step 4: task-100 (BackupLog schema), task-101 (services/
+  googleDrive.ts -- services/r2.ts already existed and is reused
+  as-is), task-102 (scripts/runBackup.js), task-103 (nightly
+  database-backup.yml CI workflow), task-104 (read-only GET /api/
+  superAdmin/backups), task-105 (read-only /superAdmin/backups page,
+  no "Run Backup Now" button per Rule 40.6). Planning only -- no code
+  written yet. In passing, corrected a stale "Section 3.5" citation
+  for Backups in docs/taskPlan.md (copy-pasted from the Analytics
+  line; no spec .md file actually defines a Backups section --
+  infra_ops_specification.md Section 4.1 only cross-references Rule
+  40.5 in passing) and added Backups as item 9 to overviewProject.txt
+  Section 5C's Phase 4 list, which had omitted it entirely. NEXT-UP
+  now points to task-100.

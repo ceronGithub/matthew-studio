@@ -1,12 +1,11 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** Phase 4 (remainder) — Backups (Section 3.5, Rule 40).
-Phase 3 — Admin Management is now fully [DONE] (task-98 closed this
-pass, 6 of 6 parts). Backups has no micro-tasks yet — first step is
-its own Rule 49 Step 4 breakdown (BackupLog schema, scripts/runBackup.js,
-super-admin Backups page, break-glass/restore runbooks) before any
-code gets written; see its own line below for what's verified NOT
-built yet.
+**NEXT UP:** task-100 — schema-backuplog (Rule 40 — first item in the
+Backups breakdown; task-101 can run in parallel, tasks 102-105 depend
+on 100/101 in sequence).
+Phase 3 — Admin Management is fully [DONE] (task-98 closed that
+pass, 6 of 6 parts). Backups is now split into 6 micro-tasks
+(task-100 through task-105, this pass) — see the Backups line below.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -532,13 +531,24 @@ see Section 5C / 8 in that file.
             side notFound state (not Rule 31.10's server notFound())
             used for consistency with AdminUserDetail.tsx, the
             established sibling pattern for admin detail pages.
-  - [ ] Phase 4 (remainder) — Backups (Section 3.5, Rule 40) — vault
-        half of this phase is already [DONE] (item 6 above); Backups
-        page, `BackupLog` model, `scripts/runBackup.js`, and the
-        break-glass/restore runbooks are verified NOT built: no
-        `BackupLog` model in schema.prisma, no `scripts/*backup*` file,
-        no `app/**/backup*` route. Not yet split into micro-tasks —
-        do after Phase 3 per the spec's own dependency order.
+  - [ ] Phase 4 (remainder) — Backups (Rule 40) — vault half of this
+        phase is already [DONE] (item 6 above). CORRECTION this pass:
+        the prior "Section 3.5" citation here was a mislabel copied
+        from the Analytics line above — no spec doc defines a
+        Backups section; `infra_ops_specification.md` §4.1 only
+        cross-references Rule 40.5 in passing. Rule 40 itself is the
+        spec of record for this phase (see each task-N file's
+        "Fulfills spec" header). Split into 6 micro-tasks per Rule 49
+        Step 4 (spans schema + services + a standalone script + CI +
+        API + UI):
+        - [ ] task-100 — schema: `BackupLog` model
+        - [ ] task-101 — services: Google Drive upload helper
+              (`services/r2.ts` already exists and is reused as-is)
+        - [ ] task-102 — script: `scripts/runBackup.js`
+        - [ ] task-103 — CI: nightly `database-backup.yml` workflow
+        - [ ] task-104 — API: `GET /api/superAdmin/backups` (read-only)
+        - [ ] task-105 — UI: `/superAdmin/backups` page (read-only,
+              no "Run Backup Now" button per Rule 40.6)
   - [ ] Phase 5 — Buyer Management (Section 3.8, `/superAdmin/
         buyer-management/*`) — distinct from admin_account_
         specification.md's task-84-88 (that's the regular ADMIN role's
