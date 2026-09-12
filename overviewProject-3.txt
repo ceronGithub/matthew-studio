@@ -642,3 +642,17 @@ file holds change-log entries only.
   locally. docs/taskPlan.md and overviewProject.txt Section 5C
   updated in place same turn; NEXT-UP now points to task-103
   (.github/workflows/database-backup.yml).
+
+[2026-09-13] Built task-103 -- .github/workflows/database-backup.yml
+  added: nightly cron trigger (18:00 UTC, flagged in the file's own
+  comment for timezone confirmation against the real deployment
+  region) plus workflow_dispatch for the one sanctioned manual-run
+  path per Rule 40.6 (never a button inside the app). Installs
+  postgresql-client on the runner since pg_dump isn't preinstalled on
+  ubuntu-latest. Injects DIRECT_URL, DATABASE_URL, 5 R2 keys, and 3
+  Google Drive keys via GitHub Actions repo secrets, none of which
+  are configured yet in this repo's GitHub settings, so the workflow
+  hasn't been run/tested. YAML validated with python's
+  yaml.safe_load. docs/taskPlan.md and overviewProject.txt Section 5C
+  updated in place same turn; NEXT-UP now points to task-104 (GET
+  /api/superAdmin/backups).

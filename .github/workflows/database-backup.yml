@@ -1,0 +1,60 @@
+name: Database Backup
+
+# Rule 40.1: backups must run on separate infrastructure, never inside
+# the app's own hosting (Vercel) or triggered by an incoming request.
+# GitHub's own cloud runners are the "separate infrastructure" here.
+on:
+  schedule:
+    # 18:00 UTC ≈ 2:00 AM Philippine Time (UTC+8), the project's
+    # lowest-traffic window per Rule 40.1. CONFIRM this against the
+    # actual target timezone before relying on it in production —
+    # adjust the cron expression if the deployment region differs.
+    - cron: "0 18 * * *"
+  # Rule 40.6: this is the ONLY sanctioned way to trigger an on-demand
+  # backup — never a button inside the app itself, which would put a
+  # backup back into the live request/response cycle.
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # pg_dump is required by scripts/runBackup.ts but is not
+      # preinstalled on the ubuntu-latest runner by default.
+      - name: Install PostgreSQL client (pg_dump)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+
+      - name: Run backup
+        run: npm run backup
+        env:
+          # Session-pooler connection used only for pg_dump — never the
+          # app's transaction-pooler DATABASE_URL (Rule 37.2 / 40.5).
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+          # Used by services/prisma.ts to write the BackupLog row.
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          # Cloudflare R2 (Rule 35.6)
+          CLOUDFLARE_R2_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}
+          CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+          CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+          CLOUDFLARE_R2_BUCKET_NAME: ${{ secrets.CLOUDFLARE_R2_BUCKET_NAME }}
+          NEXT_PUBLIC_CLOUDFLARE_R2_PUBLIC_URL: ${{ secrets.NEXT_PUBLIC_CLOUDFLARE_R2_PUBLIC_URL }}
+          # Google Drive (Rule 35.7 / task-101)
+          GOOGLE_SERVICE_ACCOUNT_EMAIL: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
+          GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY }}
+          GOOGLE_DRIVE_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}

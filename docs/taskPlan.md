@@ -1,10 +1,10 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-103 — ci-backup-workflow (Rule 40.1/40.5 — depends on
-task-102 [DONE]).
+**NEXT UP:** task-104 — api-admin-backups-list (Rule 40.6 — depends on
+task-100 [DONE] only; can proceed independently of task-103).
 Phase 3 — Admin Management is fully [DONE] (task-98 closed that
-pass, 6 of 6 parts). task-100/101/102 are now [DONE] this pass — see
-the Backups line below.
+pass, 6 of 6 parts). task-100/101/102/103 are now [DONE] this pass —
+see the Backups line below.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -564,7 +564,15 @@ see Section 5C / 8 in that file.
               credentials or pg_dump binary available in this
               environment; verification steps are in the task file.
               See docs/tasks/task-102-script-run-backup.md.
-        - [ ] task-103 — CI: nightly `database-backup.yml` workflow
+        - [DONE] task-103 — CI: `.github/workflows/database-backup.yml`
+              added — nightly cron (18:00 UTC, flagged for timezone
+              confirmation) + `workflow_dispatch` for manual on-demand
+              runs (Rule 40.6 — never a button in the app itself).
+              Installs `postgresql-client` on the runner for `pg_dump`
+              since it isn't preinstalled. YAML validated. Requires 9
+              GitHub Actions repo secrets to be set (see task file) —
+              not yet configured, cannot be tested from this sandbox.
+              See docs/tasks/task-103-ci-backup-workflow.md.
         - [ ] task-104 — API: `GET /api/superAdmin/backups` (read-only)
         - [ ] task-105 — UI: `/superAdmin/backups` page (read-only,
               no "Run Backup Now" button per Rule 40.6)

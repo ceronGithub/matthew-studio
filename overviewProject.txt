@@ -966,8 +966,10 @@ block revenue-generating pages from shipping first)
              tsx devDependency; pg_dump -> gzip -> R2 + Drive, writes
              BackupLog rows). Not smoke-tested (no live DB/pg_dump in
              this sandbox)
-       [ ] task-103 -- .github/workflows/database-backup.yml nightly
-             cron + workflow_dispatch
+       [DONE] task-103 -- .github/workflows/database-backup.yml added
+             (nightly cron + workflow_dispatch, installs
+             postgresql-client for pg_dump). Requires 9 repo secrets,
+             not yet configured -- not tested from this sandbox
        [ ] task-104 -- GET /api/superAdmin/backups (read-only)
        [ ] task-105 -- /superAdmin/backups page (read-only, no
              "Run Backup Now" button per Rule 40.6)
