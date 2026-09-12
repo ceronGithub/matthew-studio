@@ -798,15 +798,20 @@ means testing against fixtures instead of the real flow)
          (task-106, 107, 108).
          Phase 6 (Product & Order Management w/ approval flow, Section
          9.2) audited 2026-09-13: Spec present, but Schema and Code
-         Wired both fail — `Product.status` only supports
+         Wired both failed — `Product.status` only supported
          draft/published (no pending-review value), no
          /superAdmin/products route exists, zero pending-review
          references anywhere in the codebase. Split into task-109
          (schema), task-110 (admin write routes → pending-review),
          task-111 (super-admin approve/reject API), task-112
-         (/superAdmin/products UI) — see docs/taskPlan.md's task-48+
-         section. Phases 7-10 not yet split — see docs/taskPlan.md's
-         task-48+ section for the full per-phase verification notes.
+         (/superAdmin/products UI). [DONE] task-109 built 2026-09-13 —
+         `Product.status` field comment in prisma/schema.prisma now
+         documents draft | pending-review | published (String field,
+         not a Prisma enum, so no structural migration needed beyond
+         the comment). Run `npx prisma db push && npx prisma generate`
+         before task-110. Phases 7-10 not yet split — see
+         docs/taskPlan.md's task-48+ section for the full per-phase
+         verification notes.
 
 PHASE 4 — SECURITY & ACCESS HARDENING (independent of commerce;
 sequenced after core buyer flow so login/vault hardening doesn't

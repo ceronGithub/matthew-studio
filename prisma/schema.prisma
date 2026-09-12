@@ -344,7 +344,7 @@ model Product {
   dateAdded     DateTime  @default(now())
   trendingScore Float     @default(0)
   variants      Json? // ProductVariant[] — Templates only
-  status        String    @default("draft") // draft | published
+  status        String    @default("draft") // draft | pending-review | published — Section 9.2 approval flow (task-109/110/111)
 
   // Media fields — product_media_upload_specification.md Section 6
   coverImageUrl   String? // R2 public URL, products/<id>/cover.webp

@@ -762,3 +762,11 @@ file holds change-log entries only.
   line updated in place; overviewProject.txt's Section 5C corrected
   in place to match (Rule 16.1). No code built yet -- planning/split
   only, per Rule 49 Step 3/4.
+
+[2026-09-13] Built task-109: documented pending-review as a valid
+  Product.status value (Section 9.2 approval flow, Phase 6). status
+  is a plain String field, not a Prisma enum, so this was a comment
+  update only -- no structural schema change or migration file
+  needed beyond running db push/generate. docs/taskPlan.md's NEXT UP
+  pointer advanced to task-110; overviewProject.txt's Section 5C
+  corrected in place to match (Rule 16.1).

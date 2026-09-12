@@ -1,15 +1,13 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-109 — schema: add `pending-review` to `Product.status`
-(Phase 6, product approval flow — first of a 4-task split, see below).
+**NEXT UP:** task-110 — API: admin product create/edit routes save as
+`pending-review` instead of `published` (Phase 6, 2nd of 4-task split).
 
-Phase 6 audit (Section 9.2 approval flow) completed this pass:
-Spec ✅ / Schema ❌ / Code Wired ❌ — `Product.status` only supports
-`draft`/`published`, no `/superAdmin/products` route exists, no
-`pending-review` references anywhere in the codebase. Split into
-task-109 through task-112 per Rule 49 Step 4 (spans schema + 2 API
-surfaces + UI). Phase 4 and Phase 5 remain fully [DONE] (task-100
-through task-108 closed). Phases 7-10 remain unaudited.
+task-109 (schema) is now [DONE] — `Product.status` comment documents
+`pending-review` as a valid value. Run `npx prisma db push && npx
+prisma generate` before starting task-110. Phase 4 and Phase 5 remain
+fully [DONE] (task-100 through task-108 closed). Phases 7-10 remain
+unaudited.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -647,8 +645,13 @@ see Section 5C / 8 in that file.
         approval flow confirmed NOT wired (spec-only — see NEXT UP).
         Split into 4 micro-tasks per Rule 49 Step 4 (schema + 2 API
         surfaces + UI, each independently completable):
-      - [ ] task-109 — schema: add `pending-review` to `Product.status`
-            enum/default (Section 9.2). Migration only — no app code.
+      - [DONE] task-109 — schema: add `pending-review` to `Product.status`
+            enum/default (Section 9.2). Documented as a valid value in
+            the field comment (`status` is a plain String, not a
+            Prisma enum, so no structural migration needed beyond the
+            comment update). Built 2026-09-13, see
+            docs/tasks/task-109-schema-product-pending-review.md. Run
+            `npx prisma db push && npx prisma generate` before task-110.
       - [ ] task-110 — API: admin product create/edit routes save as
             `pending-review` instead of `published` (extends existing
             admin product write routes from task-21). Depends on
