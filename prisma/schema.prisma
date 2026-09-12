@@ -743,3 +743,28 @@ model Notification {
   @@index([userId])
   @@index([isRead])
 }
+
+/// BackupLog
+/// Rule 40.4 (Backup & Disaster Recovery Standard). One row per
+/// scripts/runBackup.js run (task-102) — never written by the live
+/// app. status is "failed" only if EVERY configured destination
+/// failed; if at least one succeeds, status is "success" and
+/// errorMessage still records which destination(s) failed, prefixed
+/// per destination (e.g. "Drive: <error>"). Row is created with
+/// status "running" at the start of a run so a crash mid-backup still
+/// leaves a visible trail instead of disappearing silently.
+model BackupLog {
+  id            String    @id @default(cuid())
+  status        String    @default("running") // running | success | failed
+  fileSizeBytes Int?
+  r2Key         String?
+  r2Url         String?
+  driveFileId   String?
+  driveViewLink String?
+  errorMessage  String?
+  startedAt     DateTime  @default(now())
+  completedAt   DateTime?
+
+  @@index([status])
+  @@index([startedAt])
+}

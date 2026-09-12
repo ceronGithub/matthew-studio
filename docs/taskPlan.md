@@ -1,11 +1,10 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-100 — schema-backuplog (Rule 40 — first item in the
-Backups breakdown; task-101 can run in parallel, tasks 102-105 depend
-on 100/101 in sequence).
+**NEXT UP:** task-101 — services-google-drive (Rule 35.7 — no hard
+dependency on task-100, but next in top-to-bottom build order).
 Phase 3 — Admin Management is fully [DONE] (task-98 closed that
-pass, 6 of 6 parts). Backups is now split into 6 micro-tasks
-(task-100 through task-105, this pass) — see the Backups line below.
+pass, 6 of 6 parts). task-100 (BackupLog schema) is now [DONE] this
+pass — see the Backups line below.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -541,7 +540,11 @@ see Section 5C / 8 in that file.
         "Fulfills spec" header). Split into 6 micro-tasks per Rule 49
         Step 4 (spans schema + services + a standalone script + CI +
         API + UI):
-        - [ ] task-100 — schema: `BackupLog` model
+        - [DONE] task-100 — schema: `BackupLog` model. Added to
+              prisma/schema.prisma with @@index([status]) and
+              @@index([startedAt]) beyond the base Rule 40.4 spec, to
+              support task-105's filterable admin table. See
+              docs/tasks/task-100-schema-backuplog.md.
         - [ ] task-101 — services: Google Drive upload helper
               (`services/r2.ts` already exists and is reused as-is)
         - [ ] task-102 — script: `scripts/runBackup.js`

@@ -958,7 +958,8 @@ block revenue-generating pages from shipping first)
        docs/taskPlan.md "Section 3.5" citation for it was a mislabel
        corrected this pass, and Section 5C previously omitted it
        entirely). Split into 6 micro-tasks:
-       [ ] task-100 -- schema: BackupLog model
+       [DONE] task-100 -- schema: BackupLog model, added with
+             @@index([status]) and @@index([startedAt])
        [ ] task-101 -- services/googleDrive.ts upload helper
              (services/r2.ts already exists, reused as-is)
        [ ] task-102 -- scripts/runBackup.js (pg_dump -> gzip -> R2 +

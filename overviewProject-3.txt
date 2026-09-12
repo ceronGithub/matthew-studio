@@ -603,3 +603,10 @@ file holds change-log entries only.
   40.5 in passing) and added Backups as item 9 to overviewProject.txt
   Section 5C's Phase 4 list, which had omitted it entirely. NEXT-UP
   now points to task-100.
+
+[2026-09-13] Built task-100 -- BackupLog model added to
+  prisma/schema.prisma per Rule 40.4, with @@index([status]) and
+  @@index([startedAt]) added beyond the base spec to support
+  task-105's filterable/paginated admin table. docs/taskPlan.md and
+  overviewProject.txt Section 5C updated in place same turn; NEXT-UP
+  now points to task-101 (services/googleDrive.ts).
