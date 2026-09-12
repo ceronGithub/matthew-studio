@@ -285,6 +285,40 @@
 }
 
 /* ------------------------------------------------------------
+ * TOTP LOGIN STEP (task-47-ui-totp-login-step)
+ * Second step of SignInForm, shown only for a TOTP-enabled
+ * admin/superAdmin account after the password step succeeds.
+ * ------------------------------------------------------------ */
+.authTotpStep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-sm);
+}
+
+.authTotpStepIcon {
+  color: #fff;
+}
+
+.authTotpStepHint {
+  margin-bottom: var(--space-sm);
+}
+
+.authTotpStep .authForm {
+  width: 100%;
+  text-align: left;
+}
+
+/* Wide letter-spacing makes a 6-digit code easier to scan than the
+ * default input styling used for email/password. */
+.authTotpCodeInput {
+  text-align: center;
+  letter-spacing: 0.4em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------------------
  * PASSWORD STRENGTH METER
  * ------------------------------------------------------------ */
 .passwordStrengthMeter {

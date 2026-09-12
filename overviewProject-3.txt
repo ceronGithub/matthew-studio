@@ -402,3 +402,31 @@ file holds change-log entries only.
   docs/taskPlan.md and overviewProject.txt's Section 5C updated in place
   same turn per Rule 16.1/49.1: task-47-ui-totp-enrollment flipped to
   [DONE], NEXT-UP pointer now points to task-47-ui-totp-login-step.
+
+[2026-09-12] task-47-ui-totp-login-step (part 5 of 6, 2FA/TOTP,
+  super_admin_account_specification.md Section 12 Phase 1) — login page
+  TOTP prompt. New components/auth/TotpLoginStep.tsx renders the 6-digit
+  code step (same manual useState + inline-error pattern as
+  TotpEnrollmentForm.tsx); components/auth/SignInForm.tsx now tracks a
+  pendingTotpToken and swaps to TotpLoginStep when POST /api/auth/login
+  responds with data.totpRequired, instead of routing away — no session
+  cookies exist until POST /api/auth/totp/verify-login confirms the
+  code, matching the server-side contract already built in
+  task-47-api-totp-login-verify. On success, role is handed back to
+  SignInForm for the existing getDashboardPathForRole() redirect,
+  reusing the same helper as the non-2FA path. New CSS in
+  app/styles/auth.css (.authTotpStep, .authTotpStepIcon,
+  .authTotpStepHint, .authTotpCodeInput) — reused the existing
+  .authField/.authFieldError/.authSubmitButton/.authSubmitButton--link
+  classes rather than duplicating them. No schema change, no new env
+  var. Buyers and un-enrolled admins never see this step — untouched,
+  since app/api/auth/login/route.ts only sets totpRequired for an
+  admin/superAdmin account with an enabled TOTP credential. `npx tsc
+  --noEmit`: zero new errors from the 2 touched files — same
+  pre-existing ungenerated-Prisma-client errors as prior entries
+  (binaries.prisma.sh still blocked in this sandbox; run
+  npx prisma generate locally, no db push needed).
+  docs/taskPlan.md and overviewProject.txt's Section 5C updated in
+  place same turn per Rule 16.1/49.1: task-47-ui-totp-login-step
+  flipped to [DONE], NEXT-UP pointer now points to
+  task-47-totp-setup-gate (final part, 6 of 6).

@@ -7,6 +7,13 @@
  * the buyer to their dashboard on success. Field-level errors only —
  * no form-level error summary, per login_and_registration_page.md
  * Section 3.1.
+ *
+ * TOTP step (task-47-ui-totp-login-step, part 5 of 6): when the login
+ * response signals `data.totpRequired`, this form swaps to
+ * TotpLoginStep instead of navigating away — no session cookies exist
+ * until that second step succeeds. Buyers and un-enrolled admins never
+ * see this: the flag is only ever set by app/api/auth/login/route.ts
+ * for an admin/superAdmin account with an enabled TOTP credential.
  */
 "use client";
 
@@ -16,6 +23,7 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import type { ToastType } from "@/components/shared/useToast";
 import { getCsrfHeader } from "@/lib/csrf";
 import { getDashboardPathForRole } from "@/lib/roleRouting";
+import TotpLoginStep from "@/components/auth/TotpLoginStep";
 
 interface SignInFormProps {
   showToast: (message: string, type: ToastType) => void;
@@ -29,6 +37,9 @@ export default function SignInForm({ showToast }: SignInFormProps) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // Non-null only while awaiting the second (TOTP) step — presence of
+  // this token, not a separate boolean, is what drives the step switch.
+  const [pendingTotpToken, setPendingTotpToken] = useState<string | null>(null);
 
   function validate(): boolean {
     const errors: { email?: string; password?: string } = {};
@@ -60,6 +71,13 @@ export default function SignInForm({ showToast }: SignInFormProps) {
         return;
       }
 
+      // Password verified but a TOTP-enabled admin/superAdmin account —
+      // no session yet, swap to the code-entry step instead of routing.
+      if (result.data?.totpRequired) {
+        setPendingTotpToken(result.data.pendingToken);
+        return;
+      }
+
       showToast("Signed in. Redirecting…", "success");
       router.push(getDashboardPathForRole(result.data?.role));
     } catch {
@@ -67,6 +85,20 @@ export default function SignInForm({ showToast }: SignInFormProps) {
     } finally {
       setIsSubmitting(false);
     }
+  }
+
+  // --- Step 2: TOTP code entry (task-47-ui-totp-login-step) ---
+  if (pendingTotpToken) {
+    return (
+      <TotpLoginStep
+        pendingToken={pendingTotpToken}
+        showToast={showToast}
+        onVerified={(role) => {
+          router.push(getDashboardPathForRole(role));
+        }}
+        onBack={() => setPendingTotpToken(null)}
+      />
+    );
   }
 
   return (
