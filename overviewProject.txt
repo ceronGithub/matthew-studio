@@ -672,6 +672,24 @@ means testing against fixtures instead of the real flow)
          stored). "Locked" status is display-only pending a separate,
          not-yet-numbered task to actually enforce Section 5.3's
          5-failure/1-hour lockout in app/api/auth/login/route.ts.
+         [DONE] task-95 (admin actions API) built 2026-09-12 — added
+         PATCH (edit name/permissions) and DELETE (permanent delete)
+         to app/api/superadmin/admin-management/[adminId]/route.ts,
+         plus two new sub-routes: ./toggle-status/route.ts
+         (deactivate/reactivate, same ban_duration convention as the
+         buyer actions route) and ./reset-password/route.ts. The
+         reset-password route does NOT reuse BuyerRecovery's
+         token-link pattern — that table is buyer-specific and has no
+         admin equivalent; instead it rotates the admin's Supabase
+         password directly to a new temp password and emails it, same
+         approach as create-admin's own flow. New required env var:
+         EMAILJS_TEMPLATE_ID_SUPERADMIN_ADMIN_PASSWORD_RESET (not yet
+         created in the EmailJS dashboard — flagged for the
+         developer, distinct from the buyer-facing
+         EMAILJS_TEMPLATE_ID_ADMIN_PASSWORD_RESET template). All four
+         actions log their own SecurityLog eventType (admin_updated,
+         admin_deactivated/admin_reactivated, admin_password_reset,
+         admin_deleted).
          Phases 4 (remainder —
          Backups/BackupLog/runbooks), 5 (Buyer Management, distinct
          from admin_account_specification.md's own task-84-88 buyer

@@ -496,3 +496,16 @@ file holds change-log entries only.
   create response, never stored). docs/taskPlan.md and
   overviewProject.txt's Section 5C updated in place same turn;
   NEXT-UP now points to task-95.
+
+[2026-09-12] Built task-95: added PATCH (edit name/permissions) and
+  DELETE (permanent delete) to app/api/superadmin/admin-management/
+  [adminId]/route.ts, plus two new sub-routes — ./toggle-status/
+  route.ts (deactivate/reactivate) and ./reset-password/route.ts.
+  Reset-password rotates the admin's Supabase password directly and
+  emails the new temp password (create-admin's own pattern) rather
+  than reusing BuyerRecovery's token-link flow, which is buyer-only.
+  New required env var: EMAILJS_TEMPLATE_ID_SUPERADMIN_ADMIN_PASSWORD_
+  RESET (not yet created in the EmailJS dashboard). All four actions
+  log their own SecurityLog eventType. docs/taskPlan.md and
+  overviewProject.txt's Section 5C updated in place same turn;
+  NEXT-UP now points to task-96.

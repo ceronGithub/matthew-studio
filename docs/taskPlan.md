@@ -1,12 +1,11 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-95 — API: admin actions — edit (name/permissions),
-deactivate/reactivate, reset-password, delete (Section 3.2.1/3.2.3,
-5-second-delay confirmation on delete per Rule 34.4), Phase 3 — Admin
-Management, part 3 of 6. task-94 closed this pass — built
-app/api/superadmin/admin-management/route.ts (list + CSV) and
-app/api/superadmin/admin-management/[adminId]/route.ts (detail); see
-NOTES below.
+**NEXT UP:** task-96 — UI: `/superAdmin/admin-management` list page —
+DataTable, filters, CSV export, row actions (Section 3.2.1), Phase 3 —
+Admin Management, part 4 of 6. task-95 closed this pass — added
+PATCH/DELETE to app/api/superadmin/admin-management/[adminId]/route.ts
+plus two new sub-routes (toggle-status, reset-password); see NOTES
+below.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -458,10 +457,21 @@ see Section 5C / 8 in that file.
             SecurityLog login_failed counts (lib/adminAccountStatus.ts
             header has the full note). Enforcing the actual block is a
             separate task, not yet numbered.
-      - [ ] task-95 — API: admin actions — edit (name/permissions),
+      - [DONE] task-95 — API: admin actions — edit (name/permissions),
             deactivate/reactivate, reset-password, delete (Section
             3.2.1/3.2.3, 5-second-delay confirmation on delete per
-            Rule 34.4)
+            Rule 34.4) — built 2026-09-12: PATCH/DELETE added to
+            app/api/superadmin/admin-management/[adminId]/route.ts,
+            plus two new sub-routes, ./toggle-status/route.ts and
+            ./reset-password/route.ts. Reset-password does NOT reuse
+            BuyerRecovery (buyer-specific, no admin equivalent exists)
+            — it rotates the admin's Supabase password directly and
+            emails the new temp password, same pattern as
+            create-admin's own flow. New required env var:
+            EMAILJS_TEMPLATE_ID_SUPERADMIN_ADMIN_PASSWORD_RESET
+            (distinct template from the buyer-facing
+            EMAILJS_TEMPLATE_ID_ADMIN_PASSWORD_RESET — not yet created
+            in the EmailJS dashboard, flagged for the developer).
       - [ ] task-96 — UI: `/superAdmin/admin-management` list page —
             DataTable, filters, CSV export, row actions (Section 3.2.1)
       - [ ] task-97 — UI: `/superAdmin/admin-management/create` page —
