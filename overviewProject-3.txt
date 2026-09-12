@@ -656,3 +656,19 @@ file holds change-log entries only.
   yaml.safe_load. docs/taskPlan.md and overviewProject.txt Section 5C
   updated in place same turn; NEXT-UP now points to task-104 (GET
   /api/superAdmin/backups).
+
+[2026-09-13] Built task-104 -- app/api/superadmin/backups/route.ts
+  added (GET only, paginated, filterable by status), plus
+  lib/backupsQuery.ts mirroring lib/accountActivityQuery.ts's shape.
+  Same getSessionAdmin + role === "superAdmin" guard as the other
+  super-admin routes. Strictly read-only, no POST handler, per Rule
+  40.6. PATH CORRECTION: task-104's own spec file said app/api/
+  superAdmin/backups (camelCase), but every existing super-admin
+  route in this repo lives under the lowercase app/api/superadmin/
+  folder (account-activity, security-logs, admin-management,
+  gatekeeper) -- built at the lowercase path to match, and the task
+  file itself corrected in passing rather than left contradicting the
+  code. npx tsc --noEmit shows zero errors in either new file.
+  docs/taskPlan.md and overviewProject.txt Section 5C updated in
+  place same turn; NEXT-UP now points to task-105 (/superAdmin/backups
+  page).

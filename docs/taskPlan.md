@@ -1,10 +1,10 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-104 — api-admin-backups-list (Rule 40.6 — depends on
-task-100 [DONE] only; can proceed independently of task-103).
+**NEXT UP:** task-105 — ui-admin-backups-page (Rule 40.6 — depends on
+task-104 [DONE]).
 Phase 3 — Admin Management is fully [DONE] (task-98 closed that
-pass, 6 of 6 parts). task-100/101/102/103 are now [DONE] this pass —
-see the Backups line below.
+pass, 6 of 6 parts). task-100/101/102/103/104 are now [DONE] this
+pass — see the Backups line below.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -573,7 +573,17 @@ see Section 5C / 8 in that file.
               GitHub Actions repo secrets to be set (see task file) —
               not yet configured, cannot be tested from this sandbox.
               See docs/tasks/task-103-ci-backup-workflow.md.
-        - [ ] task-104 — API: `GET /api/superAdmin/backups` (read-only)
+        - [DONE] task-104 — API: `GET /api/superadmin/backups`
+              (CORRECTED path — its own task file said `superAdmin`
+              camelCase, but every existing super-admin route in this
+              repo lives under lowercase `app/api/superadmin/`; fixed
+              to match rather than introduce a second, inconsistent
+              folder). Added `lib/backupsQuery.ts` alongside it,
+              mirroring `lib/accountActivityQuery.ts`'s shape. Same
+              `getSessionAdmin` + `role === "superAdmin"` guard as the
+              other super-admin routes. Strictly read-only — no POST
+              handler. `npx tsc --noEmit` shows zero errors in either
+              new file. See docs/tasks/task-104-api-admin-backups-list.md.
         - [ ] task-105 — UI: `/superAdmin/backups` page (read-only,
               no "Run Backup Now" button per Rule 40.6)
   - [ ] Phase 5 — Buyer Management (Section 3.8, `/superAdmin/

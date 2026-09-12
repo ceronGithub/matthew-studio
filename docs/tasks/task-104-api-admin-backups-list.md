@@ -6,7 +6,9 @@ read source) + Rule 28 (API response shape standard).
 **Dependency:** task-100 (`BackupLog` model must exist).
 
 ## What this builds
-`app/api/superAdmin/backups/route.ts`:
+`app/api/superadmin/backups/route.ts` (lowercase `superadmin`, matching
+this repo's existing convention — see account-activity, security-logs,
+admin-management, gatekeeper routes):
 - `export const dynamic = "force-dynamic"` (Rule 31.3).
 - Guarded by the existing super-admin auth check (same pattern as
   the other `/api/superAdmin/*` routes already in this repo — reuse,
