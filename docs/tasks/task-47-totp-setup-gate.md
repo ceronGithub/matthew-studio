@@ -35,3 +35,23 @@ instead of buyer + recovery setup:
 
 - Building the enrollment page or its APIs — this task only wires the
   existing (by this point, already-built) pieces into `middleware.ts`.
+
+## What was built (2026-09-12)
+
+- `lib/totpSetup.ts` (new) — `isTotpEnrolled(userId)`, read-only
+  lookup on `AdminTotpCredential.enabled`. Fails open on a DB error
+  (mirrors `lib/recoverySetup.ts`'s `isRecoverySetupComplete()`) —
+  a lookup outage should never lock every admin out of their own
+  dashboard.
+- `middleware.ts` — added `TOTP_SETUP_PATH` constant
+  (`/admin/security/totp-setup`) and a new branch right after the
+  existing `/superAdmin` and `/admin` role-mismatch checks: if the
+  pathname starts with `/admin` or `/superAdmin`, isn't the setup
+  page itself, the role is `admin`/`superAdmin`, and
+  `isTotpEnrolled()` is false, redirect to `TOTP_SETUP_PATH`. The
+  setup page is explicitly excluded from its own check, so an
+  unenrolled admin can still reach it to enroll.
+- Verified no infinite-loop risk: `TOTP_SETUP_PATH` is checked with
+  strict equality before the redirect fires.
+- task-47 (2FA/TOTP enrollment) is now fully closed — all 6 parts
+  done.

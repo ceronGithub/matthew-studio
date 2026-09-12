@@ -49,6 +49,15 @@
  * or any other buyer page. /auth/register/recovery-setup itself is
  * under the /auth/* matcher, not /buyer/*, so it is never caught by
  * its own gate.
+ *
+ * TOTP Setup Gate (super_admin_account_specification.md Section 9.1,
+ * task-47, part 6 of 6) runs right after the admin/superAdmin role
+ * checks, ahead of letting any /admin/* or /superAdmin/* request
+ * through: an admin/superAdmin whose AdminTotpCredential.enabled flag
+ * is still false is redirected to /admin/security/totp-setup instead
+ * of reaching their dashboard or any other admin/superAdmin page. The
+ * enrollment page itself is excluded from this redirect so it never
+ * loops back on itself.
  */
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
@@ -59,12 +68,17 @@ import { generateDeviceFingerprint } from "@/lib/deviceFingerprint";
 import { checkDeviceBan } from "@/lib/gatekeeper";
 import { validateSlugActive } from "@/lib/vaultHelpers";
 import { isRecoverySetupComplete } from "@/lib/recoverySetup";
+import { isTotpEnrolled } from "@/lib/totpSetup";
 
 // Matches /superAdmin/vault/<slug> or /admin/vault/<slug> and captures
 // the route's role segment plus the AdminSession id carried in the
 // URL. Vault pages (task-32) are session-scoped per Rule 47.2 — the
 // slug segment IS the AdminSession row's id, not the raw slug string.
 const VAULT_ROUTE_PATTERN = /^\/(superAdmin|admin)\/vault\/([^/]+)$/;
+
+// The TOTP enrollment page itself must never be caught by its own
+// gate below, or an unenrolled admin could never reach it to enroll.
+const TOTP_SETUP_PATH = "/admin/security/totp-setup";
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -147,6 +161,18 @@ export async function middleware(request: NextRequest) {
     response = redirectToLogin(request, pathname);
   } else if (pathname.startsWith("/admin") && role !== "admin" && role !== "superAdmin") {
     response = redirectToLogin(request, pathname);
+  } else if (
+    (pathname.startsWith("/admin") || pathname.startsWith("/superAdmin")) &&
+    pathname !== TOTP_SETUP_PATH &&
+    (role === "admin" || role === "superAdmin") &&
+    !(await isTotpEnrolled(data.user?.id ?? null))
+  ) {
+    // Admin/superAdmin is authenticated (role checks above already
+    // passed) but hasn't enrolled in TOTP yet — blocked from every
+    // /admin/* and /superAdmin/* page until AdminTotpCredential.enabled
+    // is true. The setup page itself (TOTP_SETUP_PATH) is excluded
+    // above so it never redirects to itself.
+    response = NextResponse.redirect(new URL(TOTP_SETUP_PATH, request.url));
   } else if (pathname === "/auth/login" && role) {
     // Already signed in and hitting the login page — send them to their
     // own dashboard instead of showing the form again. Buyer, admin, and

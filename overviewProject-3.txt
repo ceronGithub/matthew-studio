@@ -430,3 +430,24 @@ file holds change-log entries only.
   place same turn per Rule 16.1/49.1: task-47-ui-totp-login-step
   flipped to [DONE], NEXT-UP pointer now points to
   task-47-totp-setup-gate (final part, 6 of 6).
+
+[2026-09-12] Closed task-47-totp-setup-gate — final part (6 of 6) of
+  task-47 (2FA/TOTP enrollment). New lib/totpSetup.ts (isTotpEnrolled(),
+  read-only AdminTotpCredential.enabled lookup, fails open on DB error —
+  same convention as lib/recoverySetup.ts). New branch in middleware.ts,
+  right after the admin/superAdmin role checks: redirects to
+  /admin/security/totp-setup whenever an authenticated admin/superAdmin
+  hasn't enabled TOTP, excluding the setup page itself so it never
+  redirect-loops. task-47 is now fully [DONE] (all 6 micro-tasks
+  closed); docs/taskPlan.md's parent line auto-flipped per Rule 6.
+  `npx tsc --noEmit`: zero new errors from the 2 touched files — same
+  pre-existing ungenerated-Prisma-client errors as prior entries
+  (binaries.prisma.sh still blocked in this sandbox; run
+  npx prisma generate locally, no db push needed — AdminTotpCredential
+  already exists in prisma/schema.prisma from task-47-schema-totp).
+  docs/taskPlan.md and overviewProject.txt's Section 5C updated in
+  place same turn per Rule 16.1/49.1: task-47 parent line and the
+  setup-gate child line both flipped to [DONE]; NEXT-UP pointer now
+  points to task-48+ (Phases 3+ — admin management, vault, buyer
+  management), which needs its own Rule 4 micro-task breakdown before
+  building.

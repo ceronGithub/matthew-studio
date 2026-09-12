@@ -1,9 +1,11 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-47-totp-setup-gate — middleware forced-enrollment
-redirect, part 6 of 6 (final part) for task-47 (2FA/TOTP enrollment).
-task-47-ui-totp-login-step closed 2026-09-12 — see
-docs/tasks/task-47-ui-totp-login-step.md.
+**NEXT UP:** task-48+ — Phases 3+: admin management, vault, buyer
+management. task-47 (2FA/TOTP enrollment, all 6 parts) is now fully
+[DONE] — task-47-totp-setup-gate closed 2026-09-12, see
+docs/tasks/task-47-totp-setup-gate.md. task-48+ needs its own Rule 4
+micro-task breakdown before building (not yet split — scope was
+pending on task-47's closure, which just happened).
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -376,10 +378,10 @@ see Section 5C / 8 in that file.
       docs/tasks/task-46-account-activity-page.md.
 - [DONE] task-33 (shared, see Phase 4) — Gatekeeper/device-bans page (Section
       3's note bundling gatekeeper_specification.md into this phase)
-- [ ] task-47 — Phase 1: 2FA/TOTP enrollment (flagged as missing even though
-      later phases are already built — not blocking, but should not be
-      skipped indefinitely). Broken into 6 micro-tasks 2026-09-08 (Rule 49
-      Step 4 — touches 4+ layers): see docs/tasks/task-47-*.md.
+- [DONE] task-47 — Phase 1: 2FA/TOTP enrollment. Broken into 6 micro-tasks
+      2026-09-08 (Rule 49 Step 4 — touches 4+ layers): see
+      docs/tasks/task-47-*.md. All 6 parts closed 2026-09-12 (Rule 6
+      parent auto-sync — flipped the same turn the last child closed).
       - [DONE] task-47-schema-totp — AdminTotpCredential model + otplib/qrcode deps
       - [DONE] task-47-api-totp-enroll — enrollment API (generate + verify) —
             built 2026-09-08 at app/api/auth/totp/enroll/route.ts (not
@@ -403,7 +405,13 @@ see Section 5C / 8 in that file.
             components/auth/TotpLoginStep.tsx (new) when the login
             response signals totpRequired — see
             docs/tasks/task-47-ui-totp-login-step.md
-      - [ ] task-47-totp-setup-gate — middleware forced-enrollment redirect
+      - [DONE] task-47-totp-setup-gate — middleware forced-enrollment redirect,
+            built 2026-09-12: new `lib/totpSetup.ts` (`isTotpEnrolled()`,
+            fail-open on DB error, mirrors lib/recoverySetup.ts) + new
+            branch in middleware.ts, right after the admin/superAdmin
+            role checks, redirecting to /admin/security/totp-setup when
+            AdminTotpCredential.enabled is false — see
+            docs/tasks/task-47-totp-setup-gate.md
 - [ ] task-48+ — Phases 3+: admin management, vault, buyer management
       (break down further once task-47 scope is confirmed)
 

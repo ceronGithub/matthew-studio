@@ -613,7 +613,7 @@ means testing against fixtures instead of the real flow)
          Section 3.6) and task-45/task-46 (Super-Admin Security Logs
          + Account Activity pages) are now all [DONE] for this
          internal phase; task-47 (2FA/TOTP enrollment) is next.
-       - Phase 1 (2FA/TOTP enrollment) [~] in progress — broken into 6
+       - Phase 1 (2FA/TOTP enrollment) [DONE] — broken into 6
          micro-tasks 2026-09-08 (task-47-schema-totp through
          task-47-totp-setup-gate, see docs/tasks/task-47-*.md).
          task-47-schema-totp [DONE]: AdminTotpCredential model +
@@ -641,10 +641,18 @@ means testing against fixtures instead of the real flow)
          responds with totpRequired, submitting the code + pendingToken
          to POST /api/auth/totp/verify-login and routing on success —
          see docs/tasks/task-47-ui-totp-login-step.md.
-         Remaining 1 micro-task (setup gate) not started; not blocking,
-         just noting progress.
+         task-47-totp-setup-gate [DONE] 2026-09-12: middleware forced-
+         enrollment redirect — new lib/totpSetup.ts (isTotpEnrolled(),
+         fail-open on DB error, mirrors lib/recoverySetup.ts) + new
+         branch in middleware.ts right after the admin/superAdmin role
+         checks, redirecting to /admin/security/totp-setup whenever
+         AdminTotpCredential.enabled is false; the setup page itself is
+         excluded from the redirect so it never loops — see docs/tasks/
+         task-47-totp-setup-gate.md. task-47 is now fully [DONE], all
+         6 parts closed.
        - Phases 3+ (admin management, vault, buyer management, etc.)
-         not started.
+         not started — needs its own Rule 4 micro-task breakdown before
+         building (task-48+, see docs/taskPlan.md's NEXT-UP pointer).
 
 PHASE 4 — SECURITY & ACCESS HARDENING (independent of commerce;
 sequenced after core buyer flow so login/vault hardening doesn't
