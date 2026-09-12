@@ -532,3 +532,28 @@ file holds change-log entries only.
   by the binaries.prisma.sh sandbox restriction). docs/taskPlan.md and
   overviewProject.txt's Section 5C updated in place same turn; NEXT-UP
   now points to task-97.
+
+[2026-09-13] Built task-97 (create-admin form page UI, Section 3.2.2):
+  app/superAdmin/admin-management/create/page.tsx (Server Component
+  shell) + components/admin/CreateAdminForm.tsx (Full Name / Email /
+  Section 4.1 permission checkboxes) + lib/hooks/useCreateAdminForm.ts
+  (owns form state and the POST to task-99's existing
+  /api/admin/create-admin route) + app/styles/
+  adminManagementCreate.css. Same plain useState + validate() pattern
+  as every other form in the codebase -- no react-hook-form/zod
+  dependency introduced, consistent with AdminProductForm.tsx's own
+  documented reasoning. A 409 email-conflict response surfaces as an
+  inline error on the Email field only, never a top-of-form banner,
+  per task-97's scope note. On success: a toast naming the recipient
+  email, then a 900ms-delayed redirect to
+  /superAdmin/admin-management/[newAdminId] (same precedent as
+  useBuyerOrderDetail.ts's reorder() flow) -- that destination route
+  is task-98, not yet built. In passing, fixed a gap from task-96:
+  its own scope called for a "Create Admin" toolbar button linking
+  here, which was missed in that task's initial build -- added now to
+  components/admin/AdminManagementList.tsx (+ its CSS) since task-97
+  exists to link to. npx tsc --noEmit and eslint both run for
+  validation -- only the same pre-existing, unrelated Prisma-client
+  errors remain (still blocked by the binaries.prisma.sh sandbox
+  restriction). docs/taskPlan.md and overviewProject.txt's Section 5C
+  updated in place same turn; NEXT-UP now points to task-98.

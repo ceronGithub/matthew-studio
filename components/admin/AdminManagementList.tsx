@@ -15,9 +15,11 @@
  * this one's Section 3.2.1 does not.
  *
  * "View Details" and "Edit" link to /superAdmin/admin-management/
- * [adminId] and its /edit sub-route (task-97/98 — routes exist here
- * so this page ships ready for them, even before those pages are
- * built, same precedent as AdminUsersList's link to task-88).
+ * [adminId] and its /edit sub-route (task-98 — not yet built, same
+ * precedent as AdminUsersList's link to task-88). The toolbar's
+ * "Create Admin" button links to task-97's page (added once that
+ * task closed — task-96's own scope called for this link but it was
+ * missed in the initial build).
  *
  * Reuses the shared ConfirmationModal (Rule 34.4) before deactivating/
  * reactivating and before resetting a password, and the same modal's
@@ -35,7 +37,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Download, UserCog } from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, UserCog, UserPlus } from "lucide-react";
 import { useAdminManagement, type AdminAccountStatus } from "@/lib/hooks/useAdminManagement";
 import { useToast } from "@/components/shared/useToast";
 import ToastStack from "@/components/shared/ToastStack";
@@ -182,10 +184,16 @@ export default function AdminManagementList() {
           )}
         </div>
 
-        <button type="button" className="adminManagementExportButton" onClick={handleExport} disabled={isExporting}>
-          <Download size={16} />
-          {isExporting ? "Exporting…" : "Export CSV"}
-        </button>
+        <div className="adminManagementToolbarActions">
+          <Link href="/superAdmin/admin-management/create" className="adminManagementCreateButton">
+            <UserPlus size={16} />
+            Create Admin
+          </Link>
+          <button type="button" className="adminManagementExportButton" onClick={handleExport} disabled={isExporting}>
+            <Download size={16} />
+            {isExporting ? "Exporting…" : "Export CSV"}
+          </button>
+        </div>
       </div>
 
       {isLoading ? (

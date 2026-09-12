@@ -1,11 +1,10 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-97 — UI: `/superAdmin/admin-management/create` page —
-form w/ permission checkboxes (Section 3.2.2), Phase 3 — Admin
-Management, part 5 of 6. task-96 closed this pass — built the list
-page (DataTable, filters, CSV export, row actions) and extended the
-shared ConfirmationModal with an optional confirmDelaySeconds prop for
-Delete's 5-second delay; see NOTES below.
+**NEXT UP:** task-98 — UI: `/superAdmin/admin-management/[adminId]/edit`
+page — view + edit (Section 3.2.3), Phase 3 — Admin Management, part 6
+of 6 (last task in this phase). task-97 closed this pass — built the
+create-admin form page and, in passing, fixed task-96's own missed
+"Create Admin" toolbar button; see NOTES below.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -482,10 +481,27 @@ see Section 5C / 8 in that file.
             (backward-compatible, all 15 prior callers unaffected) for
             Delete's required 5-second delay. Status shown as a colored
             dot + label rather than the spec's literal emoji glyphs, per
-            Rule 17.3. View/Edit link to task-97/98's not-yet-built
-            routes, same precedent as AdminUsersList → task-88.
-      - [ ] task-97 — UI: `/superAdmin/admin-management/create` page —
-            form w/ permission checkboxes (Section 3.2.2)
+            Rule 17.3. View/Edit link to task-98's not-yet-built route,
+            same precedent as AdminUsersList → task-88. CORRECTION
+            (2026-09-13, made while closing task-97): task-96's own
+            scope required a "Create Admin" toolbar button linking to
+            this task's page — missed in the initial build, added now
+            that task-97 exists (see task-97's own entry below).
+      - [DONE] task-97 — UI: `/superAdmin/admin-management/create` page —
+            form w/ permission checkboxes (Section 3.2.2). Built:
+            lib/hooks/useCreateAdminForm.ts,
+            components/admin/CreateAdminForm.tsx,
+            app/superAdmin/admin-management/create/page.tsx,
+            app/styles/adminManagementCreate.css. Plain useState +
+            validate() pattern (no react-hook-form/zod anywhere in this
+            codebase — see AdminProductForm.tsx's own header note).
+            409 email-conflict surfaces as an inline Email field error,
+            never a banner. On success: toast + a 900ms-delayed
+            redirect to /superAdmin/admin-management/[newAdminId]
+            (same precedent as useBuyerOrderDetail.ts's reorder()).
+            Also wired AdminManagementList.tsx's missing "Create Admin"
+            toolbar button (task-96's own scope, corrected above) to
+            this page.
       - [ ] task-98 — UI: `/superAdmin/admin-management/[adminId]/edit`
             page — view + edit (Section 3.2.3)
   - [ ] Phase 4 (remainder) — Backups (Section 3.5, Rule 40) — vault

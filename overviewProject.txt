@@ -701,9 +701,23 @@ means testing against fixtures instead of the real flow)
          5-second-delay requirement. Status shown as a colored dot +
          label (green/amber/red) rather than the spec's literal
          emoji glyphs, per Rule 17.3 — same Active/Inactive/Locked
-         meaning. View/Edit row actions link to task-97/98's
-         not-yet-built routes (same precedent as AdminUsersList's
-         link to task-88).
+         meaning. View/Edit row actions link to task-98's
+         not-yet-built route (same precedent as AdminUsersList's
+         link to task-88). Its "Create Admin" toolbar button (task-
+         96's own scope) was missed in the initial build and added
+         2026-09-13 once task-97 existed to link to.
+         [DONE] task-97 (create-admin form page UI) built
+         2026-09-13 — app/superAdmin/admin-management/create/
+         page.tsx + components/admin/CreateAdminForm.tsx +
+         lib/hooks/useCreateAdminForm.ts + app/styles/
+         adminManagementCreate.css, wired to task-99's existing
+         POST /api/admin/create-admin route. Same plain useState +
+         validate() pattern as every other form in the codebase (no
+         react-hook-form/zod dependency introduced). A 409 email
+         conflict surfaces as an inline Email field error, never a
+         banner. On success: toast + a 900ms-delayed redirect to
+         /superAdmin/admin-management/[newAdminId] (task-98's
+         not-yet-built detail route).
          Phases 4 (remainder —
          Backups/BackupLog/runbooks), 5 (Buyer Management, distinct
          from admin_account_specification.md's own task-84-88 buyer
