@@ -662,6 +662,16 @@ means testing against fixtures instead of the real flow)
          UI task; task-94 through task-98 unaffected (see
          docs/taskPlan.md's NOTES). [DONE] task-99 (create-admin API)
          built 2026-09-12 — app/api/admin/create-admin/route.ts.
+         [DONE] task-94 (list + detail API) built 2026-09-12 —
+         app/api/superadmin/admin-management/route.ts (list, filters,
+         CSV export) + app/api/superadmin/admin-management/[adminId]/
+         route.ts (detail), plus lib/getAdminAuthUser.ts and
+         lib/adminAccountStatus.ts. Fixed a task-99 gap in passing:
+         createdBy is now persisted in user_metadata at creation time
+         (was only ever returned in the create response, never
+         stored). "Locked" status is display-only pending a separate,
+         not-yet-numbered task to actually enforce Section 5.3's
+         5-failure/1-hour lockout in app/api/auth/login/route.ts.
          Phases 4 (remainder —
          Backups/BackupLog/runbooks), 5 (Buyer Management, distinct
          from admin_account_specification.md's own task-84-88 buyer

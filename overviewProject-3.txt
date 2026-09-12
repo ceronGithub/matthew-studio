@@ -483,3 +483,16 @@ file holds change-log entries only.
   and logs admin_created to SecurityLog. docs/taskPlan.md and this
   file's Section 5C updated in place same turn; NEXT-UP now points to
   task-94.
+
+[2026-09-12] Built task-94: GET /api/superadmin/admin-management
+  (list — paginated, filterable by status/date/search, CSV export) and
+  GET /api/superadmin/admin-management/[adminId] (detail — email,
+  name, role, created date + creator email, last login with IP/city,
+  status, permissions). New shared helpers: lib/getAdminAuthUser.ts
+  (role="admin" lookup) and lib/adminAccountStatus.ts (active/
+  inactive/locked, derived from Supabase banned_until + SecurityLog
+  login_failed counts). In passing, fixed task-99's create-admin route
+  to persist createdBy in user_metadata (was only ever returned in the
+  create response, never stored). docs/taskPlan.md and
+  overviewProject.txt's Section 5C updated in place same turn;
+  NEXT-UP now points to task-95.

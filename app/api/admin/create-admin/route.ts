@@ -148,7 +148,11 @@ export async function POST(request: Request) {
       email,
       password: tempPassword,
       email_confirm: true,
-      user_metadata: { role: "admin", permissions, fullName },
+      // createdBy persisted so task-94's detail endpoint can show the
+      // creator's email (this route's own JSON response already
+      // returned createdBy below, but never stored it — a gap task-94
+      // surfaced; existing admins created before this fix show null).
+      user_metadata: { role: "admin", permissions, fullName, createdBy: admin.email },
     });
 
     if (createError || !created.user) {

@@ -1,12 +1,12 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-94 — API: GET /api/superadmin/admin-management (list)
-+ GET /api/superadmin/admin-management/[adminId] (detail) (Section
-3.2.1/3.2.3 of super_admin_account_specification.md, Phase 3 — Admin
-Management, part 2 of 6). The create-admin task closed this pass —
-built app/api/admin/create-admin/route.ts — and was renumbered from
-task-93 to task-99 after a numbering collision was found (task-93 was
-already used for the admin analytics UI); see NOTES below.
+**NEXT UP:** task-95 — API: admin actions — edit (name/permissions),
+deactivate/reactivate, reset-password, delete (Section 3.2.1/3.2.3,
+5-second-delay confirmation on delete per Rule 34.4), Phase 3 — Admin
+Management, part 3 of 6. task-94 closed this pass — built
+app/api/superadmin/admin-management/route.ts (list + CSV) and
+app/api/superadmin/admin-management/[adminId]/route.ts (detail); see
+NOTES below.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -437,9 +437,27 @@ see Section 5C / 8 in that file.
             EMAILJS_TEMPLATE_ID_ADMIN_ACCOUNT_CREATED — needs to be
             created in the EmailJS dashboard and added to
             .env/.env.local.
-      - [ ] task-94 — API: GET /api/superadmin/admin-management (list,
-            paginated/filtered) + GET /api/superadmin/admin-management/
-            [adminId] (detail) — Section 3.2.1/3.2.3
+      - [DONE] task-94 — API: GET /api/superadmin/admin-management
+            (list, paginated/filtered, CSV export) + GET
+            /api/superadmin/admin-management/[adminId] (detail) —
+            Section 3.2.1/3.2.3. New: lib/getAdminAuthUser.ts (role-
+            "admin" lookup, mirrors lib/getBuyerAuthUser.ts) and
+            lib/adminAccountStatus.ts (active/inactive/locked). Built
+            2026-09-12, see docs/tasks/task-94-api-admin-management-
+            list-detail.md. GAP FOUND & FIXED: task-99's create-admin
+            route never persisted createdBy in user_metadata even
+            though its own JSON response already returned it — added
+            createdBy: admin.email to that route's user_metadata so
+            task-94's detail endpoint has real data going forward;
+            admins created before this fix show createdBy: null.
+            GAP FOUND, NOT FIXED (out of scope — read-only task):
+            Section 5.3's "locked after 5 failures, 1-hour auto-
+            recovery" has no stored field and app/api/auth/login/
+            route.ts does not actually block logins once reached —
+            "Locked" status here is display-only, computed live from
+            SecurityLog login_failed counts (lib/adminAccountStatus.ts
+            header has the full note). Enforcing the actual block is a
+            separate task, not yet numbered.
       - [ ] task-95 — API: admin actions — edit (name/permissions),
             deactivate/reactivate, reset-password, delete (Section
             3.2.1/3.2.3, 5-second-delay confirmation on delete per
