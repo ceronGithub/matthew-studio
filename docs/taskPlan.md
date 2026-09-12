@@ -1,10 +1,10 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-106 — api-buyer-delete-action (no dependency — 
-extends the existing actions route; unblocks task-108).
+**NEXT UP:** task-107 — ui-buyer-management-list (no dependency —
+reuses the existing list API; task-106 is now [DONE]).
 Phase 4 is fully [DONE] (task-100 through task-105 all closed). Phase
-5 is now split into 3 micro-tasks (task-106/107/108) this pass — see
-the Buyer Management line below.
+5 is now split into 3 micro-tasks (task-106/107/108) — task-106
+closed this pass, task-107/108 remain.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -614,7 +614,7 @@ see Section 5C / 8 in that file.
         super-admin's own UI route tree are missing. Split into 3
         micro-tasks per Rule 49 Step 4 (spans API + UI, 3+ distinct
         sub-features: list, detail, delete):
-        - [ ] task-106 — API: add "delete" action to the existing
+        - [DONE] task-106 — API: add "delete" action to the existing
               `app/api/admin/users/[buyerId]/actions/route.ts`
               (extends, doesn't duplicate — Supabase Auth
               deleteUser + soft-deletes owned Orders per Rule 6).

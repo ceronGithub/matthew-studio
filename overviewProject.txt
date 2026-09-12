@@ -743,11 +743,22 @@ means testing against fixtures instead of the real flow)
          post-create redirect corrected from `[adminId]` to
          `[adminId]/edit`. Phase 3 — Admin Management is now fully
          [DONE], all 6 parts closed (task-99, 94, 95, 96, 97, 98).
-         Phases 4 (remainder — Backups/BackupLog/runbooks), 5 (Buyer
-         Management, distinct from admin_account_specification.md's
-         own task-84-88 buyer list), 6-10 not yet split — see
-         docs/taskPlan.md's task-48+ section for the full per-phase
-         verification notes.
+         Phase 4 (Backups/BackupLog/runbooks) is now fully [DONE] —
+         see item 9 above (task-100-105). Phase 5 (Buyer Management,
+         distinct from admin_account_specification.md's own task-
+         84-88 buyer list) split into 3 micro-tasks 2026-09-13:
+         [DONE] task-106 — API: added a "delete" case to the existing
+         app/api/admin/users/[buyerId]/actions/route.ts (extends,
+         doesn't duplicate) — soft-deletes the buyer's owned Order
+         rows first (deletedAt, Rule 6) then permanently removes the
+         Supabase Auth user via supabaseAdminClient.auth.admin.
+         deleteUser(). Not yet build-verified in this sandbox (no
+         node_modules/tsc available) — signatures match the five
+         existing sibling handlers in the same file. task-107 (list
+         page UI) and task-108 (detail page UI + delete button) are
+         next; see docs/tasks/task-106/107/108-*.md. Phases 6-10 not
+         yet split — see docs/taskPlan.md's task-48+ section for the
+         full per-phase verification notes.
 
 PHASE 4 — SECURITY & ACCESS HARDENING (independent of commerce;
 sequenced after core buyer flow so login/vault hardening doesn't

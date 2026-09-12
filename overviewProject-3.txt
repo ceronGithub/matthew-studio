@@ -690,3 +690,20 @@ file holds change-log entries only.
   prior entries; run npx prisma generate locally before deploying).
   docs/taskPlan.md and overviewProject.txt Section 5C updated in
   place same turn; NEXT-UP now points to Phase 5 — Buyer Management.
+
+[2026-09-13] task-106 built: added a "delete" case to the existing
+  app/api/admin/users/[buyerId]/actions/route.ts (extends, doesn't
+  duplicate — same grouped-route precedent as its five siblings).
+  Soft-deletes the buyer's owned Order rows first (deletedAt set,
+  Rule 6 Soft Delete Standard, consistent with every other Order
+  soft-delete site in the repo) so no Order is ever left pointing at
+  a userId that no longer exists, then permanently removes the
+  Supabase Auth user via supabaseAdminClient.auth.admin.deleteUser().
+  Reuses the route's existing generic post-switch SecurityLog
+  admin_action logging — no new logging code needed. No schema
+  change (Order.deletedAt already existed). Not build-verified with
+  npx tsc --noEmit in this sandbox (no node_modules present to
+  install/run it against) — flagged rather than claimed clean;
+  signatures match the five existing sibling handlers exactly.
+  docs/taskPlan.md updated in place same turn (task-106 -> [DONE],
+  NEXT-UP now points to task-107 — buyer-management list page UI).

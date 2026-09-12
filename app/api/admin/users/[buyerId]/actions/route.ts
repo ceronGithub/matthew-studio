@@ -32,8 +32,16 @@
  *   - "add_note" — appends an internalNotes entry to task-83's
  *     BuyerAdminMeta (upserted — a buyer may not have a row yet if
  *     no note has ever been added).
+ *   - "delete" — task-106: permanently removes the buyer's Supabase
+ *     Auth user. Their Order rows are soft-deleted first (deletedAt
+ *     set, never physically removed) per Rule 6's Soft Delete
+ *     Standard, so order history/revenue reporting isn't corrupted
+ *     by a vanished userId foreign key. The calling UI (task-108)
+ *     is responsible for the ConfirmationModal (Rule 34.4) — this
+ *     route gates on nothing beyond the existing getSessionAdmin()
+ *     check, same as its five siblings.
  *
- * All five log a SecurityLog `admin_action` event (Rule 38).
+ * All six log a SecurityLog `admin_action` event (Rule 38).
  * Buyer lookup rejects any id whose role isn't "buyer" (an admin/
  * super-admin id typed into the URL 404s instead of being actioned
  * on) — lib/getBuyerAuthUser.ts, shared with task-85's detail route.
@@ -199,6 +207,30 @@ async function handleAddNote(buyerId: string, adminId: string, body: { note?: st
   });
 }
 
+/**
+ * handleDelete
+ * Soft-deletes every Order owned by this buyer (deletedAt set, never
+ * physically removed — Rule 6) BEFORE the Auth user is permanently
+ * deleted, so no Order is ever left pointing at a userId that no
+ * longer exists in Supabase Auth. Order deletion runs first and is
+ * awaited so a failure here aborts before the irreversible Auth
+ * deletion happens.
+ */
+async function handleDelete(buyerId: string) {
+  await prisma.order.updateMany({
+    where: { userId: buyerId, deletedAt: null },
+    data: { deletedAt: new Date() },
+  });
+
+  await supabaseAdminClient.auth.admin.deleteUser(buyerId);
+
+  return NextResponse.json({
+    success: true,
+    data: { deleted: true },
+    message: "Buyer account deleted.",
+  });
+}
+
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ buyerId: string }> }
@@ -242,6 +274,9 @@ export async function POST(
         break;
       case "add_note":
         result = await handleAddNote(buyerId, admin.id, body);
+        break;
+      case "delete":
+        result = await handleDelete(buyerId);
         break;
       default:
         return NextResponse.json(
