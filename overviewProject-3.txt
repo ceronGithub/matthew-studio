@@ -473,3 +473,13 @@ file holds change-log entries only.
   turn — planning/reconciliation only. docs/taskPlan.md and
   overviewProject.txt's Section 5C updated in place same turn per
   Rule 16.1/49.1; NEXT-UP now points to task-93.
+
+[2026-09-12] Built task-99 (renumbered from task-93 after a numbering
+  collision was found with the already-done admin analytics UI task):
+  POST /api/admin/create-admin — super-admin-only route that creates a
+  new admin Supabase Auth user (role=admin + permissions in
+  user_metadata), generates a 16-char temp password, emails it via a
+  new EmailJS template (EMAILJS_TEMPLATE_ID_ADMIN_ACCOUNT_CREATED),
+  and logs admin_created to SecurityLog. docs/taskPlan.md and this
+  file's Section 5C updated in place same turn; NEXT-UP now points to
+  task-94.

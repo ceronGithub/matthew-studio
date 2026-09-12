@@ -1,14 +1,12 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-93 — API: POST /api/admin/create-admin (Section 3.2.2
-of super_admin_account_specification.md, Phase 3 — Admin Management,
-part 1 of 6). The old "task-48+" placeholder was corrected this pass:
-verified against the spec's own Phase summary table and actual code
-that vault is already [DONE] (it doesn't belong in this remaining
-list) and that Admin Management (Section 3.2, `/superAdmin/
-admin-management/*`) genuinely has zero code — `find app -ipath
-"*admin-management*"` returns no matches. Split into 6 micro-tasks
-(task-93 through task-98) per Rule 4.
+**NEXT UP:** task-94 — API: GET /api/superadmin/admin-management (list)
++ GET /api/superadmin/admin-management/[adminId] (detail) (Section
+3.2.1/3.2.3 of super_admin_account_specification.md, Phase 3 — Admin
+Management, part 2 of 6). The create-admin task closed this pass —
+built app/api/admin/create-admin/route.ts — and was renumbered from
+task-93 to task-99 after a numbering collision was found (task-93 was
+already used for the admin analytics UI); see NOTES below.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -425,10 +423,20 @@ see Section 5C / 8 in that file.
         "*admin-management*"` returns no matches. Broken into 6
         micro-tasks (Rule 49 Step 4 — spans API + UI, 3+ distinct
         sub-features: list, create, edit/actions):
-      - [ ] task-93 — API: POST /api/admin/create-admin (Section 3.2.2
+      - [DONE] task-99 — API: POST /api/admin/create-admin (Section 3.2.2
             — create Supabase user w/ role=admin + permissions in
             user_metadata, temp password, EmailJS credentials email,
-            `admin_created` SecurityLog event)
+            `admin_created` SecurityLog event). Renumbered from task-93
+            to task-99 this pass — task-93 was already used and closed
+            2026-09-08 for the admin analytics UI (see item 4/task-65's
+            split above); the Phase 3 Admin Management split that
+            minted 93-98 didn't check against that prior use. task-94
+            through task-98 below are unaffected (checked, no
+            collision). Built 2026-09-12, see
+            docs/tasks/task-99-api-create-admin.md. New env var:
+            EMAILJS_TEMPLATE_ID_ADMIN_ACCOUNT_CREATED — needs to be
+            created in the EmailJS dashboard and added to
+            .env/.env.local.
       - [ ] task-94 — API: GET /api/superadmin/admin-management (list,
             paginated/filtered) + GET /api/superadmin/admin-management/
             [adminId] (detail) — Section 3.2.1/3.2.3
@@ -533,6 +541,20 @@ see Section 5C / 8 in that file.
 
 ## NOTES
 
+- **RESOLVED — task-93 numbering collision (found + fixed 2026-09-12):**
+  `task-93` was used twice — once for the (DONE, closed 2026-09-08)
+  admin analytics UI (`app/admin/analytics/page.tsx`, under item
+  4/task-65's split), and again when the Phase 3 Admin Management
+  split minted task-93 through task-98 this pass without checking
+  against that prior use. Reconciliation: grepped `task-93` across
+  this file before renumbering — task-94 through task-98 came back
+  clean (no collision), so only the create-admin task needed to move.
+  Renumbered the create-admin task to **task-99** (next free number
+  after the 93-98 range) and renamed
+  `docs/tasks/task-93-api-create-admin.md` →
+  `docs/tasks/task-99-api-create-admin.md`. Do not reuse 93 for
+  anything else — it stays permanently attached to the analytics UI
+  task in this file's history.
 - **RESOLVED — task-04/10 and task-19/23 traceability gap (found +
   fixed 2026-09-07, Rule 49.1 reconciliation):** `docs/tasks/task-04`
   through `task-10` (7 files) and `task-19` through `task-23` (5

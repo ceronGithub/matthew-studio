@@ -656,8 +656,13 @@ means testing against fixtures instead of the real flow)
          already [DONE] (see item 6) and doesn't belong here. Verified
          Phase 3 (Admin Management, /superAdmin/admin-management/*)
          has zero code (`find app -ipath "*admin-management*"` — no
-         matches) and is now split into 6 micro-tasks (task-93 through
-         task-98, see docs/taskPlan.md). Phases 4 (remainder —
+         matches) and is split into 6 micro-tasks — the create-admin
+         one renumbered task-93 -> task-99 on 2026-09-12 after a
+         collision was found with the (already-done) admin analytics
+         UI task; task-94 through task-98 unaffected (see
+         docs/taskPlan.md's NOTES). [DONE] task-99 (create-admin API)
+         built 2026-09-12 — app/api/admin/create-admin/route.ts.
+         Phases 4 (remainder —
          Backups/BackupLog/runbooks), 5 (Buyer Management, distinct
          from admin_account_specification.md's own task-84-88 buyer
          list), 6-10 not yet split — see docs/taskPlan.md's task-48+

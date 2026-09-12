@@ -1,4 +1,4 @@
-# task-93 — api-create-admin — POST /api/admin/create-admin
+# task-99 — api-create-admin — POST /api/admin/create-admin
 
 **Fulfills:** super_admin_account_specification.md Section 3.2.2
 (Create Admin Account)
