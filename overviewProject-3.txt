@@ -610,3 +610,13 @@ file holds change-log entries only.
   task-105's filterable/paginated admin table. docs/taskPlan.md and
   overviewProject.txt Section 5C updated in place same turn; NEXT-UP
   now points to task-101 (services/googleDrive.ts).
+
+[2026-09-13] Built task-101 -- services/googleDrive.ts added
+  (getDriveClient/uploadToDrive/deleteFromDrive), following the exact
+  pattern in Rule 35.7. Requires the googleapis package and three new
+  env keys (GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_SERVICE_ACCOUNT_
+  PRIVATE_KEY, GOOGLE_DRIVE_FOLDER_ID) not yet installed/set locally.
+  services/r2.ts needed no changes -- its existing uploadToR2() is
+  reused as-is by task-102. docs/taskPlan.md and overviewProject.txt
+  Section 5C updated in place same turn; NEXT-UP now points to
+  task-102 (scripts/runBackup.js).

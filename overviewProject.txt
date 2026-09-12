@@ -960,8 +960,8 @@ block revenue-generating pages from shipping first)
        entirely). Split into 6 micro-tasks:
        [DONE] task-100 -- schema: BackupLog model, added with
              @@index([status]) and @@index([startedAt])
-       [ ] task-101 -- services/googleDrive.ts upload helper
-             (services/r2.ts already exists, reused as-is)
+       [DONE] task-101 -- services/googleDrive.ts upload helper
+             (services/r2.ts already existed, reused as-is)
        [ ] task-102 -- scripts/runBackup.js (pg_dump -> gzip -> R2 +
              Drive, writes BackupLog rows)
        [ ] task-103 -- .github/workflows/database-backup.yml nightly

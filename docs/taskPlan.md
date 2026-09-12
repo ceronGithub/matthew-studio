@@ -1,10 +1,10 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-101 — services-google-drive (Rule 35.7 — no hard
-dependency on task-100, but next in top-to-bottom build order).
+**NEXT UP:** task-102 — script-run-backup (Rule 40.5 — depends on
+task-100 [DONE] and task-101 [DONE], both now satisfied).
 Phase 3 — Admin Management is fully [DONE] (task-98 closed that
-pass, 6 of 6 parts). task-100 (BackupLog schema) is now [DONE] this
-pass — see the Backups line below.
+pass, 6 of 6 parts). task-100 and task-101 are now [DONE] this pass
+— see the Backups line below.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -545,8 +545,12 @@ see Section 5C / 8 in that file.
               @@index([startedAt]) beyond the base Rule 40.4 spec, to
               support task-105's filterable admin table. See
               docs/tasks/task-100-schema-backuplog.md.
-        - [ ] task-101 — services: Google Drive upload helper
-              (`services/r2.ts` already exists and is reused as-is)
+        - [DONE] task-101 — services: Google Drive upload helper.
+              Added services/googleDrive.ts (uploadToDrive/
+              deleteFromDrive); services/r2.ts already existed and
+              needed no changes. Requires `npm install googleapis`
+              (not yet run — see Run in terminal). See
+              docs/tasks/task-101-services-google-drive.md.
         - [ ] task-102 — script: `scripts/runBackup.js`
         - [ ] task-103 — CI: nightly `database-backup.yml` workflow
         - [ ] task-104 — API: `GET /api/superAdmin/backups` (read-only)
