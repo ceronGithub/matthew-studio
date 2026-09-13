@@ -784,3 +784,16 @@ file holds change-log entries only.
   developer, not yet a numbered task. docs/taskPlan.md's NEXT UP
   pointer advanced to task-111; overviewProject.txt's Section 5C
   corrected in place (Rule 16.1).
+
+[2026-09-13] Built task-111: super-admin product approve/reject API.
+  Added PATCH /api/superadmin/products/[productId]/approve and
+  .../reject -- superAdmin-only (getSessionAdmin + role check, same
+  pattern as app/api/superadmin/backups/route.ts), 409 if the product
+  isn't currently pending-review. Approve flips status to published;
+  reject returns it to draft (never deletes). Both log via
+  recordAuditLog() (AuditLog, action "updated", status-only diff) --
+  matches the existing admin product write routes' audit trail rather
+  than adding a SecurityLog/AccountActivityLog path for the same
+  entity. docs/taskPlan.md's NEXT UP pointer advanced to task-112 (the
+  final task in this split -- /superAdmin/products UI);
+  overviewProject.txt's Section 5C corrected in place (Rule 16.1).

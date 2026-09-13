@@ -818,10 +818,22 @@ means testing against fixtures instead of the real flow)
          listings from static data files, never the Product DB table
          — pending-review exclusion has no live storefront query to
          apply to yet; flagged for the developer, not yet a numbered
-         task. Run `npx prisma db push && npx prisma generate` before
-         task-111. Phases 7-10 not yet split — see
-         docs/taskPlan.md's task-48+ section for the full per-phase
-         verification notes.
+         task. [DONE] task-111 built 2026-09-13 —
+         `PATCH /api/superadmin/products/[productId]/approve` and
+         `.../reject`, superAdmin-only (getSessionAdmin + role check,
+         same pattern as app/api/superadmin/backups/route.ts), 409 if
+         the product isn't currently pending-review. Logs via
+         recordAuditLog() (AuditLog, action "updated", status-only
+         diff) — matches the existing admin product write routes'
+         audit trail rather than adding a SecurityLog/
+         AccountActivityLog path for the same entity. `npx tsc
+         --noEmit` shows zero new errors in either new file (same
+         pre-existing Prisma-client-generation errors as prior
+         entries — this sandbox's binaries.prisma.sh access is
+         blocked, confirmed again this pass). Only task-112
+         (`/superAdmin/products` UI) remains in this split. Phases
+         7-10 not yet split — see docs/taskPlan.md's task-48+ section
+         for the full per-phase verification notes.
 
 PHASE 4 — SECURITY & ACCESS HARDENING (independent of commerce;
 sequenced after core buyer flow so login/vault hardening doesn't

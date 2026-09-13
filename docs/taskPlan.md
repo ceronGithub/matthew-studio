@@ -1,9 +1,11 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-111 — API: super-admin approve/reject endpoints for
-products (Phase 6, 3rd of 4-task split).
+**NEXT UP:** task-112 — UI: `/superAdmin/products` page with a
+"Pending Review" filter and approve/reject row actions (Phase 6,
+last of the 4-task split).
 
-task-109 (schema) and task-110 (admin write routes) are now [DONE].
+task-109 (schema), task-110 (admin write routes), and task-111
+(approve/reject API) are now [DONE].
 task-110 turned up two findings — see its entry below: (1) a fixed
 bug — the admin products collection route had no working create/list
 endpoint at all; (2) an unfixed, unscoped gap — the public storefront
@@ -682,10 +684,14 @@ see Section 5C / 8 in that file.
             than this split; **not numbered as a task yet** — flagged
             here for the developer to confirm priority/scope before
             it's added to the plan.
-      - [ ] task-111 — API: super-admin approve/reject endpoints —
+      - [DONE] task-111 — API: super-admin approve/reject endpoints —
             `PATCH /api/superadmin/products/[productId]/approve` and
             `.../reject`, flips status to `published` or back to
-            `draft`, logs the action. Depends on task-109.
+            `draft`, logs the action. Depends on task-109. Built
+            2026-09-13 — logs via `recordAuditLog()` (AuditLog),
+            matching the existing admin product write routes' audit
+            trail rather than introducing a SecurityLog/
+            AccountActivityLog path for the same entity.
       - [ ] task-112 — UI: `/superAdmin/products` page with a
             "Pending Review" filter and approve/reject row actions
             (ConfirmationModal per Rule 34.4 on reject). Depends on
