@@ -862,8 +862,17 @@ means testing against fixtures instead of the real flow)
          Prisma-client-generation errors as prior entries). Phase 6
          (Product & Order Management w/ approval flow) is now fully
          [DONE], all 4 micro-tasks closed (task-109 through 112).
-         Phases 7-10 not yet split — see docs/taskPlan.md's task-48+
-         section for the full per-phase verification notes.
+         Phase 7 (CMS, Announcements, Media Library, Section 3.7/3.9,
+         9.3) audited 2026-09-13: all three Spec-only — no schema, no
+         routes, no wired code (the "announcement" notification-type
+         label in lib/notificationType.ts is cosmetic, not a real
+         feature). Split into 8 micro-tasks: task-113/114/115 (CMS
+         schema/API/UI), task-116/117/118 (Announcements
+         schema/API/UI), task-119/120 (Media Library API/UI — reads
+         the R2 bucket directly via ListObjectsV2Command, no new DB
+         table). See docs/taskPlan.md's task-113+ section for full
+         detail. Phases 8-10 not yet split — see docs/taskPlan.md's
+         task-48+ section for the full per-phase verification notes.
 
 PHASE 4 — SECURITY & ACCESS HARDENING (independent of commerce;
 sequenced after core buyer flow so login/vault hardening doesn't

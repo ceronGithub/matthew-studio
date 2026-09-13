@@ -1,10 +1,10 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** Audit Phase 7 — CMS, Announcements, Media Library
-(Section 3.7/3.9, 9.3) — not yet audited this pass; break into
-micro-tasks once the Layer-3 check is run, same pattern as Phase 6.
-(task-110's collection-route gap — GET/POST /api/admin/products — is
-now actually closed; see its entry below.)
+**NEXT UP:** task-113 — schema: `ContentSection` + `ContentVersion`
+models (CMS, Section 3.7/9.3). Phase 7 audit is done and split into
+8 micro-tasks (task-113 through 120); this is the first, no
+dependency. (task-110's collection-route gap — GET/POST
+/api/admin/products — is now actually closed; see its entry below.)
 
 task-109 through task-112 are now all [DONE] — Phase 6 (Product &
 Order Management w/ approval flow) is fully closed.
@@ -719,8 +719,54 @@ see Section 5C / 8 in that file.
             not a reuse of /api/admin/products — see GAP note on
             task-110 above). Built 2026-09-13, see
             docs/tasks/task-112-ui-superadmin-products-page.md.
-  - [ ] Phase 7 — CMS, Announcements, Media Library (Section 3.7/3.9,
-        9.3) — not yet audited this pass.
+  - [ ] Phase 7 — CMS, Announcements, Media Library (Section 3.7/3.9, 9.3)
+
+        AUDITED 2026-09-13 — Layer-3 verification:
+
+        | Module                      | Spec | Schema | Code Wired | Verdict      |
+        |------------------------------|------|--------|------------|--------------|
+        | CMS / Content Mgmt (3.7)     | ✅   | ❌     | ❌         | Spec only    |
+        | Announcements (3.9)          | ✅   | ❌     | ❌         | Spec only    |
+        | Media Library (9.3)          | ✅   | ❌     | ❌         | Spec only    |
+
+        None of the three exist at all — no `ContentSection`/
+        `Announcement` model in schema.prisma, no `/superAdmin/content`,
+        `/superAdmin/announcements`, or `/superAdmin/media` routes, zero
+        code references beyond a cosmetic `"announcement"` notification-
+        type label in `lib/notificationType.ts` (not a real feature).
+        Split into 8 micro-tasks below, same pattern as Phase 6's
+        task-109 through 112.
+
+      - [ ] task-113 — schema: `ContentSection` + `ContentVersion`
+            models (CMS, Section 3.7 + 9.3's 5-version history).
+            No dependency.
+      - [ ] task-114 — API: content section CRUD — list all sections
+            (tree), get one, PUT (publish, snapshots prior `data` into
+            `ContentVersion`, prunes beyond 5), revert-to-version.
+            Depends on task-113.
+      - [ ] task-115 — UI: `/superAdmin/content` page — section tree
+            (left panel), dynamic form matching the selected section's
+            data shape (right panel), Preview (opens live page),
+            Publish, Revert-to-last-published. Depends on task-114.
+      - [ ] task-116 — schema: `Announcement` model (Section 3.9).
+            No dependency.
+      - [ ] task-117 — API: announcement CRUD — list (paginated),
+            create, edit, duplicate, deactivate early, soft delete
+            (Rule 6). Depends on task-116.
+      - [ ] task-118 — UI: `/superAdmin/announcements` page — list +
+            create/edit form (title, message w/ counter, placement,
+            publish-at, expires-at, status). Depends on task-117.
+      - [ ] task-119 — API: `GET /api/superadmin/media` — lists
+            existing Cloudflare R2 bucket objects (no new DB table —
+            Section 9.3 says "everything already uploaded", so this
+            reads the bucket directly via `ListObjectsV2Command`,
+            never a duplicate tracking table per Rule 3's no-useless-
+            duplication). Paginated, filterable by folder prefix
+            (avatars/products/banners/receipts/documents). Adds
+            `listR2Objects()` to `services/r2.ts`. No dependency.
+      - [ ] task-120 — UI: `/superAdmin/media` page — grid of uploaded
+            assets, search/filter by folder, "Copy URL" action per
+            item. Depends on task-119.
   - [ ] Phase 8 — Task Assignment, Customer Assignment, Notifications
         (Section 3.12/3.13, 9.2/9.4) — general Notifications (task-11-
         14) are done; Task/Customer Assignment specifically not yet

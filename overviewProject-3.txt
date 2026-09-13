@@ -814,3 +814,20 @@ file holds change-log entries only.
   docs/taskPlan.md's task-110 entry and NEXT UP pointer corrected in
   place; overviewProject.txt's Section 5C corrected in place (Rule
   16.1).
+
+[2026-09-13] Ran the Phase 7 Layer-3 audit flagged by docs/taskPlan.md's
+  NEXT UP pointer (CMS, Announcements, Media Library -- Section
+  3.7/3.9, 9.3). Result: all three are spec-only -- no schema, no
+  API/UI routes, zero wired code. Split into 8 micro-tasks per Rule
+  49 Step 4: task-113 (ContentSection/ContentVersion schema),
+  task-114 (content section CRUD API, publish snapshots into version
+  history capped at 5 per Section 9.3), task-115 (/superAdmin/content
+  UI), task-116 (Announcement schema), task-117 (announcement CRUD
+  API), task-118 (/superAdmin/announcements UI), task-119 (media
+  library API -- reads the R2 bucket directly via ListObjectsV2Command,
+  no new DB table, per Rule 3), task-120 (/superAdmin/media UI).
+  Wrote docs/tasks/task-113 through task-120 micro-task files with
+  Rule 49.1 traceability headers. docs/taskPlan.md's NEXT UP pointer
+  advanced to task-113; overviewProject.txt's Section 5C updated in
+  place (Rule 16.1). No code changed this turn -- audit + planning
+  only, per Rule 49 Step 3/4 (build starts next turn).
