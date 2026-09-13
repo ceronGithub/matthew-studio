@@ -19,7 +19,7 @@
  */
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ShieldAlert, ShieldCheck, Ban, Activity, ArrowRight, BarChart3, KeyRound, Archive, Users } from "lucide-react";
+import { ShieldAlert, ShieldCheck, Ban, Activity, ArrowRight, BarChart3, KeyRound, Archive, Users, PackageSearch } from "lucide-react";
 import { getDashboardHealthStats, getRecentAccountActivity } from "@/lib/dashboardStats";
 import "../../styles/superAdminDashboard.css";
 
@@ -70,6 +70,12 @@ const QUICK_ACTIONS = [
     label: "Backups",
     description: "Database backup history — status, size, and destinations",
     icon: Archive,
+  },
+  {
+    href: "/superAdmin/products",
+    label: "Products",
+    description: "Review products submitted for approval — approve or reject",
+    icon: PackageSearch,
   },
 ];
 

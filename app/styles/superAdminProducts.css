@@ -1,0 +1,400 @@
+/**
+ * FILE: app/styles/superAdminProducts.css
+ * PURPOSE:
+ * Styles for app/superAdmin/products/page.tsx and
+ * components/products/SuperAdminProductsList.tsx (task-112).
+ * References the design tokens in app/globals.css — never hardcoded
+ * colors or spacing. Responsive breakpoints live in
+ * app/styles/mediaQueries.css, not inline here. Adapted from
+ * app/styles/buyerManagement.css (task-107) for visual consistency
+ * across super-admin list pages, minus the CSV export button (this
+ * page has no export requirement) and with an added
+ * `--danger` action-button variant for Reject.
+ *
+ * Also carries its own copy of the shared ConfirmationModal's classes
+ * (.confirmationModal*), same per-page-duplication pattern as
+ * buyerManagement.css / adminUsers.css / adminOrderDetail.css.
+ */
+
+.superAdminProductsPage {
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.superAdminProductsHeader {
+  margin-bottom: var(--space-xl);
+}
+
+.superAdminProductsEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.superAdminProductsTitle {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-top: var(--space-xs);
+}
+
+.superAdminProductsSubtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+  max-width: 70ch;
+}
+
+/* Filter toolbar */
+.superAdminProductsToolbar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.superAdminProductsFilters {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.superAdminProductsFilterSelect,
+.superAdminProductsFilterInput {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  touch-action: manipulation;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+.superAdminProductsFilterSelect:hover,
+.superAdminProductsFilterSelect:focus-visible,
+.superAdminProductsFilterInput:hover,
+.superAdminProductsFilterInput:focus-visible {
+  border-color: var(--color-border-hover);
+  background-color: var(--color-surface-hover);
+}
+
+.superAdminProductsSearchInput {
+  flex: 1 1 220px;
+}
+
+.superAdminProductsClearFiltersButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: color var(--transition-fast);
+}
+.superAdminProductsClearFiltersButton:hover,
+.superAdminProductsClearFiltersButton:focus-visible {
+  color: var(--color-text-primary);
+}
+
+/* Table */
+.superAdminProductsTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.superAdminProductsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.superAdminProductsTable thead tr {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.superAdminProductsTable th {
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.superAdminProductsTable td {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.superAdminProductsTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.superAdminProductsTable tbody tr:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.superAdminProductsNameCell {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.superAdminProductsStatusBadge {
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.superAdminProductsActionsCell {
+  text-align: right;
+}
+
+.superAdminProductsRowActions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-xs);
+}
+
+.superAdminProductsNoActions {
+  color: var(--color-text-muted);
+}
+
+.superAdminProductsActionButton {
+  border: none;
+  background: none;
+  color: var(--color-accent);
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: color var(--transition-fast);
+  min-height: 44px;
+  padding: 0 var(--space-xs);
+  display: inline-flex;
+  align-items: center;
+}
+.superAdminProductsActionButton:hover,
+.superAdminProductsActionButton:focus-visible {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+.superAdminProductsActionButton:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.superAdminProductsActionButton--danger {
+  color: var(--color-error);
+}
+.superAdminProductsActionButton--danger:hover,
+.superAdminProductsActionButton--danger:focus-visible {
+  color: #dc2626;
+}
+
+/* Loading skeleton */
+.superAdminProductsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.superAdminProductsRow--skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.superAdminProductsSkeletonLine {
+  height: 1rem;
+  border-radius: 4px;
+}
+.superAdminProductsSkeletonLine--short {
+  width: 40%;
+}
+
+/* Empty / error state */
+.superAdminProductsEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.superAdminProductsRetryButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.superAdminProductsRetryButton:hover,
+.superAdminProductsRetryButton:focus-visible {
+  background-color: var(--color-surface-hover);
+}
+
+/* Footer: total count + pagination */
+.superAdminProductsFooter {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.superAdminProductsTotalCount {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.superAdminProductsPagination {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.superAdminProductsPageButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.superAdminProductsPageButton:hover:not(:disabled),
+.superAdminProductsPageButton:focus-visible:not(:disabled) {
+  background-color: var(--color-surface-hover);
+}
+.superAdminProductsPageButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.superAdminProductsPageLabel {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+/* ---------- Confirmation Modal (Rule 34.4 shared component) ---------- */
+
+.confirmationModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  z-index: var(--z-modal-backdrop);
+}
+
+.confirmationModalDialog {
+  width: 100%;
+  max-width: 420px;
+  padding: var(--space-lg) var(--space-xl);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-bg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  z-index: var(--z-modal);
+  transition: transform var(--transition-slow), opacity var(--transition-slow);
+}
+
+.confirmationModalTitle {
+  font-size: 1.1rem;
+  color: var(--color-text-primary);
+}
+
+.confirmationModalDescription {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+}
+
+.confirmationModalActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.confirmationModalCancelButton {
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.confirmationModalCancelButton:hover,
+.confirmationModalCancelButton:focus-visible,
+.confirmationModalCancelButton:active {
+  background-color: var(--color-surface-hover);
+}
+
+.confirmationModalConfirmButton {
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-error);
+  background-color: var(--color-error);
+  color: var(--color-text-primary);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.confirmationModalConfirmButton:hover,
+.confirmationModalConfirmButton:focus-visible,
+.confirmationModalConfirmButton:active {
+  background-color: #dc2626;
+}
+
+.confirmationModalCancelButton:disabled,
+.confirmationModalConfirmButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

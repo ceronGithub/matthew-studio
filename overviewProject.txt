@@ -811,10 +811,19 @@ means testing against fixtures instead of the real flow)
          the comment). [DONE] task-110 built 2026-09-13 —
          resolveProductStatus() added to lib/adminProductValidation.ts,
          wired into both the admin product create and edit routes.
-         GAP FOUND & FIXED: app/api/admin/products/route.ts had no
-         working GET/POST handlers (was an accidental byte-for-byte
-         copy of the [productId] detail route) — rebuilt from scratch.
-         GAP FOUND, NOT FIXED: the public storefront reads product
+         GAP FOUND, CLAIMED FIXED BUT NOT ACTUALLY FIXED: task-110's
+         own log entry said app/api/admin/products/route.ts (the
+         collection route) was rebuilt from scratch to fix a missing
+         GET/POST handler (accidental byte-for-byte copy of the
+         [productId] detail route). Re-verified 2026-09-13 during
+         task-112's Layer-3 check: `diff`/`md5sum` show the two files
+         are STILL byte-identical — the claimed rebuild never actually
+         landed in commit 97fd293 (which only added an 8-line
+         resolveProductStatus() call to each file). GET/POST
+         /api/admin/products remain non-functional right now. Flagged
+         for the developer as its own follow-up fix — out of scope
+         for task-112, which uses its own new
+         /api/superadmin/products route instead. GAP FOUND, NOT FIXED: the public storefront reads product
          listings from static data files, never the Product DB table
          — pending-review exclusion has no live storefront query to
          apply to yet; flagged for the developer, not yet a numbered
@@ -830,10 +839,22 @@ means testing against fixtures instead of the real flow)
          --noEmit` shows zero new errors in either new file (same
          pre-existing Prisma-client-generation errors as prior
          entries — this sandbox's binaries.prisma.sh access is
-         blocked, confirmed again this pass). Only task-112
-         (`/superAdmin/products` UI) remains in this split. Phases
-         7-10 not yet split — see docs/taskPlan.md's task-48+ section
-         for the full per-phase verification notes.
+         blocked, confirmed again this pass). [DONE] task-112 built
+         2026-09-13 — `/superAdmin/products` page.tsx (Server
+         Component) + SuperAdminProductsList.tsx (client), new GET
+         /api/superadmin/products list route (superAdmin-only,
+         defaults to the pending-review filter), useSuperAdminProducts
+         hook, superAdminProducts.css. Approve fires immediately (no
+         modal, matches task-108's non-destructive-action precedent);
+         Reject goes through the shared ConfirmationModal naming the
+         product. Added a "Products" QUICK_ACTIONS card to the
+         super-admin dashboard. `npx tsc --noEmit` shows zero new
+         errors in any of the new/edited files (same pre-existing
+         Prisma-client-generation errors as prior entries). Phase 6
+         (Product & Order Management w/ approval flow) is now fully
+         [DONE], all 4 micro-tasks closed (task-109 through 112).
+         Phases 7-10 not yet split — see docs/taskPlan.md's task-48+
+         section for the full per-phase verification notes.
 
 PHASE 4 — SECURITY & ACCESS HARDENING (independent of commerce;
 sequenced after core buyer flow so login/vault hardening doesn't

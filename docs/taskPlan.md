@@ -1,19 +1,24 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-112 — UI: `/superAdmin/products` page with a
-"Pending Review" filter and approve/reject row actions (Phase 6,
-last of the 4-task split).
+**NEXT UP:** Audit Phase 7 — CMS, Announcements, Media Library
+(Section 3.7/3.9, 9.3) — not yet audited this pass; break into
+micro-tasks once the Layer-3 check is run, same pattern as Phase 6.
 
-task-109 (schema), task-110 (admin write routes), and task-111
-(approve/reject API) are now [DONE].
-task-110 turned up two findings — see its entry below: (1) a fixed
-bug — the admin products collection route had no working create/list
-endpoint at all; (2) an unfixed, unscoped gap — the public storefront
-never reads from the Product DB table, so "hide pending-review
-products from the storefront" has nothing to hide from yet. Flagging
-for the developer before this becomes its own task. Phase 4 and
-Phase 5 remain fully [DONE] (task-100 through task-108 closed).
-Phases 7-10 remain unaudited.
+task-109 through task-112 are now all [DONE] — Phase 6 (Product &
+Order Management w/ approval flow) is fully closed.
+Two findings surfaced during this split — see task-110's entry below:
+(1) an UNRESOLVED gap — task-110's own log claimed the admin products
+collection route (app/api/admin/products/route.ts) was rebuilt to fix
+a missing GET/POST handler, but task-112's re-verification
+(2026-09-13) found the claim was false: the file is still a
+byte-for-byte copy of the [productId] detail route, so GET/POST
+/api/admin/products remain non-functional. Needs its own follow-up
+task before /admin/products (task-22/23) can be trusted as working.
+(2) an unfixed, unscoped gap — the public storefront never reads from
+the Product DB table, so "hide pending-review products from the
+storefront" has nothing to hide from yet. Both flagged for the
+developer. Phase 4 and Phase 5 remain fully [DONE] (task-100 through
+task-108 closed). Phases 7-10 remain unaudited.
 
 Generated per Rule 49. Source of truth for phase order: overviewProject.txt
 Section 5C (SPEC BUILD SEQUENCE), cross-checked against actual code
@@ -644,13 +649,11 @@ see Section 5C / 8 in that file.
               the dashboard QUICK_ACTIONS entry (folded in per
               task-105's precedent). Built 2026-09-13, see
               docs/tasks/task-108-ui-buyer-management-detail.md.
-  - [~] Phase 6 — Product & Order Management w/ approval flow (Section
+  - [DONE] Phase 6 — Product & Order Management w/ approval flow (Section
         3.10/3.11, 9.2) — admin_account_specification.md's own
-        product/order pages (task-19-27, task-74-82) are done. Layer-3
-        audit completed 2026-09-13: super-admin `pending-review`
-        approval flow confirmed NOT wired (spec-only — see NEXT UP).
-        Split into 4 micro-tasks per Rule 49 Step 4 (schema + 2 API
-        surfaces + UI, each independently completable):
+        product/order pages (task-19-27, task-74-82) are done. All 4
+        micro-tasks of the pending-review approval-flow split
+        (task-109 through 112) are now closed:
       - [DONE] task-109 — schema: add `pending-review` to `Product.status`
             enum/default (Section 9.2). Documented as a valid value in
             the field comment (`status` is a plain String, not a
@@ -692,10 +695,13 @@ see Section 5C / 8 in that file.
             matching the existing admin product write routes' audit
             trail rather than introducing a SecurityLog/
             AccountActivityLog path for the same entity.
-      - [ ] task-112 — UI: `/superAdmin/products` page with a
+      - [DONE] task-112 — UI: `/superAdmin/products` page with a
             "Pending Review" filter and approve/reject row actions
-            (ConfirmationModal per Rule 34.4 on reject). Depends on
-            task-110, task-111.
+            (ConfirmationModal per Rule 34.4 on reject). New GET
+            /api/superadmin/products list route (superAdmin-only,
+            not a reuse of /api/admin/products — see GAP note on
+            task-110 above). Built 2026-09-13, see
+            docs/tasks/task-112-ui-superadmin-products-page.md.
   - [ ] Phase 7 — CMS, Announcements, Media Library (Section 3.7/3.9,
         9.3) — not yet audited this pass.
   - [ ] Phase 8 — Task Assignment, Customer Assignment, Notifications
