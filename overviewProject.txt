@@ -870,9 +870,17 @@ means testing against fixtures instead of the real flow)
          schema/API/UI), task-116/117/118 (Announcements
          schema/API/UI), task-119/120 (Media Library API/UI — reads
          the R2 bucket directly via ListObjectsV2Command, no new DB
-         table). See docs/taskPlan.md's task-113+ section for full
-         detail. Phases 8-10 not yet split — see docs/taskPlan.md's
-         task-48+ section for the full per-phase verification notes.
+         table). [DONE] task-113 built 2026-09-13 — ContentSection
+         (sectionKey/label/data Json) + ContentVersion
+         (section-scoped snapshot, pruned to last 5 per Section 9.3
+         by task-114's publish logic) added to prisma/schema.prisma.
+         `npx prisma validate`/`generate` can't run in this sandbox
+         (binaries.prisma.sh blocked) — reviewed manually against
+         existing model conventions instead (relation/index pattern
+         mirrors ProductGalleryImage/Product). See docs/taskPlan.md's
+         task-113+ section for full detail. Phases 8-10 not yet
+         split — see docs/taskPlan.md's task-48+ section for the full
+         per-phase verification notes.
 
 PHASE 4 — SECURITY & ACCESS HARDENING (independent of commerce;
 sequenced after core buyer flow so login/vault hardening doesn't

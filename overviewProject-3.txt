@@ -831,3 +831,19 @@ file holds change-log entries only.
   advanced to task-113; overviewProject.txt's Section 5C updated in
   place (Rule 16.1). No code changed this turn -- audit + planning
   only, per Rule 49 Step 3/4 (build starts next turn).
+
+[2026-09-13] Built task-113: ContentSection + ContentVersion models
+  added to prisma/schema.prisma (CMS, Section 3.7 + 9.3's 5-version
+  history). ContentSection holds one row per editable section
+  (sectionKey/label/data Json, since each section's shape differs);
+  ContentVersion holds a snapshot of a section's prior data, pruned
+  to the last 5 per section by task-114's publish logic (not
+  schema-enforced). `npx prisma validate`/`generate` failed in this
+  sandbox (binaries.prisma.sh returns 403 -- network egress
+  restricted to the allowlisted domains, unrelated to the schema
+  itself); reviewed the new models manually against the existing
+  Product/ProductGalleryImage relation+index pattern instead. Run
+  `npx prisma db push && npx prisma generate` in the real dev
+  environment before starting task-114. docs/taskPlan.md's NEXT UP
+  pointer advanced to task-114; overviewProject.txt's Section 5C
+  corrected in place (Rule 16.1).

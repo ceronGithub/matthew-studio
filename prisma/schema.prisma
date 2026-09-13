@@ -151,6 +151,69 @@ model AuditLog {
   @@index([actor])
 }
 
+/// ContentSection
+/// task-113, super_admin_account_specification.md Section 3.7 (CMS) —
+/// one row per editable visitor-facing section (sectionKey e.g.
+/// "homepage.hero", "shop.pricing", "footer"). `data` is Json since
+/// each section's shape differs, matching the existing lib/*Data.ts
+/// static structures the CMS is meant to eventually replace (visitor
+/// pages keep reading from lib/*Data.ts until each section's task-115
+/// UI work publishes a first row here — no big-bang cutover).
+model ContentSection {
+  id         String    @id @default(cuid())
+  sectionKey String    @unique
+  label      String // display name for the section-tree UI
+  data       Json
+  updatedBy  String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  versions ContentVersion[]
+
+  @@index([sectionKey])
+}
+
+/// ContentVersion
+/// task-113, Section 9.3 — snapshot of a ContentSection's `data`
+/// immediately before it gets overwritten by a publish. task-114's
+/// publish logic keeps only the last 5 rows per section (pruning the
+/// oldest beyond that), so this table stays small — never enforced
+/// at the schema level, since Prisma has no row-count constraint.
+model ContentVersion {
+  id        String   @id @default(cuid())
+  sectionId String
+  data      Json // snapshot of ContentSection.data prior to the overwrite
+  savedBy   String?
+  createdAt DateTime @default(now())
+
+  section ContentSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  @@index([sectionId])
+}
+
+/// Announcement
+/// task-116, Section 3.9 — site-wide announcements (promos, downtime
+/// notices, new product drops). Rule 6 soft delete (deletedAt) so a
+/// deleted announcement stays recoverable/auditable like every other
+/// admin-managed entity in this schema.
+model Announcement {
+  id         String    @id @default(cuid())
+  title      String
+  message    String
+  placement  String // "homepage-banner" | "shop-banner" | "login-toast"
+  status     String    @default("draft") // draft | scheduled | live | expired
+  publishAt  DateTime
+  expiresAt  DateTime? // blank = manual dismiss only, no auto-expiry
+  createdBy  String?
+  updatedBy  String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime? // Rule 6 soft delete
+
+  @@index([status])
+  @@index([placement])
+}
+
 /// CartItem
 /// One row per line item in a cart — either a buyer's (userId set) or a
 /// guest's (cartToken set instead, matching the signed cookie value).

@@ -1,9 +1,9 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-113 — schema: `ContentSection` + `ContentVersion`
-models (CMS, Section 3.7/9.3). Phase 7 audit is done and split into
-8 micro-tasks (task-113 through 120); this is the first, no
-dependency. (task-110's collection-route gap — GET/POST
+**NEXT UP:** task-114 — API: content section CRUD (list/get/publish
+w/ version snapshot + prune/revert). Depends on task-113 (schema),
+which is now [DONE] — run `npx prisma db push && npx prisma
+generate` first. (task-110's collection-route gap — GET/POST
 /api/admin/products — is now actually closed; see its entry below.)
 
 task-109 through task-112 are now all [DONE] — Phase 6 (Product &
@@ -737,9 +737,15 @@ see Section 5C / 8 in that file.
         Split into 8 micro-tasks below, same pattern as Phase 6's
         task-109 through 112.
 
-      - [ ] task-113 — schema: `ContentSection` + `ContentVersion`
-            models (CMS, Section 3.7 + 9.3's 5-version history).
-            No dependency.
+      - [DONE] task-113 — schema: `ContentSection` + `ContentVersion`
+            models (CMS, Section 3.7 + 9.3's 5-version history). Built
+            2026-09-13, see docs/tasks/task-113-schema-content-sections.md.
+            Manually reviewed for syntax correctness against existing
+            model conventions (relation/index pattern mirrors
+            ProductGalleryImage) — `npx prisma validate`/`generate`
+            can't run in this sandbox (binaries.prisma.sh blocked, per
+            prior entries); run `npx prisma db push && npx prisma
+            generate` before task-114.
       - [ ] task-114 — API: content section CRUD — list all sections
             (tree), get one, PUT (publish, snapshots prior `data` into
             `ContentVersion`, prunes beyond 5), revert-to-version.
