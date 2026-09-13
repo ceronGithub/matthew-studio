@@ -61,3 +61,27 @@ export function diffProductFields(
   }
   return changes;
 }
+
+/**
+ * diffJsonFields
+ * task-114 — same top-level-only diff shape as diffProductFields, but
+ * generalized for the arbitrary/nested JSON stored on
+ * ContentSection.data (product fields are always primitives; content
+ * section data can hold nested objects/arrays). Values are compared
+ * via JSON.stringify rather than `!==` so a change buried inside a
+ * nested object still registers as that top-level key changing,
+ * rather than being missed by strict reference inequality.
+ */
+export function diffJsonFields(
+  before: Record<string, unknown>,
+  after: Record<string, unknown>
+): string[] {
+  const changedKeys: string[] = [];
+  const allKeys = new Set([...Object.keys(before), ...Object.keys(after)]);
+  for (const key of allKeys) {
+    if (JSON.stringify(before[key]) !== JSON.stringify(after[key])) {
+      changedKeys.push(key);
+    }
+  }
+  return changedKeys;
+}

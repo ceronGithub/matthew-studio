@@ -1,10 +1,12 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-114 — API: content section CRUD (list/get/publish
-w/ version snapshot + prune/revert). Depends on task-113 (schema),
+**NEXT UP:** task-115 — UI: `/superAdmin/content` page (section tree
++ dynamic form + Preview/Publish/Revert). Depends on task-114 (API),
 which is now [DONE] — run `npx prisma db push && npx prisma
-generate` first. (task-110's collection-route gap — GET/POST
-/api/admin/products — is now actually closed; see its entry below.)
+generate` first, since task-113/114 were both built without a
+working `prisma generate` in this sandbox. (task-110's collection-
+route gap — GET/POST /api/admin/products — is now actually closed;
+see its entry below.)
 
 task-109 through task-112 are now all [DONE] — Phase 6 (Product &
 Order Management w/ approval flow) is fully closed.
@@ -746,10 +748,17 @@ see Section 5C / 8 in that file.
             can't run in this sandbox (binaries.prisma.sh blocked, per
             prior entries); run `npx prisma db push && npx prisma
             generate` before task-114.
-      - [ ] task-114 — API: content section CRUD — list all sections
+      - [DONE] task-114 — API: content section CRUD — list all sections
             (tree), get one, PUT (publish, snapshots prior `data` into
             `ContentVersion`, prunes beyond 5), revert-to-version.
-            Depends on task-113.
+            Depends on task-113. Built 2026-09-13, see
+            docs/tasks/task-114-api-content-sections.md. `npx tsc
+            --noEmit` clean for the new/changed files — the 45 baseline
+            errors elsewhere (incl. `services/prisma.ts` itself) are
+            pre-existing, caused by `@prisma/client` not being
+            generated in this sandbox (binaries.prisma.sh blocked);
+            run `npx prisma db push && npx prisma generate` locally
+            before verifying in the browser.
       - [ ] task-115 — UI: `/superAdmin/content` page — section tree
             (left panel), dynamic form matching the selected section's
             data shape (right panel), Preview (opens live page),

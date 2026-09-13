@@ -877,10 +877,20 @@ means testing against fixtures instead of the real flow)
          `npx prisma validate`/`generate` can't run in this sandbox
          (binaries.prisma.sh blocked) — reviewed manually against
          existing model conventions instead (relation/index pattern
-         mirrors ProductGalleryImage/Product). See docs/taskPlan.md's
-         task-113+ section for full detail. Phases 8-10 not yet
-         split — see docs/taskPlan.md's task-48+ section for the full
-         per-phase verification notes.
+         mirrors ProductGalleryImage/Product). [DONE] task-114 built
+         2026-09-13 — GET /api/superadmin/content (list),
+         GET/PUT /api/superadmin/content/[sectionId] (detail/publish),
+         POST .../[sectionId]/revert, all super-admin-only. Publish
+         and revert both snapshot before overwriting (revert is
+         non-destructive) and log content_updated/content_reverted to
+         SecurityLog via a new diffJsonFields() in lib/auditLog.ts;
+         shared 5-row prune logic lives in new lib/contentVersions.ts.
+         `npx tsc --noEmit` clean for all new/changed files (same
+         pre-existing Prisma-client-generation errors elsewhere as
+         task-113's entry). See docs/taskPlan.md's task-113+ section
+         for full detail. Phases 8-10 not yet split — see
+         docs/taskPlan.md's task-48+ section for the full per-phase
+         verification notes.
 
 PHASE 4 — SECURITY & ACCESS HARDENING (independent of commerce;
 sequenced after core buyer flow so login/vault hardening doesn't

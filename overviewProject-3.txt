@@ -847,3 +847,29 @@ file holds change-log entries only.
   environment before starting task-114. docs/taskPlan.md's NEXT UP
   pointer advanced to task-114; overviewProject.txt's Section 5C
   corrected in place (Rule 16.1).
+
+[2026-09-13] Built task-114: content section CRUD API. New routes --
+  GET /api/superadmin/content (list, id/sectionKey/label/updatedAt
+  only), GET/PUT /api/superadmin/content/[sectionId] (full row / 
+  publish), POST /api/superadmin/content/[sectionId]/revert. PUT
+  snapshots the section's pre-update data into a new ContentVersion
+  row before overwriting, then prunes beyond the 5-row cap (Section
+  9.3); revert does the same snapshot-first step so reverting is
+  itself reversible. Both publish and revert log to SecurityLog
+  (content_updated / content_reverted) naming the section and, for
+  publish, which top-level fields changed -- via a new generalized
+  diffJsonFields() added to lib/auditLog.ts (diffProductFields's
+  shallow-compare logic didn't handle nested JSON; this one compares
+  via JSON.stringify and returns just the changed key names, not a
+  full before/after payload). The shared 5-row prune logic lives in
+  new lib/contentVersions.ts rather than either route.ts file, since
+  Next.js route files may only export recognized HTTP handlers. All
+  three routes are super-admin-only (Section 3.7's per-admin
+  manage-content grant is out of scope, ships later if needed).
+  `npx tsc --noEmit` is clean for every new/changed file; the 45
+  pre-existing errors elsewhere (including services/prisma.ts itself)
+  are the same binaries.prisma.sh sandbox limitation noted on
+  task-113 -- run `npx prisma db push && npx prisma generate` in the
+  real dev environment before verifying in the browser. docs/
+  taskPlan.md's NEXT UP pointer advanced to task-115; overviewProject.
+  txt's Section 5C corrected in place (Rule 16.1).
