@@ -3,6 +3,8 @@
 **NEXT UP:** Audit Phase 7 — CMS, Announcements, Media Library
 (Section 3.7/3.9, 9.3) — not yet audited this pass; break into
 micro-tasks once the Layer-3 check is run, same pattern as Phase 6.
+(task-110's collection-route gap — GET/POST /api/admin/products — is
+now actually closed; see its entry below.)
 
 task-109 through task-112 are now all [DONE] — Phase 6 (Product &
 Order Management w/ approval flow) is fully closed.
@@ -687,6 +689,21 @@ see Section 5C / 8 in that file.
             than this split; **not numbered as a task yet** — flagged
             here for the developer to confirm priority/scope before
             it's added to the plan.
+            CORRECTION (2026-09-13): the "GAP FOUND & FIXED" note above
+            was itself inaccurate — task-112's re-verification caught
+            that `app/api/admin/products/route.ts` was still the
+            `[productId]/route.ts` copy, no GET/POST ever existed.
+            `resolveProductStatus()`/`CATEGORY_ICON_NAMES` were real
+            (already applied to the PUT handler), but the collection
+            route rebuild was not. It is now actually rebuilt: GET
+            (paginated, category/status/search filters, matches
+            `lib/hooks/useAdminProducts.ts`'s param names) + POST
+            (create, `resolveProductStatus()` override, unique slug
+            via `slugify()` + random suffix on collision, AuditLog
+            `"created"` entry). Verified with `npx tsc --noEmit` —
+            zero errors on this file (pre-existing errors elsewhere in
+            the repo are from `prisma generate` failing in a
+            network-restricted sandbox, unrelated to this change).
       - [DONE] task-111 — API: super-admin approve/reject endpoints —
             `PATCH /api/superadmin/products/[productId]/approve` and
             `.../reject`, flips status to `published` or back to

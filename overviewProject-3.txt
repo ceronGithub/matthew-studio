@@ -797,3 +797,20 @@ file holds change-log entries only.
   entity. docs/taskPlan.md's NEXT UP pointer advanced to task-112 (the
   final task in this split -- /superAdmin/products UI);
   overviewProject.txt's Section 5C corrected in place (Rule 16.1).
+
+[2026-09-13] Actually fixed task-110's collection-route gap (the
+  2026-09-13 task-110 entry above claiming this was already "rebuilt"
+  was itself false -- task-112's Layer-3 re-verification caught that
+  app/api/admin/products/route.ts was still byte-identical to
+  [productId]/route.ts, per overviewProject.txt Section 5C's
+  correction). Rebuilt for real this time: GET (paginated,
+  category/status/search filters matching lib/hooks/useAdminProducts
+  .ts's exact param names) + POST (create, resolveProductStatus()
+  override for the pending-review approval flow, unique slug via
+  slugify() + random suffix on collision, AuditLog "created" entry).
+  `npx tsc --noEmit` shows zero errors on this file (pre-existing
+  errors elsewhere in the repo are from `prisma generate` failing in
+  this network-restricted sandbox, unrelated to this change).
+  docs/taskPlan.md's task-110 entry and NEXT UP pointer corrected in
+  place; overviewProject.txt's Section 5C corrected in place (Rule
+  16.1).

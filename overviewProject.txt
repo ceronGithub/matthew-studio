@@ -823,7 +823,16 @@ means testing against fixtures instead of the real flow)
          /api/admin/products remain non-functional right now. Flagged
          for the developer as its own follow-up fix — out of scope
          for task-112, which uses its own new
-         /api/superadmin/products route instead. GAP FOUND, NOT FIXED: the public storefront reads product
+         /api/superadmin/products route instead. FIXED 2026-09-13:
+         app/api/admin/products/route.ts rebuilt — GET (paginated,
+         category/status/search filters matching
+         lib/hooks/useAdminProducts.ts's param names) + POST (create,
+         resolveProductStatus() override, unique slug via slugify() +
+         random suffix on collision, AuditLog "created" entry).
+         `npx tsc --noEmit` shows zero errors on this file (same
+         pre-existing Prisma-client-generation errors elsewhere in the
+         repo, unrelated — this sandbox's binaries.prisma.sh access is
+         blocked). GAP FOUND, NOT FIXED: the public storefront reads product
          listings from static data files, never the Product DB table
          — pending-review exclusion has no live storefront query to
          apply to yet; flagged for the developer, not yet a numbered
