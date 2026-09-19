@@ -13,13 +13,15 @@
  * DATA FLOW:
  * Reads PRICING_TIERS (pricingData.ts) for the comparison table,
  * TEMPLATE_BENEFITS/TEMPLATE_WHY_US/TEMPLATE_DEMO_VIDEOS
- * (templatesSectionData.ts) for the rest, and PRODUCTS
- * (productsData.ts) filtered to category "templates" for the card
- * grid. The comparison table's feature rows are the union of every
- * tier's own `features` bullets (deduped, first-seen order) rather
- * than a separately invented master list — this keeps the table
- * accurate to the tier data that already exists instead of risking
- * drift between two descriptions of the same tiers.
+ * (templatesSectionData.ts) for the rest of the static content, and
+ * fetches the live "templates" product cards via useCategoryProducts
+ * (task-126's shared hook), replacing the old static PRODUCTS filter
+ * so a DB-only product appears here without a code change. The
+ * comparison table's feature rows are the union of every tier's own
+ * `features` bullets (deduped, first-seen order) rather than a
+ * separately invented master list — this keeps the table accurate to
+ * the tier data that already exists instead of risking drift between
+ * two descriptions of the same tiers.
  */
 "use client";
 
@@ -32,11 +34,12 @@ import { useIsMobileViewport } from "@/lib/hooks/useIsMobileViewport";
 import VideoCarousel from "@/components/home/VideoCarousel";
 import ProductCard from "@/components/home/ProductCard";
 import ScrollReveal from "@/components/shared/ScrollReveal";
+import { useCategoryProducts } from "@/lib/hooks/useCategoryProducts";
 import { PRICING_TIERS } from "@/lib/pricingData";
-import { PRODUCTS } from "@/lib/productsData";
 import { TEMPLATE_BENEFITS, TEMPLATE_WHY_US, TEMPLATE_DEMO_VIDEOS } from "@/lib/templatesSectionData";
 
-const TEMPLATE_PRODUCTS = PRODUCTS.filter((product) => product.category === "templates");
+// How many placeholder cards the loading skeleton shows (Rule 25.2).
+const SKELETON_CARD_COUNT = 3;
 
 // Per-card stagger delay for the scroll-entrance animation — same
 // values as ProductsGrid.tsx/TShirtsSection.tsx so every card grid
@@ -65,6 +68,7 @@ export default function TemplatesSection() {
   // §13.2 — 24px on desktop/tablet, a lighter 12px on mobile.
   const isMobileViewport = useIsMobileViewport();
   const entranceDistance = isMobileViewport ? 12 : 24;
+  const { products, isLoading, error, refetch } = useCategoryProducts("templates");
 
   return (
     <section className="categorySection">
@@ -97,16 +101,42 @@ export default function TemplatesSection() {
 
         <VideoCarousel videos={TEMPLATE_DEMO_VIDEOS} />
 
-        <div className="productCardsGrid">
-          {TEMPLATE_PRODUCTS.map((product, index) => (
-            <ScrollReveal
-              key={product.id}
-              delay={Math.min(index, STAGGER_CAP) * STAGGER_STEP_SECONDS}
-            >
-              <ProductCard product={product} />
-            </ScrollReveal>
-          ))}
-        </div>
+        {isLoading ? (
+          // Loading state (Rule 25.2) — skeleton cards mirror the real card shape.
+          <div className="productCardsGrid" aria-busy="true" aria-label="Loading templates">
+            {Array.from({ length: SKELETON_CARD_COUNT }, (_, index) => (
+              <div key={index} className="productCardSkeleton">
+                <div className="productCardSkeletonThumb skeletonBlock" />
+                <div className="productCardSkeletonBody">
+                  <div className="productCardSkeletonLine skeletonBlock" />
+                  <div className="productCardSkeletonLine productCardSkeletonLine--short skeletonBlock" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : error ? (
+          // Error state (Rule 25.4) — friendly message + retry, never the raw error.
+          <div className="productsEmpty" role="alert">
+            <p>{error}</p>
+            <button type="button" className="buttonSecondary" onClick={refetch}>
+              Try again
+            </button>
+          </div>
+        ) : products.length === 0 ? (
+          // Empty state (Rule 25.3) — action-specific, never a blank grid.
+          <p className="productsEmpty">No Templates products are published yet.</p>
+        ) : (
+          <div className="productCardsGrid">
+            {products.map((product, index) => (
+              <ScrollReveal
+                key={product.id}
+                delay={Math.min(index, STAGGER_CAP) * STAGGER_STEP_SECONDS}
+              >
+                <ProductCard product={product} />
+              </ScrollReveal>
+            ))}
+          </div>
+        )}
 
         <div className="sectionCTA">
           <Link href="/templates" className="buttonPrimary">

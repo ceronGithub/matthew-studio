@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-130 | file: docs/tasks/task-130-ui-wire-templates.md | needs: task-121 | setup: none
+**NEXT UP:** task-131 | file: docs/tasks/task-131-ui-wire-ai-videos.md | needs: task-121 | setup: none
 **OPEN FINDINGS:** 4 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
@@ -207,8 +207,19 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
             catalog set id === slug — switched to product.slug so it
             survives DB-generated ids. See
             docs/tasks/task-129-ui-wire-tutorials.md.
-      - [ ] task-130 — UI: wire templates (section + [slug] page) to
+      - [DONE] task-130 — UI: wire templates (section + [slug] page) to
             the live Product API. Depends on task-121.
+            Built 2026-09-20: components/home/TemplatesSection.tsx and
+            app/(public)/templates/[slug]/page.tsx now fetch from
+            /api/shop/products (client, via task-126's shared
+            lib/hooks/useCategoryProducts.ts) and Prisma directly
+            (server), instead of the static PRODUCTS catalog.
+            [slug]/page.tsx dropped generateStaticParams and is now
+            force-dynamic. Comparison table/benefits/why-us/demo video
+            (all static pricing/marketing content) unchanged. Confirmed
+            lib/publicProduct.ts already includes `variants` in its
+            mapped shape and ProductDetail.tsx's variant selector reads
+            it unchanged — no special-casing needed for this category.
             See docs/tasks/task-130-ui-wire-templates.md.
       - [ ] task-131 — UI: wire ai-videos (section + [slug] page) to
             the live Product API. Depends on task-121.
