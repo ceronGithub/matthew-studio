@@ -14,7 +14,8 @@
  *      after every SecurityLog write. Applies instant-ban rules
  *      (sql_injection_attempt, location_anomaly — 1 occurrence) and
  *      3-strike rules (login_failed, admin_login_denied,
- *      registration_abuse, rate_limit_hit, password_recovery_failed —
+ *      admin_login_locked, registration_abuse, rate_limit_hit,
+ *      password_recovery_failed —
  *      3 occurrences from the same device within a rolling 24h
  *      window, counted directly from SecurityLog, no separate counter
  *      table). Bans are permanent until a super-admin manually unbans
@@ -44,6 +45,7 @@ const INSTANT_BAN_EVENT_TYPES = ["sql_injection_attempt", "location_anomaly"];
 const STRIKE_EVENT_TYPES = [
   "login_failed",
   "admin_login_denied",
+  "admin_login_locked", // task-123: login attempt on a locked admin account
   "registration_abuse",
   "rate_limit_hit",
   "password_recovery_failed",

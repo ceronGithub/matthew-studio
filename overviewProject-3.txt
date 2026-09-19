@@ -950,3 +950,18 @@ cannot generate the Prisma client (binaries.prisma.sh blocked), so
 `npx tsc --noEmit` could not fully typecheck -- run it in the real dev
 environment. taskPlan.md task-121 flipped to [DONE]; NEXT UP unchanged
 (task-118 is still the first open leaf).
+[2026-09-20] task-123 built: admin account lockout now enforced.
+app/api/auth/login/route.ts checks lib/adminAccountStatus.ts's
+getAdminAccountStatus() before signInWithPassword; if the email has 5+
+login_failed SecurityLog rows in 60 minutes AND the new
+getUserRoleByEmail() (lib/getUserByEmail.ts) says admin/superAdmin, it
+returns the same generic 401 as a wrong password and logs
+admin_login_locked (buyers are never locked). The failure count is now
+case-insensitive. lib/gatekeeper.ts STRIKE_EVENT_TYPES gained
+admin_login_locked so each locked attempt counts toward the 3-strike
+device ban. No schema change. Debug point: a 429 on the 6th attempt is
+the login IP rate limiter (5/15 min), not the lockout. Sandbox cannot
+generate the Prisma client, so `npx tsc --noEmit` could not fully
+typecheck -- run it in the real dev environment. taskPlan.md task-123
+flipped to [DONE]; NEXT UP unchanged (task-118 is still the first open
+leaf).

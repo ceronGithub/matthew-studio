@@ -16,14 +16,11 @@ only consulted when investigating a specific flagged item.
   all. **Converted to task-121 (API) / task-122 (UI) 2026-09-20** —
   see docs/tasks/task-121-api-public-products.md and
   docs/tasks/task-122-ui-storefront-wire-product-db.md.
-- [2026-09-12] **Admin account lockout is display-only** (found
-  during task-94). Section 5.3 calls for "locked after 5 failures,
-  1-hour auto-recovery" — no stored field exists and
-  `app/api/auth/login/route.ts` does not actually block logins once
-  reached. `lib/adminAccountStatus.ts` only computes a "Locked"
-  display badge live from `SecurityLog` `login_failed` counts.
-  **Converted to task-123 2026-09-20** — see
-  docs/tasks/task-123-api-admin-lockout-enforcement.md.
+- [2026-09-12] ~~Admin account lockout is display-only~~ **RESOLVED
+  (2026-09-20, task-123).** `app/api/auth/login/route.ts` now rejects
+  admin/superAdmin logins with 5 failures in 60 minutes before the
+  password check (generic 401, logs `admin_login_locked`, which now
+  counts as a Gatekeeper strike). Kept struck through for history.
 - [2026-09-07] **task-41 numbering collision — reserved renumber, not
   yet built.** `task-41` was used for the (DONE) buyer-recovery
   middleware gate. The still-open admin_account_specification.md

@@ -1,7 +1,7 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
 **NEXT UP:** task-118 | file: docs/tasks/task-118-ui-superadmin-announcements.md | needs: task-117 | setup: none — task-117's schema+API already exist, this is UI-only
-**OPEN FINDINGS:** 5 — see docs/openFindings.md
+**OPEN FINDINGS:** 4 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
 
@@ -106,7 +106,7 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
       - [ ] task-122 — UI: wire /shop and /pricing to task-121's
             API instead of static lib/productsData.ts. Depends on
             task-121.
-      - [ ] task-123 — API: enforce admin account lockout (5 fails/1h)
+      - [DONE] task-123 — API: enforce admin account lockout (5 fails/1h)
             in app/api/auth/login/route.ts — reuses the existing
             lib/adminAccountStatus.ts SecurityLog-count query as
             the actual gate. Closes openFindings.md's 2026-09-12

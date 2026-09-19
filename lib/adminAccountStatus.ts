@@ -5,18 +5,14 @@
  * and detail pages (super_admin_account_specification.md Section
  * 3.2.1's "Active / Inactive / Locked" indicators) for task-94.
  *
- * GROUNDING NOTE (Rule 0D): Section 5.3 describes an intended lockout
- * ("after 5 failures: account locked for 1 hour, auto-recovery") but
- * this app has no stored lockedUntil/failedAttempts field anywhere in
- * prisma/schema.prisma, and app/api/auth/login/route.ts does not
- * currently block a login once 5 failures are reached — Rule 32.1's
- * IP-based rate limiter is the only thing that actually stops repeat
- * attempts today. "Locked" here is therefore a DISPLAY-ONLY signal,
- * derived from existing SecurityLog rows (never a real login block),
- * so the list/detail pages can at least surface the pattern the spec
- * describes. Enforcing the block itself is a separate, out-of-scope
- * gap in app/api/auth/login/route.ts — flagged here, not silently
- * fixed as part of this read-only task.
+ * LOCKOUT RULE (Section 5.3, enforced since task-123): 5 failed
+ * logins within 60 minutes lock an account until the oldest failure
+ * ages out of the window — no stored lockedUntil field is needed,
+ * because the count comes straight from SecurityLog rows. This file
+ * computes the badge shown on the Admin Management pages, and
+ * getAdminAccountStatus() is also the gate app/api/auth/login/route.ts
+ * calls before checking a password for an admin/superAdmin account, so
+ * the badge and the real block share one 5-in-60 rule and one threshold.
  *
  * "Inactive" reads Supabase Auth's banned_until — same convention
  * task-84/86 already use for buyers (a far-future ban_duration means
@@ -44,7 +40,14 @@ export async function getAdminAccountStatus(
 
   const windowStart = new Date(Date.now() - LOCKOUT_WINDOW_MINUTES * 60 * 1000);
   const recentFailures = await prisma.securityLog.count({
-    where: { eventType: "login_failed", actor: email, createdAt: { gte: windowStart } },
+    // Case-insensitive: SecurityLog.actor stores the email exactly as it
+    // was typed, so "Admin@x.com" and "admin@x.com" must count together
+    // or a lockout could be dodged just by changing the letter case.
+    where: {
+      eventType: "login_failed",
+      actor: { equals: email, mode: "insensitive" },
+      createdAt: { gte: windowStart },
+    },
   });
 
   return recentFailures >= LOCKOUT_FAILURE_THRESHOLD ? "locked" : "active";

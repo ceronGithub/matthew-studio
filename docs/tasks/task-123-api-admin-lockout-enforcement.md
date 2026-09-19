@@ -12,7 +12,9 @@ CMS-related itself, kept together for scheduling only).
 **Dependency:** none.
 **NEEDS:** none
 **SETUP:** none
-**FILES TO TOUCH:** app/api/auth/login/route.ts (modified)
+**FILES TO TOUCH:** app/api/auth/login/route.ts (modified),
+lib/adminAccountStatus.ts (modified), lib/getUserByEmail.ts (modified),
+lib/gatekeeper.ts (modified)
 
 **DONE WHEN:** the 3 verification steps below all pass.
 
@@ -53,3 +55,22 @@ stays exactly as-is for them):
 3. Wait for (or backdate) the 60-minute window to pass → the same
    account can log in again with the correct password, with no
    manual unlock needed.
+
+## Status
+[DONE] 2026-09-20. Deviations from the plan above, found by reading the
+code first:
+- The role isn't known before the password check (it lives in Supabase
+  `user_metadata.role`). The count query runs first (cheap); only when it
+  says "locked" does the new `getUserRoleByEmail()` look the role up, so
+  normal logins never pay for it and buyers are never locked.
+- Step 3 said no Gatekeeper change was needed. Wrong: `lib/gatekeeper.ts`
+  counts strikes from an explicit `STRIKE_EVENT_TYPES` list, so
+  `admin_login_locked` had to be added to it.
+- The failure count is now case-insensitive (`SecurityLog.actor` stores
+  the email as typed), otherwise changing letter case dodges the lock.
+- Verification step 1 note: the 5-per-15-min IP rate limit
+  (`checkRateLimit`, login) fires first. To reach the 6th attempt, wait
+  15 minutes after the 5th failure (or use a different IP) — a 429 on
+  the 6th attempt means the IP limiter answered, not the lockout.
+- Not run against a live DB in the sandbox — verify steps 1-3 in the
+  real dev environment.

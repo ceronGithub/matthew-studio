@@ -27,6 +27,15 @@
  * that has never enrolled TOTP is unaffected by this branch — forcing
  * enrollment itself is task-47-totp-setup-gate's job, a separate
  * middleware redirect that runs once they DO have a session.
+ *
+ * Admin lockout (super_admin_account_specification.md Section 5.3,
+ * task-123): an admin/superAdmin account with 5 failed logins in the
+ * last 60 minutes is rejected BEFORE the password is checked — even a
+ * correct password gets the same generic 401 as a wrong one, so the
+ * response never reveals the account is locked. The attempt is logged
+ * as "admin_login_locked". Recovery is automatic: failures age out of
+ * the 60-minute window, no manual unlock or stored field involved.
+ * Buyers are never locked by this check.
  */
 export const dynamic = "force-dynamic";
 
@@ -39,6 +48,8 @@ import { isValidCsrfRequest } from "@/lib/csrf";
 import { detectAnomalies } from "@/lib/anomalyDetection";
 import { createLoginSuccessResponse } from "@/lib/loginSession";
 import { createPendingTotpLoginToken } from "@/lib/pendingTotpLogin";
+import { getAdminAccountStatus } from "@/lib/adminAccountStatus";
+import { getUserRoleByEmail } from "@/lib/getUserByEmail";
 
 const LOGIN_MAX_ATTEMPTS = 5;
 const LOGIN_WINDOW_MINUTES = 15;
@@ -72,6 +83,28 @@ export async function POST(request: Request) {
         { success: false, data: null, message: "Enter your email and password." },
         { status: 400 }
       );
+    }
+
+    // Admin lockout gate (task-123) — runs before any password check.
+    // The failure count is one cheap indexed query; the (heavier) role
+    // lookup only happens when the count already says "locked", so
+    // normal logins never pay for it. Buyers with 5+ failures fall
+    // through to the normal path — only admin/superAdmin get locked.
+    if (typeof email === "string" && (await getAdminAccountStatus(email.trim(), true)) === "locked") {
+      const lockedAccountRole = await getUserRoleByEmail(email.trim());
+      if (lockedAccountRole === "admin" || lockedAccountRole === "superAdmin") {
+        await logSecurityEvent({
+          eventType: "admin_login_locked",
+          actor: email,
+          request,
+          details: "Login blocked: 5 failed attempts in the last 60 minutes.",
+        });
+        // Identical to the wrong-password response — never reveals the lock.
+        return NextResponse.json(
+          { success: false, data: null, message: "Invalid email or password.", error: "Authentication failed" },
+          { status: 401 }
+        );
+      }
     }
 
     const { data, error } = await supabaseServerClient.auth.signInWithPassword({ email, password });
