@@ -172,3 +172,14 @@ force-dynamic. tsc: 45 errors, all pre-existing (prisma client not
 generated in the sandbox -- binaries.prisma.sh isn't a reachable
 domain here), zero new errors in touched files. taskPlan.md: task-127
 flipped [DONE]; NEXT UP advanced to task-128.
+
+[2026-09-20] Built task-128: FileToolsSection.tsx and the file-tools
+[slug] detail page now read the live Product table instead of the
+static lib/productsData.ts catalog, reusing task-126's shared
+lib/hooks/useCategoryProducts.ts and PUBLIC_PRODUCT_SELECT/
+toPublicProduct pattern. FeatureGrid content unchanged. The [slug]
+page is a Server Component querying Prisma directly (Rule 31.2),
+dropped generateStaticParams, and is now force-dynamic. tsc: 45
+errors, all pre-existing (prisma client not generated in the sandbox),
+zero new errors in touched files. taskPlan.md: task-128 flipped
+[DONE]; NEXT UP advanced to task-129.
