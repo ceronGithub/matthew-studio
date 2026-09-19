@@ -53,3 +53,8 @@ only consulted when investigating a specific flagged item.
   putting it on a browse-heavy GET would add a write per page view. No
   public GET route uses it today. Decide: apply it, or use a cheaper
   edge/in-memory limit for public reads.
+- [2026-09-20] **/superAdmin/media has no dashboard entry point.**
+  task-120 built the page but, like task-118d for announcements, a
+  dashboard quick-action card is a separate item — until one is added
+  the page is reachable only by typing the URL. Also: its search box
+  filters only the files already loaded (the API has no search param).

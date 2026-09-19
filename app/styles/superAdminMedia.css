@@ -1,0 +1,293 @@
+/**
+ * FILE: app/styles/superAdminMedia.css
+ * PURPOSE:
+ * Styles for app/superAdmin/media/page.tsx and
+ * components/media/* (task-120). References the design tokens in
+ * app/styles/globals.css — never hardcoded colors or spacing. The card
+ * grid reflows with auto-fill + minmax, so no breakpoints are needed
+ * and nothing is added to app/styles/mediaQueries.css. Adapted from
+ * app/styles/superAdminAnnouncements.css for visual consistency across
+ * super-admin pages.
+ */
+
+.superAdminMediaPage {
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.superAdminMediaHeader {
+  margin-bottom: var(--space-xl);
+}
+
+.superAdminMediaEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.superAdminMediaTitle {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-top: var(--space-xs);
+}
+
+.superAdminMediaSubtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+  max-width: 70ch;
+}
+
+/* Toolbar: folder dropdown + search + clear */
+.superAdminMediaToolbar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.superAdminMediaFilters {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+}
+
+.superAdminMediaFilterSelect,
+.superAdminMediaFilterInput {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  touch-action: manipulation;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+.superAdminMediaFilterSelect:hover,
+.superAdminMediaFilterSelect:focus,
+.superAdminMediaFilterSelect:active,
+.superAdminMediaFilterSelect:focus-visible,
+.superAdminMediaFilterInput:hover,
+.superAdminMediaFilterInput:focus,
+.superAdminMediaFilterInput:active,
+.superAdminMediaFilterInput:focus-visible {
+  border-color: var(--color-border-hover);
+  background-color: var(--color-surface-hover);
+}
+
+.superAdminMediaFilterInput {
+  flex: 1 1 220px;
+}
+
+.superAdminMediaClearFiltersButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: color var(--transition-fast);
+}
+.superAdminMediaClearFiltersButton:hover,
+.superAdminMediaClearFiltersButton:focus,
+.superAdminMediaClearFiltersButton:active,
+.superAdminMediaClearFiltersButton:focus-visible {
+  color: var(--color-text-primary);
+}
+
+/* Card grid — columns reflow automatically, no breakpoints needed */
+.superAdminMediaGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-lg);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.superAdminMediaCard {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+.superAdminMediaCard:hover {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+/* Fixed-ratio preview box (Rule 27.2) — the image fills it via object-fit */
+.superAdminMediaPreview {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: var(--color-surface-active);
+}
+.superAdminMediaPreview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Icon tile shown for videos, other non-image files, and broken images */
+.superAdminMediaPreviewIcon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  width: 100%;
+  height: 100%;
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+
+.superAdminMediaDetails {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.superAdminMediaFileName {
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--color-text-primary);
+  overflow-wrap: anywhere;
+}
+
+.superAdminMediaFolderPath {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--color-text-muted);
+  overflow-wrap: anywhere;
+}
+
+.superAdminMediaMeta {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.superAdminMediaCopyButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  width: 100%;
+  min-height: 44px;
+  margin-top: auto;
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-accent);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.superAdminMediaCopyButton:hover,
+.superAdminMediaCopyButton:focus,
+.superAdminMediaCopyButton:active,
+.superAdminMediaCopyButton:focus-visible {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+/* Loading skeleton lines under each skeleton preview */
+.superAdminMediaSkeletonLine {
+  height: 1rem;
+  border-radius: 4px;
+}
+.superAdminMediaSkeletonLine--short {
+  width: 40%;
+}
+
+/* Empty / error state */
+.superAdminMediaEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.superAdminMediaRetryButton,
+.superAdminMediaLoadMoreButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.superAdminMediaRetryButton:hover,
+.superAdminMediaRetryButton:focus,
+.superAdminMediaRetryButton:active,
+.superAdminMediaRetryButton:focus-visible,
+.superAdminMediaLoadMoreButton:hover:not(:disabled),
+.superAdminMediaLoadMoreButton:focus:not(:disabled),
+.superAdminMediaLoadMoreButton:active:not(:disabled),
+.superAdminMediaLoadMoreButton:focus-visible:not(:disabled) {
+  background-color: var(--color-surface-hover);
+}
+.superAdminMediaLoadMoreButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* Footer: loaded count + Load more */
+.superAdminMediaFooter {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.superAdminMediaTotalCount {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.superAdminMediaLoadMoreError {
+  font-size: 0.85rem;
+  color: var(--color-error);
+}

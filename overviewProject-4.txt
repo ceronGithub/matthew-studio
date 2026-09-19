@@ -106,3 +106,31 @@ broken -> check NEXT_PUBLIC_CLOUDFLARE_R2_PUBLIC_URL. No schema change.
 tsc: zero errors in touched files; the 45 repo-wide errors are
 pre-existing (sandbox skipped `prisma generate`). taskPlan.md task-119
 flipped to [DONE]; NEXT UP advanced to task-120 (needs task-119, done).
+[2026-09-20] task-120 built: /superAdmin/media page (Media Library) --
+a grid of every file in the public R2 folders with a folder dropdown,
+a filename search box, and a per-file Copy URL button. New files:
+app/superAdmin/media/page.tsx (Server Component shell),
+components/media/MediaLibraryGrid.tsx (states + grid + Load more),
+MediaLibraryCard.tsx (one tile: <img> preview, or a Film/File icon for
+videos and other files, falling back to an icon if the image URL is
+broken), MediaLibraryToolbar.tsx (folder select/search/clear),
+lib/hooks/useMediaLibrary.ts, app/styles/superAdminMedia.css. Data
+flow: useMediaLibrary calls GET /api/superadmin/media (task-119); R2
+pages by cursor so each Load more APPENDS the next page, and switching
+folders restarts from page one (a request counter drops stale
+responses). Search filters only the files already loaded -- the API has
+no search param. Copy URL uses navigator.clipboard, flashes "Copied" on
+the button, and toasts only on failure. Read-only: no upload/delete.
+No API, schema, or mediaQueries.css change (grid reflows via
+auto-fill/minmax). Debug points: every tile shows "Preview unavailable"
+-> NEXT_PUBLIC_CLOUDFLARE_R2_PUBLIC_URL is wrong or the bucket's public
+access is off; empty list with a folder chosen -> that folder has no
+objects yet; Copy URL does nothing on a non-HTTPS host -> clipboard
+needs a secure context (localhost is fine). tsc: zero errors in touched
+files (45 pre-existing repo-wide, prisma client not generated in the
+sandbox). eslint flags react-hooks/set-state-in-effect on the hook's
+fetch-on-mount effect -- identical to useBackups.ts/useAnnouncements.ts,
+so left consistent with the repo. taskPlan.md task-120 flipped to
+[DONE]; NEXT UP advanced to task-124 (needs task-121, done). Parent
+Phase 7 stays open (task-124/125 remain). New openFindings.md line:
+page has no dashboard card yet.

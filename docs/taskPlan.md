@@ -1,7 +1,7 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-120 | file: none (single-line item, no docs/tasks file) | needs: task-119 | setup: none
-**OPEN FINDINGS:** 3 — see docs/openFindings.md
+**NEXT UP:** task-124 | file: none (single-line item, no docs/tasks file) | needs: task-121 | setup: none
+**OPEN FINDINGS:** 4 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
 
@@ -134,9 +134,14 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
             nextCursor, folder, folders }. Only products/banners/
             avatars/orders folders are listable (allowlist) so
             database-backups/ and private buyer files stay hidden.
-      - [ ] task-120 — UI: `/superAdmin/media` page — grid of uploaded
+      - [DONE] task-120 — UI: `/superAdmin/media` page — grid of uploaded
             assets, search/filter by folder, "Copy URL" action per
             item. Depends on task-119.
+            Built 2026-09-20: app/superAdmin/media/page.tsx,
+            components/media/{MediaLibraryGrid,MediaLibraryCard,
+            MediaLibraryToolbar}.tsx, lib/hooks/useMediaLibrary.ts,
+            app/styles/superAdminMedia.css. "Load more" cursor
+            paging; search filters loaded files only.
       - [DONE] task-121 — API: public product list/detail
             (/api/shop/products, /api/shop/products/[slug]),
             published + non-deleted only. Closes openFindings.md's
