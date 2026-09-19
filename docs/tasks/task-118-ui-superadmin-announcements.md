@@ -1,8 +1,12 @@
-# task-118 — UI: /superAdmin/announcements page
+# task-118 — SUPERSEDED — split into 4 micro-tasks (2026-09-20)
 
-**Fulfills spec:** Section 3.9.
-**taskPlan.md phase:** Phase 7 — CMS, Announcements, Media Library.
-**Dependency:** task-117 (announcements API must exist).
+This task was split per Rule 49 Step 4 (touches 2+ layers, 300+
+estimated lines, 5+ bundled sub-features). Do not build from this
+file. See the parent line in docs/taskPlan.md and:
+- docs/tasks/task-118a-ui-superadmin-announcements-list.md
+- docs/tasks/task-118b-ui-superadmin-announcements-form.md
+- docs/tasks/task-118c-ui-superadmin-announcements-actions.md
+- docs/tasks/task-118d-dashboard-announcements-card.md
 
 ## What this builds
 `app/superAdmin/announcements/page.tsx` +
