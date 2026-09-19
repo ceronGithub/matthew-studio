@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-118c | file: docs/tasks/task-118c-ui-superadmin-announcements-actions.md | needs: task-118a | setup: none
+**NEXT UP:** task-118d | file: docs/tasks/task-118d-dashboard-announcements-card.md | needs: task-118a | setup: none
 **OPEN FINDINGS:** 3 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
@@ -108,8 +108,16 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
                 shell, not a routed page — matches this task's own
                 "opens the form" wording.
                 docs/tasks/task-118b-ui-superadmin-announcements-form.md
-          - [ ] task-118c — row actions (duplicate/deactivate/delete).
-                Needs task-118a.
+          - [DONE] task-118c — row actions (duplicate/deactivate/delete).
+                Needs task-118a. Built 2026-09-20
+                (lib/hooks/useAnnouncements.ts extended with
+                duplicateAnnouncement/deactivateAnnouncement/
+                deleteAnnouncement, components/announcements/
+                AnnouncementsList.tsx edited — Delete goes through
+                shared ConfirmationModal with 5-second delay, same
+                pendingRowAction pattern as AdminManagementList.tsx;
+                Duplicate/Deactivate fire directly, no modal, per
+                this task's own DONE WHEN wording).
                 docs/tasks/task-118c-ui-superadmin-announcements-actions.md
           - [ ] task-118d — dashboard quick-action card. Needs
                 task-118a.

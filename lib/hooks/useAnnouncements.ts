@@ -7,14 +7,18 @@
  * filter — never calls fetch directly inside the page/component
  * (Rule 31.2). Mirrors lib/hooks/useSuperAdminProducts.ts's shape.
  *
- * Create/edit/duplicate/deactivate/delete mutations are NOT part of
- * this hook yet — those land with task-118b (form) and task-118c
- * (row actions), which will extend this file rather than duplicate
- * the fetch logic.
+ * Create/edit mutations are handled separately by
+ * lib/hooks/useAnnouncementForm.ts (task-118b) since that hook also
+ * owns form validation state, which doesn't belong here. Duplicate,
+ * deactivate, and soft-delete are pure list-row actions with no form
+ * state, so they DO extend this file (task-118c) — same split
+ * lib/hooks/useAdminManagement.ts uses (setActive/deleteAdmin live in
+ * the list hook; the create/edit form is separate).
  */
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { getCsrfHeader } from "@/lib/csrf";
 
 export interface AnnouncementListItem {
   id: string;
@@ -110,6 +114,79 @@ export function useAnnouncements() {
 
   const clearFilters = useCallback(() => setFilters(DEFAULT_FILTERS), []);
 
+  type MutationResult = { success: boolean; message?: string };
+
+  /**
+   * duplicateAnnouncement
+   * task-118c "Duplicate" row action. Server clones the row as a new
+   * draft (title suffixed " (Copy)") — no confirmation modal per the
+   * task spec (only Delete requires one). Refetches the current
+   * page/filters on success so the new row appears without a full
+   * page reload.
+   */
+  const duplicateAnnouncement = useCallback(
+    async (announcementId: string): Promise<MutationResult> => {
+      try {
+        const response = await fetch(`/api/superadmin/announcements/${announcementId}/duplicate`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", ...getCsrfHeader() },
+        });
+        const result = await response.json();
+        if (result.success) await fetchAnnouncements(state.page, filters);
+        return { success: Boolean(result.success), message: result.message };
+      } catch {
+        return { success: false, message: "We couldn't reach the server. Check your connection and try again." };
+      }
+    },
+    [fetchAnnouncements, state.page, filters]
+  );
+
+  /**
+   * deactivateAnnouncement
+   * task-118c "Deactivate early" row action. Sets status to
+   * "expired" ahead of its scheduled expiresAt. No confirmation
+   * modal per the task spec — direct action + toast.
+   */
+  const deactivateAnnouncement = useCallback(
+    async (announcementId: string): Promise<MutationResult> => {
+      try {
+        const response = await fetch(`/api/superadmin/announcements/${announcementId}/deactivate`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json", ...getCsrfHeader() },
+        });
+        const result = await response.json();
+        if (result.success) await fetchAnnouncements(state.page, filters);
+        return { success: Boolean(result.success), message: result.message };
+      } catch {
+        return { success: false, message: "We couldn't reach the server. Check your connection and try again." };
+      }
+    },
+    [fetchAnnouncements, state.page, filters]
+  );
+
+  /**
+   * deleteAnnouncement
+   * task-118c "Delete" row action. Soft-deletes the row (Rule 6).
+   * The caller wraps this behind ConfirmationModal's 5-second delay
+   * (Rule 34.4) — this function itself has no delay of its own.
+   */
+  const deleteAnnouncement = useCallback(
+    async (announcementId: string): Promise<MutationResult> => {
+      try {
+        const response = await fetch(`/api/superadmin/announcements/${announcementId}`, {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json", ...getCsrfHeader() },
+        });
+        const result = await response.json();
+        if (result.success) await fetchAnnouncements(state.page, filters);
+        return { success: Boolean(result.success), message: result.message };
+      } catch {
+        return { success: false, message: "We couldn't reach the server. Check your connection and try again." };
+      }
+    },
+    [fetchAnnouncements, state.page, filters]
+  );
+
   return {
     ...state,
     filters,
@@ -117,5 +194,8 @@ export function useAnnouncements() {
     clearFilters,
     goToPage,
     refetch,
+    duplicateAnnouncement,
+    deactivateAnnouncement,
+    deleteAnnouncement,
   };
 }

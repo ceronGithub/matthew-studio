@@ -64,3 +64,19 @@ restricted to binaries.prisma.sh), so pre-existing unrelated tsc
 errors persist repo-wide; confirmed zero errors in any file this
 task touched. taskPlan.md task-118b flipped to [DONE]; NEXT UP
 advanced to task-118c (needs task-118a, done).
+[2026-09-20] task-118c built: Duplicate/Deactivate/Delete row actions
+wired on /superAdmin/announcements. lib/hooks/useAnnouncements.ts
+extended with duplicateAnnouncement/deactivateAnnouncement/
+deleteAnnouncement (same setActive/deleteAdmin split pattern as
+useAdminManagement.ts -- mutations live in the list hook, separate
+from the create/edit form hook). components/announcements/
+AnnouncementsList.tsx edited: Delete routes through the shared
+ConfirmationModal with a 5-second delay (pendingRowAction
+discriminated union, mirrors AdminManagementList.tsx); Duplicate and
+Deactivate fire directly with a toast, no modal -- task-118c's own
+DONE WHEN only requires a modal for Delete. Deactivate button hides
+once status is "expired" (matches the API's own 400 guard against
+re-deactivating). No schema/API/CSS change -- task-117's
+duplicate/deactivate/delete routes already existed. taskPlan.md
+task-118c flipped to [DONE]; parent task-118 stays open (task-118d
+remaining); NEXT UP advanced to task-118d (needs task-118a, done).

@@ -12,8 +12,11 @@
  * components/products/SuperAdminProductsList.tsx's structure.
  *
  * task-118b wires Create/Edit into this list via the AnnouncementForm
- * modal below. Duplicate/Deactivate/Delete (task-118c) still render
- * as disabled stub buttons — those land in a later task.
+ * modal below. task-118c wires Duplicate/Deactivate/Delete row
+ * actions — Delete goes through the shared ConfirmationModal with a
+ * 5-second delay (Rule 34.4), same pendingRowAction discriminated-
+ * union pattern as components/admin/AdminManagementList.tsx. Duplicate
+ * and Deactivate are direct actions (no modal) per task-118c's spec.
  */
 "use client";
 
@@ -23,6 +26,13 @@ import { useAnnouncements, type AnnouncementListItem } from "@/lib/hooks/useAnno
 import { useToast } from "@/components/shared/useToast";
 import ToastStack from "@/components/shared/ToastStack";
 import AnnouncementForm from "@/components/announcements/AnnouncementForm";
+import ConfirmationModal from "@/components/shared/ConfirmationModal";
+
+const DELETE_CONFIRM_DELAY_SECONDS = 5;
+
+// Which single-row action is pending confirmation — only "delete"
+// currently uses this; Duplicate/Deactivate fire immediately.
+type PendingRowAction = { type: "delete"; id: string; title: string } | null;
 
 function formatDate(iso: string | null): string {
   if (!iso) return "—";
@@ -62,6 +72,9 @@ export default function AnnouncementsList() {
     clearFilters,
     goToPage,
     refetch,
+    duplicateAnnouncement,
+    deactivateAnnouncement,
+    deleteAnnouncement,
   } = useAnnouncements();
 
   const { toasts, showToast, dismissToast } = useToast();
@@ -70,11 +83,42 @@ export default function AnnouncementsList() {
   // AnnouncementListItem being edited. Single piece of state covers
   // both Create and Edit since AnnouncementForm handles both modes.
   const [formMode, setFormMode] = useState<"create" | AnnouncementListItem | null>(null);
+  const [pendingRowAction, setPendingRowAction] = useState<PendingRowAction>(null);
 
   function handleSaved(message: string) {
     setFormMode(null);
     showToast(message, "success");
     refetch();
+  }
+
+  async function handleDuplicate(announcement: AnnouncementListItem) {
+    const result = await duplicateAnnouncement(announcement.id);
+    if (result.success) {
+      showToast(`✓ "${announcement.title}" duplicated as a new draft.`, "success");
+    } else {
+      showToast(`✕ ${result.message ?? "Failed to duplicate this announcement."}`, "error");
+    }
+  }
+
+  async function handleDeactivate(announcement: AnnouncementListItem) {
+    const result = await deactivateAnnouncement(announcement.id);
+    if (result.success) {
+      showToast(`✓ "${announcement.title}" deactivated.`, "success");
+    } else {
+      showToast(`✕ ${result.message ?? "Failed to deactivate this announcement."}`, "error");
+    }
+  }
+
+  async function handleDeleteConfirm() {
+    if (!pendingRowAction) return;
+    const result = await deleteAnnouncement(pendingRowAction.id);
+    const { title } = pendingRowAction;
+    setPendingRowAction(null);
+    if (result.success) {
+      showToast(`✓ "${title}" deleted.`, "success");
+    } else {
+      showToast(`✕ ${result.message ?? "Failed to delete this announcement."}`, "error");
+    }
   }
 
   return (
@@ -86,6 +130,18 @@ export default function AnnouncementsList() {
         existing={formMode === "create" || formMode === null ? null : formMode}
         onClose={() => setFormMode(null)}
         onSaved={handleSaved}
+      />
+
+      <ConfirmationModal
+        isOpen={pendingRowAction?.type === "delete"}
+        title="Delete announcement?"
+        description={`Are you sure you want to delete "${
+          pendingRowAction?.type === "delete" ? pendingRowAction.title : ""
+        }"? This cannot be undone.`}
+        confirmLabel="Delete"
+        confirmDelaySeconds={DELETE_CONFIRM_DELAY_SECONDS}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setPendingRowAction(null)}
       />
 
       <div className="superAdminAnnouncementsToolbar">
@@ -188,7 +244,6 @@ export default function AnnouncementsList() {
                     <td>{formatDate(announcement.publishAt)}</td>
                     <td>{formatDate(announcement.expiresAt)}</td>
                     <td className="superAdminAnnouncementsActionsCell">
-                      {/* Duplicate/Deactivate/Delete still stub — wired in task-118c */}
                       <div className="superAdminAnnouncementsRowActions">
                         <button
                           type="button"
@@ -197,13 +252,28 @@ export default function AnnouncementsList() {
                         >
                           Edit
                         </button>
-                        <button type="button" className="superAdminAnnouncementsActionButton" disabled>
+                        <button
+                          type="button"
+                          className="superAdminAnnouncementsActionButton"
+                          onClick={() => handleDuplicate(announcement)}
+                        >
                           Duplicate
                         </button>
+                        {announcement.status !== "expired" && (
+                          <button
+                            type="button"
+                            className="superAdminAnnouncementsActionButton"
+                            onClick={() => handleDeactivate(announcement)}
+                          >
+                            Deactivate
+                          </button>
+                        )}
                         <button
                           type="button"
                           className="superAdminAnnouncementsActionButton superAdminAnnouncementsActionButton--danger"
-                          disabled
+                          onClick={() =>
+                            setPendingRowAction({ type: "delete", id: announcement.id, title: announcement.title })
+                          }
                         >
                           Delete
                         </button>
