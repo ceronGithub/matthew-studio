@@ -98,6 +98,18 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
       - [ ] task-120 — UI: `/superAdmin/media` page — grid of uploaded
             assets, search/filter by folder, "Copy URL" action per
             item. Depends on task-119.
+      - [ ] task-121 — API: public product list/detail
+            (/api/shop/products, /api/shop/products/[slug]),
+            published + non-deleted only. Closes openFindings.md's
+            2026-09-13 storefront-not-wired gap. No dependency.
+      - [ ] task-122 — UI: wire /shop and /pricing to task-121's
+            API instead of static lib/productsData.ts. Depends on
+            task-121.
+      - [ ] task-123 — API: enforce admin account lockout (5 fails/1h)
+            in app/api/auth/login/route.ts — reuses the existing
+            lib/adminAccountStatus.ts SecurityLog-count query as
+            the actual gate. Closes openFindings.md's 2026-09-12
+            display-only-lockout gap. No dependency.
   - [ ] Phase 8 — Task Assignment, Customer Assignment, Notifications
         (Section 3.12/3.13, 9.2/9.4) — general Notifications (task-11-
         14) are done; Task/Customer Assignment specifically not yet
@@ -147,8 +159,8 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
 
 ## NOTES
 
-- Task numbering continues from the highest existing file (`task-120`) —
-  next new task file is `task-121`.
+- Task numbering continues from the highest existing file (`task-123`) —
+  next new task file is `task-124`.
 - `task-33` is listed under both item 6 (Vault) and item 7 (Gatekeeper)
   deliberately — it is one deliverable (Gatekeeper/Emergency Actions
   backend + viewer page) that closes gaps in two specs simultaneously.

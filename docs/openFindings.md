@@ -13,15 +13,17 @@ only consulted when investigating a specific flagged item.
   pending-review approval flow (task-109/110/111/112) has no live
   public query to exclude pending-review products from — the
   admin-managed `Product` table isn't wired to the public site at
-  all. Not yet numbered as a task. Needs developer priority/scope
-  decision before it's added to the plan.
+  all. **Converted to task-121 (API) / task-122 (UI) 2026-09-20** —
+  see docs/tasks/task-121-api-public-products.md and
+  docs/tasks/task-122-ui-storefront-wire-product-db.md.
 - [2026-09-12] **Admin account lockout is display-only** (found
   during task-94). Section 5.3 calls for "locked after 5 failures,
   1-hour auto-recovery" — no stored field exists and
   `app/api/auth/login/route.ts` does not actually block logins once
   reached. `lib/adminAccountStatus.ts` only computes a "Locked"
   display badge live from `SecurityLog` `login_failed` counts.
-  Enforcing the actual block is a separate, not-yet-numbered task.
+  **Converted to task-123 2026-09-20** — see
+  docs/tasks/task-123-api-admin-lockout-enforcement.md.
 - [2026-09-07] **task-41 numbering collision — reserved renumber, not
   yet built.** `task-41` was used for the (DONE) buyer-recovery
   middleware gate. The still-open admin_account_specification.md
