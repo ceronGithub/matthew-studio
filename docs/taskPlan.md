@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-118a | file: docs/tasks/task-118a-ui-superadmin-announcements-list.md | needs: task-117 | setup: none — task-117's schema+API already exist, this is UI-only
+**NEXT UP:** task-118b | file: docs/tasks/task-118b-ui-superadmin-announcements-form.md | needs: task-118a | setup: none
 **OPEN FINDINGS:** 3 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
@@ -93,7 +93,12 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
             split into 4 micro-tasks 2026-09-20, see docs/tasks/).
             Depends on task-117. Flips to [DONE] only when all 4
             children below are [DONE] (Rule 49.1 Rule 6).
-          - [ ] task-118a — list page + pagination. Needs task-117.
+          - [DONE] task-118a — list page + pagination. Needs task-117.
+                Built 2026-09-20 (app/superAdmin/announcements/page.tsx,
+                components/announcements/AnnouncementsList.tsx,
+                lib/hooks/useAnnouncements.ts,
+                app/styles/superAdminAnnouncements.css). Actions column
+                is disabled stubs pending task-118b/c.
                 docs/tasks/task-118a-ui-superadmin-announcements-list.md
           - [ ] task-118b — create/edit form. Needs task-118a.
                 docs/tasks/task-118b-ui-superadmin-announcements-form.md

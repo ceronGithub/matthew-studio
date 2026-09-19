@@ -1,0 +1,333 @@
+/**
+ * FILE: app/styles/superAdminAnnouncements.css
+ * PURPOSE:
+ * Styles for app/superAdmin/announcements/page.tsx and
+ * components/announcements/AnnouncementsList.tsx (task-118a).
+ * References the design tokens in app/globals.css — never hardcoded
+ * colors or spacing. Responsive breakpoints live in
+ * app/styles/mediaQueries.css, not inline here. Adapted from
+ * app/styles/superAdminProducts.css (task-112) for visual consistency
+ * across super-admin list pages, plus a Create button in the toolbar
+ * (this page's create/edit flow lands in task-118b).
+ */
+
+.superAdminAnnouncementsPage {
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.superAdminAnnouncementsHeader {
+  margin-bottom: var(--space-xl);
+}
+
+.superAdminAnnouncementsEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.superAdminAnnouncementsTitle {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-top: var(--space-xs);
+}
+
+.superAdminAnnouncementsSubtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+  max-width: 70ch;
+}
+
+/* Toolbar: filters + create button */
+.superAdminAnnouncementsToolbar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.superAdminAnnouncementsFilters {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.superAdminAnnouncementsFilterSelect,
+.superAdminAnnouncementsFilterInput {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  touch-action: manipulation;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+.superAdminAnnouncementsFilterSelect:hover,
+.superAdminAnnouncementsFilterSelect:focus-visible,
+.superAdminAnnouncementsFilterInput:hover,
+.superAdminAnnouncementsFilterInput:focus-visible {
+  border-color: var(--color-border-hover);
+  background-color: var(--color-surface-hover);
+}
+
+.superAdminAnnouncementsSearchInput {
+  flex: 1 1 220px;
+}
+
+.superAdminAnnouncementsClearFiltersButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: color var(--transition-fast);
+}
+.superAdminAnnouncementsClearFiltersButton:hover,
+.superAdminAnnouncementsClearFiltersButton:focus-visible {
+  color: var(--color-text-primary);
+}
+
+.superAdminAnnouncementsCreateButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--color-accent);
+  border-radius: 8px;
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.superAdminAnnouncementsCreateButton:hover:not(:disabled),
+.superAdminAnnouncementsCreateButton:focus-visible:not(:disabled) {
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+.superAdminAnnouncementsCreateButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* Table */
+.superAdminAnnouncementsTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.superAdminAnnouncementsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.superAdminAnnouncementsTable thead tr {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.superAdminAnnouncementsTable th {
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.superAdminAnnouncementsTable td {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.superAdminAnnouncementsTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.superAdminAnnouncementsTable tbody tr:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.superAdminAnnouncementsNameCell {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  white-space: normal;
+  max-width: 320px;
+}
+
+.superAdminAnnouncementsStatusBadge {
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.superAdminAnnouncementsActionsCell {
+  text-align: right;
+}
+
+.superAdminAnnouncementsRowActions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-xs);
+}
+
+.superAdminAnnouncementsActionButton {
+  border: none;
+  background: none;
+  color: var(--color-accent);
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: color var(--transition-fast);
+  min-height: 44px;
+  padding: 0 var(--space-xs);
+  display: inline-flex;
+  align-items: center;
+}
+.superAdminAnnouncementsActionButton:hover:not(:disabled),
+.superAdminAnnouncementsActionButton:focus-visible:not(:disabled) {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+.superAdminAnnouncementsActionButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.superAdminAnnouncementsActionButton--danger {
+  color: var(--color-error);
+}
+.superAdminAnnouncementsActionButton--danger:hover:not(:disabled),
+.superAdminAnnouncementsActionButton--danger:focus-visible:not(:disabled) {
+  color: #dc2626;
+}
+
+/* Loading skeleton */
+.superAdminAnnouncementsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.superAdminAnnouncementsRow--skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.superAdminAnnouncementsSkeletonLine {
+  height: 1rem;
+  border-radius: 4px;
+}
+.superAdminAnnouncementsSkeletonLine--short {
+  width: 40%;
+}
+
+/* Empty / error state */
+.superAdminAnnouncementsEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.superAdminAnnouncementsRetryButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.superAdminAnnouncementsRetryButton:hover,
+.superAdminAnnouncementsRetryButton:focus-visible {
+  background-color: var(--color-surface-hover);
+}
+
+/* Footer: total count + pagination */
+.superAdminAnnouncementsFooter {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.superAdminAnnouncementsTotalCount {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.superAdminAnnouncementsPagination {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.superAdminAnnouncementsPageButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.superAdminAnnouncementsPageButton:hover:not(:disabled),
+.superAdminAnnouncementsPageButton:focus-visible:not(:disabled) {
+  background-color: var(--color-surface-hover);
+}
+.superAdminAnnouncementsPageButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.superAdminAnnouncementsPageLabel {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}

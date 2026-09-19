@@ -1,0 +1,43 @@
+# overviewProject-4.txt — ACTIVE
+# Previous (closed): overviewProject-3.txt  |  Base overview: overviewProject.txt
+
+STRUCTURE UPDATES
+
+[2026-09-20] New route: /superAdmin/announcements (task-118a).
+Files added:
+- app/superAdmin/announcements/page.tsx — Server Component shell,
+  renders AnnouncementsList, metadata set.
+- components/announcements/AnnouncementsList.tsx — Client Component,
+  paginated table (Title, Status, Placement, Publish Date, Expiry
+  Date, Actions). Loading skeleton / empty / error states per Rule
+  25. Status filter + search. Actions column (Edit/Duplicate/Delete)
+  renders as DISABLED STUBS — no mutation logic yet.
+- lib/hooks/useAnnouncements.ts — client fetch hook against the
+  existing GET /api/superadmin/announcements (task-117), mirrors
+  lib/hooks/useSuperAdminProducts.ts's shape (filters, pagination,
+  refetch).
+- app/styles/superAdminAnnouncements.css — adapted from
+  superAdminProducts.css, adds a Create-button style for task-118b.
+No schema or API change — task-116/117 already provide the
+Announcement model and CRUD routes this reads from.
+
+CHANGE LOG
+
+[2026-09-20] task-118 split into 4 micro-tasks (118a-d) per Rule 49
+Step 4 (2+ layers, ~300+ est. lines, 5+ bundled sub-features:
+list/pagination, create form, edit, duplicate, delete+modal,
+dashboard card). docs/taskPlan.md's task-118 line is now a parent
+that flips [DONE] only when all 4 children are [DONE] (Rule 49.1
+Rule 6). Original docs/tasks/task-118-*.md marked superseded,
+redirects to the 4 new files.
+[2026-09-20] task-118a built: read-only announcements list page at
+/superAdmin/announcements. See STRUCTURE UPDATES above for the file
+list. Debug points: an empty list with a real DB means either no
+announcements created yet, or the status/search filter is too
+narrow -- try "All statuses" + clear search first. Sandbox cannot
+download the Prisma engine binary (network-restricted), so
+`npx tsc --noEmit` could not fully verify the whole repo -- confirmed
+no errors specific to the new announcement files; run the full
+typecheck in the real dev environment before merging. taskPlan.md
+task-118a flipped to [DONE]; NEXT UP advanced to task-118b (needs
+task-118a, which is now done).
