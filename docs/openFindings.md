@@ -29,6 +29,29 @@ only consulted when investigating a specific flagged item.
   **task-65** instead — now built and closed as task-65/92/93 (see
   docs/taskPlan.archive.md). Note kept here only as a reminder never
   to create `docs/tasks/task-41-analytics.md` under the old number.
+- [2026-09-20] **task-114's list endpoint is a duplicate of the detail
+  route, not implemented.** `app/api/superadmin/content/route.ts` is
+  byte-identical to `app/api/superadmin/content/[sectionId]/route.ts`
+  (confirmed via diff) — its own file-header comment even claims to
+  be the `[sectionId]` file. It destructures a `sectionId` route
+  param that doesn't exist at `content/route.ts`'s path, so
+  `params.sectionId` is `undefined` and the Prisma lookup will throw
+  at runtime. There is no `prisma.contentSection.findMany()` anywhere
+  in the codebase — the "list all sections" GET that task-115's
+  section tree depends on was never actually built. Surfaced while
+  spot-checking task-115's `needs: task-114` before starting
+  (Rule 49.2 §3). Blocks task-115 until fixed — flagged to developer,
+  build paused pending direction.
+- [2026-09-20] **Content PUT/revert routes don't enforce CSRF
+  server-side.** `app/api/superadmin/content/[sectionId]/route.ts`'s
+  PUT and `.../revert/route.ts`'s POST never call
+  `isValidCsrfRequest()` (Rule 32.2) — unlike the auth endpoints that
+  already use it. Not fixed here: task-115's new client code still
+  sends `getCsrfHeader()` on every mutation (matches
+  `useAdminProductForm.ts`'s convention), but the header currently
+  goes unchecked server-side. Adding the check is a one-line change
+  to task-114's already-shipped routes — flagged rather than made
+  silently, since it touches code outside task-115's own scope.
 - [2026-09-20] **taskPlan.md v60 cleanup note.** This file and
   docs/taskPlan.archive.md were created during the first v60 session
   touching taskPlan.md (Rule 49.2 §8): pointer shortened to the

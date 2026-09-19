@@ -3,6 +3,18 @@
 **Fulfills spec:** Section 3.7.
 **taskPlan.md phase:** Phase 7 — CMS, Announcements, Media Library.
 **Dependency:** task-114 (content API must exist).
+**NEEDS:** task-114
+**SETUP:** npx prisma db push && npx prisma generate
+**FILES TO TOUCH:** app/superAdmin/content/page.tsx (new),
+components/content/ContentEditor.tsx, SectionTree.tsx, SectionForm.tsx,
+ContentFieldRenderer.tsx (new), lib/hooks/useContentSections.ts,
+useContentSectionEditor.ts (new), app/styles/content.css (new),
+app/api/superadmin/content/route.ts (fixed — was a broken duplicate),
+app/api/superadmin/content/[sectionId]/versions/route.ts (new)
+**DONE WHEN:** section tree renders and loads a form on select;
+Publish fires a toast and adds a version-history entry; Preview opens
+the live page in a new tab; Revert restores prior data behind a
+ConfirmationModal naming the version.
 
 ## What this builds
 `app/superAdmin/content/page.tsx` (Server Component shell) +

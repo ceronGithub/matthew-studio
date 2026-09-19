@@ -1,7 +1,7 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-115 | file: docs/tasks/task-115-ui-superadmin-content.md | needs: task-114 | setup: npx prisma db push && npx prisma generate
-**OPEN FINDINGS:** 3 — see docs/openFindings.md
+**NEXT UP:** task-116 | file: docs/tasks/task-116-schema-announcement.md | needs: none
+**OPEN FINDINGS:** 6 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
 
@@ -68,18 +68,15 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
             one, PUT (publish, snapshots to `ContentVersion`, prunes
             beyond 5), revert-to-version. Depends on task-113. Built
             2026-09-13, see docs/tasks/task-114-api-content-sections.md.
-      - [ ] task-115 — UI: `/superAdmin/content` page — section tree
-            (left panel), dynamic form matching the selected section's
-            data shape (right panel), Preview (opens live page),
-            Publish, Revert-to-last-published. Depends on task-114.
-            NEEDS: task-114. SETUP: npx prisma db push && npx prisma
-            generate. FILES TO TOUCH:
-            app/superAdmin/content/page.tsx (new),
-            components/content/ContentEditor.tsx (new). DONE WHEN:
-            section tree renders and loads a form on select; Publish
-            fires a toast and adds a Revert history entry; Preview
-            opens the live page in a new tab; Revert restores prior
-            data behind a ConfirmationModal. See
+      - [DONE] task-115 — UI: `/superAdmin/content` page — section tree
+            (left panel), type-aware form matching the selected
+            section's data shape (right panel), Preview (opens live
+            page), Publish, Revert-to-last-published w/ version
+            history list. Depends on task-114. Built 2026-09-20 —
+            also fixed task-114's list route (was a duplicate of the
+            detail route, never actually listed sections) and added
+            the missing GET .../[sectionId]/versions endpoint the
+            Revert feature needs (neither existed before). See
             docs/tasks/task-115-ui-superadmin-content.md.
       - [ ] task-116 — schema: `Announcement` model (Section 3.9).
             No dependency.

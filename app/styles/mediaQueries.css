@@ -328,3 +328,13 @@
 
 
 
+
+/* content.css — /superAdmin/content two-panel layout (task-115).
+   Below 768px the tree and form stack in a single column
+   (content.css's base rule); at tablet width and up they sit
+   side by side. */
+@media (min-width: 768px) {
+  .contentEditorGrid {
+    grid-template-columns: 280px 1fr;
+  }
+}

@@ -1,0 +1,396 @@
+/**
+ * FILE: app/styles/content.css
+ * PURPOSE:
+ * Styles for app/superAdmin/content/page.tsx and
+ * components/content/*.tsx (task-115). References the design tokens
+ * in app/globals.css — never hardcoded colors or spacing. Page header
+ * density matches backups.css/accountActivity.css so every
+ * super-admin page reads as one system (Rule 17). Responsive
+ * breakpoints live in app/styles/mediaQueries.css, not inline here.
+ */
+
+.contentPage {
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.contentPageHeader {
+  margin-bottom: var(--space-xl);
+}
+
+.contentPageEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.contentPageTitle {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-top: var(--space-xs);
+}
+
+.contentPageSubtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+  max-width: 70ch;
+}
+
+/* contentEditorGrid — mobile-first single column by default (Rule
+   23.5); the two-panel 280px/1fr layout is a min-width override in
+   mediaQueries.css, never declared here. */
+.contentEditorGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+.contentEditorTreePanel,
+.contentEditorFormPanel {
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+}
+
+/* --- Section tree (left panel) --- */
+
+.sectionTreeGroup + .sectionTreeGroup {
+  margin-top: var(--space-lg);
+}
+
+.sectionTreeGroupLabel {
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-xs);
+}
+
+.sectionTreeList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.sectionTreeItem {
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-sm);
+  text-align: left;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+.sectionTreeItem:hover,
+.sectionTreeItem:focus-visible,
+.sectionTreeItem:active {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+.sectionTreeItem--active {
+  background-color: var(--color-surface-active);
+  border-color: var(--color-border-hover);
+  color: var(--color-text-primary);
+}
+
+.contentEditorTreeSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.contentEditorTreeSkeletonLine {
+  height: 1.1rem;
+  border-radius: 4px;
+}
+
+.contentEditorTreeEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xl) var(--space-md);
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+.contentEditorTreeRetryButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-primary);
+  touch-action: manipulation;
+}
+
+/* --- Section form (right panel) --- */
+
+.sectionFormHeader {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.sectionFormTitle {
+  font-size: 1.3rem;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+.sectionFormMeta {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+}
+
+.sectionFormActions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.sectionFormPreviewButton,
+.sectionFormPublishButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.sectionFormPreviewButton {
+  border: 1px solid var(--color-border);
+  background-color: transparent;
+  color: var(--color-text-secondary);
+}
+.sectionFormPreviewButton:hover,
+.sectionFormPreviewButton:focus-visible {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+.sectionFormPublishButton {
+  border: 1px solid var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  font-weight: 600;
+}
+.sectionFormPublishButton:hover:not(:disabled),
+.sectionFormPublishButton:focus-visible:not(:disabled) {
+  background-color: var(--color-accent-hover);
+}
+.sectionFormPublishButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sectionFormSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.sectionFormSkeletonLine {
+  height: 2.5rem;
+  border-radius: 8px;
+}
+.sectionFormSkeletonLine--short {
+  width: 60%;
+}
+
+.sectionFormErrorState,
+.sectionFormEmptyState {
+  padding: var(--space-xl) var(--space-md);
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+/* --- Field renderer --- */
+
+.contentFieldList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.contentFieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.contentFieldLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.contentFieldInput,
+.contentFieldTextarea {
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-size: 1rem; /* never below 16px — prevents iOS auto-zoom (Rule 29.6) */
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.contentFieldTextarea {
+  min-height: 100px;
+  resize: vertical;
+}
+.contentFieldInput:focus-visible,
+.contentFieldTextarea:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+.contentFieldCounter {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  align-self: flex-end;
+}
+
+.contentFieldGroup--checkbox {
+  flex-direction: row;
+  align-items: center;
+}
+.contentFieldCheckboxLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-height: 44px;
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+}
+.contentFieldCheckbox {
+  width: 20px;
+  height: 20px;
+}
+
+.contentFieldListEditor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+.contentFieldListRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
+}
+.contentFieldListRow .contentFieldInput {
+  flex: 1 1 auto;
+}
+.contentFieldListRemoveButton,
+.contentFieldListAddButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  touch-action: manipulation;
+}
+.contentFieldListRemoveButton:hover,
+.contentFieldListAddButton:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+.contentFieldListAddButton {
+  align-self: flex-start;
+}
+
+.contentFieldComplexNote,
+.contentFieldEmptyNote {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+/* --- Version history --- */
+
+.sectionFormVersionHistory {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.sectionFormVersionHistoryTitle {
+  font-size: 0.95rem;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.sectionFormVersionEmptyNote {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.sectionFormVersionList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.sectionFormVersionRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.sectionFormVersionLabel {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.sectionFormRevertButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  font-size: 0.8rem;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+.sectionFormRevertButton:hover:not(:disabled),
+.sectionFormRevertButton:focus-visible:not(:disabled) {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+.sectionFormRevertButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

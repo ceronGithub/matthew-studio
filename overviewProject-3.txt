@@ -873,3 +873,45 @@ file holds change-log entries only.
   real dev environment before verifying in the browser. docs/
   taskPlan.md's NEXT UP pointer advanced to task-115; overviewProject.
   txt's Section 5C corrected in place (Rule 16.1).
+[2026-09-20] Built task-115: /superAdmin/content page (Section 3.7
+  CMS). New: app/superAdmin/content/page.tsx (Server shell) +
+  components/content/ContentEditor.tsx (orchestrator),
+  SectionTree.tsx (left panel, groups sections by sectionKey prefix
+  into Homepage/Shop/Pricing/Standalone Pages/Site-wide/Other),
+  SectionForm.tsx (right panel -- header, Preview/Publish buttons,
+  version-history list with Revert), ContentFieldRenderer.tsx
+  (type-aware field editor: text/textarea/number/boolean/string-list
+  get real typed inputs, nested objects and arrays-of-objects show a
+  read-only note instead of a raw JSON editor -- no ContentSection
+  rows are seeded yet, so a full per-sectionKey field-config map
+  would have been guesswork; this ships the generic renderer as the
+  honest baseline). New hooks: lib/hooks/useContentSections.ts
+  (list) and useContentSectionEditor.ts (detail fetch, publish,
+  revert, re-fetches both detail and version list after either
+  mutation succeeds).
+  Found and fixed two gaps in already-"done" task-114 before
+  building on top of it (flagged in docs/openFindings.md, not
+  silently patched): (1) GET /api/superadmin/content was a
+  byte-for-byte duplicate of the [sectionId] detail route -- it
+  destructured a sectionId param that doesn't exist at that path, so
+  it always threw at runtime, and no findMany() existed anywhere in
+  the codebase. Replaced with the actual list behavior task-114's
+  own spec already called for. (2) task-114 never shipped a way to
+  list a section's ContentVersion rows, so the Revert feature task-
+  115 itself requires had nothing to select a versionId from -- added
+  GET /api/superadmin/content/[sectionId]/versions (id/createdAt/
+  savedBy only, capped at the same 5-row limit the PUT/revert routes
+  already prune to). Separately flagged, NOT fixed: task-114's PUT
+  and revert routes never call isValidCsrfRequest() (Rule 32.2)
+  server-side, even though this task's new client code already sends
+  getCsrfHeader() on every mutation -- the header currently goes
+  unchecked. `npx tsc --noEmit` is clean for every new/changed file
+  in this task; this sandbox still can't reach binaries.prisma.sh to
+  generate the Prisma engine, so the ~45 pre-existing implicit-any
+  errors elsewhere are unrelated to this change (same limitation
+  noted on task-113/114) -- run `npx prisma db push && npx prisma
+  generate` in the real dev environment before verifying in browser.
+  docs/taskPlan.md's NEXT UP pointer advanced to task-116; task-115's
+  own doc file upgraded with the v60 NEEDS/SETUP/FILES TO TOUCH/DONE
+  WHEN fields (Rule 49.2 §4, first time it became the pointer's
+  target).
