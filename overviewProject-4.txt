@@ -134,3 +134,14 @@ so left consistent with the repo. taskPlan.md task-120 flipped to
 [DONE]; NEXT UP advanced to task-124 (needs task-121, done). Parent
 Phase 7 stays open (task-124/125 remain). New openFindings.md line:
 page has no dashboard card yet.
+
+[2026-09-20] Planning only, no code: split task-124 (wire category
+pages/detail pages/homepage sections to the live Product API) into 6
+per-category micro-tasks task-126..131 (game-characters, tshirts,
+file-tools, tutorials, templates, ai-videos) in docs/taskPlan.md, each
+with its own docs/tasks/task-1XX-ui-wire-*.md file. Reason: task-124 as
+written touched 12 route files (~688 lines) + 6 section components
+(~1,034 lines) across 2 layers for 6 distinct categories — over Rule 49
+Step 4's splitting threshold. task-124 itself is now a parent line that
+flips [DONE] once all 6 children are [DONE] (Rule 49.1 Rule 6). NEXT UP
+pointer advanced to task-126.

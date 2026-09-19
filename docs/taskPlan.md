@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-124 | file: none (single-line item, no docs/tasks file) | needs: task-121 | setup: none
+**NEXT UP:** task-126 | file: docs/tasks/task-126-ui-wire-game-characters.md | needs: task-121 | setup: none
 **OPEN FINDINGS:** 4 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
@@ -154,11 +154,29 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
             lib/adminAccountStatus.ts SecurityLog-count query as
             the actual gate. Closes openFindings.md's 2026-09-12
             display-only-lockout gap. No dependency.
-      - [ ] task-124 — UI: wire the category pages, product detail
-            ([slug]) pages, and homepage category sections to the
-            live Product API (they still read static PRODUCTS, so a
-            DB-only product's "View Details" link 404s). Depends on
-            task-121.
+      - [ ] task-124 — SPLIT into task-126..131 below. Too large for a
+            single item (12 route files ~688 lines + 6 section
+            components ~1,034 lines across 6 categories = ~1,900+
+            lines, 2+ layers). Parent flips [DONE] only when all 6
+            children below are [DONE] (Rule 49.1 Rule 6).
+      - [ ] task-126 — UI: wire game-characters (section + [slug]
+            page) to the live Product API. Depends on task-121.
+            See docs/tasks/task-126-ui-wire-game-characters.md.
+      - [ ] task-127 — UI: wire tshirts (section + [slug] page) to
+            the live Product API. Depends on task-121.
+            See docs/tasks/task-127-ui-wire-tshirts.md.
+      - [ ] task-128 — UI: wire file-tools (section + [slug] page) to
+            the live Product API. Depends on task-121.
+            See docs/tasks/task-128-ui-wire-file-tools.md.
+      - [ ] task-129 — UI: wire tutorials (section + [slug] page) to
+            the live Product API. Depends on task-121.
+            See docs/tasks/task-129-ui-wire-tutorials.md.
+      - [ ] task-130 — UI: wire templates (section + [slug] page) to
+            the live Product API. Depends on task-121.
+            See docs/tasks/task-130-ui-wire-templates.md.
+      - [ ] task-131 — UI: wire ai-videos (section + [slug] page) to
+            the live Product API. Depends on task-121.
+            See docs/tasks/task-131-ui-wire-ai-videos.md.
       - [ ] task-125 — Script: seed the Product table from the static
             lib/productsData.ts catalog (18 products) so /products
             isn't empty on a fresh DB. Depends on task-121.
@@ -211,7 +229,7 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
 
 ## NOTES
 
-- Task numbering continues from the highest existing file (`task-125`) —
+- Task numbering continues from the highest existing file (`task-131`) —
   next new task file is `task-126`.
 - `task-33` is listed under both item 6 (Vault) and item 7 (Gatekeeper)
   deliberately — it is one deliverable (Gatekeeper/Emergency Actions
