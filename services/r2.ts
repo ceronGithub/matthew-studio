@@ -13,7 +13,13 @@
  *
  * Server-side only — never import this file in a "use client" component.
  */
-import { S3Client, GetObjectCommand, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import {
+  S3Client,
+  GetObjectCommand,
+  PutObjectCommand,
+  DeleteObjectCommand,
+  ListObjectsV2Command,
+} from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 export const r2Client = new S3Client({
@@ -74,4 +80,65 @@ export async function deleteFromR2(key: string): Promise<void> {
       Key: key,
     })
   );
+}
+
+export interface R2ObjectSummary {
+  key: string;
+  url: string;
+  sizeBytes: number;
+  lastModified: string | null;
+}
+
+export interface R2ListResult {
+  objects: R2ObjectSummary[];
+  nextCursor: string | null;
+}
+
+/**
+ * listR2Objects
+ * Lists one page of objects in the R2 bucket, optionally limited to a
+ * folder prefix (e.g. "products/"). Used by the super-admin media
+ * library (GET /api/superadmin/media, task-119).
+ *
+ * R2 pagination is cursor-based, not page-number-based: pass the
+ * previous call's nextCursor back in as cursor to get the next page.
+ * nextCursor is null once the last page has been returned.
+ *
+ * The url on each object is the public CDN URL — the caller is
+ * responsible for never listing private folders (buyer download
+ * files are private and must only ever be served via
+ * getSignedDownloadUrl above).
+ *
+ * @param prefix - Only return keys starting with this string
+ * @param cursor - R2 continuation token from a previous call
+ * @param limit  - Max objects to return in this page
+ */
+export async function listR2Objects(options: {
+  prefix?: string;
+  cursor?: string;
+  limit: number;
+}): Promise<R2ListResult> {
+  const response = await r2Client.send(
+    new ListObjectsV2Command({
+      Bucket: process.env.CLOUDFLARE_R2_BUCKET_NAME!,
+      Prefix: options.prefix || undefined,
+      ContinuationToken: options.cursor || undefined,
+      MaxKeys: options.limit,
+    })
+  );
+
+  const objects: R2ObjectSummary[] = (response.Contents ?? [])
+    // R2 can return zero-byte "folder marker" keys ending in "/" — not real files
+    .filter((item) => item.Key && !item.Key.endsWith("/"))
+    .map((item) => ({
+      key: item.Key as string,
+      url: `${process.env.NEXT_PUBLIC_CLOUDFLARE_R2_PUBLIC_URL}/${item.Key}`,
+      sizeBytes: item.Size ?? 0,
+      lastModified: item.LastModified ? item.LastModified.toISOString() : null,
+    }));
+
+  return {
+    objects,
+    nextCursor: response.IsTruncated ? response.NextContinuationToken ?? null : null,
+  };
 }

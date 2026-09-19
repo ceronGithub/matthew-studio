@@ -88,3 +88,21 @@ task-118 micro-tasks; taskPlan.md's task-118 parent line auto-flipped
 to [DONE] per Rule 49.1 Rule 6 now that 118a/b/c/d are all done. NEXT
 UP advanced to task-119 (API: GET /api/superadmin/media, no
 dependency, single-line item -- no docs/tasks file for this one).
+[2026-09-20] task-119 built: GET /api/superadmin/media (superAdmin only)
+lists existing Cloudflare R2 objects for the future /superAdmin/media
+page. New file app/api/superadmin/media/route.ts; services/r2.ts gained
+listR2Objects() (ListObjectsV2, cursor-based -- R2 has no page numbers).
+Query: ?folder=&cursor=&limit= (limit default 50, max 100). Response:
+{ objects: [{ key, url, sizeBytes, lastModified }], nextCursor, folder,
+folders }; nextCursor is null on the last page. Only the folders in
+MEDIA_LIBRARY_FOLDERS (products, banners, avatars, orders) are ever
+returned -- database-backups/ and private buyer download files are
+deliberately excluded, so any new private folder stays hidden until
+added to that list. When no folder is chosen, private keys are skipped
+per fetch (up to 5 rounds) so a page can come back shorter than limit.
+Debug points: 500 on load -> check CLOUDFLARE_R2_ACCOUNT_ID/
+ACCESS_KEY_ID/SECRET_ACCESS_KEY/BUCKET_NAME in .env.local; every url
+broken -> check NEXT_PUBLIC_CLOUDFLARE_R2_PUBLIC_URL. No schema change.
+tsc: zero errors in touched files; the 45 repo-wide errors are
+pre-existing (sandbox skipped `prisma generate`). taskPlan.md task-119
+flipped to [DONE]; NEXT UP advanced to task-120 (needs task-119, done).

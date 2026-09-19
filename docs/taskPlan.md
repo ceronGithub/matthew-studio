@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-119 | file: none (single-line item, no docs/tasks file) | needs: none | setup: none
+**NEXT UP:** task-120 | file: none (single-line item, no docs/tasks file) | needs: task-119 | setup: none
 **OPEN FINDINGS:** 3 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
@@ -125,10 +125,15 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
                 "Announcements" entry to QUICK_ACTIONS, same shape as
                 the Vault/Security Logs/Products entries).
                 docs/tasks/task-118d-dashboard-announcements-card.md
-      - [ ] task-119 — API: `GET /api/superadmin/media` — lists
+      - [DONE] task-119 — API: `GET /api/superadmin/media` — lists
             existing Cloudflare R2 bucket objects (no new DB table).
             Paginated, filterable by folder prefix. Adds
             `listR2Objects()` to `services/r2.ts`. No dependency.
+            Built 2026-09-20 (app/api/superadmin/media/route.ts).
+            Cursor-based: ?folder=&cursor=&limit= -> { objects,
+            nextCursor, folder, folders }. Only products/banners/
+            avatars/orders folders are listable (allowlist) so
+            database-backups/ and private buyer files stay hidden.
       - [ ] task-120 — UI: `/superAdmin/media` page — grid of uploaded
             assets, search/filter by folder, "Copy URL" action per
             item. Depends on task-119.
