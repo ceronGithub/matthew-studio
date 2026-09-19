@@ -4,11 +4,11 @@ Unresolved gaps and follow-ups surfaced during builds/audits, one
 dated line each. Not read during next-task lookup (Rule 49.2 §2) —
 only consulted when investigating a specific flagged item.
 
-- [2026-09-13] ~~Storefront not wired to Product DB table~~ **PARTLY
-  RESOLVED (2026-09-20).** task-121 (public API) and task-122 (`/products`
-  grid) are done. Still static: category pages, `[slug]` detail pages,
-  homepage sections, compare tool -> task-124; empty DB has no seed ->
-  task-125. Kept struck through for history.
+- [2026-09-13] ~~Storefront not wired to Product DB table~~ **FULLY
+  RESOLVED (2026-09-20).** task-121/122 (API + /products grid),
+  task-124/126..131 (category pages, [slug] pages, homepage sections),
+  and task-125 (seed script) are all done and verified. Kept struck
+  through for history.
 - [2026-09-12] ~~Admin account lockout is display-only~~ **RESOLVED
   (2026-09-20, task-123).** `app/api/auth/login/route.ts` now rejects
   admin/superAdmin logins with 5 failures in 60 minutes before the
@@ -58,3 +58,15 @@ only consulted when investigating a specific flagged item.
   dashboard quick-action card is a separate item — until one is added
   the page is reachable only by typing the URL. Also: its search box
   filters only the files already loaded (the API has no search param).
+- [2026-09-20] ~~task-131 not build-verified in this sandbox.~~
+  **RESOLVED (2026-09-20).** Vic confirmed the build and admin CMS
+  create/unpublish check locally for both task-131 and task-125. Kept
+  struck through for history.
+- [2026-09-20] **task-49 is an unspecced stub — flagged before
+  building.** Recomputing NEXT UP after task-125 closed (Rule 49.2 §5)
+  landed on task-49 (bulk_file_converter_and_pdf_renamer_specification.md),
+  which has no docs/tasks/task-49-*.md file and is explicitly marked
+  "not detailed yet — lower priority" in taskPlan.md. Per Rule 49.1
+  Rule 1, no micro-task file should be created without first reading
+  the full spec and breaking it into schema/API/UI pieces — asked Vic
+  how to proceed rather than guessing a breakdown.

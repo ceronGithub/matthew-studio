@@ -1,7 +1,7 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-131 | file: docs/tasks/task-131-ui-wire-ai-videos.md | needs: task-121 | setup: none
-**OPEN FINDINGS:** 4 — see docs/openFindings.md
+**NEXT UP:** task-49 | file: none yet — spec not broken down | needs: none | setup: none
+**OPEN FINDINGS:** 5 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
 
@@ -154,11 +154,11 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
             lib/adminAccountStatus.ts SecurityLog-count query as
             the actual gate. Closes openFindings.md's 2026-09-12
             display-only-lockout gap. No dependency.
-      - [ ] task-124 — SPLIT into task-126..131 below. Too large for a
+      - [DONE] task-124 — SPLIT into task-126..131 below. Too large for a
             single item (12 route files ~688 lines + 6 section
             components ~1,034 lines across 6 categories = ~1,900+
-            lines, 2+ layers). Parent flips [DONE] only when all 6
-            children below are [DONE] (Rule 49.1 Rule 6).
+            lines, 2+ layers). All 6 children below are [DONE]
+            (2026-09-20) — parent auto-flipped per Rule 49.1 Rule 6.
       - [DONE] task-126 — UI: wire game-characters (section + [slug]
             page) to the live Product API. Depends on task-121.
             Built 2026-09-20: components/home/GameCharactersSection.tsx
@@ -221,12 +221,29 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
             mapped shape and ProductDetail.tsx's variant selector reads
             it unchanged — no special-casing needed for this category.
             See docs/tasks/task-130-ui-wire-templates.md.
-      - [ ] task-131 — UI: wire ai-videos (section + [slug] page) to
+      - [DONE] task-131 — UI: wire ai-videos (section + [slug] page) to
             the live Product API. Depends on task-121.
-            See docs/tasks/task-131-ui-wire-ai-videos.md.
-      - [ ] task-125 — Script: seed the Product table from the static
+            Built 2026-09-20: components/home/AIVideosSection.tsx and
+            app/(public)/ai-videos/[slug]/page.tsx now fetch from
+            /api/shop/products (client, via task-126's shared
+            lib/hooks/useCategoryProducts.ts) and Prisma directly
+            (server), instead of the static PRODUCTS catalog.
+            [slug]/page.tsx dropped generateStaticParams and is now
+            force-dynamic. VideoCarousel/custom-callout content
+            unchanged. Verified 2026-09-20 (build + admin CMS create/
+            unpublish check). See docs/tasks/task-131-ui-wire-ai-videos.md.
+      - [DONE] task-125 — Script: seed the Product table from the static
             lib/productsData.ts catalog (18 products) so /products
             isn't empty on a fresh DB. Depends on task-121.
+            Built 2026-09-20: scripts/seedProducts.ts upserts all 18
+            static-catalog products by slug (own DIRECT_URL Prisma
+            Client + adapter, per Rule 37.2 — never services/prisma.ts's
+            DATABASE_URL client), setting status: "published". Re-runnable,
+            never duplicates, never touches admin-added/edited rows.
+            Added npm run seed:products. Verified 2026-09-20 (18
+            created on first run, 0 created/18 updated on re-run;
+            /products and GET /api/shop/products both confirm 18).
+            See docs/tasks/task-125-script-seed-products.md.
   - [ ] Phase 8 — Task Assignment, Customer Assignment, Notifications
         (Section 3.12/3.13, 9.2/9.4) — general Notifications (task-11-
         14) are done; Task/Customer Assignment specifically not yet
