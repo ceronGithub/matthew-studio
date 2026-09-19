@@ -41,3 +41,26 @@ no errors specific to the new announcement files; run the full
 typecheck in the real dev environment before merging. taskPlan.md
 task-118a flipped to [DONE]; NEXT UP advanced to task-118b (needs
 task-118a, which is now done).
+[2026-09-20] task-118b built: Create/Edit Announcement modal wired
+into /superAdmin/announcements. Files added:
+components/announcements/AnnouncementForm.tsx (modal shell mirrors
+ConfirmationModal's backdrop/dialog shape),
+lib/hooks/useAnnouncementForm.ts (manual useState + validate()
+pattern -- project uses no react-hook-form/zod anywhere, so this
+matches useAdminProductForm.ts rather than introducing a new
+pattern). Files edited:
+components/announcements/AnnouncementsList.tsx (Create button +
+Edit row action now open the modal; formMode state holds
+"create" | AnnouncementListItem | null),
+app/styles/superAdminAnnouncements.css (+announcementForm* modal/
+field styles, ~185 lines). No schema or API change -- POST/PUT
+routes already existed from task-117. Debug points: if Save
+silently no-ops, check the browser console for a CSRF 403 first
+(getCsrfHeader() must find the csrf_token cookie); if the datetime
+fields look off by a few hours, that's local-timezone rendering in
+toDatetimeLocalValue(), not a data bug -- the stored value is UTC.
+Sandbox again could not run `npx prisma generate` (network-
+restricted to binaries.prisma.sh), so pre-existing unrelated tsc
+errors persist repo-wide; confirmed zero errors in any file this
+task touched. taskPlan.md task-118b flipped to [DONE]; NEXT UP
+advanced to task-118c (needs task-118a, done).

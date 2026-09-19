@@ -11,18 +11,18 @@
  * error state with retry. Mirrors
  * components/products/SuperAdminProductsList.tsx's structure.
  *
- * SCOPE OF THIS TASK (118a): read-only list + pagination only. The
- * Actions column renders disabled stub buttons — Create/Edit
- * (task-118b) and Duplicate/Deactivate/Delete (task-118c) wire real
- * handlers into these same buttons in later tasks. Do not add
- * mutation logic here.
+ * task-118b wires Create/Edit into this list via the AnnouncementForm
+ * modal below. Duplicate/Deactivate/Delete (task-118c) still render
+ * as disabled stub buttons — those land in a later task.
  */
 "use client";
 
+import { useState } from "react";
 import { ChevronLeft, ChevronRight, Megaphone } from "lucide-react";
-import { useAnnouncements } from "@/lib/hooks/useAnnouncements";
+import { useAnnouncements, type AnnouncementListItem } from "@/lib/hooks/useAnnouncements";
 import { useToast } from "@/components/shared/useToast";
 import ToastStack from "@/components/shared/ToastStack";
+import AnnouncementForm from "@/components/announcements/AnnouncementForm";
 
 function formatDate(iso: string | null): string {
   if (!iso) return "—";
@@ -64,13 +64,29 @@ export default function AnnouncementsList() {
     refetch,
   } = useAnnouncements();
 
-  // Reserved for task-118b/c toasts on create/edit/duplicate/delete —
-  // wired here now so the row/toolbar markup doesn't need to change shape later.
-  const { toasts, dismissToast } = useToast();
+  const { toasts, showToast, dismissToast } = useToast();
+
+  // formMode: null = modal closed, "create" = blank form, or the
+  // AnnouncementListItem being edited. Single piece of state covers
+  // both Create and Edit since AnnouncementForm handles both modes.
+  const [formMode, setFormMode] = useState<"create" | AnnouncementListItem | null>(null);
+
+  function handleSaved(message: string) {
+    setFormMode(null);
+    showToast(message, "success");
+    refetch();
+  }
 
   return (
     <>
       <ToastStack toasts={toasts} onDismiss={dismissToast} />
+
+      <AnnouncementForm
+        isOpen={formMode !== null}
+        existing={formMode === "create" || formMode === null ? null : formMode}
+        onClose={() => setFormMode(null)}
+        onSaved={handleSaved}
+      />
 
       <div className="superAdminAnnouncementsToolbar">
         <div className="superAdminAnnouncementsFilters">
@@ -107,8 +123,11 @@ export default function AnnouncementsList() {
           )}
         </div>
 
-        {/* Create button — wired to the form in task-118b */}
-        <button type="button" className="superAdminAnnouncementsCreateButton" disabled>
+        <button
+          type="button"
+          className="superAdminAnnouncementsCreateButton"
+          onClick={() => setFormMode("create")}
+        >
           + Create Announcement
         </button>
       </div>
@@ -169,9 +188,13 @@ export default function AnnouncementsList() {
                     <td>{formatDate(announcement.publishAt)}</td>
                     <td>{formatDate(announcement.expiresAt)}</td>
                     <td className="superAdminAnnouncementsActionsCell">
-                      {/* Stub actions — wired in task-118b (Edit) and task-118c (Duplicate/Deactivate/Delete) */}
+                      {/* Duplicate/Deactivate/Delete still stub — wired in task-118c */}
                       <div className="superAdminAnnouncementsRowActions">
-                        <button type="button" className="superAdminAnnouncementsActionButton" disabled>
+                        <button
+                          type="button"
+                          className="superAdminAnnouncementsActionButton"
+                          onClick={() => setFormMode(announcement)}
+                        >
                           Edit
                         </button>
                         <button type="button" className="superAdminAnnouncementsActionButton" disabled>

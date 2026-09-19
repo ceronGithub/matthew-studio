@@ -331,3 +331,188 @@
   font-size: 0.85rem;
   color: var(--color-text-secondary);
 }
+
+/* ---------- Announcement Form Modal (task-118b) ---------- */
+/* Backdrop/dialog shape mirrors components/shared/ConfirmationModal.tsx
+ * (Rule 34.4) for visual consistency; field styling mirrors
+ * app/styles/adminProductForm.css's .adminProductForm* classes. */
+
+.announcementFormBackdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  z-index: var(--z-modal-backdrop);
+  overflow-y: auto;
+}
+
+.announcementFormDialog {
+  width: 100%;
+  max-width: 560px;
+  padding: var(--space-lg) var(--space-xl);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-bg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  z-index: var(--z-modal);
+  transition: transform var(--transition-slow), opacity var(--transition-slow);
+  max-height: 90dvh;
+  overflow-y: auto;
+}
+
+.announcementFormTitle {
+  font-size: 1.3rem;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-md);
+}
+
+.announcementForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.announcementFormLegend {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.announcementFormRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+.announcementFormRow > .announcementFormField {
+  flex: 1 1 220px;
+}
+
+.announcementFormField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.announcementFormField input,
+.announcementFormField select,
+.announcementFormField textarea {
+  width: 100%;
+  font-size: 1rem; /* never below 16px — prevents iOS auto-zoom (Rule 29.6) */
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface-active);
+  color: var(--color-text-primary);
+  font-family: inherit;
+  resize: vertical;
+}
+.announcementFormField input:focus-visible,
+.announcementFormField select:focus-visible,
+.announcementFormField textarea:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+.announcementFormCharCount {
+  align-self: flex-end;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.announcementFormError,
+.announcementFormSubmitError {
+  font-size: 0.8rem;
+  color: var(--color-error);
+}
+
+.announcementFormStatusFieldset {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: var(--space-md);
+}
+.announcementFormStatusFieldset legend {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+  padding: 0 var(--space-xs);
+}
+
+.announcementFormRadio {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.announcementFormActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.announcementFormCancelButton {
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.announcementFormCancelButton:hover:not(:disabled),
+.announcementFormCancelButton:focus-visible:not(:disabled),
+.announcementFormCancelButton:active:not(:disabled) {
+  background-color: var(--color-surface-hover);
+}
+.announcementFormCancelButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.announcementFormSubmitButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: 8px;
+  border: 1px solid var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  font-weight: 600;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.announcementFormSubmitButton:hover:not(:disabled),
+.announcementFormSubmitButton:focus-visible:not(:disabled) {
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+.announcementFormSubmitButton:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.announcementFormSpin {
+  animation: announcementFormSpin 0.8s linear infinite;
+}
+@keyframes announcementFormSpin {
+  to { transform: rotate(360deg); }
+}

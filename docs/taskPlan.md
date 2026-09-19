@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-118b | file: docs/tasks/task-118b-ui-superadmin-announcements-form.md | needs: task-118a | setup: none
+**NEXT UP:** task-118c | file: docs/tasks/task-118c-ui-superadmin-announcements-actions.md | needs: task-118a | setup: none
 **OPEN FINDINGS:** 3 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
@@ -100,7 +100,13 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
                 app/styles/superAdminAnnouncements.css). Actions column
                 is disabled stubs pending task-118b/c.
                 docs/tasks/task-118a-ui-superadmin-announcements-list.md
-          - [ ] task-118b — create/edit form. Needs task-118a.
+          - [DONE] task-118b — create/edit form. Needs task-118a. Built
+                2026-09-20 (components/announcements/AnnouncementForm.tsx,
+                lib/hooks/useAnnouncementForm.ts,
+                components/announcements/AnnouncementsList.tsx edited,
+                app/styles/superAdminAnnouncements.css edited). Modal
+                shell, not a routed page — matches this task's own
+                "opens the form" wording.
                 docs/tasks/task-118b-ui-superadmin-announcements-form.md
           - [ ] task-118c — row actions (duplicate/deactivate/delete).
                 Needs task-118a.
