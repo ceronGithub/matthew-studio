@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-118d | file: docs/tasks/task-118d-dashboard-announcements-card.md | needs: task-118a | setup: none
+**NEXT UP:** task-119 | file: none (single-line item, no docs/tasks file) | needs: none | setup: none
 **OPEN FINDINGS:** 3 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
@@ -89,10 +89,10 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
             create, edit, duplicate, deactivate early, soft delete
             (Rule 6). Depends on task-116. Built 2026-09-20, see
             docs/tasks/task-117-api-announcements.md.
-      - [ ] task-118 — UI: `/superAdmin/announcements` page (parent —
+      - [DONE] task-118 — UI: `/superAdmin/announcements` page (parent —
             split into 4 micro-tasks 2026-09-20, see docs/tasks/).
-            Depends on task-117. Flips to [DONE] only when all 4
-            children below are [DONE] (Rule 49.1 Rule 6).
+            Depends on task-117. All 4 children [DONE] as of
+            2026-09-20 — parent auto-flipped per Rule 49.1 Rule 6.
           - [DONE] task-118a — list page + pagination. Needs task-117.
                 Built 2026-09-20 (app/superAdmin/announcements/page.tsx,
                 components/announcements/AnnouncementsList.tsx,
@@ -119,8 +119,11 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
                 Duplicate/Deactivate fire directly, no modal, per
                 this task's own DONE WHEN wording).
                 docs/tasks/task-118c-ui-superadmin-announcements-actions.md
-          - [ ] task-118d — dashboard quick-action card. Needs
-                task-118a.
+          - [DONE] task-118d — dashboard quick-action card. Needs
+                task-118a. Built 2026-09-20
+                (app/superAdmin/dashboard/page.tsx — added Megaphone
+                "Announcements" entry to QUICK_ACTIONS, same shape as
+                the Vault/Security Logs/Products entries).
                 docs/tasks/task-118d-dashboard-announcements-card.md
       - [ ] task-119 — API: `GET /api/superadmin/media` — lists
             existing Cloudflare R2 bucket objects (no new DB table).
