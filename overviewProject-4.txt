@@ -145,3 +145,18 @@ written touched 12 route files (~688 lines) + 6 section components
 Step 4's splitting threshold. task-124 itself is now a parent line that
 flips [DONE] once all 6 children are [DONE] (Rule 49.1 Rule 6). NEXT UP
 pointer advanced to task-126.
+
+[2026-09-20] Built task-126: GameCharactersSection.tsx and the
+game-characters [slug] detail page now read the live Product table
+instead of the static lib/productsData.ts catalog. New
+lib/hooks/useCategoryProducts.ts (lightweight fetch-by-category hook,
+no search/sort/pagination) is shared infrastructure for task-127..131.
+The [slug] page is a Server Component querying Prisma directly (Rule
+31.2) with the same PUBLIC_PRODUCT_SELECT/toPublicProduct as the public
+API, dropped generateStaticParams, and is now force-dynamic. Fixed a
+latent bug found while wiring: the tag badge lookup was keyed by
+product.id (only worked because id === slug in the static catalog) —
+changed to product.slug. tsc: 45 errors, all pre-existing (prisma
+client not generated in the sandbox), zero new errors in touched files.
+eslint: clean on all 3 touched/added files. taskPlan.md: task-126
+flipped [DONE]; NEXT UP advanced to task-127.

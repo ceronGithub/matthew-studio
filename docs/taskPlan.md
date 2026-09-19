@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-126 | file: docs/tasks/task-126-ui-wire-game-characters.md | needs: task-121 | setup: none
+**NEXT UP:** task-127 | file: docs/tasks/task-127-ui-wire-tshirts.md | needs: task-121 | setup: none
 **OPEN FINDINGS:** 4 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
@@ -159,9 +159,20 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
             components ~1,034 lines across 6 categories = ~1,900+
             lines, 2+ layers). Parent flips [DONE] only when all 6
             children below are [DONE] (Rule 49.1 Rule 6).
-      - [ ] task-126 — UI: wire game-characters (section + [slug]
+      - [DONE] task-126 — UI: wire game-characters (section + [slug]
             page) to the live Product API. Depends on task-121.
-            See docs/tasks/task-126-ui-wire-game-characters.md.
+            Built 2026-09-20: components/home/GameCharactersSection.tsx
+            and app/(public)/game-characters/[slug]/page.tsx now fetch
+            from /api/shop/products (client) and Prisma directly
+            (server), instead of the static PRODUCTS catalog. New
+            shared lib/hooks/useCategoryProducts.ts (reused by
+            task-127..131). [slug]/page.tsx dropped
+            generateStaticParams and is now force-dynamic. Also fixed
+            a latent bug: GAME_CHARACTER_PRODUCT_TAGS was keyed by
+            product.id, which only worked because the static catalog
+            set id === slug — switched to product.slug so it survives
+            DB-generated ids. See
+            docs/tasks/task-126-ui-wire-game-characters.md.
       - [ ] task-127 — UI: wire tshirts (section + [slug] page) to
             the live Product API. Depends on task-121.
             See docs/tasks/task-127-ui-wire-tshirts.md.

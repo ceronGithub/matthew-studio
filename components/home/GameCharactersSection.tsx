@@ -15,11 +15,13 @@
  *
  * DATA FLOW:
  * Reads GAME_CHARACTER_GALLERY/GAME_CHARACTER_PRODUCT_TAGS
- * (gameCharactersSectionData.ts) and PRODUCTS (productsData.ts)
- * filtered to category "game-characters". No real character renders
- * exist yet, so both the grid thumbnails and the lightbox show a
- * tinted gradient placeholder (Rule 27 — swap for real renders once
- * available).
+ * (gameCharactersSectionData.ts, static — thumbnail gallery has no
+ * database backing yet) and fetches the live "game-characters"
+ * product cards via useCategoryProducts (task-126), replacing the old
+ * static PRODUCTS filter so a DB-only product appears here without a
+ * code change. No real character renders exist yet, so both the grid
+ * thumbnails and the lightbox show a tinted gradient placeholder
+ * (Rule 27 — swap for real renders once available).
  */
 "use client";
 
@@ -30,10 +32,12 @@ import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
 import ProductCard from "@/components/home/ProductCard";
 import ScrollReveal from "@/components/shared/ScrollReveal";
-import { PRODUCTS } from "@/lib/productsData";
+import { useCategoryProducts } from "@/lib/hooks/useCategoryProducts";
 import { GAME_CHARACTER_GALLERY, GAME_CHARACTER_PRODUCT_TAGS } from "@/lib/gameCharactersSectionData";
 
-const GAME_CHARACTER_PRODUCTS = PRODUCTS.filter((product) => product.category === "game-characters");
+// How many placeholder cards the loading skeleton shows (Rule 25.2) —
+// same count as the gallery grid above it, so the section doesn't jump.
+const SKELETON_CARD_COUNT = 3;
 
 // Per-card stagger delay for the product grid's scroll-entrance —
 // same values used across every other category grid so the whole
@@ -124,6 +128,7 @@ function CharacterLightbox({ activeIndex, onClose, onNavigate }: { activeIndex: 
 
 export default function GameCharactersSection() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const { products, isLoading, error, refetch } = useCategoryProducts("game-characters");
 
   return (
     <section className="categorySection">
@@ -153,19 +158,45 @@ export default function GameCharactersSection() {
           {activeIndex !== null && <CharacterLightbox activeIndex={activeIndex} onClose={() => setActiveIndex(null)} onNavigate={setActiveIndex} />}
         </AnimatePresence>
 
-        <div className="productCardsGrid">
-          {GAME_CHARACTER_PRODUCTS.map((product, index) => (
-            <ScrollReveal
-              key={product.id}
-              delay={Math.min(index, STAGGER_CAP) * STAGGER_STEP_SECONDS}
-            >
-              <div className="gameCharacterCardWrap">
-                <span className="characterTagBadge">{GAME_CHARACTER_PRODUCT_TAGS[product.id]}</span>
-                <ProductCard product={product} />
+        {isLoading ? (
+          // Loading state (Rule 25.2) — skeleton cards mirror the real card shape.
+          <div className="productCardsGrid" aria-busy="true" aria-label="Loading game characters">
+            {Array.from({ length: SKELETON_CARD_COUNT }, (_, index) => (
+              <div key={index} className="productCardSkeleton">
+                <div className="productCardSkeletonThumb skeletonBlock" />
+                <div className="productCardSkeletonBody">
+                  <div className="productCardSkeletonLine skeletonBlock" />
+                  <div className="productCardSkeletonLine productCardSkeletonLine--short skeletonBlock" />
+                </div>
               </div>
-            </ScrollReveal>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : error ? (
+          // Error state (Rule 25.4) — friendly message + retry, never the raw error.
+          <div className="productsEmpty" role="alert">
+            <p>{error}</p>
+            <button type="button" className="buttonSecondary" onClick={refetch}>
+              Try again
+            </button>
+          </div>
+        ) : products.length === 0 ? (
+          // Empty state (Rule 25.3) — action-specific, never a blank grid.
+          <p className="productsEmpty">No Game Characters products are published yet.</p>
+        ) : (
+          <div className="productCardsGrid">
+            {products.map((product, index) => (
+              <ScrollReveal
+                key={product.id}
+                delay={Math.min(index, STAGGER_CAP) * STAGGER_STEP_SECONDS}
+              >
+                <div className="gameCharacterCardWrap">
+                  <span className="characterTagBadge">{GAME_CHARACTER_PRODUCT_TAGS[product.slug]}</span>
+                  <ProductCard product={product} />
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        )}
 
         <div className="sectionCTA">
           <Link href="/game-characters" className="buttonPrimary">
