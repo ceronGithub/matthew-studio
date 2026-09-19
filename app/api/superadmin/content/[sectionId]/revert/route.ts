@@ -31,6 +31,7 @@ export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
 import { prisma } from "@/services/prisma";
 import { getSessionAdmin } from "@/lib/getSessionAdmin";
+import { isValidCsrfRequest } from "@/lib/csrf";
 import { logSecurityEvent } from "@/lib/securityLog";
 import { pruneOldVersions } from "@/lib/contentVersions";
 
@@ -40,6 +41,13 @@ interface RevertContentSectionBody {
 
 export async function POST(request: Request, { params }: { params: Promise<{ sectionId: string }> }) {
   try {
+    if (!isValidCsrfRequest(request)) {
+      return NextResponse.json(
+        { success: false, data: null, message: "Invalid request. Please refresh the page and try again." },
+        { status: 403 }
+      );
+    }
+
     const admin = await getSessionAdmin(request);
     if (!admin) {
       return NextResponse.json(

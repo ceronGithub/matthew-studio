@@ -1,59 +1,53 @@
 /**
- * FILE: app/api/superadmin/content/[sectionId]/route.ts
+ * FILE: app/api/superadmin/content/[sectionId]/revert/route.ts
  * ROLE: Super-admin only — strictly role === "superAdmin", same gate
- * as the list route in the parent folder.
+ * as the parent content routes.
  *
  * PURPOSE:
- * task-114 (Section 3.7, 9.3), detail + publish variant.
- * GET returns the full ContentSection row (including its current
- * `data`) for the super-admin's form panel. PUT validates and saves a
- * new `data` payload: before overwriting, it snapshots the *current*
- * `data` into a new ContentVersion row, then prunes the oldest
- * version(s) for that section beyond 5 (Section 9.3's version-history
- * cap), then logs `content_updated` to SecurityLog (Rule 38) naming
- * the section and which top-level fields changed.
+ * task-114 (Section 3.7, 9.3), revert variant. Takes a `versionId`
+ * belonging to this section and restores that snapshot's `data` onto
+ * the live ContentSection row. Revert is never destructive: the
+ * section's data immediately before the revert is itself snapshotted
+ * into a NEW ContentVersion row first, so reverting can always be
+ * undone by reverting again to the pre-revert snapshot.
  *
- * DATA FLOW (GET):
+ * DATA FLOW:
  * 1. Resolve the calling account via getSessionAdmin(); 403 unless
  *    role === "superAdmin".
- * 2. prisma.contentSection.findUnique() by id — 404 if it doesn't
- *    exist.
- *
- * DATA FLOW (PUT):
- * 1. Same auth/lookup as GET.
- * 2. Validate the request body's `data` field is present and is a
- *    plain JSON object (never an array or a primitive — a content
- *    section's data is always a keyed object per Section 9.3's own
- *    examples).
- * 3. Snapshot the section's CURRENT `data` into a new ContentVersion
- *    row (savedBy = calling admin's email) — this preserves the
- *    pre-update state, never the new one.
- * 4. Overwrite the ContentSection row's `data` with the validated
- *    payload (updatedBy = calling admin's email).
- * 5. Prune: count ContentVersion rows for this section; if more than
- *    5 remain, delete the oldest ones beyond that cap (Section 9.3).
- * 6. Log `content_updated` to SecurityLog with the section's label
- *    and the list of top-level fields that changed (lib/auditLog.ts's
- *    diffJsonFields, generalized from diffProductFields for
- *    arbitrary/nested JSON) — never the full before/after payload,
- *    same "don't bloat SecurityLog.details" discipline as every other
- *    admin-mutation route in this codebase.
+ * 2. Look up the target ContentSection by id — 404 if missing.
+ * 3. Look up the ContentVersion by the body's `versionId`, scoped to
+ *    this section (a versionId from a different section must never
+ *    resolve here) — 404 if missing or mismatched.
+ * 4. Snapshot the section's CURRENT data into a new ContentVersion
+ *    row (same non-destructive pattern as the PUT route), then prune
+ *    beyond the 5-row cap (Section 9.3, lib/contentVersions.ts).
+ * 5. Overwrite the ContentSection row's `data` with the old version's
+ *    snapshot (updatedBy = calling admin's email).
+ * 6. Log `content_reverted` to SecurityLog (Rule 38) naming the
+ *    section and which version was restored.
  */
 export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 import { prisma } from "@/services/prisma";
 import { getSessionAdmin } from "@/lib/getSessionAdmin";
+import { isValidCsrfRequest } from "@/lib/csrf";
 import { logSecurityEvent } from "@/lib/securityLog";
-import { diffJsonFields } from "@/lib/auditLog";
 import { pruneOldVersions } from "@/lib/contentVersions";
 
-function isPlainObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
+interface RevertContentSectionBody {
+  versionId?: string;
 }
 
-export async function GET(request: Request, { params }: { params: Promise<{ sectionId: string }> }) {
+export async function POST(request: Request, { params }: { params: Promise<{ sectionId: string }> }) {
   try {
+    if (!isValidCsrfRequest(request)) {
+      return NextResponse.json(
+        { success: false, data: null, message: "Invalid request. Please refresh the page and try again." },
+        { status: 403 }
+      );
+    }
+
     const admin = await getSessionAdmin(request);
     if (!admin) {
       return NextResponse.json(
@@ -78,101 +72,62 @@ export async function GET(request: Request, { params }: { params: Promise<{ sect
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      data: section,
-      message: "Content section retrieved.",
-    });
-  } catch (error) {
-    console.error("[api/superadmin/content/[sectionId] GET] Unexpected error:", error);
-    return NextResponse.json(
-      { success: false, data: null, message: "We couldn't load this content section. Please try again." },
-      { status: 500 }
-    );
-  }
-}
-
-interface UpdateContentSectionBody {
-  data?: unknown;
-}
-
-export async function PUT(request: Request, { params }: { params: Promise<{ sectionId: string }> }) {
-  try {
-    const admin = await getSessionAdmin(request);
-    if (!admin) {
+    const body: RevertContentSectionBody = await request.json();
+    if (!body.versionId) {
       return NextResponse.json(
-        { success: false, data: null, message: "Your session has expired. Please log in again." },
-        { status: 401 }
-      );
-    }
-    if (admin.role !== "superAdmin") {
-      return NextResponse.json(
-        { success: false, data: null, message: "You don't have permission to view this page." },
-        { status: 403 }
-      );
-    }
-
-    const { sectionId } = await params;
-
-    const section = await prisma.contentSection.findUnique({ where: { id: sectionId } });
-    if (!section) {
-      return NextResponse.json(
-        { success: false, data: null, message: "We couldn't find that content section. It may have been removed." },
-        { status: 404 }
-      );
-    }
-
-    const body: UpdateContentSectionBody = await request.json();
-
-    if (!isPlainObject(body.data)) {
-      return NextResponse.json(
-        { success: false, data: null, message: "Section data must be a valid object." },
+        { success: false, data: null, message: "Please choose a version to restore." },
         { status: 400 }
       );
     }
-    const newData = body.data;
-    const previousData = section.data as Record<string, unknown>;
 
-    // Snapshot the CURRENT data before it's overwritten — revert
-    // always restores to a state that existed before some publish,
-    // never the state being published right now.
+    // Scoped to this section so a versionId belonging to a different
+    // section can never be used to pull unrelated data into this one.
+    const targetVersion = await prisma.contentVersion.findFirst({
+      where: { id: body.versionId, sectionId: section.id },
+    });
+    if (!targetVersion) {
+      return NextResponse.json(
+        { success: false, data: null, message: "We couldn't find that version. It may have already been pruned." },
+        { status: 404 }
+      );
+    }
+
+    // Snapshot the CURRENT (pre-revert) data first — makes the revert
+    // itself reversible, same non-destructive guarantee as a publish.
     await prisma.contentVersion.create({
       data: {
         sectionId: section.id,
-        data: previousData,
+        data: section.data as Record<string, unknown>,
         savedBy: admin.email,
       },
     });
 
-    const updated = await prisma.contentSection.update({
+    const restored = await prisma.contentSection.update({
       where: { id: section.id },
       data: {
-        data: newData,
+        data: targetVersion.data as Record<string, unknown>,
         updatedBy: admin.email,
       },
     });
 
     await pruneOldVersions(section.id);
 
-    const changedFields = diffJsonFields(previousData, newData);
     await logSecurityEvent({
-      eventType: "content_updated",
+      eventType: "content_reverted",
       actor: admin.email,
       request,
-      details: `Content section "${section.label}" published${
-        changedFields.length ? `: ${changedFields.join(", ")} changed` : " (no field-level changes detected)"
-      }`,
+      details: `Content section "${section.label}" reverted to version saved ${targetVersion.createdAt.toISOString()}`,
     });
 
     return NextResponse.json({
       success: true,
-      data: updated,
-      message: "Content section published successfully.",
+      data: restored,
+      message: "Content section reverted successfully.",
     });
   } catch (error) {
-    console.error("[api/superadmin/content/[sectionId] PUT] Unexpected error:", error);
+    console.error("[api/superadmin/content/[sectionId]/revert POST] Unexpected error:", error);
     return NextResponse.json(
-      { success: false, data: null, message: "We couldn't publish this content section. Please try again." },
+      { success: false, data: null, message: "We couldn't revert this content section. Please try again." },
       { status: 500 }
     );
   }

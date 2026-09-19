@@ -36,16 +36,16 @@ only consulted when investigating a specific flagged item.
   dated 2026-09-20, and `.../[sectionId]/versions/route.ts` exists —
   matches taskPlan.md's task-115 entry, which already logs this as
   fixed. Original finding is stale; kept struck through for history.
-- [2026-09-20] **Content PUT/revert routes don't enforce CSRF
-  server-side.** `app/api/superadmin/content/[sectionId]/route.ts`'s
-  PUT and `.../revert/route.ts`'s POST never call
-  `isValidCsrfRequest()` (Rule 32.2) — unlike the auth endpoints that
-  already use it. Not fixed here: task-115's new client code still
-  sends `getCsrfHeader()` on every mutation (matches
-  `useAdminProductForm.ts`'s convention), but the header currently
-  goes unchecked server-side. Adding the check is a one-line change
-  to task-114's already-shipped routes — flagged rather than made
-  silently, since it touches code outside task-115's own scope.
+- [2026-09-20] ~~Content PUT/revert routes don't enforce CSRF
+  server-side.~~ **RESOLVED (2026-09-20).** Added `isValidCsrfRequest()`
+  (Rule 32.2) as the first check inside `content/[sectionId]/route.ts`'s
+  PUT and `.../revert/route.ts`'s POST, matching the exact pattern
+  already used in `app/api/admin/products/route.ts` and other
+  mutating admin routes. Client already sent `getCsrfHeader()`
+  (task-115) — server now actually validates it. NOTE: could not run
+  `npx tsc --noEmit` (Rule 20) — this sandbox clone has no
+  `node_modules` installed. Run it in the real dev environment before
+  merging.
 - [2026-09-20] **taskPlan.md v60 cleanup note.** This file and
   docs/taskPlan.archive.md were created during the first v60 session
   touching taskPlan.md (Rule 49.2 §8): pointer shortened to the

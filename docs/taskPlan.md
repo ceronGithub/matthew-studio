@@ -1,7 +1,7 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
 **NEXT UP:** task-117 | file: docs/tasks/task-117-api-announcements.md | needs: task-116 | setup: verify Announcement db push/generate ran against live DB
-**OPEN FINDINGS:** 5 — see docs/openFindings.md
+**OPEN FINDINGS:** 4 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
 
