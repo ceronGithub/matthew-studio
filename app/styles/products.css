@@ -155,3 +155,79 @@
   color: var(--color-text-secondary);
   padding: var(--space-2xl) 0;
 }
+
+/* ------------------------------------------------------------
+ * LOADING SKELETON + PAGINATION (task-122)
+ * The skeleton mirrors ProductCard's shape (thumb + two text lines)
+ * so the grid doesn't jump when real cards replace it (Rule 25.2).
+ * ------------------------------------------------------------ */
+.productCardSkeleton {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius, 12px);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+/* Same 16/10 ratio as .productCardThumb so heights match real cards. */
+.productCardSkeletonThumb {
+  aspect-ratio: 16 / 10;
+  border-radius: 0;
+}
+
+.productCardSkeletonBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
+}
+
+.productCardSkeletonLine {
+  height: 1rem;
+}
+
+.productCardSkeletonLine--short {
+  width: 60%;
+}
+
+.productsPagination {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: var(--space-lg) 0;
+}
+
+.productsPageButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.productsPageButton:hover:not(:disabled),
+.productsPageButton:focus-visible:not(:disabled),
+.productsPageButton:active:not(:disabled) {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.productsPageButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.productsPageLabel {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}

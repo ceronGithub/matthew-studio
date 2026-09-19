@@ -7,20 +7,19 @@
  * categories (Templates, T-Shirts, AI Videos, File Tools, Tutorials,
  * Game Characters), with search, category filter, and sort — per
  * improvement_1.md Section 4 ("/products — master grid (filter/sort/
- * search), pulls from lib/productsData.ts").
+ * search)"), now backed by the live Product table.
  *
  * DATA FLOW:
- * 1. This Server Component reads PRODUCTS directly (no fetch needed —
- *    it's a local static array today, same pattern as /shop reading
- *    PRICING_TIERS).
- * 2. The full product list is passed as a prop into the Client
- *    Component ProductsGrid, which owns the search/filter/sort state
- *    and re-derives the visible list on every change.
+ * 1. This Server Component renders the page header and the Client
+ *    Component ProductsGrid — it no longer reads the static PRODUCTS
+ *    array (task-122).
+ * 2. ProductsGrid fetches published products from GET
+ *    /api/shop/products (via useShopProducts) and owns the
+ *    search/filter/sort/page state.
  */
 import type { Metadata } from "next";
 import "../../styles/products.css";
 import ProductsGrid from "@/components/products/ProductsGrid";
-import { PRODUCTS } from "@/lib/productsData";
 
 export const metadata: Metadata = {
   title: "All Products | Matthew Studio",
@@ -50,7 +49,7 @@ export default function ProductsPage() {
         </div>
       </header>
 
-      <ProductsGrid products={PRODUCTS} />
+      <ProductsGrid />
     </>
   );
 }

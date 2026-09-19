@@ -1,7 +1,7 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
 **NEXT UP:** task-118 | file: docs/tasks/task-118-ui-superadmin-announcements.md | needs: task-117 | setup: none — task-117's schema+API already exist, this is UI-only
-**OPEN FINDINGS:** 4 — see docs/openFindings.md
+**OPEN FINDINGS:** 3 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
 
@@ -103,7 +103,7 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
             (/api/shop/products, /api/shop/products/[slug]),
             published + non-deleted only. Closes openFindings.md's
             2026-09-13 storefront-not-wired gap. No dependency.
-      - [ ] task-122 — UI: wire /shop and /pricing to task-121's
+      - [DONE] task-122 — UI: wire /shop and /pricing to task-121's
             API instead of static lib/productsData.ts. Depends on
             task-121.
       - [DONE] task-123 — API: enforce admin account lockout (5 fails/1h)
@@ -111,6 +111,14 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
             lib/adminAccountStatus.ts SecurityLog-count query as
             the actual gate. Closes openFindings.md's 2026-09-12
             display-only-lockout gap. No dependency.
+      - [ ] task-124 — UI: wire the category pages, product detail
+            ([slug]) pages, and homepage category sections to the
+            live Product API (they still read static PRODUCTS, so a
+            DB-only product's "View Details" link 404s). Depends on
+            task-121.
+      - [ ] task-125 — Script: seed the Product table from the static
+            lib/productsData.ts catalog (18 products) so /products
+            isn't empty on a fresh DB. Depends on task-121.
   - [ ] Phase 8 — Task Assignment, Customer Assignment, Notifications
         (Section 3.12/3.13, 9.2/9.4) — general Notifications (task-11-
         14) are done; Task/Customer Assignment specifically not yet
@@ -160,8 +168,8 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
 
 ## NOTES
 
-- Task numbering continues from the highest existing file (`task-123`) —
-  next new task file is `task-124`.
+- Task numbering continues from the highest existing file (`task-125`) —
+  next new task file is `task-126`.
 - `task-33` is listed under both item 6 (Vault) and item 7 (Gatekeeper)
   deliberately — it is one deliverable (Gatekeeper/Emergency Actions
   backend + viewer page) that closes gaps in two specs simultaneously.

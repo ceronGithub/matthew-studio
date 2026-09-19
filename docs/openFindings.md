@@ -4,18 +4,11 @@ Unresolved gaps and follow-ups surfaced during builds/audits, one
 dated line each. Not read during next-task lookup (Rule 49.2 §2) —
 only consulted when investigating a specific flagged item.
 
-- [2026-09-13] **Storefront not wired to Product DB table** (found
-  during task-110). The public storefront (`/pricing`, `/shop`)
-  reads product listings entirely from static data
-  (`lib/categoryShowcaseData.ts` / `lib/productsData.ts`) —
-  confirmed via grep, zero `prisma.product.*` calls exist outside
-  `/api/admin/*` and `/api/buyer/downloads`. This means the
-  pending-review approval flow (task-109/110/111/112) has no live
-  public query to exclude pending-review products from — the
-  admin-managed `Product` table isn't wired to the public site at
-  all. **Converted to task-121 (API) / task-122 (UI) 2026-09-20** —
-  see docs/tasks/task-121-api-public-products.md and
-  docs/tasks/task-122-ui-storefront-wire-product-db.md.
+- [2026-09-13] ~~Storefront not wired to Product DB table~~ **PARTLY
+  RESOLVED (2026-09-20).** task-121 (public API) and task-122 (`/products`
+  grid) are done. Still static: category pages, `[slug]` detail pages,
+  homepage sections, compare tool -> task-124; empty DB has no seed ->
+  task-125. Kept struck through for history.
 - [2026-09-12] ~~Admin account lockout is display-only~~ **RESOLVED
   (2026-09-20, task-123).** `app/api/auth/login/route.ts` now rejects
   admin/superAdmin logins with 5 failures in 60 minutes before the

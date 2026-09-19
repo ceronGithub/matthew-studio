@@ -965,3 +965,17 @@ generate the Prisma client, so `npx tsc --noEmit` could not fully
 typecheck -- run it in the real dev environment. taskPlan.md task-123
 flipped to [DONE]; NEXT UP unchanged (task-118 is still the first open
 leaf).
+[2026-09-20] task-122 built: /products grid now reads the live Product
+table. New lib/hooks/useShopProducts.ts (search debounced 300ms, category/
+sort/page, AbortController so stale responses are dropped);
+components/products/ProductsGrid.tsx rewritten to use it (no props;
+loading skeleton, error+retry, empty state, prev/next pagination, Rule
+18.1 input stripping); app/(public)/products/page.tsx no longer imports
+static PRODUCTS; app/styles/products.css gained skeleton + pagination
+classes. Scope narrowed from the task file's /shop + /pricing (/shop only
+redirects; /pricing uses tier data). Debug points: empty grid on a fresh
+DB = no seed yet (task-125); a card's View Details 404s for DB-only
+products because [slug] pages still read static PRODUCTS (task-124).
+Sandbox cannot generate the Prisma client or run the app; run
+`npx tsc --noEmit` and check /products in the real dev environment.
+taskPlan.md task-122 flipped to [DONE]; NEXT UP unchanged (task-118).

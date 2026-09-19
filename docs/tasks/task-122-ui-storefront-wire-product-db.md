@@ -6,9 +6,9 @@ same gap as task-121, UI side.
 **Dependency:** task-121 (public API must exist first).
 **NEEDS:** task-121
 **SETUP:** none
-**FILES TO TOUCH:** app/(public)/shop/page.tsx (modified),
-app/(public)/pricing/page.tsx (modified),
-lib/hooks/useShopProducts.ts (new)
+**FILES TO TOUCH:** components/products/ProductsGrid.tsx (modified),
+app/(public)/products/page.tsx (modified), lib/hooks/useShopProducts.ts
+(new), app/styles/products.css (modified — skeleton + pagination)
 
 **DONE WHEN:** the 3 verification steps below all pass.
 
@@ -53,3 +53,14 @@ swap belongs in `/products` (and the category pages `templates`,
 `tshirts`, `ai-videos`, `file-tools`, `tutorials`, `game-characters` and
 their `[slug]` pages, plus the homepage sections that import `PRODUCTS`),
 not `/shop`. Confirm scope with the developer before starting.
+
+## Status
+[DONE] 2026-09-20, scope narrowed to the `/products` grid (developer
+confirmed). `/shop` and `/pricing` were left alone: `/shop` only
+redirects, and `/pricing` uses tier data, not `PRODUCTS`. The grid now
+sends search/category/sort/page to `/api/shop/products` (search debounced
+300ms, stale requests aborted), with skeleton, error+retry, and empty
+states (Rule 25) and page buttons. Category pages, detail pages, and the
+homepage sections are NOT wired yet — that is task-124; seeding the DB
+from the static catalog is task-125. Until then `/products` shows only
+products created in the admin. Not run in a browser in the sandbox.
