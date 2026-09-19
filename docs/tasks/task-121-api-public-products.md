@@ -12,7 +12,9 @@ exist (task-109/110/111/112).
 **NEEDS:** none
 **SETUP:** none
 **FILES TO TOUCH:** app/api/shop/products/route.ts (new),
-app/api/shop/products/[slug]/route.ts (new)
+app/api/shop/products/[slug]/route.ts (new), lib/publicProduct.ts (new —
+shared row->storefront-Product mapper + safe SELECT, so the two routes
+don't duplicate it and admin emails/storage keys are never selected)
 **DONE WHEN:** the 3 verification steps below all pass.
 
 ## What this builds
@@ -41,3 +43,11 @@ response shape, read-only so no CSRF check needed (GET only).
    full product data.
 3. `GET /api/shop/products/[slug]` on a pending-review or
    non-existent slug → same 404 shape for both.
+
+## Status
+[DONE] 2026-09-20. List route supports `page`, `category`, `search`,
+`sort` (bestselling | newest | price-asc | price-desc | rating — same
+values as components/products/ProductsGrid.tsx), 24 per page. Response
+is `{ products, totalPages, totalCount, page }` (Rule 28). Not run
+against a live DB or a generated Prisma client in the sandbox — verify
+steps 1-3 above in the real dev environment.

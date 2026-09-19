@@ -42,3 +42,14 @@ e.g. `ProductCategorySlug`, `ProductVariant`); only the static
 3. Loading and empty states render correctly (Rule 25) — throttle the
    network tab and confirm a skeleton shows, then confirm an empty
    category shows the Rule 25.3 empty state, not a blank grid.
+
+## Note added during task-121 (2026-09-20)
+Verified in the repo: `app/(public)/shop/page.tsx` is only a
+`redirect("/pricing")` — it renders no products. The real product grid
+is `app/(public)/products/page.tsx` -> `components/products/ProductsGrid.tsx`
+(reads static `PRODUCTS`; its SortMode values match the task-121 `sort`
+param). `/pricing` uses lib/pricingData.ts tiers, not `PRODUCTS`. So the
+swap belongs in `/products` (and the category pages `templates`,
+`tshirts`, `ai-videos`, `file-tools`, `tutorials`, `game-characters` and
+their `[slug]` pages, plus the homepage sections that import `PRODUCTS`),
+not `/shop`. Confirm scope with the developer before starting.

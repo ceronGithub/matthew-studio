@@ -939,3 +939,14 @@ confirm the Announcement model is actually pushed to the live DB
 (task-117's own SETUP note) and typecheck in the real dev environment
 before merging. docs/taskPlan.md's NEXT UP pointer advanced to
 task-118 (UI: /superAdmin/announcements page, depends on task-117).
+[2026-09-20] task-121 built: public product API. New:
+app/api/shop/products/route.ts (GET list -- published + non-deleted
+only, params page/category/search/sort, 24 per page, Rule 28 shape) and
+app/api/shop/products/[slug]/route.ts (GET one -- same filter, identical
+404 for missing/draft/pending-review), plus lib/publicProduct.ts (shared
+row -> storefront Product mapper and safe SELECT; admin emails and R2
+keys never selected). No auth (public), GET only so no CSRF. Sandbox
+cannot generate the Prisma client (binaries.prisma.sh blocked), so
+`npx tsc --noEmit` could not fully typecheck -- run it in the real dev
+environment. taskPlan.md task-121 flipped to [DONE]; NEXT UP unchanged
+(task-118 is still the first open leaf).

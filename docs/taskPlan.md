@@ -1,7 +1,7 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
 **NEXT UP:** task-118 | file: docs/tasks/task-118-ui-superadmin-announcements.md | needs: task-117 | setup: none — task-117's schema+API already exist, this is UI-only
-**OPEN FINDINGS:** 4 — see docs/openFindings.md
+**OPEN FINDINGS:** 5 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
 
@@ -99,7 +99,7 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
       - [ ] task-120 — UI: `/superAdmin/media` page — grid of uploaded
             assets, search/filter by folder, "Copy URL" action per
             item. Depends on task-119.
-      - [ ] task-121 — API: public product list/detail
+      - [DONE] task-121 — API: public product list/detail
             (/api/shop/products, /api/shop/products/[slug]),
             published + non-deleted only. Closes openFindings.md's
             2026-09-13 storefront-not-wired gap. No dependency.
