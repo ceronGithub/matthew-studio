@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-127 | file: docs/tasks/task-127-ui-wire-tshirts.md | needs: task-121 | setup: none
+**NEXT UP:** task-128 | file: docs/tasks/task-128-ui-wire-file-tools.md | needs: task-121 | setup: none
 **OPEN FINDINGS:** 4 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
@@ -173,8 +173,15 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
             set id === slug — switched to product.slug so it survives
             DB-generated ids. See
             docs/tasks/task-126-ui-wire-game-characters.md.
-      - [ ] task-127 — UI: wire tshirts (section + [slug] page) to
+      - [DONE] task-127 — UI: wire tshirts (section + [slug] page) to
             the live Product API. Depends on task-121.
+            Built 2026-09-20: components/home/TShirtsSection.tsx and
+            app/(public)/tshirts/[slug]/page.tsx now fetch from
+            /api/shop/products (client, via task-126's shared
+            lib/hooks/useCategoryProducts.ts) and Prisma directly
+            (server), instead of the static PRODUCTS catalog.
+            [slug]/page.tsx dropped generateStaticParams and is now
+            force-dynamic. Carousel/story-callout content unchanged.
             See docs/tasks/task-127-ui-wire-tshirts.md.
       - [ ] task-128 — UI: wire file-tools (section + [slug] page) to
             the live Product API. Depends on task-121.

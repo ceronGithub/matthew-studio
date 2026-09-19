@@ -160,3 +160,15 @@ changed to product.slug. tsc: 45 errors, all pre-existing (prisma
 client not generated in the sandbox), zero new errors in touched files.
 eslint: clean on all 3 touched/added files. taskPlan.md: task-126
 flipped [DONE]; NEXT UP advanced to task-127.
+
+[2026-09-20] Built task-127: TShirtsSection.tsx and the tshirts [slug]
+detail page now read the live Product table instead of the static
+lib/productsData.ts catalog, reusing task-126's shared
+lib/hooks/useCategoryProducts.ts and PUBLIC_PRODUCT_SELECT/
+toPublicProduct pattern. DesignGalleryCarousel and the story callout
+are unchanged. The [slug] page is a Server Component querying Prisma
+directly (Rule 31.2), dropped generateStaticParams, and is now
+force-dynamic. tsc: 45 errors, all pre-existing (prisma client not
+generated in the sandbox -- binaries.prisma.sh isn't a reachable
+domain here), zero new errors in touched files. taskPlan.md: task-127
+flipped [DONE]; NEXT UP advanced to task-128.

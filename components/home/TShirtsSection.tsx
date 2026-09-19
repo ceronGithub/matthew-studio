@@ -14,11 +14,13 @@
  * structure only lists it under TShirtsSection.tsx).
  *
  * DATA FLOW:
- * Reads TSHIRT_DESIGN_GALLERY/TSHIRT_STORY (tshirtsSectionData.ts)
- * and PRODUCTS (productsData.ts) filtered to category "tshirts". No
- * real design photos exist yet — each gallery slide shows a tinted
- * gradient placeholder swapped to a real image once photos exist
- * (Rule 27).
+ * Reads TSHIRT_DESIGN_GALLERY/TSHIRT_STORY (tshirtsSectionData.ts,
+ * static — no database backing yet) and fetches the live "tshirts"
+ * product cards via useCategoryProducts (task-126's shared hook),
+ * replacing the old static PRODUCTS filter so a DB-only product
+ * appears here without a code change. No real design photos exist
+ * yet — each gallery slide shows a tinted gradient placeholder
+ * swapped to a real image once photos exist (Rule 27).
  */
 "use client";
 
@@ -29,10 +31,11 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
 import ProductCard from "@/components/home/ProductCard";
 import ScrollReveal from "@/components/shared/ScrollReveal";
-import { PRODUCTS } from "@/lib/productsData";
+import { useCategoryProducts } from "@/lib/hooks/useCategoryProducts";
 import { TSHIRT_DESIGN_GALLERY, TSHIRT_STORY } from "@/lib/tshirtsSectionData";
 
-const TSHIRT_PRODUCTS = PRODUCTS.filter((product) => product.category === "tshirts");
+// How many placeholder cards the loading skeleton shows (Rule 25.2).
+const SKELETON_CARD_COUNT = 3;
 
 // Per-card stagger delay for the scroll-entrance animation — same
 // values as ProductsGrid.tsx so every card grid across the site
@@ -126,6 +129,8 @@ function DesignGalleryCarousel() {
 }
 
 export default function TShirtsSection() {
+  const { products, isLoading, error, refetch } = useCategoryProducts("tshirts");
+
   return (
     <section className="categorySection">
       <div className="sectionContainer">
@@ -144,16 +149,42 @@ export default function TShirtsSection() {
           <cite className="storyCalloutAttribution">{TSHIRT_STORY.attribution}</cite>
         </motion.blockquote>
 
-        <div className="productCardsGrid">
-          {TSHIRT_PRODUCTS.map((product, index) => (
-            <ScrollReveal
-              key={product.id}
-              delay={Math.min(index, STAGGER_CAP) * STAGGER_STEP_SECONDS}
-            >
-              <ProductCard product={product} />
-            </ScrollReveal>
-          ))}
-        </div>
+        {isLoading ? (
+          // Loading state (Rule 25.2) — skeleton cards mirror the real card shape.
+          <div className="productCardsGrid" aria-busy="true" aria-label="Loading t-shirts">
+            {Array.from({ length: SKELETON_CARD_COUNT }, (_, index) => (
+              <div key={index} className="productCardSkeleton">
+                <div className="productCardSkeletonThumb skeletonBlock" />
+                <div className="productCardSkeletonBody">
+                  <div className="productCardSkeletonLine skeletonBlock" />
+                  <div className="productCardSkeletonLine productCardSkeletonLine--short skeletonBlock" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : error ? (
+          // Error state (Rule 25.4) — friendly message + retry, never the raw error.
+          <div className="productsEmpty" role="alert">
+            <p>{error}</p>
+            <button type="button" className="buttonSecondary" onClick={refetch}>
+              Try again
+            </button>
+          </div>
+        ) : products.length === 0 ? (
+          // Empty state (Rule 25.3) — action-specific, never a blank grid.
+          <p className="productsEmpty">No T-Shirts products are published yet.</p>
+        ) : (
+          <div className="productCardsGrid">
+            {products.map((product, index) => (
+              <ScrollReveal
+                key={product.id}
+                delay={Math.min(index, STAGGER_CAP) * STAGGER_STEP_SECONDS}
+              >
+                <ProductCard product={product} />
+              </ScrollReveal>
+            ))}
+          </div>
+        )}
 
         <div className="sectionCTA">
           <Link href="/tshirts" className="buttonPrimary">
