@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-117 | file: docs/tasks/task-117-api-announcements.md | needs: task-116 | setup: verify Announcement db push/generate ran against live DB
+**NEXT UP:** task-118 | file: docs/tasks/task-118-ui-superadmin-announcements.md | needs: task-117 | setup: none — task-117's schema+API already exist, this is UI-only
 **OPEN FINDINGS:** 4 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
@@ -85,9 +85,10 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
             placement, status, publishAt, expiresAt, createdBy/
             updatedBy, deletedAt, indexes on status+placement). Not
             wired into any API/UI yet — that's task-117/118's scope.
-      - [ ] task-117 — API: announcement CRUD — list (paginated),
+      - [DONE] task-117 — API: announcement CRUD — list (paginated),
             create, edit, duplicate, deactivate early, soft delete
-            (Rule 6). Depends on task-116.
+            (Rule 6). Depends on task-116. Built 2026-09-20, see
+            docs/tasks/task-117-api-announcements.md.
       - [ ] task-118 — UI: `/superAdmin/announcements` page — list +
             create/edit form (title, message w/ counter, placement,
             publish-at, expires-at, status). Depends on task-117.

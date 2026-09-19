@@ -915,3 +915,27 @@ file holds change-log entries only.
   own doc file upgraded with the v60 NEEDS/SETUP/FILES TO TOUCH/DONE
   WHEN fields (Rule 49.2 §4, first time it became the pointer's
   target).
+
+[2026-09-20] task-117 built: announcement CRUD API. New:
+lib/adminAnnouncementValidation.ts (title/message/placement/status/
+publishAt/expiresAt validation, shared by POST+PUT -- same split
+adminProductValidation.ts uses for products). New routes: GET+POST
+app/api/superadmin/announcements/route.ts (paginated list w/ status+
+search filters; create); PUT+DELETE .../[announcementId]/route.ts
+(edit w/ diff-aware publish logging, soft delete per Rule 6, no
+server-side delay -- the 5-second confirm delay is a UI concern for
+task-118's ConfirmationModal); POST .../duplicate/route.ts (clones,
+forces status back to "draft", title suffixed " (Copy)"); PATCH
+.../deactivate/route.ts (manual status -> "expired" ahead of
+expiresAt, 400 if already expired). All four: superAdmin-only, CSRF-
+checked on mutating verbs, matches app/api/superadmin/products'
+existing auth/pagination pattern. announcement_published logged only
+on the transition into "live" (create-as-live, or edit that flips an
+existing draft/scheduled row live -- not a no-op edit of an
+already-live row); announcement_deactivated logged on every
+successful early-deactivate. Sandbox has no DB connection to run
+`npx prisma db push`/`generate` or `npx tsc --noEmit` against --
+confirm the Announcement model is actually pushed to the live DB
+(task-117's own SETUP note) and typecheck in the real dev environment
+before merging. docs/taskPlan.md's NEXT UP pointer advanced to
+task-118 (UI: /superAdmin/announcements page, depends on task-117).
