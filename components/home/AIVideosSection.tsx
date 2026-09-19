@@ -12,9 +12,11 @@
  * section CTA.
  *
  * DATA FLOW:
- * Reads AI_VIDEO_SAMPLES/AI_VIDEO_CUSTOM_CALLOUT
- * (aiVideosSectionData.ts) and PRODUCTS (productsData.ts) filtered
- * to category "ai-videos".
+ * Reads AI_VIDEO_SAMPLES/AI_VIDEO_CUSTOM_CALLOUT (aiVideosSectionData.ts,
+ * static — no database backing yet) and fetches the live "ai-videos"
+ * product cards via useCategoryProducts (task-131), replacing the old
+ * static PRODUCTS filter so a DB-only product appears here without a
+ * code change — same pattern as task-126..130.
  */
 "use client";
 
@@ -24,7 +26,7 @@ import SectionHeader from "@/components/shared/SectionHeader";
 import VideoCarousel from "@/components/home/VideoCarousel";
 import ProductCard from "@/components/home/ProductCard";
 import ScrollReveal from "@/components/shared/ScrollReveal";
-import { PRODUCTS } from "@/lib/productsData";
+import { useCategoryProducts } from "@/lib/hooks/useCategoryProducts";
 import { AI_VIDEO_SAMPLES, AI_VIDEO_CUSTOM_CALLOUT } from "@/lib/aiVideosSectionData";
 
 // Per-card stagger delay for the scroll-entrance animation — same
@@ -34,9 +36,12 @@ import { AI_VIDEO_SAMPLES, AI_VIDEO_CUSTOM_CALLOUT } from "@/lib/aiVideosSection
 const STAGGER_STEP_SECONDS = 0.06;
 const STAGGER_CAP = 8;
 
-const AI_VIDEO_PRODUCTS = PRODUCTS.filter((product) => product.category === "ai-videos");
+// How many placeholder cards the loading skeleton shows (Rule 25.2).
+const SKELETON_CARD_COUNT = 3;
 
 export default function AIVideosSection() {
+  const { products, isLoading, error, refetch } = useCategoryProducts("ai-videos");
+
   return (
     <section className="categorySection">
       <div className="sectionContainer">
@@ -64,16 +69,42 @@ export default function AIVideosSection() {
           </a>
         </motion.div>
 
-        <div className="productCardsGrid">
-          {AI_VIDEO_PRODUCTS.map((product, index) => (
-            <ScrollReveal
-              key={product.id}
-              delay={Math.min(index, STAGGER_CAP) * STAGGER_STEP_SECONDS}
-            >
-              <ProductCard product={product} />
-            </ScrollReveal>
-          ))}
-        </div>
+        {isLoading ? (
+          // Loading state (Rule 25.2) — skeleton cards mirror the real card shape.
+          <div className="productCardsGrid" aria-busy="true" aria-label="Loading AI videos">
+            {Array.from({ length: SKELETON_CARD_COUNT }, (_, index) => (
+              <div key={index} className="productCardSkeleton">
+                <div className="productCardSkeletonThumb skeletonBlock" />
+                <div className="productCardSkeletonBody">
+                  <div className="productCardSkeletonLine skeletonBlock" />
+                  <div className="productCardSkeletonLine productCardSkeletonLine--short skeletonBlock" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : error ? (
+          // Error state (Rule 25.4) — friendly message + retry, never the raw error.
+          <div className="productsEmpty" role="alert">
+            <p>{error}</p>
+            <button type="button" className="buttonSecondary" onClick={refetch}>
+              Try again
+            </button>
+          </div>
+        ) : products.length === 0 ? (
+          // Empty state (Rule 25.3) — action-specific, never a blank grid.
+          <p className="productsEmpty">No AI Videos products are published yet.</p>
+        ) : (
+          <div className="productCardsGrid">
+            {products.map((product, index) => (
+              <ScrollReveal
+                key={product.id}
+                delay={Math.min(index, STAGGER_CAP) * STAGGER_STEP_SECONDS}
+              >
+                <ProductCard product={product} />
+              </ScrollReveal>
+            ))}
+          </div>
+        )}
 
         <div className="sectionCTA">
           <Link href="/ai-videos" className="buttonPrimary">
