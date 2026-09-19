@@ -3,6 +3,16 @@
 **Fulfills spec:** Section 3.9.
 **taskPlan.md phase:** Phase 7 — CMS, Announcements, Media Library.
 **Dependency:** task-116 (schema must exist first).
+**NEEDS:** task-116
+**SETUP:** confirm `npx prisma db push && npx prisma generate` has
+been run against the live DB for the Announcement model (schema-only
+so far as of this check — not verifiable from a sandboxed clone with
+no DB connection).
+**FILES TO TOUCH:** app/api/superadmin/announcements/route.ts (new),
+app/api/superadmin/announcements/[announcementId]/route.ts (new),
+.../[announcementId]/duplicate/route.ts (new),
+.../[announcementId]/deactivate/route.ts (new)
+**DONE WHEN:** the 4 verification steps below all pass.
 
 ## What this builds
 `app/api/superadmin/announcements/route.ts`:

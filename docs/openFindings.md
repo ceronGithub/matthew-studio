@@ -29,19 +29,13 @@ only consulted when investigating a specific flagged item.
   **task-65** instead — now built and closed as task-65/92/93 (see
   docs/taskPlan.archive.md). Note kept here only as a reminder never
   to create `docs/tasks/task-41-analytics.md` under the old number.
-- [2026-09-20] **task-114's list endpoint is a duplicate of the detail
-  route, not implemented.** `app/api/superadmin/content/route.ts` is
-  byte-identical to `app/api/superadmin/content/[sectionId]/route.ts`
-  (confirmed via diff) — its own file-header comment even claims to
-  be the `[sectionId]` file. It destructures a `sectionId` route
-  param that doesn't exist at `content/route.ts`'s path, so
-  `params.sectionId` is `undefined` and the Prisma lookup will throw
-  at runtime. There is no `prisma.contentSection.findMany()` anywhere
-  in the codebase — the "list all sections" GET that task-115's
-  section tree depends on was never actually built. Surfaced while
-  spot-checking task-115's `needs: task-114` before starting
-  (Rule 49.2 §3). Blocks task-115 until fixed — flagged to developer,
-  build paused pending direction.
+- [2026-09-20] ~~task-114's list endpoint is a duplicate of the detail
+  route~~ **RESOLVED (2026-09-20).** Re-checked during task-116/117
+  pointer lookup: `app/api/superadmin/content/route.ts` now has a
+  real `prisma.contentSection.findMany()` with a FIX NOTE comment
+  dated 2026-09-20, and `.../[sectionId]/versions/route.ts` exists —
+  matches taskPlan.md's task-115 entry, which already logs this as
+  fixed. Original finding is stale; kept struck through for history.
 - [2026-09-20] **Content PUT/revert routes don't enforce CSRF
   server-side.** `app/api/superadmin/content/[sectionId]/route.ts`'s
   PUT and `.../revert/route.ts`'s POST never call

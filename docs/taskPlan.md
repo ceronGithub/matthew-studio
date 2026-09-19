@@ -1,7 +1,7 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-116 | file: docs/tasks/task-116-schema-announcement.md | needs: none
-**OPEN FINDINGS:** 6 — see docs/openFindings.md
+**NEXT UP:** task-117 | file: docs/tasks/task-117-api-announcements.md | needs: task-116 | setup: verify Announcement db push/generate ran against live DB
+**OPEN FINDINGS:** 5 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
 
@@ -78,8 +78,13 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
             the missing GET .../[sectionId]/versions endpoint the
             Revert feature needs (neither existed before). See
             docs/tasks/task-115-ui-superadmin-content.md.
-      - [ ] task-116 — schema: `Announcement` model (Section 3.9).
-            No dependency.
+      - [DONE] task-116 — schema: `Announcement` model (Section 3.9).
+            No dependency. Found already present in prisma/schema.prisma
+            during pointer lookup (2026-09-20) — plan was stale, code
+            wasn't. Model matches spec exactly (title, message,
+            placement, status, publishAt, expiresAt, createdBy/
+            updatedBy, deletedAt, indexes on status+placement). Not
+            wired into any API/UI yet — that's task-117/118's scope.
       - [ ] task-117 — API: announcement CRUD — list (paginated),
             create, edit, duplicate, deactivate early, soft delete
             (Rule 6). Depends on task-116.
