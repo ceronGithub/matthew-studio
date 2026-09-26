@@ -216,3 +216,22 @@ Static/Dynamic/Modern breakdown) -- no extra work needed there. The
 sandbox), zero new errors in touched files. taskPlan.md: task-130
 flipped [DONE]; NEXT UP advanced to task-131 (last of the 6-category
 split — ai-videos).
+
+[2026-09-27] Resolved the docs/openFindings.md [2026-09-20] gap:
+"Public shop API has no rate limit." Added lib/publicRateLimit.ts, an
+in-memory (not DB-backed) sliding-window limiter -- deliberately
+cheaper than lib/rateLimit.ts's checkRateLimit(), which writes one
+RateLimitAttempt row per call and was judged too expensive for a
+browse-heavy public GET. Wired into both public storefront routes,
+app/api/shop/products/route.ts and app/api/shop/products/[slug]/
+route.ts, at Rule 32.1's "General API" tier (100 req/15min/IP),
+checked before any Prisma call. Trade-off documented in the new
+file's header: counts are per-server-instance and reset on cold
+start/instance recycle, accepted in exchange for zero added DB load
+on every page view. Not applied to any auth/security endpoint --
+those keep using the existing DB-backed limiter. tsc: same 45
+pre-existing errors as before (prisma client not generated in this
+sandbox; verify in the real dev environment before merging), zero
+new errors in the touched files. No taskPlan.md line existed for
+this item (it was tracked only in openFindings.md) -- NEXT UP pointer
+unchanged, still task-49.

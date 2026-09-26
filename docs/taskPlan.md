@@ -1,7 +1,7 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
 **NEXT UP:** task-49 | file: none yet — spec not broken down | needs: none | setup: none
-**OPEN FINDINGS:** 5 — see docs/openFindings.md
+**OPEN FINDINGS:** 4 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
 

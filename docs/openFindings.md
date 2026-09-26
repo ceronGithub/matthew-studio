@@ -47,12 +47,17 @@ only consulted when investigating a specific flagged item.
   3/4-remainder/5/6 sub-scopes) archived. Phase 7 (CMS/Announcements/
   Media, where task-115 lives) and Phases 8/9/10 stayed in the main
   file since they're still open.
-- [2026-09-20] **Public shop API has no rate limit** (found during
-  task-121). Rule 32.1 asks for a general 100 req/15 min/IP limit on all
-  endpoints, but `lib/rateLimit.ts` writes one DB row per call, so
-  putting it on a browse-heavy GET would add a write per page view. No
-  public GET route uses it today. Decide: apply it, or use a cheaper
-  edge/in-memory limit for public reads.
+- [2026-09-20] ~~Public shop API has no rate limit~~ **RESOLVED
+  (2026-09-27).** Built `lib/publicRateLimit.ts` -- an in-memory
+  sliding-window limiter (not DB-backed) -- and wired it into both
+  `app/api/shop/products/route.ts` and
+  `app/api/shop/products/[slug]/route.ts` at Rule 32.1's General API
+  tier (100 req/15min/IP), checked before any Prisma call. Chose the
+  "cheaper edge/in-memory" option this finding proposed over the
+  DB-backed `lib/rateLimit.ts`, since that writes one row per call and
+  this route fires on every storefront page view. Trade-off (counts
+  are per-instance, reset on cold start) is documented in the new
+  file's header. Kept struck through for history.
 - [2026-09-20] **/superAdmin/media has no dashboard entry point.**
   task-120 built the page but, like task-118d for announcements, a
   dashboard quick-action card is a separate item — until one is added

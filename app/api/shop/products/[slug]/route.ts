@@ -16,18 +16,44 @@
  *    route, including the gallery images.
  * 3. No row found (for any reason) -> the single shared 404 response.
  * 4. Otherwise map through toPublicProduct() and return it.
+ *
+ * RATE LIMIT (docs/openFindings.md [2026-09-20]):
+ * Same in-memory checkPublicRateLimit() as the list route — see
+ * lib/publicRateLimit.ts for the accepted trade-off vs. the DB-backed
+ * limiter used on auth endpoints.
  */
 export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 import { prisma } from "@/services/prisma";
 import { PUBLIC_PRODUCT_DETAIL_SELECT, toPublicProduct } from "@/lib/publicProduct";
+import { checkPublicRateLimit } from "@/lib/publicRateLimit";
+import { getClientIp } from "@/lib/rateLimit";
+
+// Rule 32.1 "General API" tier: 100 requests per 15 minutes per IP.
+const PUBLIC_API_MAX_REQUESTS = 100;
+const PUBLIC_API_WINDOW_MINUTES = 15;
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+    // Rate limit BEFORE touching the database.
+    const ipAddress = getClientIp(request);
+    const rateLimit = checkPublicRateLimit(
+      ipAddress,
+      "shop-products-detail",
+      PUBLIC_API_MAX_REQUESTS,
+      PUBLIC_API_WINDOW_MINUTES
+    );
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { success: false, data: null, message: "Too many requests. Please try again shortly." },
+        { status: 429 }
+      );
+    }
+
     const { slug } = await params;
 
     // findFirst (not findUnique) because the filter includes status and
