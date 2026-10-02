@@ -50,6 +50,18 @@ Env: APP_URL (already used by the reset-password and create-admin emails)
 must be the live origin in production.
 No schema change.
 
+[2026-10-03] New route: /superAdmin/coupons (task-54g). Super-admin only.
+Files added:
+- app/superAdmin/coupons/page.tsx — Server Component shell, renders CouponManager.
+- components/coupons/CouponManager.tsx — toolbar (status filter, code search, Create button), loading/empty/error states, pagination, switch-off confirmation modal, toasts.
+- components/coupons/CouponTable.tsx — rows with Code, Discount, Category, Used / Limit, Expires, Status badge and the on/off switch. Expired / Used up are worked out from expiresAt and usageCount.
+- components/coupons/CouponForm.tsx — Create Coupon modal.
+- lib/hooks/useCoupons.ts — list fetch, filters, pagination, switch on/off (PATCH /api/superadmin/coupons/[couponId]).
+- lib/hooks/useCouponForm.ts — form state; validates with createCouponSchema (lib/couponValidation.ts), then POST /api/superadmin/coupons.
+- app/styles/superAdminCoupons.css — page, table, switch and form-modal styles.
+Debug points: list empty or error -> check GET /api/superadmin/coupons and the superAdmin session; create says "already exists" -> duplicate code (409); switch does nothing -> check the csrf_token cookie and PATCH response.
+
+
 CHANGE LOG
 
 [2026-09-20] task-118 split into 4 micro-tasks (118a-d) per Rule 49
@@ -319,3 +331,5 @@ unchanged, still task-49.
 
 
 [2026-10-03] Built task-54f on developer approval (coupons are managed by super-admin only; ordinary admins get no access in v1): new lib/couponValidation.ts (zod rules shared by both routes: code trimmed and upper-cased then 3-32 letters/digits; percentage 1-100, fixed above 0, free_shipping value 0 and only for no category or tshirts; scopeCategory must be one of the 6 CATEGORY_SHOWCASE slugs or null; expiry must be in the future; update schema is strict and allows only isActive, usageLimit, expiresAt). New app/api/superadmin/coupons/route.ts (GET paginated list with status/search filters; POST create with CSRF, superAdmin guard, 409 on a duplicate code including the P2002 race, audit entry) and app/api/superadmin/coupons/[couponId]/route.ts (PATCH switch on/off, change limit or expiry; a new limit can't be below usageCount; audit entry only for fields that changed; no DELETE — coupons are never hard-deleted). tsc shows no errors in the new files, but the Prisma client could not be generated in the sandbox (engine download blocked), so task-54f stays in progress. NEXT UP is task-54g (needs approval — not specced).
+
+[2026-10-03] Built task-54g on developer approval: new /superAdmin/coupons page (coupon list with status filter, code search and pagination; Create Coupon modal validated with the shared createCouponSchema; on/off switch per row, with a confirmation modal when switching off and action-specific toasts) plus a Coupons quick-action card on the super-admin dashboard. Edit for limit and expiry was split out as task-54h. tsc shows no errors in the new files; Prisma client could not be generated in the sandbox, so task-54g stays in progress until checked in a browser. NEXT UP is task-54h (needs approval — not specced).

@@ -1,0 +1,492 @@
+/**
+ * FILE: app/styles/superAdminCoupons.css
+ * PURPOSE:
+ * Styles for app/superAdmin/coupons/page.tsx and the components in
+ * components/coupons/ (task-54g). References the design tokens in
+ * app/styles/globals.css — never hardcoded colors or spacing. Mirrors
+ * app/styles/superAdminAnnouncements.css so every super-admin list page
+ * looks the same. The table scrolls sideways inside its own wrapper on
+ * narrow screens, so the page itself never scrolls sideways.
+ */
+
+.superAdminCouponsPage {
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.superAdminCouponsHeader {
+  margin-bottom: var(--space-xl);
+}
+
+.superAdminCouponsEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.superAdminCouponsTitle {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-top: var(--space-xs);
+}
+
+.superAdminCouponsSubtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+  max-width: 70ch;
+}
+
+/* Toolbar: filters + create button */
+.superAdminCouponsToolbar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.superAdminCouponsFilters {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.superAdminCouponsFilterSelect,
+.superAdminCouponsFilterInput {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  touch-action: manipulation;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+.superAdminCouponsFilterSelect:hover,
+.superAdminCouponsFilterSelect:focus-visible,
+.superAdminCouponsFilterInput:hover,
+.superAdminCouponsFilterInput:focus-visible {
+  border-color: var(--color-border-hover);
+  background-color: var(--color-surface-hover);
+}
+
+.superAdminCouponsSearchInput {
+  flex: 1 1 220px;
+}
+
+.superAdminCouponsClearFiltersButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: color var(--transition-fast);
+}
+.superAdminCouponsClearFiltersButton:hover,
+.superAdminCouponsClearFiltersButton:focus-visible,
+.superAdminCouponsClearFiltersButton:active {
+  color: var(--color-text-primary);
+}
+
+.superAdminCouponsCreateButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--color-accent);
+  border-radius: 8px;
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.superAdminCouponsCreateButton:hover,
+.superAdminCouponsCreateButton:focus-visible,
+.superAdminCouponsCreateButton:active {
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+/* Table */
+.superAdminCouponsTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.superAdminCouponsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.superAdminCouponsTable thead tr {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.superAdminCouponsTable th {
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.superAdminCouponsTable td {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.superAdminCouponsTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.superAdminCouponsTable tbody tr:hover {
+  background-color: var(--color-surface-hover);
+}
+
+/* The promo code itself — the one thing the super-admin scans for */
+.superAdminCouponsCodeCell {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.superAdminCouponsStatusBadge {
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.superAdminCouponsActionsCell {
+  text-align: right;
+}
+
+/*
+ * .superAdminCouponsSwitch
+ * On/off switch for one coupon. The button is the full 44px tap target
+ * (Rule 29.1); the visible track is drawn with a pseudo-element so it stays
+ * a slim pill. Green track = switched on.
+ */
+.superAdminCouponsSwitch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  min-height: 44px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.superAdminCouponsSwitch::before {
+  content: "";
+  width: 40px;
+  height: 22px;
+  border: 1px solid var(--color-border-hover);
+  border-radius: 999px;
+  background-color: var(--color-surface-active);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.superAdminCouponsSwitch[aria-checked="true"]::before {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+.superAdminCouponsSwitch:hover::before,
+.superAdminCouponsSwitch:focus-visible::before,
+.superAdminCouponsSwitch:active::before {
+  border-color: var(--color-accent);
+}
+
+.superAdminCouponsSwitchKnob {
+  position: absolute;
+  left: 9px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--color-text-primary);
+  transition: transform var(--transition-base);
+  will-change: transform;
+}
+.superAdminCouponsSwitch[aria-checked="true"] .superAdminCouponsSwitchKnob {
+  background-color: var(--color-bg);
+  transform: translateX(18px);
+}
+
+/* Loading skeleton */
+.superAdminCouponsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.superAdminCouponsRow--skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.superAdminCouponsSkeletonLine {
+  height: 1rem;
+  border-radius: 4px;
+}
+.superAdminCouponsSkeletonLine--short {
+  width: 40%;
+}
+
+/* Empty / error state */
+.superAdminCouponsEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.superAdminCouponsRetryButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.superAdminCouponsRetryButton:hover,
+.superAdminCouponsRetryButton:focus-visible,
+.superAdminCouponsRetryButton:active {
+  background-color: var(--color-surface-hover);
+}
+
+/* Footer: total count + pagination */
+.superAdminCouponsFooter {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.superAdminCouponsTotalCount {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.superAdminCouponsPagination {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.superAdminCouponsPageButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.superAdminCouponsPageButton:hover:not(:disabled),
+.superAdminCouponsPageButton:focus-visible:not(:disabled),
+.superAdminCouponsPageButton:active:not(:disabled) {
+  background-color: var(--color-surface-hover);
+}
+.superAdminCouponsPageButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.superAdminCouponsPageLabel {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+/* ---------- Create Coupon form modal ---------- */
+/* Backdrop/dialog shape mirrors components/shared/ConfirmationModal.tsx (Rule 34.4). */
+
+.couponFormBackdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  z-index: var(--z-modal-backdrop);
+  overflow-y: auto;
+}
+
+.couponFormDialog {
+  width: 100%;
+  max-width: 560px;
+  padding: var(--space-lg) var(--space-xl);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-bg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  z-index: var(--z-modal);
+  transition: transform var(--transition-slow), opacity var(--transition-slow);
+  max-height: 90dvh;
+  overflow-y: auto;
+}
+
+.couponFormTitle {
+  font-size: 1.3rem;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-md);
+}
+
+.couponForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.couponFormLegend {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.couponFormRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+.couponFormRow > .couponFormField {
+  flex: 1 1 220px;
+}
+
+.couponFormField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.couponFormField input,
+.couponFormField select {
+  width: 100%;
+  font-size: 1rem; /* never below 16px — prevents iOS auto-zoom (Rule 29.6) */
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface-active);
+  color: var(--color-text-primary);
+  font-family: inherit;
+}
+.couponFormField input:focus-visible,
+.couponFormField select:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+.couponFormError,
+.couponFormSubmitError {
+  font-size: 0.8rem;
+  color: var(--color-error);
+}
+
+.couponFormActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.couponFormCancelButton {
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.couponFormCancelButton:hover:not(:disabled),
+.couponFormCancelButton:focus-visible:not(:disabled),
+.couponFormCancelButton:active:not(:disabled) {
+  background-color: var(--color-surface-hover);
+}
+.couponFormCancelButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.couponFormSubmitButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: 8px;
+  border: 1px solid var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  font-weight: 600;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.couponFormSubmitButton:hover:not(:disabled),
+.couponFormSubmitButton:focus-visible:not(:disabled),
+.couponFormSubmitButton:active:not(:disabled) {
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+.couponFormSubmitButton:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.couponFormSpin {
+  animation: couponFormSpin 0.8s linear infinite;
+}
+@keyframes couponFormSpin {
+  to { transform: rotate(360deg); }
+}
