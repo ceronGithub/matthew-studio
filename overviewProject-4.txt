@@ -21,6 +21,21 @@ Files added:
 No schema or API change — task-116/117 already provide the
 Announcement model and CRUD routes this reads from.
 
+[2026-10-03] New route: /file-tools/bulk-file-converter (task-49i).
+Files added:
+- app/(public)/file-tools/bulk-file-converter/page.tsx — Server Component,
+  metadata + header text, renders BulkFileConverterTool. A static folder
+  for this slug takes precedence over /file-tools/[slug], so the existing
+  "Bulk File Converter" product card (links to /file-tools/<slug>) now
+  opens this tool instead of the product detail page.
+- app/(public)/file-tools/bulk-file-converter/BulkFileConverterTool.tsx —
+  Client Component, Convert / Rename by Invoice tab switch (arrow-key
+  support). Both workspaces stay mounted, inactive one hidden.
+- app/(public)/file-tools/bulk-file-converter/error.tsx and loading.tsx —
+  error boundary with retry, skeleton placeholder.
+- app/styles/bulkFileConverter.css — page, mode switch and panel styles.
+No schema or API change; everything runs in the browser.
+
 CHANGE LOG
 
 [2026-09-20] task-118 split into 4 micro-tasks (118a-d) per Rule 49
@@ -263,3 +278,5 @@ unchanged, still task-49.
 [2026-10-03] Built task-49g: new hooks/useInvoiceExtraction.ts (reads each PDF with extractInvoiceFields one at a time, keeps editable per-file rows, refuses non-PDFs) and components/fileTools/InvoicePreviewTable.tsx (Original name / Invoice No. / Date / Client / New name table with inline editing, Not detected and Needs manual input flags, ambiguous-date highlight); added one message in lib/errorMessages.ts and table styles in app/styles/fileTools.css.
 
 [2026-10-03] Built task-49h: new hooks/useInvoiceRename.ts (rename pattern, live new names with -2/-3 duplicates, Rename & Download as one file or a lazy-loaded ZIP, result toast), components/fileTools/RenamePatternBuilder.tsx, app/(public)/file-tools/bulk-file-converter/rename/InvoiceRenameWorkspace.tsx and lib/fileTools/downloadBlob.ts (download helper now shared with useFileConversion); useInvoiceExtraction also exposes showToast; added one message in lib/errorMessages.ts and pattern styles in app/styles/fileTools.css.
+
+[2026-10-03] Built task-49i: new page /file-tools/bulk-file-converter (page.tsx with metadata, BulkFileConverterTool.tsx with the Convert / Rename by Invoice tab switch over both workspaces, error.tsx, loading.tsx) and app/styles/bulkFileConverter.css; the existing product card already resolves to the route and the static folder now takes precedence over [slug]. CSS placed in app/styles/ to match the project instead of beside the page as the task file listed. Type check adds no new errors in the new files (sandbox total unchanged at 46 with Prisma types missing). Not run in a browser. taskPlan.md: task-49i and parent task-49 marked DONE, NEXT UP moved to task-50 (no task file yet).

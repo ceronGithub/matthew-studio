@@ -1,0 +1,131 @@
+/**
+ * FILE: app/styles/bulkFileConverter.css
+ * PURPOSE:
+ * Styles for the Bulk File Converter page shell (task-49i): the page header,
+ * the Convert / Rename mode switch and the panel that holds each workspace.
+ * The two workspaces keep their own look in fileTools.css; this file only
+ * covers what wraps them. Mobile-first, every value is a token from globals.css.
+ */
+
+/* Outer region of the whole tool page. */
+.bulkConverterPage {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-xl);
+  width: 100%;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+/* Eyebrow + title + one-line description above the tool. */
+.bulkConverterHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--space-sm);
+}
+
+/* Privacy reassurance under the description: files never leave the browser. */
+.bulkConverterNote {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+/* Holds the mode switch and the active workspace panel. */
+.bulkConverterTool {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-lg);
+}
+
+/* Row of the two mode buttons. Wraps on very narrow phones. */
+.modeSwitch {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-sm);
+}
+
+/* One mode button. At least 44px tall so it is easy to tap (Rule 29.1). */
+.modeSwitchButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 10rem;
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  background: var(--color-surface);
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.modeSwitchButton:hover,
+.modeSwitchButton:focus-visible,
+.modeSwitchButton:active {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+  color: var(--color-text-primary);
+}
+
+/* The mode currently showing. */
+.modeSwitchButtonActive,
+.modeSwitchButtonActive:hover,
+.modeSwitchButtonActive:focus-visible,
+.modeSwitchButtonActive:active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* Frame around the active workspace. Hidden panels use the hidden attribute. */
+.modePanel {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+}
+
+.modePanel[hidden] {
+  display: none;
+}
+
+/* error.tsx — message plus retry button. */
+.bulkConverterError {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--space-md);
+  width: 100%;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+/* loading.tsx — placeholder blocks shaped like the header, switch and panel. */
+.bulkConverterSkeletonTitle {
+  width: 60%;
+  height: 2rem;
+}
+
+.bulkConverterSkeletonSwitch {
+  width: 100%;
+  height: 44px;
+}
+
+.bulkConverterSkeletonPanel {
+  width: 100%;
+  height: 16rem;
+}
