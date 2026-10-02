@@ -574,3 +574,129 @@
   overflow-wrap: anywhere;
   color: var(--color-text-primary);
 }
+
+/* ------------------------------------------------------------
+ * INVOICE PREVIEW TABLE (task-49g)
+ * ------------------------------------------------------------ */
+
+.invoicePreviewSection {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-md);
+  width: 100%;
+}
+
+/* Empty message under the drop zone. */
+.invoicePreviewEmpty {
+  padding: var(--space-lg);
+  border: 1px dashed var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+/* Sideways scroll lives here so the page body never scrolls (Rule 23.8). */
+.invoicePreviewScroll {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+}
+
+/* min-width is intentional: five editable columns do not fit a phone, so the table keeps this
+   width and scrolls inside .invoicePreviewScroll instead of squashing the inputs (Rule 23.3). */
+.invoicePreviewTable {
+  width: 100%;
+  min-width: 56rem;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.invoicePreviewTable th,
+.invoicePreviewTable td {
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+
+.invoicePreviewTable th {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+/* Original-name cell: name, size, status pill and flag stacked. */
+.invoicePreviewNameCell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--space-xs);
+}
+
+.invoicePreviewFileName {
+  overflow-wrap: anywhere;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.invoicePreviewFileMeta {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+}
+
+/* "Needs manual input" flag: amber text with a border, never colour alone. */
+.invoicePreviewFlag {
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-warning);
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  color: var(--color-warning);
+}
+
+/* Inline field editor. 44px tall, 1rem text so phones do not zoom (Rule 29). */
+.invoicePreviewInput {
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  background: var(--color-bg);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.invoicePreviewInput:hover {
+  border-color: var(--color-border-hover);
+}
+
+.invoicePreviewInput:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Row whose date could be day/month swapped: tinted row plus an outlined date field. */
+.invoicePreviewRowAmbiguous {
+  background: var(--color-surface-hover);
+}
+
+.invoicePreviewRowAmbiguous .invoicePreviewInput[type="date"] {
+  border-color: var(--color-warning);
+}
+
+.invoicePreviewWarning {
+  display: block;
+  margin-top: var(--space-xs);
+  font-size: 0.8125rem;
+  color: var(--color-warning);
+}
+
+.invoicePreviewNewName {
+  overflow-wrap: anywhere;
+  color: var(--color-text-secondary);
+}
