@@ -38,15 +38,12 @@ only consulted when investigating a specific flagged item.
   was run on 2026-10-03: the CSRF lines (import + check) type-check
   fine, but the full project is NOT clean — see the 2026-10-03 tsc
   entry at the bottom of this file. Kept struck through for history.
-- [2026-09-20] **taskPlan.md v60 cleanup note.** This file and
-  docs/taskPlan.archive.md were created during the first v60 session
-  touching taskPlan.md (Rule 49.2 §8): pointer shortened to the
-  single-line format, narrative moved here, the `task-48+` open-ended
-  range stub reclassified as a Phase heading, and fully-[DONE] phases
-  (Phase 4 items 6/7/8, Phase 3 item 4, and item 5's Phase
-  3/4-remainder/5/6 sub-scopes) archived. Phase 7 (CMS/Announcements/
-  Media, where task-115 lives) and Phases 8/9/10 stayed in the main
-  file since they're still open.
+- [2026-09-20] ~~taskPlan.md v60 cleanup note.~~ **CLOSED
+  (2026-10-03).** Record only, nothing to fix: during the first v60
+  session touching taskPlan.md (Rule 49.2 §8) the pointer was shortened
+  to one line, its narrative moved here, the `task-48+` range stub
+  became a Phase heading, and fully-[DONE] phases were archived to
+  docs/taskPlan.archive.md. Kept struck through for history.
 - [2026-09-20] ~~Public shop API has no rate limit~~ **RESOLVED
   (2026-09-27).** Built `lib/publicRateLimit.ts` -- an in-memory
   sliding-window limiter (not DB-backed) -- and wired it into both

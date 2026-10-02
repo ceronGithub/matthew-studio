@@ -1,7 +1,7 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
 **NEXT UP:** task-49c | file: docs/tasks/task-49c-lib-conversion-images.md | needs: none | setup: npm install heic2any pdf-lib
-**OPEN FINDINGS:** 5 — see docs/openFindings.md
+**OPEN FINDINGS:** 1 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
 
