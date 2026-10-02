@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-49a | file: docs/tasks/task-49a-lib-filename-builder.md | needs: none | setup: none
+**NEXT UP:** task-49b | file: docs/tasks/task-49b-lib-invoice-extractor.md | needs: none | setup: npm install pdfjs-dist
 **OPEN FINDINGS:** 4 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
@@ -261,7 +261,7 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
 ### [ ] 10. bulk_file_converter_and_pdf_renamer_specification.md
 - [ ] task-49 — Bulk File Converter & PDF Invoice Renamer (parent — v1 is
       fully client-side, no schema change; broken down 2026-10-03)
-      - [ ] task-49a — filenameBuilder lib. Needs none.
+      - [DONE] task-49a — filenameBuilder lib. Needs none.
       - [ ] task-49b — invoiceExtractor lib (pdf.js). Needs none.
       - [ ] task-49c — conversionEngine: image conversions. Needs none.
       - [ ] task-49d — conversionEngine: PDF utils. Needs task-49b, task-49c.
