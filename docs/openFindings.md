@@ -34,10 +34,10 @@ only consulted when investigating a specific flagged item.
   PUT and `.../revert/route.ts`'s POST, matching the exact pattern
   already used in `app/api/admin/products/route.ts` and other
   mutating admin routes. Client already sent `getCsrfHeader()`
-  (task-115) — server now actually validates it. NOTE: could not run
-  `npx tsc --noEmit` (Rule 20) — this sandbox clone has no
-  `node_modules` installed. Run it in the real dev environment before
-  merging.
+  (task-115) — server now actually validates it. `npx tsc --noEmit`
+  was run on 2026-10-03: the CSRF lines (import + check) type-check
+  fine, but the full project is NOT clean — see the 2026-10-03 tsc
+  entry at the bottom of this file. Kept struck through for history.
 - [2026-09-20] **taskPlan.md v60 cleanup note.** This file and
   docs/taskPlan.archive.md were created during the first v60 session
   touching taskPlan.md (Rule 49.2 §8): pointer shortened to the
@@ -86,3 +86,17 @@ only consulted when investigating a specific flagged item.
   referenced by the page bundle. The first run with a real PDF in a
   browser stays as a check in task-49g's DONE WHEN, where the loader is
   first used. Kept struck through for history.
+- [2026-10-03] **`npx tsc --noEmit` reports 24 errors on the shop branch
+  (Rule 20 wants zero).** Same count with and without the open-findings
+  cleanup, so all of it was already there. Ran against Prisma 7.10.0,
+  the version in the lockfile. Three groups: (a) 17 Json-column errors —
+  interfaces and `Record<string, unknown>` passed to Prisma Json fields
+  (order actions + production-stage routes, buyer actions route,
+  content PUT/revert routes, auditLog.ts, vaultHelpers.ts,
+  seedProducts.ts); (b) 4 errors in `lib/adminAnalyticsStats.ts` —
+  it reads `product` on OrderItem, but the schema's OrderItem has no
+  `product` relation (only a `productId` string), so those queries
+  would fail at runtime; (c) 3 errors in `services/analytics.ts`
+  (lines 55-57) — `string | null` passed where `string` is expected.
+  The sandbox could only generate the Prisma client with a stub engine,
+  which does not affect types.
