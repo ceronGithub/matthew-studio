@@ -58,11 +58,13 @@ only consulted when investigating a specific flagged item.
   this route fires on every storefront page view. Trade-off (counts
   are per-instance, reset on cold start) is documented in the new
   file's header. Kept struck through for history.
-- [2026-09-20] **/superAdmin/media has no dashboard entry point.**
-  task-120 built the page but, like task-118d for announcements, a
-  dashboard quick-action card is a separate item — until one is added
-  the page is reachable only by typing the URL. Also: its search box
-  filters only the files already loaded (the API has no search param).
+- [2026-09-20] ~~/superAdmin/media has no dashboard entry point.~~
+  **RESOLVED (2026-10-03).** Added a "Media Library" quick-action card
+  to `app/superAdmin/dashboard/page.tsx`. The search-box limit is
+  accepted as is: R2 can only list by prefix (no substring search) and
+  uploaded files are named with random UUIDs, so a server-side filename
+  search would find nothing useful. The grid already tells the admin to
+  load more files to search further. Kept struck through for history.
 - [2026-09-20] ~~task-131 not build-verified in this sandbox.~~
   **RESOLVED (2026-09-20).** Vic confirmed the build and admin CMS
   create/unpublish check locally for both task-131 and task-125. Kept

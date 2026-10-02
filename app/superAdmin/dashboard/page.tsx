@@ -19,7 +19,7 @@
  */
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ShieldAlert, ShieldCheck, Ban, Activity, ArrowRight, BarChart3, KeyRound, Archive, Users, PackageSearch, Megaphone } from "lucide-react";
+import { ShieldAlert, ShieldCheck, Ban, Activity, ArrowRight, BarChart3, KeyRound, Archive, Users, PackageSearch, Megaphone, Images } from "lucide-react";
 import { getDashboardHealthStats, getRecentAccountActivity } from "@/lib/dashboardStats";
 import "../../styles/superAdminDashboard.css";
 
@@ -82,6 +82,12 @@ const QUICK_ACTIONS = [
     label: "Announcements",
     description: "Manage homepage banner, shop banner, and login-toast announcements",
     icon: Megaphone,
+  },
+  {
+    href: "/superAdmin/media",
+    label: "Media Library",
+    description: "Browse uploaded files and copy their URLs for reuse",
+    icon: Images,
   },
 ];
 
