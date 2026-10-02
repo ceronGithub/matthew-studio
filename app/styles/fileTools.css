@@ -421,3 +421,156 @@
   cursor: not-allowed;
   opacity: 0.6;
 }
+
+/* ------------------------------------------------------------
+ * CONVERT WORKSPACE (task-49f)
+ * ------------------------------------------------------------ */
+
+/* Outer region of the Convert tool. */
+.convertWorkspace {
+  width: 100%;
+  padding: var(--space-lg);
+}
+
+/* Stacks drop zone, queue, selector, actions and downloads with even spacing. */
+.convertWorkspaceLayout {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-lg);
+}
+
+/* Convert + Clear all. Wraps on narrow phones. */
+.convertActions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-md);
+}
+
+/* Primary action: accent-filled, 44px tap target (Rule 29.1). */
+.convertButton,
+.convertSecondaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border: 1px solid var(--color-accent);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.convertButton {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.convertButton:hover,
+.convertButton:focus-visible,
+.convertButton:active {
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+/* Secondary action: outlined, so Convert stays the clear main choice. */
+.convertSecondaryButton {
+  background: transparent;
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+.convertSecondaryButton:hover,
+.convertSecondaryButton:focus-visible,
+.convertSecondaryButton:active {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.convertButton:disabled,
+.convertSecondaryButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Overall progress: a label above a thin bar. */
+.convertProgress {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-sm);
+}
+
+.convertProgressLabel {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+/* The empty track the fill grows inside. */
+.convertProgressTrack {
+  width: 100%;
+  height: 0.5rem;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--color-surface-active);
+}
+
+/* Width is set from the hook's percent; it animates by width because it is a one-off bar, not a layout. */
+.convertProgressFill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--color-accent);
+  transition: width var(--transition-base);
+}
+
+/* Download panel: bordered card, same edge style as the queue rows. */
+.convertDownloads {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+}
+
+.convertDownloadsTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.convertDownloadList {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-sm);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* One converted file: name left, Download button right; stacks on phones. */
+.convertDownloadItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--space-sm);
+}
+
+/* Long names wrap instead of pushing the button off screen. */
+.convertDownloadName {
+  overflow-wrap: anywhere;
+  color: var(--color-text-primary);
+}

@@ -354,3 +354,13 @@
     justify-content: flex-end;
   }
 }
+
+/* fileTools.css — Convert workspace download rows (task-49f).
+   From tablet width the file name and its Download button sit on one line. */
+@media (min-width: 768px) {
+  .convertDownloadItem {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

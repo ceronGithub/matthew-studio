@@ -53,4 +53,14 @@ export const fileToolMessages = {
 
   /** Heading above the list of refused files in the drop zone. */
   rejectedHeading: "Some files weren't added",
+
+  /** The conversion step threw something the engine did not expect (it normally returns a reason instead). */
+  conversionUnexpected: (fileName: string) =>
+    `We couldn't convert ${fileName}. Please try again, or choose a different format.`,
+
+  /** Building the ZIP of converted files failed. */
+  zipFailed: "We couldn't build the ZIP file. Download the files one by one instead, or try again.",
+
+  /** Nothing is ready to convert yet. */
+  nothingToConvert: "Add at least one file before converting.",
 };

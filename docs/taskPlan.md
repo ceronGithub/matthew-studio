@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-49f | file: docs/tasks/task-49f-ui-convert-workspace.md | needs: task-49c, task-49d, task-49e | setup: npm install jszip
+**NEXT UP:** task-49g | file: docs/tasks/task-49g-ui-invoice-extraction-preview.md | needs: task-49b, task-49e
 **OPEN FINDINGS:** 2 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
@@ -266,7 +266,7 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
       - [DONE] task-49c — conversionEngine: image conversions. Needs none.
       - [DONE] task-49d — conversionEngine: PDF utils. Needs task-49b, task-49c.
       - [DONE] task-49e — shared UI + validation. Needs none.
-      - [ ] task-49f — Convert workspace + hook. Needs task-49c/49d/49e.
+      - [DONE] task-49f — Convert workspace + hook. Needs task-49c/49d/49e.
       - [ ] task-49g — invoice extraction hook + preview table. Needs task-49b/49e.
       - [ ] task-49h — rename workspace + pattern builder. Needs task-49a/49g.
       - [ ] task-49i — tool page shell + mode switch. Needs task-49f/49h.

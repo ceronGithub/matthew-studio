@@ -17,3 +17,12 @@ All conversion calls go through the hook; the component stays presentational (Ru
 
 ## Notes
 v1 defaults (approved 2026-10-03): one tool with two modes; no OCR; no audio; no DOCX; generic Invoice No./Date/Bill To patterns only; fully client-side, no schema change.
+
+## Result (2026-10-03)
+Built hooks/useFileConversion.ts and app/(public)/file-tools/bulk-file-converter/convert/ConvertWorkspace.tsx. Added jszip (package.json, package-lock.json).
+- Hook: queue, target format, one-at-a-time `convertFile` loop, per-file status, overall progress, `convertedOutputs`, `downloadOutput`, lazy-loaded `downloadAllAsZip`, completion toast via components/shared/useToast. A failed file never stops the batch; pressing Convert again retries failed rows. Format list is the set every queued file shares (images: JPG/PNG/WEBP/PDF, PDFs: JPG/PNG/TXT, mixed: JPG/PNG). Changing the format resets results.
+- Component: `allowMultiple` prop (bulk vs individual); 1 output shows one Download button, 2+ shows "Download all (.zip)" plus a button per file. Duplicate output names in the ZIP get " (2)".
+- DEVIATION (files touched beyond the list): lib/errorMessages.ts (3 messages, Rule 34.1), app/styles/fileTools.css and mediaQueries.css (workspace styles; CSS follows 49e's location). The component imports the CSS by relative path.
+- Type check: no errors in the new/changed files. The sandbox's overall `tsc` count is not comparable to the 24 in openFindings (46 here): Prisma client types are not generated in this checkout, and nearly all errors are in Prisma-using files.
+- NOT TESTED: no browser run yet. Check: drop 1 and 3 files, convert, ZIP download, a failing file mid-batch, change format after converting, and the carried 49e checks (same file picked twice, tab to button, 768px layout).
+- Not wired to a page yet; task-49i adds the tool page and mode switch.
