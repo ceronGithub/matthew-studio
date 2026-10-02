@@ -1,7 +1,7 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-51 | file: none yet — create docs/tasks/task-51-global-error-boundaries.md first (Rule 49.1) | needs: none
-**OPEN FINDINGS:** 4 — see docs/openFindings.md
+**NEXT UP:** task-52 | file: none yet — create docs/tasks/task-52-idle-session-timeout.md first (Rule 49.1) | needs: none
+**OPEN FINDINGS:** 6 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
 
@@ -280,7 +280,7 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
 
 ### [~] 11. sitewide_technical_seo_specification.md
 - [DONE] task-50 — Sitemap/robots.txt
-- [ ] task-51 — Global 404/error boundaries (Rule 31.10 pattern)
+- [DONE] task-51 — Global 404/error boundaries (Rule 31.10 pattern) — root not-found.tsx, error.tsx, global-error.tsx (closed 2026-10-03; per-segment error.tsx left as a follow-up in openFindings.md)
 - [ ] task-52 — Idle session timeout (Rule 32.5) — apply per account layout
 - [DONE] task-53 — Anonymized traffic analytics (Rule 41) — split into
       task-89/90/91, all closed 2026-09-08 (`PageViewDaily` schema,
