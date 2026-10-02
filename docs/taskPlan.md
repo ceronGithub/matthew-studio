@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-54a | file: docs/tasks/task-54a-coupon-schema.md | needs: none | setup: npx prisma db push && npx prisma generate
+**NEXT UP:** task-54b | file: docs/tasks/task-54b-coupon-pricing-logic.md | needs: task-54a | setup: none
 **OPEN FINDINGS:** 7 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
@@ -291,8 +291,8 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
 
 ### [ ] 12. additional_platform_gaps_specification.md
 - [ ] task-54 — Coupons (checkout totals already available) — split into task-54a..54g
-      - [~] task-54a — Coupon model + Order.couponCode/discountAmount (db push). Needs none.
-      - [ ] task-54b — lib/couponPricing.ts validate + discount calc + couponMessages. Needs task-54a.
+      - [DONE] task-54a — Coupon model + Order.couponCode/discountAmount (db push). Needs none.
+      - [~] task-54b — lib/couponPricing.ts validate + discount calc + couponMessages. Needs task-54a.
       - [ ] task-54c — POST /api/checkout/validate-coupon (rate limited). Needs task-54b.
       - [ ] task-54d — apply coupon in POST /api/checkout (atomic use reservation). Needs task-54a/54b.
       - [ ] task-54e — checkout "Have a promo code?" UI. Needs task-54c/54d.

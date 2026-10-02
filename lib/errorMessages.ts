@@ -78,3 +78,31 @@ export const sessionMessages = {
   /** Idle logout sent the user back to /auth/login?reason=idle. */
   idleLogout: "Your session expired due to inactivity. Please log in again.",
 };
+
+/**
+ * Promo code messages shown at checkout (task-54b). One sentence per reason
+ * returned by lib/couponPricing.ts. `notFound` and `expired` deliberately say
+ * the same thing so a visitor can't use the wording to learn which codes exist.
+ */
+export const couponMessages = {
+  /** The promo code box was submitted with nothing in it. */
+  emptyCode: "Enter a promo code first, then try again.",
+
+  /** The code doesn't exist or has been switched off. */
+  notFound: "This promo code isn't valid or has expired. Check the code and try again.",
+
+  /** The code is past its expiry date. Same wording as notFound on purpose. */
+  expired: "This promo code isn't valid or has expired. Check the code and try again.",
+
+  /** Every allowed redemption has already been used. */
+  usageLimitReached: "This promo code has reached its redemption limit.",
+
+  /** The code only covers one product category and the cart has nothing in it. */
+  noMatchingItems: "This promo code doesn't apply to the items in your cart.",
+
+  /** A free-shipping code on a cart with nothing to ship (no t-shirt). */
+  freeShippingNotApplicable: "Free shipping only applies to orders that include a t-shirt.",
+};
+
+/** Every reason applyCoupon can reject a code for — matches the keys above. */
+export type CouponRejectReason = keyof typeof couponMessages;
