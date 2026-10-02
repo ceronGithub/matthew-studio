@@ -1,7 +1,7 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-50 | file: none yet — create docs/tasks/task-50-sitemap-robots.md first (Rule 49.1) | needs: none
-**OPEN FINDINGS:** 2 — see docs/openFindings.md
+**NEXT UP:** task-51 | file: none yet — create docs/tasks/task-51-global-error-boundaries.md first (Rule 49.1) | needs: none
+**OPEN FINDINGS:** 4 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
 
@@ -279,7 +279,7 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
 ## PHASE 6 — SITEWIDE POLISH & PLATFORM HARDENING
 
 ### [~] 11. sitewide_technical_seo_specification.md
-- [ ] task-50 — Sitemap/robots.txt
+- [DONE] task-50 — Sitemap/robots.txt
 - [ ] task-51 — Global 404/error boundaries (Rule 31.10 pattern)
 - [ ] task-52 — Idle session timeout (Rule 32.5) — apply per account layout
 - [DONE] task-53 — Anonymized traffic analytics (Rule 41) — split into

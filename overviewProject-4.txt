@@ -36,6 +36,20 @@ Files added:
 - app/styles/bulkFileConverter.css — page, mode switch and panel styles.
 No schema or API change; everything runs in the browser.
 
+[2026-10-03] New routes: /sitemap.xml and /robots.txt (task-50).
+Files added:
+- app/sitemap.ts — builds the sitemap per request (force-dynamic): static
+  public pages, published non-deleted products at /<category>/<slug>
+  (lastModified = updatedAt), and blog posts from lib/blogData.ts. URLs are
+  de-duplicated. A database error falls back to static + blog URLs only.
+- app/robots.ts — allows "/", disallows /buyer/, /admin/, /superAdmin/,
+  /auth/, /api/, /checkout, /order-confirmation/, and points to the sitemap.
+- lib/siteUrl.ts — getSiteUrl(): APP_URL without trailing slash, falls back
+  to http://localhost:3000.
+Env: APP_URL (already used by the reset-password and create-admin emails)
+must be the live origin in production.
+No schema change.
+
 CHANGE LOG
 
 [2026-09-20] task-118 split into 4 micro-tasks (118a-d) per Rule 49
@@ -280,3 +294,5 @@ unchanged, still task-49.
 [2026-10-03] Built task-49h: new hooks/useInvoiceRename.ts (rename pattern, live new names with -2/-3 duplicates, Rename & Download as one file or a lazy-loaded ZIP, result toast), components/fileTools/RenamePatternBuilder.tsx, app/(public)/file-tools/bulk-file-converter/rename/InvoiceRenameWorkspace.tsx and lib/fileTools/downloadBlob.ts (download helper now shared with useFileConversion); useInvoiceExtraction also exposes showToast; added one message in lib/errorMessages.ts and pattern styles in app/styles/fileTools.css.
 
 [2026-10-03] Built task-49i: new page /file-tools/bulk-file-converter (page.tsx with metadata, BulkFileConverterTool.tsx with the Convert / Rename by Invoice tab switch over both workspaces, error.tsx, loading.tsx) and app/styles/bulkFileConverter.css; the existing product card already resolves to the route and the static folder now takes precedence over [slug]. CSS placed in app/styles/ to match the project instead of beside the page as the task file listed. Type check adds no new errors in the new files (sandbox total unchanged at 46 with Prisma types missing). Not run in a browser. taskPlan.md: task-49i and parent task-49 marked DONE, NEXT UP moved to task-50 (no task file yet).
+
+[2026-10-03] Built task-50: new app/sitemap.ts (static public pages, published products from the database, blog posts, de-duplicated, falls back to static + blog if the database read fails), app/robots.ts (allow public, disallow buyer/admin/superAdmin/auth/api/checkout/order-confirmation, sitemap line) and lib/siteUrl.ts (reads the existing APP_URL); created docs/tasks/task-50-sitemap-robots.md. Type check adds no errors beyond the sandbox's missing Prisma types (one implicit-any in sitemap.ts, same cause as the others). Logic tested in Node with a stubbed database: 27 unique URLs, no private paths, database-failure fallback works; real database and a browser are untested. Two follow-ups logged in docs/openFindings.md (super-admin line in robots.txt, APP_URL in production). taskPlan.md: task-50 marked DONE, NEXT UP moved to task-51 (no task file yet).
