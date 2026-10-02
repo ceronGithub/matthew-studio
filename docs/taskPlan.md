@@ -291,7 +291,7 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
 
 ### [ ] 12. additional_platform_gaps_specification.md
 - [ ] task-54 — Coupons (checkout totals already available) — split into task-54a..54g
-      - [ ] task-54a — Coupon model + Order.couponCode/discountAmount (db push). Needs none.
+      - [~] task-54a — Coupon model + Order.couponCode/discountAmount (db push). Needs none.
       - [ ] task-54b — lib/couponPricing.ts validate + discount calc + couponMessages. Needs task-54a.
       - [ ] task-54c — POST /api/checkout/validate-coupon (rate limited). Needs task-54b.
       - [ ] task-54d — apply coupon in POST /api/checkout (atomic use reservation). Needs task-54a/54b.

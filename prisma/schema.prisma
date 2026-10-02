@@ -284,8 +284,10 @@ model Order {
   guestEmail        String?
   cartToken         String? // guest cart_token this Order was created from — lets the webhook/self-heal endpoint clear the correct guest cart without ever trusting a client-submitted value
   status            String    @default("pending") // pending | PAID | FAILED | Confirmed | Shipped | Delivered | Cancelled — FAILED means PayMongo reported the checkout session as failed/expired; the Order stays in place (never deleted) so the buyer can retry via /api/orders/[orderId]/retry-payment instead of re-adding their whole cart
-  subtotal          Float
+  subtotal          Float // pre-discount amount; total = subtotal - discountAmount + shippingFee
   shippingFee       Float     @default(0)
+  couponCode        String? // task-54a: code applied at checkout (normalized upper-case), null if none — set server-side only by POST /api/checkout (task-54d)
+  discountAmount    Float     @default(0) // task-54a: peso amount taken off by the coupon, always recalculated server-side, never client-submitted
   total             Float
   paymongoOrderId   String?   @unique // Payment Link ID
   paymongoPaymentId String? // set by webhook, Rule 30.1
@@ -309,6 +311,30 @@ model Order {
   @@index([userId])
   @@index([guestEmail])
   @@index([status])
+}
+
+/// Coupon
+/// additional_platform_gaps_specification.md Section 4.1 / 5. One row
+/// per promo code. `code` is always stored trimmed + upper-case (Rule 6
+/// normalization) and its @unique constraint is the database-level
+/// backup to the app-level duplicate check. `usageCount` is only ever
+/// incremented server-side during checkout (task-54d) — never from the
+/// client. `isActive` is the soft-off switch so a coupon can be disabled
+/// without deleting it (and without losing the history of orders that
+/// used it).
+model Coupon {
+  id            String    @id @default(cuid())
+  code          String    @unique
+  discountType  String // percentage | fixed | free_shipping (free_shipping applies to t-shirt orders only)
+  discountValue Float // percent (0-100) for percentage, peso amount for fixed, ignored for free_shipping
+  usageLimit    Int? // null = unlimited redemptions
+  usageCount    Int       @default(0)
+  expiresAt     DateTime? // null = never expires
+  scopeCategory String? // ProductCategorySlug; null = applies to all categories
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+
+  @@index([isActive])
 }
 
 /// Subscription
