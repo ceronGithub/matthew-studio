@@ -97,3 +97,4 @@ only consulted when investigating a specific flagged item.
   (lines 55-57) — `string | null` passed where `string` is expected.
   The sandbox could only generate the Prisma client with a stub engine,
   which does not affect types.
+- [2026-10-03] task-49d follow-ups, all browser checks for task-49f/49g: (a) pdf.js warned `standardFontDataUrl` is missing when opening a PDF that uses non-embedded standard fonts (Helvetica etc.) — text reading was fine, but check whether PDF to JPG/PNG shows wrong glyphs for such PDFs in a browser; if so, `getDocument` in pdfJsLoader/conversionEngine needs that parameter; (b) merge has no combined-size limit (each file is capped at 25MB, up to 50 files could be ~1.25GB in memory); (c) `maxPdfPages = 100` is an unconfirmed assumption.

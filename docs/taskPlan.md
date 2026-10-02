@@ -1,7 +1,7 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-49d | file: docs/tasks/task-49d-lib-conversion-pdf-utils.md | needs: task-49b, task-49c
-**OPEN FINDINGS:** 1 — see docs/openFindings.md
+**NEXT UP:** task-49e | file: docs/tasks/task-49e-ui-file-tools-shared.md | needs: none
+**OPEN FINDINGS:** 2 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
 
@@ -264,7 +264,7 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
       - [DONE] task-49a — filenameBuilder lib. Needs none.
       - [DONE] task-49b — invoiceExtractor lib (pdf.js). Needs none.
       - [DONE] task-49c — conversionEngine: image conversions. Needs none.
-      - [ ] task-49d — conversionEngine: PDF utils. Needs task-49b, task-49c.
+      - [DONE] task-49d — conversionEngine: PDF utils. Needs task-49b, task-49c.
       - [ ] task-49e — shared UI + validation. Needs none.
       - [ ] task-49f — Convert workspace + hook. Needs task-49c/49d/49e.
       - [ ] task-49g — invoice extraction hook + preview table. Needs task-49b/49e.
