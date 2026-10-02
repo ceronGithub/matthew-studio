@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-52b | file: docs/tasks/task-52b-idle-timeout-wire-layouts.md | needs: task-52a
+**NEXT UP:** task-54 | file: none yet — create docs/tasks/task-54-coupons.md first (Rule 49.1) | needs: none
 **OPEN FINDINGS:** 6 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
@@ -278,12 +278,12 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
 
 ## PHASE 6 — SITEWIDE POLISH & PLATFORM HARDENING
 
-### [~] 11. sitewide_technical_seo_specification.md
+### [DONE] 11. sitewide_technical_seo_specification.md
 - [DONE] task-50 — Sitemap/robots.txt
 - [DONE] task-51 — Global 404/error boundaries (Rule 31.10 pattern) — root not-found.tsx, error.tsx, global-error.tsx (closed 2026-10-03; per-segment error.tsx left as a follow-up in openFindings.md)
-- [ ] task-52 — Idle session timeout (Rule 32.5) — split into task-52a/52b
+- [DONE] task-52 — Idle session timeout (Rule 32.5) — split into task-52a/52b (closed 2026-10-03)
       - [DONE] task-52a — useIdleTimeout hook + IdleSessionGuard client component (closed 2026-10-03).
-      - [ ] task-52b — mount guard in buyer (30m) / admin (15m) / superAdmin (15m) layouts + inactivity toast on login. Needs task-52a.
+      - [DONE] task-52b — guard mounted in buyer (30m) / admin (15m) / superAdmin (15m) layouts + inactivity toast on login (closed 2026-10-03).
       Task files: docs/tasks/task-52a-*.md, task-52b-*.md
 - [DONE] task-53 — Anonymized traffic analytics (Rule 41) — split into
       task-89/90/91, all closed 2026-09-08 (`PageViewDaily` schema,

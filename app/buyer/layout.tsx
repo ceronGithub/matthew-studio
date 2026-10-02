@@ -22,6 +22,7 @@ import type { ReactNode } from "react";
 import { cookies } from "next/headers";
 import { supabaseAdminClient } from "@/lib/supabase/serverClient";
 import BuyerNav from "@/components/buyer/BuyerNav";
+import IdleSessionGuard from "@/components/shared/IdleSessionGuard";
 import "../styles/buyerDashboard.css";
 import "../styles/onboardingModal.css";
 
@@ -40,6 +41,8 @@ export default async function BuyerLayout({ children }: { children: ReactNode })
 
   return (
     <div className="buyerShell">
+      {/* Logs the buyer out after 30 minutes with no activity (Rule 32.5) */}
+      <IdleSessionGuard idleMinutes={30} />
       <BuyerNav displayName={displayName} />
       <main className="buyerMain">{children}</main>
     </div>

@@ -16,6 +16,7 @@ import { cookies, headers } from "next/headers";
 import { supabaseAdminClient } from "@/lib/supabase/serverClient";
 import { recordAccountActivity } from "@/lib/accountActivity";
 import RoleAreaHeader from "@/components/shared/RoleAreaHeader";
+import IdleSessionGuard from "@/components/shared/IdleSessionGuard";
 import "../styles/roleAreaDashboard.css";
 
 export default async function SuperAdminLayout({ children }: { children: ReactNode }) {
@@ -40,6 +41,8 @@ export default async function SuperAdminLayout({ children }: { children: ReactNo
 
   return (
     <div className="roleAreaShell">
+      {/* Super-admin sessions end after 15 minutes with no activity (Rule 32.5) */}
+      <IdleSessionGuard idleMinutes={15} />
       <RoleAreaHeader displayName={displayName} roleLabel="Super-Admin" />
       <main className="roleAreaMain">{children}</main>
     </div>

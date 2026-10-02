@@ -72,3 +72,9 @@ export const fileToolMessages = {
   renameOnlyPdf: (fileName: string) =>
     `${fileName} wasn't added because renaming works on PDF invoices only. Use the Convert mode for images.`,
 };
+
+/** Session messages shown on the login page after the session ended (task-52b). */
+export const sessionMessages = {
+  /** Idle logout sent the user back to /auth/login?reason=idle. */
+  idleLogout: "Your session expired due to inactivity. Please log in again.",
+};

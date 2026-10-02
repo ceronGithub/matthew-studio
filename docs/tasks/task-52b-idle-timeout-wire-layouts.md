@@ -5,7 +5,7 @@
 **Dependency:** task-52a
 **NEEDS:** task-52a
 **SETUP:** none
-**FILES TO TOUCH:** app/buyer/layout.tsx, app/admin/layout.tsx, app/superAdmin/layout.tsx, app/auth/login/page.tsx, lib/errorMessages.ts (all existing)
+**FILES TO TOUCH:** app/buyer/layout.tsx, app/admin/layout.tsx, app/superAdmin/layout.tsx, app/auth/login/page.tsx, lib/errorMessages.ts (existing); components/auth/IdleLogoutNotice.tsx (new)
 **DONE WHEN:**
 - Each of the three layouts renders `<IdleSessionGuard idleMinutes={...} />`: buyer 30, admin 15, superAdmin 15.
 - The guard is not in the root layout, the public layout or the auth layout.
@@ -16,6 +16,6 @@
 
 ## Notes
 - The spec names `app/admin/layout.jsx`; the real file is `app/admin/layout.tsx`.
-- `app/auth/login/page.tsx` is already a client page that owns `useToast()`. Reading `useSearchParams()` there needs a `<Suspense>` boundary in Next.js 16, so move the page body into a small inner component.
+- `app/auth/login/page.tsx` is already a client page that owns `useToast()`. Reading `useSearchParams()` needs a `<Suspense>` boundary in Next.js 16, so the read lives in a small new component, `components/auth/IdleLogoutNotice.tsx` (Rule 31.4: one component per file), wrapped in `<Suspense fallback={null}>` on the page.
 - Spec §4.3 recommends a shorter timeout for super-admin; the two account specs both state 15 minutes, so 15 is used for admin and superAdmin.
 - To test without waiting, `IdleSessionGuard` accepts a fractional `idleMinutes` (e.g. 0.2) locally; do not commit it.

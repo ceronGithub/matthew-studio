@@ -16,13 +16,14 @@
  */
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useToast } from "@/components/shared/useToast";
 import ToastStack from "@/components/shared/ToastStack";
 import AuthBackgroundSlideshow from "@/components/auth/AuthBackgroundSlideshow";
 import SignInForm from "@/components/auth/SignInForm";
+import IdleLogoutNotice from "@/components/auth/IdleLogoutNotice";
 import RegisterForm from "@/components/auth/RegisterForm";
 
 type AuthTab = "signIn" | "register";
@@ -35,6 +36,11 @@ export default function LoginPage() {
     <>
       <AuthBackgroundSlideshow />
       <ToastStack toasts={toasts} onDismiss={dismissToast} />
+      {/* Explains an idle logout (?reason=idle). useSearchParams needs a
+          Suspense boundary so the rest of the page can still prerender. */}
+      <Suspense fallback={null}>
+        <IdleLogoutNotice showToast={showToast} />
+      </Suspense>
 
       <div className="authGlassCard">
         {/* Logo link back to the visitor home page — lets anyone who
