@@ -78,12 +78,11 @@ only consulted when investigating a specific flagged item.
   Image to PDF/merge/split because pdf.js cannot write PDFs (task-49c),
   and the missing-token filename behavior (task-49a). Kept struck
   through for history.
-- [2026-10-03] **pdf.js worker loading unverified in a browser (task-49b).**
-  lib/fileTools/pdfJsLoader.ts loads pdfjs-dist 6.x lazily and sets the
-  worker via `new URL("pdfjs-dist/build/pdf.worker.min.mjs",
-  import.meta.url)`. The extraction logic was tested against real PDFs
-  in Node (28 cases pass), but the bundling of the worker under
-  Next.js 16 could not be tested: nothing imports the loader until
-  task-49g, and this sandbox has no node_modules/`next build`. If
-  `next build` complains about a missing `canvas` module, add a
-  resolve alias for it. Check is written into task-49g's DONE WHEN.
+- [2026-10-03] ~~pdf.js worker loading unverified (task-49b).~~
+  **RESOLVED at build level (2026-10-03).** Built a throwaway Next.js 16
+  app that imports `lib/fileTools/pdfJsLoader.ts` from a client page:
+  `next build` compiled with no `canvas` error, no alias needed, and the
+  worker was emitted as `.next/static/media/pdf.worker.min.*.mjs` and
+  referenced by the page bundle. The first run with a real PDF in a
+  browser stays as a check in task-49g's DONE WHEN, where the loader is
+  first used. Kept struck through for history.
