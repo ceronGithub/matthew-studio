@@ -14,13 +14,13 @@ only consulted when investigating a specific flagged item.
   admin/superAdmin logins with 5 failures in 60 minutes before the
   password check (generic 401, logs `admin_login_locked`, which now
   counts as a Gatekeeper strike). Kept struck through for history.
-- [2026-09-07] **task-41 numbering collision — reserved renumber, not
-  yet built.** `task-41` was used for the (DONE) buyer-recovery
-  middleware gate. The still-open admin_account_specification.md
-  Analytics item that also wanted `task-41` is reserved as
-  **task-65** instead — now built and closed as task-65/92/93 (see
-  docs/taskPlan.archive.md). Note kept here only as a reminder never
-  to create `docs/tasks/task-41-analytics.md` under the old number.
+- [2026-09-07] ~~task-41 numbering collision — reserved renumber.~~
+  **RESOLVED (2026-10-03).** `task-41` stays the buyer-recovery
+  middleware gate (docs/tasks/task-41-recovery-setup-gate.md is the only
+  task-41 file). The Analytics item that wanted the same number was
+  built as task-65/92/93 and is marked [DONE] in
+  docs/taskPlan.archive.md. Nothing left to do. Kept struck through for
+  history.
 - [2026-09-20] ~~task-114's list endpoint is a duplicate of the detail
   route~~ **RESOLVED (2026-09-20).** Re-checked during task-116/117
   pointer lookup: `app/api/superadmin/content/route.ts` now has a
