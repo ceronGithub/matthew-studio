@@ -5,7 +5,7 @@
 **Dependency:** none
 **NEEDS:** none
 **SETUP:** npm install pdfjs-dist  (not in package.json as of 2026-10-03)
-**FILES TO TOUCH:** lib/fileTools/invoiceExtractor.ts (new); package.json, package-lock.json (dependency)
+**FILES TO TOUCH:** lib/fileTools/invoiceExtractor.ts (new); lib/fileTools/pdfJsLoader.ts (new — shared pdf.js import + worker setup, added so task-49d reuses it without importing from the extractor); package.json, package-lock.json (dependency)
 **DONE WHEN:**
 - extractInvoiceFields(file) returns { invoiceNumber, date, client, status } where date is normalized to YYYY-MM-DD and status is "detected" | "partial" | "needsManualInput".
 - Uses the spec's label regexes (Invoice No./#/Number, Date, first line after Bill To/Client).

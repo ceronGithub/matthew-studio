@@ -11,6 +11,7 @@
 - Table shows Original name, Detected fields, New name; fields editable inline.
 - "Needs manual input" rows are flagged but never block the batch.
 - Non-invoice PDFs show "Not detected" and can still be named by hand.
+- FIRST BROWSER RUN of pdf.js (carried over from task-49b, which could not test it): with a real invoice PDF, the pdf.js worker loads under `next dev` and `next build` with no worker or `canvas` module errors, and nothing carrying the file shows in the Network tab. Rows with dateIsAmbiguous = true are visibly highlighted.
 
 ## Scope
 New-name preview uses filenameBuilder (task-49a) once wired in task-49h; until then the table renders the new-name column from a prop.
