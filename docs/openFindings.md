@@ -67,11 +67,12 @@ only consulted when investigating a specific flagged item.
   **RESOLVED (2026-09-20).** Vic confirmed the build and admin CMS
   create/unpublish check locally for both task-131 and task-125. Kept
   struck through for history.
-- [2026-09-20] **task-49 is an unspecced stub — flagged before
-  building.** Recomputing NEXT UP after task-125 closed (Rule 49.2 §5)
-  landed on task-49 (bulk_file_converter_and_pdf_renamer_specification.md),
-  which has no docs/tasks/task-49-*.md file and is explicitly marked
-  "not detailed yet — lower priority" in taskPlan.md. Per Rule 49.1
-  Rule 1, no micro-task file should be created without first reading
-  the full spec and breaking it into schema/API/UI pieces — asked Vic
-  how to proceed rather than guessing a breakdown.
+- [2026-09-20] ~~task-49 is an unspecced stub — flagged before
+  building.~~ **RESOLVED (2026-10-03).** Full spec read and broken into
+  9 micro-tasks, task-49a through task-49i (docs/tasks/task-49*.md),
+  approved by Vic with v1 defaults: one tool with two modes, no OCR,
+  no audio, no DOCX, generic invoice patterns only, no schema change.
+  Two points still to confirm at build time: pdf-lib is added for
+  Image to PDF/merge/split because pdf.js cannot write PDFs (task-49c),
+  and the missing-token filename behavior (task-49a). Kept struck
+  through for history.

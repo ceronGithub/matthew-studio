@@ -235,3 +235,5 @@ sandbox; verify in the real dev environment before merging), zero
 new errors in the touched files. No taskPlan.md line existed for
 this item (it was tracked only in openFindings.md) -- NEXT UP pointer
 unchanged, still task-49.
+
+[2026-10-03] Planning only: read bulk_file_converter_and_pdf_renamer_specification.md and broke task-49 into 9 micro-tasks (task-49a through task-49i, docs/tasks/), approved with v1 defaults (one tool two modes, client-side only, no OCR/audio/DOCX, no schema change). taskPlan.md updated and NEXT UP pointer moved to task-49a; the task-49 stub finding in openFindings.md marked resolved. No code or structure changed.

@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-49 | file: none yet — spec not broken down | needs: none | setup: none
+**NEXT UP:** task-49a | file: docs/tasks/task-49a-lib-filename-builder.md | needs: none | setup: none
 **OPEN FINDINGS:** 4 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
@@ -259,8 +259,20 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
 ## PHASE 5 (remainder) — CATALOG & PRODUCT FEATURES
 
 ### [ ] 10. bulk_file_converter_and_pdf_renamer_specification.md
-- [ ] task-49 — Read spec fully and break into schema/API/UI micro-tasks
-      once this phase is picked up (not detailed yet — lower priority)
+- [ ] task-49 — Bulk File Converter & PDF Invoice Renamer (parent — v1 is
+      fully client-side, no schema change; broken down 2026-10-03)
+      - [ ] task-49a — filenameBuilder lib. Needs none.
+      - [ ] task-49b — invoiceExtractor lib (pdf.js). Needs none.
+      - [ ] task-49c — conversionEngine: image conversions. Needs none.
+      - [ ] task-49d — conversionEngine: PDF utils. Needs task-49b, task-49c.
+      - [ ] task-49e — shared UI + validation. Needs none.
+      - [ ] task-49f — Convert workspace + hook. Needs task-49c/49d/49e.
+      - [ ] task-49g — invoice extraction hook + preview table. Needs task-49b/49e.
+      - [ ] task-49h — rename workspace + pattern builder. Needs task-49a/49g.
+      - [ ] task-49i — tool page shell + mode switch. Needs task-49f/49h.
+      Deferred (not in v1, no task ids): convert-server route (DOCX/audio),
+      extract-invoice OCR route, FileToolsPreference table.
+      Task files: docs/tasks/task-49a-*.md through task-49i-*.md
 
 ---
 
