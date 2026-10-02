@@ -1,7 +1,7 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-54e | file: docs/tasks/task-54e-ui-checkout-promo-field.md | needs: task-54c, task-54d
-**OPEN FINDINGS:** 11 — see docs/openFindings.md
+**NEXT UP:** task-54f | file: docs/tasks/task-54f-api-superadmin-coupons.md | needs: task-54a
+**OPEN FINDINGS:** 13 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
 
@@ -295,7 +295,7 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
       - [DONE] task-54b — lib/couponPricing.ts validate + discount calc + couponMessages. Needs task-54a.
       - [DONE] task-54c — POST /api/checkout/validate-coupon (rate limited). Needs task-54b. (closed 2026-10-03)
       - [DONE] task-54d — apply coupon in POST /api/checkout (atomic use reservation). Needs task-54a/54b. (closed 2026-10-03)
-      - [ ] task-54e — checkout "Have a promo code?" UI. Needs task-54c/54d.
+      - [DONE] task-54e — checkout "Have a promo code?" UI. Needs task-54c/54d. (closed 2026-10-03)
       - [ ] task-54f — super-admin coupons API (unspecced — approve first). Needs task-54a.
       - [ ] task-54g — /superAdmin/coupons page (unspecced — approve first). Needs task-54f.
       Task files: docs/tasks/task-54a-*.md through task-54g-*.md

@@ -24,6 +24,12 @@
  * at /order-confirmation/[orderId] (components/checkout/
  * OrderConfirmation.tsx), which polls the webhook-driven order status
  * from there (step 1e/1f, both now built).
+ *
+ * PROMO CODE (task-54e): PromoCodeField sits in the order summary. This
+ * form only holds the coupon the SERVER accepted (appliedCoupon) and shows
+ * its discount, shipping and total. Submit sends just the code — the
+ * displayed total is never sent as authority; POST /api/checkout works the
+ * price out again itself.
  */
 "use client";
 
@@ -33,7 +39,9 @@ import { Loader2, ShoppingBag, TriangleAlert } from "lucide-react";
 import { CATEGORY_ICONS } from "@/lib/categoryIcons";
 import { useToast } from "@/components/shared/useToast";
 import ToastStack from "@/components/shared/ToastStack";
+import PromoCodeField from "@/components/checkout/PromoCodeField";
 import type { CheckoutSummaryData } from "@/app/api/checkout/validate/route";
+import type { ValidateCouponData } from "@/app/api/checkout/validate-coupon/route";
 
 interface CheckoutApiResponse {
   success: boolean;
@@ -56,6 +64,8 @@ export default function CheckoutForm() {
   const [shippingAddress, setShippingAddress] = useState("");
   const [shippingPhone, setShippingPhone] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // The coupon the server accepted (task-54c's answer), or null when none is applied.
+  const [appliedCoupon, setAppliedCoupon] = useState<ValidateCouponData | null>(null);
   const { toasts, showToast, dismissToast } = useToast();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -72,7 +82,14 @@ export default function CheckoutForm() {
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, shippingName, shippingAddress, shippingPhone }),
+        // Only the promo CODE is sent — never a discount or total.
+        body: JSON.stringify({
+          email,
+          shippingName,
+          shippingAddress,
+          shippingPhone,
+          couponCode: appliedCoupon?.couponCode,
+        }),
       });
       const payload: CheckoutSubmitResponse = await response.json();
 
@@ -162,6 +179,11 @@ export default function CheckoutForm() {
       </div>
     );
   }
+
+  // With a coupon applied the server's numbers replace the originals;
+  // otherwise the summary from /api/checkout/validate is shown as before.
+  const displayedShippingFee = appliedCoupon ? appliedCoupon.shippingFee : summary.shippingFee;
+  const displayedTotal = appliedCoupon ? appliedCoupon.total : summary.total;
 
   return (
     <div className="checkoutLayout">
@@ -258,20 +280,33 @@ export default function CheckoutForm() {
           })}
         </ul>
 
+        <PromoCodeField
+          appliedCoupon={appliedCoupon}
+          onApplied={setAppliedCoupon}
+          onRemoved={() => setAppliedCoupon(null)}
+          showToast={showToast}
+        />
+
         <div className="checkoutSummaryTotals">
           <div className="checkoutSummaryRow">
             <span>Subtotal</span>
             <span>₱{summary.subtotal.toLocaleString("en-PH")}</span>
           </div>
+          {appliedCoupon && appliedCoupon.discountAmount > 0 && (
+            <div className="checkoutSummaryRow checkoutSummaryRowDiscount">
+              <span>Discount ({appliedCoupon.couponCode})</span>
+              <span>−₱{appliedCoupon.discountAmount.toLocaleString("en-PH")}</span>
+            </div>
+          )}
           {summary.requiresShipping && (
             <div className="checkoutSummaryRow">
               <span>Shipping</span>
-              <span>₱{summary.shippingFee.toLocaleString("en-PH")}</span>
+              <span>{displayedShippingFee === 0 ? "Free" : `₱${displayedShippingFee.toLocaleString("en-PH")}`}</span>
             </div>
           )}
           <div className="checkoutSummaryRow checkoutSummaryRowTotal">
             <span>Total</span>
-            <span>₱{summary.total.toLocaleString("en-PH")}</span>
+            <span>₱{displayedTotal.toLocaleString("en-PH")}</span>
           </div>
         </div>
 

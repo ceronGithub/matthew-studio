@@ -212,11 +212,16 @@ export const config = {
   // covers pre-auth login/register/forgot-password calls, not just
   // page navigation — a banned device must be rejected before it can
   // even attempt to log in (Rule 47.3).
+  // /checkout/:path* (task-54e) is here so a guest who goes straight to
+  // checkout still gets the csrf_token cookie that validate-coupon needs.
+  // It adds no auth gate — a /checkout request just falls through to the
+  // plain NextResponse.next() branch, plus the Gatekeeper ban check.
   matcher: [
     "/buyer/:path*",
     "/admin/:path*",
     "/superAdmin/:path*",
     "/auth/:path*",
     "/api/auth/:path*",
+    "/checkout/:path*",
   ],
 };

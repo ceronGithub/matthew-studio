@@ -8,7 +8,7 @@
 **FILES TO TOUCH:** app/api/superadmin/coupons/route.ts (new: GET list, POST create), app/api/superadmin/coupons/[couponId]/route.ts (new: PATCH isActive / limit / expiry)
 **DONE WHEN:**
 - Super-admin only (same guard as the other app/api/superadmin routes), CSRF-checked on writes, `force-dynamic`, Rule 28 response shape.
-- Create validates with zod: code 3-32 characters, upper-case letters, digits and hyphens, unique after normalization (409 on a duplicate, Rule 6); percentage between 1 and 100; fixed above 0; `scopeCategory` must be a real catalog category or null.
+- Create validates with zod: code 3-32 characters, upper-case letters and digits only (no hyphens — Rule 18.1 strips them from the checkout promo field), unique after normalization (409 on a duplicate, Rule 6); percentage between 1 and 100; fixed above 0; `scopeCategory` must be a real catalog category or null.
 - PATCH can switch a coupon on or off and change `usageLimit` or `expiresAt`; coupons are never hard-deleted.
 - Every create and change writes an audit entry via lib/auditLog.ts (Rule 6).
 - `npx tsc --noEmit` adds no new errors.
