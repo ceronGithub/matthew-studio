@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-49c | file: docs/tasks/task-49c-lib-conversion-images.md | needs: none | setup: npm install heic2any pdf-lib
+**NEXT UP:** task-49d | file: docs/tasks/task-49d-lib-conversion-pdf-utils.md | needs: task-49b, task-49c
 **OPEN FINDINGS:** 1 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
@@ -263,7 +263,7 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
       fully client-side, no schema change; broken down 2026-10-03)
       - [DONE] task-49a — filenameBuilder lib. Needs none.
       - [DONE] task-49b — invoiceExtractor lib (pdf.js). Needs none.
-      - [ ] task-49c — conversionEngine: image conversions. Needs none.
+      - [DONE] task-49c — conversionEngine: image conversions. Needs none.
       - [ ] task-49d — conversionEngine: PDF utils. Needs task-49b, task-49c.
       - [ ] task-49e — shared UI + validation. Needs none.
       - [ ] task-49f — Convert workspace + hook. Needs task-49c/49d/49e.
