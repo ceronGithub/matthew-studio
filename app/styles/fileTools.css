@@ -700,3 +700,46 @@
   overflow-wrap: anywhere;
   color: var(--color-text-secondary);
 }
+
+/* ------------------------------------------------------------
+ * RENAME PATTERN BUILDER (task-49h)
+ * ------------------------------------------------------------ */
+
+/* Bordered card holding the pattern field, hint and token buttons. */
+.renamePatternSection {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+}
+
+.renamePatternLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.renamePatternHint {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+/* Shown when the pattern has no token; amber text, and the sentence itself says what to do. */
+.renamePatternHintWarning {
+  color: var(--color-warning);
+}
+
+/* Token buttons + Reset. Wrap on phones. */
+.renamePatternActions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-sm);
+}

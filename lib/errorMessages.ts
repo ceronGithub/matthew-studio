@@ -64,6 +64,10 @@ export const fileToolMessages = {
   /** Nothing is ready to convert yet. */
   nothingToConvert: "Add at least one file before converting.",
 
+  /** Rename & Download pressed but no row has a value the pattern can use. */
+  nothingToRename:
+    "There is nothing to rename yet. Fill in at least one detail for a file, or change the pattern.",
+
   /** The Rename mode only reads PDFs; an image was dropped in. */
   renameOnlyPdf: (fileName: string) =>
     `${fileName} wasn't added because renaming works on PDF invoices only. Use the Convert mode for images.`,

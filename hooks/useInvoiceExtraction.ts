@@ -230,6 +230,7 @@ export function useInvoiceExtraction() {
     clearAll,
     getSourceFile,
     toasts,
+    showToast,
     dismissToast,
   };
 }

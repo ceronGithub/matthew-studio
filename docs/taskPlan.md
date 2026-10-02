@@ -1,6 +1,6 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-49h | file: docs/tasks/task-49h-ui-invoice-rename-workspace.md | needs: task-49a, task-49g
+**NEXT UP:** task-49i | file: docs/tasks/task-49i-ui-tool-page-shell.md | needs: task-49f, task-49h
 **OPEN FINDINGS:** 2 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
@@ -268,7 +268,7 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
       - [DONE] task-49e — shared UI + validation. Needs none.
       - [DONE] task-49f — Convert workspace + hook. Needs task-49c/49d/49e.
       - [DONE] task-49g — invoice extraction hook + preview table. Needs task-49b/49e.
-      - [ ] task-49h — rename workspace + pattern builder. Needs task-49a/49g.
+      - [DONE] task-49h — rename workspace + pattern builder. Needs task-49a/49g.
       - [ ] task-49i — tool page shell + mode switch. Needs task-49f/49h.
       Deferred (not in v1, no task ids): convert-server route (DOCX/audio),
       extract-invoice OCR route, FileToolsPreference table.

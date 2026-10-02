@@ -24,6 +24,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { FileQueueItem } from "@/components/fileTools/FileQueueList";
 import { useToast } from "@/components/shared/useToast";
+import { saveBlobToDevice } from "@/lib/fileTools/downloadBlob";
 import { fileToolMessages } from "@/lib/errorMessages";
 import {
   convertFile,
@@ -59,23 +60,6 @@ const targetFormatsByKind = {
   image: imageTargetFormats as readonly string[],
   pdf: pdfTargetFormats as readonly string[],
 };
-
-/**
- * saveBlobToDevice
- * Starts a browser download for one file by clicking a temporary link, then
- * frees the temporary address so memory is not held after the download starts.
- */
-function saveBlobToDevice(blob: Blob, fileName: string) {
-  const temporaryUrl = URL.createObjectURL(blob);
-  const temporaryLink = document.createElement("a");
-  temporaryLink.href = temporaryUrl;
-  temporaryLink.download = fileName;
-  document.body.appendChild(temporaryLink);
-  temporaryLink.click();
-  temporaryLink.remove();
-  // Revoke on the next tick: some browsers need the click to finish first.
-  setTimeout(() => URL.revokeObjectURL(temporaryUrl), 0);
-}
 
 /**
  * makeUniqueFileName
