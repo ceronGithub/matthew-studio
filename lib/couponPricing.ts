@@ -16,13 +16,18 @@
  * 4. The discount is worked out from the eligible cart lines only.
  *
  * NEVER reads a client-submitted discount amount — the only inputs are the
- * code and the server-built cart. Never changes usageCount: the redemption
- * is reserved when the order is created (task-54d), not when a code is merely
- * checked.
+ * code and the server-built cart. applyCoupon itself never changes usageCount:
+ * the redemption is reserved by reserveCouponUse when the order is created
+ * (task-54d), not when a code is merely checked.
+ *
+ * task-54d also adds three helpers used by the checkout and retry-payment
+ * routes: reserveCouponUse / releaseCouponUse (the redemption count) and
+ * buildPayMongoLineItems (how the discount reaches PayMongo).
  */
 import { prisma } from "@/services/prisma";
 import type { CartLineItem } from "@/lib/cartPricing";
 import type { CouponRejectReason } from "@/lib/errorMessages";
+import type { CheckoutLineItemInput } from "@/services/paymongo";
 
 export type ApplyCouponResult =
   | {
@@ -125,4 +130,82 @@ export async function applyCoupon(
   const discountAmount = roundToTwoDecimals(Math.min(rawDiscount, subtotal));
 
   return { ok: true, discountAmount, freeShipping: false, couponCode: coupon.code };
+}
+
+/**
+ * reserveCouponUse
+ * Takes one redemption of a coupon at order creation. The check and the
+ * increment happen in ONE conditional update, so two buyers racing for the
+ * last use can never both get it: the database only lets one of them
+ * satisfy "usageCount is still below usageLimit". A null usageLimit means
+ * unlimited, so those coupons always reserve.
+ *
+ * Returns true when the use was reserved, false when the coupon was used up
+ * (or switched off) in the moment between the preview and this call.
+ *
+ * @param couponCode - The stored, upper-case code returned by applyCoupon
+ */
+export async function reserveCouponUse(couponCode: string): Promise<boolean> {
+  const reservation = await prisma.coupon.updateMany({
+    where: {
+      code: couponCode,
+      isActive: true,
+      // Unlimited coupons, or limited ones that still have room left.
+      OR: [{ usageLimit: null }, { usageCount: { lt: prisma.coupon.fields.usageLimit } }],
+    },
+    data: { usageCount: { increment: 1 } },
+  });
+  return reservation.count === 1;
+}
+
+/**
+ * releaseCouponUse
+ * Gives back a redemption taken by reserveCouponUse — used when the order
+ * can't be completed (the PayMongo session failed and the Order was deleted).
+ * Never lets usageCount drop below zero.
+ *
+ * @param couponCode - The stored, upper-case code that was reserved
+ */
+export async function releaseCouponUse(couponCode: string): Promise<void> {
+  await prisma.coupon.updateMany({
+    where: { code: couponCode, usageCount: { gt: 0 } },
+    data: { usageCount: { decrement: 1 } },
+  });
+}
+
+/**
+ * buildPayMongoLineItems
+ * PayMongo checkout sessions only accept positive line amounts — there is
+ * no discount line. So when a coupon took money off, the item lines are
+ * folded into ONE line for the discounted items total, and the PayMongo page
+ * shows exactly what the buyer will be charged. Orders with no peso discount
+ * (including free-shipping codes) keep their normal itemised lines.
+ *
+ * Used by BOTH the checkout route and the retry-payment route, so a retried
+ * payment charges the same discounted total as the first attempt.
+ *
+ * @param items          - Line items (live cart lines, or the Order's snapshots on retry)
+ * @param discountAmount - Peso amount the coupon took off the items (0 if none)
+ * @param couponCode     - The code, shown in the line description
+ */
+export function buildPayMongoLineItems(
+  items: CheckoutLineItemInput[],
+  discountAmount: number,
+  couponCode: string | null
+): CheckoutLineItemInput[] {
+  if (discountAmount <= 0) return items;
+
+  const itemsSubtotal = items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
+  const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
+  const discountedItemsTotal = roundToTwoDecimals(itemsSubtotal - discountAmount);
+  const codeLabel = couponCode ? ` (promo ${couponCode})` : "";
+
+  return [
+    {
+      name: `Order items${codeLabel}`,
+      unitPrice: discountedItemsTotal,
+      variant: `${totalQuantity} item${totalQuantity === 1 ? "" : "s"}, ₱${discountAmount.toFixed(2)} promo discount applied`,
+      quantity: 1,
+    },
+  ];
 }

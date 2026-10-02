@@ -17,3 +17,5 @@
 
 ## Notes
 - CheckoutForm.tsx is already 299 lines, so the field is its own component (Rule 31.4) and the form only holds the applied-coupon state.
+- Decision (confirmed 2026-10-03, "best approach"): guests must get a `csrf_token` cookie before validate-coupon is called. `middleware.ts` only issues it on `/buyer`, `/admin`, `/superAdmin`, `/auth`, `/api/auth`, so add `/checkout/:path*` to its matcher (cookie issue only — no auth gate) as part of this task. `middleware.ts` is therefore also a FILE TO TOUCH for task-54e.
+

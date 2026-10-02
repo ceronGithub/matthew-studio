@@ -52,6 +52,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/services/prisma";
 import type { OrderItem } from "@prisma/client";
 import { createCheckoutSession, type CheckoutLineItemInput } from "@/services/paymongo";
+import { buildPayMongoLineItems } from "@/lib/couponPricing";
 import { supabaseAdminClient } from "@/lib/supabase/serverClient";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { logSecurityEvent } from "@/lib/securityLog";
@@ -143,7 +144,9 @@ export async function POST(request: Request, { params }: { params: Promise<{ ord
     let checkoutUrl: string;
     try {
       const session = await createCheckoutSession({
-        items,
+        // A coupon order retries at its stored discounted total, not the
+        // pre-discount snapshot prices (task-54d).
+        items: buildPayMongoLineItems(items, order.discountAmount, order.couponCode),
         shippingFee: order.shippingFee,
         requiresShipping,
         email,
