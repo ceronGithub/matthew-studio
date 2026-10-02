@@ -1,0 +1,423 @@
+/**
+ * FILE: app/styles/fileTools.css
+ * PURPOSE:
+ * Styles for the shared File Tools components in components/fileTools/
+ * (FileDropZone, FileQueueList, FormatSelector). Placed here, next to
+ * toast.css and cart.css, because that is where every component stylesheet in
+ * this project lives; each component imports it by relative path.
+ * Mobile-first: this file is the phone layout. The one wider-screen change is
+ * in mediaQueries.css (Rule 9). Every colour, space and transition is a token
+ * from globals.css (Rule 33).
+ */
+
+/* ------------------------------------------------------------
+ * DROP ZONE
+ * ------------------------------------------------------------ */
+
+/* Wrapper for the drop area plus the refused-files list below it. */
+.fileDropZoneSection {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-md);
+  width: 100%;
+}
+
+/* The dashed target the visitor drops files onto. */
+.fileDropZone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-xl) var(--space-lg);
+  border: 1px dashed var(--color-border-hover);
+  border-radius: 4px;
+  background: var(--color-surface);
+  text-align: center;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+/* Shown while files are held over the zone. */
+.fileDropZoneActive {
+  background: var(--color-surface-active);
+  border-color: var(--color-accent);
+}
+
+/* Shown while files are being checked or the tool is busy. */
+.fileDropZoneBlocked {
+  opacity: 0.7;
+}
+
+.fileDropZoneIcon {
+  color: var(--color-text-secondary);
+}
+
+.fileDropZoneTitle {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--color-text-primary);
+}
+
+/* The small "or" between the title and the button. */
+.fileDropZoneDivider {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.fileDropZoneButton {
+  cursor: pointer;
+}
+
+.fileDropZoneButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Limits line: file types, size, count. */
+.fileDropZoneHint {
+  margin: var(--space-sm) 0 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+/* The real file input stays in the page for the picker but is never seen; the button opens it. */
+.fileDropZoneInput {
+  display: none;
+}
+
+/* "Checking your files…" row shown in the zone while validation reads the files. */
+.fileDropZoneChecking {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+}
+
+/* Small rotating ring; the only spinner in the tool, used for this single short wait (Rule 25.2). */
+.fileToolsSpinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--color-border-hover);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: fileToolsSpin 0.8s linear infinite;
+  will-change: transform;
+}
+
+@keyframes fileToolsSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Box listing files that were refused, with a Dismiss button. */
+.fileDropZoneRejections {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-error);
+  border-radius: 4px;
+  background: var(--color-surface);
+}
+
+.fileDropZoneRejectionsTitle {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-error);
+}
+
+.fileDropZoneRejectionList {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-xs);
+  margin: 0;
+  padding-left: var(--space-lg);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--color-text-primary);
+  overflow-wrap: break-word;
+}
+
+/* ------------------------------------------------------------
+ * QUEUE LIST
+ * ------------------------------------------------------------ */
+
+.fileQueueSection {
+  width: 100%;
+}
+
+/* Layout container inside the section (Rule 23.1). */
+.fileQueueLayout {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-md);
+}
+
+/* The list itself: rows stacked with a gap between them. */
+.fileQueueList {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* One file. Name and meta on top, status and Remove below on a phone. */
+.fileQueueRow {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-surface);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.fileQueueRow:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.fileQueueRowMain {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--space-xs);
+}
+
+/* File name: long names wrap instead of pushing the row wider than the screen. */
+.fileQueueFileName {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--color-text-primary);
+  overflow-wrap: anywhere;
+}
+
+/* Type tag and size, side by side. */
+.fileQueueFileMeta {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-sm);
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+/* Small uppercase tag, e.g. "PDF". */
+.fileQueueKindTag {
+  padding: 0 var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+}
+
+/* Reason a file failed, shown under its name. */
+.fileQueueFailureReason {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-error);
+}
+
+.fileQueueRowActions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.fileQueueRemoveButton {
+  cursor: pointer;
+}
+
+.fileQueueRemoveButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Status pill: always carries a word, colour only reinforces it. */
+.fileQueueStatusPill {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-text-secondary);
+  background: var(--color-surface);
+}
+
+.fileQueueStatus_converting {
+  color: var(--color-info);
+  border-color: var(--color-info);
+}
+
+.fileQueueStatus_done {
+  color: var(--color-success);
+  border-color: var(--color-success);
+}
+
+.fileQueueStatus_failed {
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+/* Empty state: icon plus a sentence. */
+.fileQueueEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-xl) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.fileQueueEmpty p {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+/* Loading skeleton row: same box as a real row. */
+.fileQueueRowSkeleton {
+  pointer-events: none;
+}
+
+/* Placeholder bars inside a skeleton row (the shimmer comes from .skeletonBlock in globals.css). */
+.fileQueueSkeletonName {
+  display: block;
+  width: 70%;
+  height: 1rem;
+}
+
+.fileQueueSkeletonMeta {
+  display: block;
+  width: 35%;
+  height: 0.875rem;
+}
+
+/* ------------------------------------------------------------
+ * FORMAT SELECTOR
+ * ------------------------------------------------------------ */
+
+.formatSelectorSection {
+  width: 100%;
+}
+
+/* Resets the browser's default fieldset border and padding. */
+.formatSelectorFieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.formatSelectorLegend {
+  padding: 0;
+  margin-bottom: var(--space-sm);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* Wrapping row of format choices. */
+.formatSelectorOptions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--space-sm);
+}
+
+/* One choice. The label is the tap target, so it is at least 44px tall. */
+.formatSelectorOption {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  background: var(--color-surface);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.formatSelectorOption:hover,
+.formatSelectorOption:active,
+.formatSelectorOption:focus-within {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+/* The chosen format. */
+.formatSelectorOptionSelected,
+.formatSelectorOptionSelected:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* The radio circle is hidden but stays focusable; focus shows as a ring on the label (Rule 33.3). */
+.formatSelectorRadio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+}
+
+.formatSelectorOption:has(.formatSelectorRadio:focus-visible) {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.formatSelectorFieldset:disabled .formatSelectorOption {
+  cursor: not-allowed;
+  opacity: 0.6;
+}

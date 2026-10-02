@@ -338,3 +338,19 @@
     grid-template-columns: 280px 1fr;
   }
 }
+
+/* fileTools.css — shared File Tools queue rows (task-49e).
+   On a phone each row stacks (name/meta above, status + Remove below,
+   fileTools.css's base rule); from tablet width the row sits on one line
+   with the status and Remove button at the right. */
+@media (min-width: 768px) {
+  .fileQueueRow {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .fileQueueRowActions {
+    justify-content: flex-end;
+  }
+}
