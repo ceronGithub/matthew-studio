@@ -183,6 +183,34 @@
   text-align: right;
 }
 
+/* Edit button + switch sit side by side in the last column (task-54h) */
+.superAdminCouponsActionsGroup {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}
+
+.superAdminCouponsEditButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.superAdminCouponsEditButton:hover,
+.superAdminCouponsEditButton:focus-visible,
+.superAdminCouponsEditButton:active {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
 /*
  * .superAdminCouponsSwitch
  * On/off switch for one coupon. The button is the full 44px tap target
@@ -489,4 +517,19 @@
 }
 @keyframes couponFormSpin {
   to { transform: rotate(360deg); }
+}
+
+/* ---------- Edit Coupon modal extras (task-54h) ---------- */
+
+/* Explains why only two fields can be changed */
+.couponFormLockedNote {
+  font-size: 0.85rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-md);
+}
+
+.couponFormHint {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
 }

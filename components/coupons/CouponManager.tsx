@@ -9,6 +9,9 @@
  * skeleton, empty state, error state with retry. Same structure as
  * components/announcements/AnnouncementsList.tsx.
  *
+ * task-54h: each row's Edit button opens CouponEditForm (usage limit and
+ * expiry only).
+ *
  * Switching a coupon OFF goes through the shared ConfirmationModal (Rule
  * 34.4). Switching it back ON is not destructive, so it fires directly.
  * Coupons are never deleted — the API has no DELETE by design.
@@ -22,6 +25,7 @@ import { useToast } from "@/components/shared/useToast";
 import ToastStack from "@/components/shared/ToastStack";
 import ConfirmationModal from "@/components/shared/ConfirmationModal";
 import CouponForm from "@/components/coupons/CouponForm";
+import CouponEditForm from "@/components/coupons/CouponEditForm";
 import CouponTable from "@/components/coupons/CouponTable";
 
 export default function CouponManager() {
@@ -34,11 +38,24 @@ export default function CouponManager() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   // The coupon waiting for "are you sure?" before it is switched off.
   const [couponToSwitchOff, setCouponToSwitchOff] = useState<CouponListItem | null>(null);
+  // The coupon whose limit / expiry is being edited in the modal.
+  const [couponToEdit, setCouponToEdit] = useState<CouponListItem | null>(null);
 
   function handleCreated(message: string) {
     setIsFormOpen(false);
     showToast(`✓ ${message}`, "success");
     refetch();
+  }
+
+  function handleEdited(message: string) {
+    setCouponToEdit(null);
+    showToast(`✓ ${message}`, "success");
+    refetch();
+  }
+
+  // The modal stays open on a failure so the super-admin can correct it.
+  function handleEditFailed(message: string) {
+    showToast(`✕ ${message}`, "error");
   }
 
   async function changeActive(coupon: CouponListItem, isActive: boolean) {
@@ -70,6 +87,16 @@ export default function CouponManager() {
       <ToastStack toasts={toasts} onDismiss={dismissToast} />
 
       <CouponForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} onSaved={handleCreated} />
+
+      {couponToEdit && (
+        <CouponEditForm
+          key={couponToEdit.id}
+          coupon={couponToEdit}
+          onClose={() => setCouponToEdit(null)}
+          onSaved={handleEdited}
+          onFailed={handleEditFailed}
+        />
+      )}
 
       <ConfirmationModal
         isOpen={couponToSwitchOff !== null}
@@ -144,7 +171,7 @@ export default function CouponManager() {
         </div>
       ) : (
         <>
-          <CouponTable coupons={coupons} onToggle={handleToggle} />
+          <CouponTable coupons={coupons} onToggle={handleToggle} onEdit={setCouponToEdit} />
 
           <div className="superAdminCouponsFooter">
             <span className="superAdminCouponsTotalCount">

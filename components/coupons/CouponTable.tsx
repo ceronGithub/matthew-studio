@@ -7,6 +7,7 @@
  * Expires, Status badge, and the on/off switch. Display only: the parent
  * decides what happens when a switch is pressed (a confirmation modal for
  * switching off, Rule 34.4).
+ * task-54h: each row also has an Edit button; the parent opens the modal.
  *
  * The API only stores isActive. "Expired" and "Used up" are worked out here
  * from expiresAt and usageCount so the badge tells the real story.
@@ -62,9 +63,10 @@ function formatExpiry(iso: string | null): string {
 interface CouponTableProps {
   coupons: CouponListItem[];
   onToggle: (coupon: CouponListItem) => void;
+  onEdit: (coupon: CouponListItem) => void;
 }
 
-export default function CouponTable({ coupons, onToggle }: CouponTableProps) {
+export default function CouponTable({ coupons, onToggle, onEdit }: CouponTableProps) {
   return (
     <div className="superAdminCouponsTableWrapper">
       <table className="superAdminCouponsTable">
@@ -76,7 +78,7 @@ export default function CouponTable({ coupons, onToggle }: CouponTableProps) {
             <th>Used / Limit</th>
             <th>Expires</th>
             <th>Status</th>
-            <th className="superAdminCouponsActionsCell">On / Off</th>
+            <th className="superAdminCouponsActionsCell">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -95,16 +97,26 @@ export default function CouponTable({ coupons, onToggle }: CouponTableProps) {
                   </span>
                 </td>
                 <td className="superAdminCouponsActionsCell">
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={coupon.isActive}
-                    aria-label={`${coupon.isActive ? "Switch off" : "Switch on"} coupon ${coupon.code}`}
-                    className="superAdminCouponsSwitch"
-                    onClick={() => onToggle(coupon)}
-                  >
-                    <span className="superAdminCouponsSwitchKnob" />
-                  </button>
+                  <div className="superAdminCouponsActionsGroup">
+                    <button
+                      type="button"
+                      className="superAdminCouponsEditButton"
+                      aria-label={`Edit coupon ${coupon.code}`}
+                      onClick={() => onEdit(coupon)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={coupon.isActive}
+                      aria-label={`${coupon.isActive ? "Switch off" : "Switch on"} coupon ${coupon.code}`}
+                      className="superAdminCouponsSwitch"
+                      onClick={() => onToggle(coupon)}
+                    >
+                      <span className="superAdminCouponsSwitchKnob" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             );
