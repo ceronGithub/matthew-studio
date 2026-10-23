@@ -24,6 +24,7 @@ import ToastStack from "@/components/shared/ToastStack";
 import AuthBackgroundSlideshow from "@/components/auth/AuthBackgroundSlideshow";
 import SignInForm from "@/components/auth/SignInForm";
 import IdleLogoutNotice from "@/components/auth/IdleLogoutNotice";
+import OAuthErrorNotice from "@/components/auth/OAuthErrorNotice";
 import RegisterForm from "@/components/auth/RegisterForm";
 
 type AuthTab = "signIn" | "register";
@@ -40,6 +41,8 @@ export default function LoginPage() {
           Suspense boundary so the rest of the page can still prerender. */}
       <Suspense fallback={null}>
         <IdleLogoutNotice showToast={showToast} />
+        {/* Explains a blocked or failed Google/Facebook sign-in (?oauthError=<code>). */}
+        <OAuthErrorNotice showToast={showToast} />
       </Suspense>
 
       <div className="authGlassCard">

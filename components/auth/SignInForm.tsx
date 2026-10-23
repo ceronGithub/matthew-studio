@@ -24,6 +24,7 @@ import type { ToastType } from "@/components/shared/useToast";
 import { getCsrfHeader } from "@/lib/csrf";
 import { getDashboardPathForRole } from "@/lib/roleRouting";
 import TotpLoginStep from "@/components/auth/TotpLoginStep";
+import OAuthButtons from "@/components/auth/OAuthButtons";
 
 interface SignInFormProps {
   showToast: (message: string, type: ToastType) => void;
@@ -145,6 +146,10 @@ export default function SignInForm({ showToast }: SignInFormProps) {
       <button type="submit" className="authSubmitButton" disabled={isSubmitting}>
         {isSubmitting ? <Loader2 size={18} className="authSpinner" /> : "Sign in"}
       </button>
+
+      {/* Google / Facebook sign-in (task-56c). Hidden automatically on the
+          TOTP step, which returns different markup above. */}
+      <OAuthButtons />
     </form>
   );
 }

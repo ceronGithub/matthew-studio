@@ -23,6 +23,7 @@ import PasswordStrengthMeter from "./PasswordStrengthMeter";
 import { PASSWORD_REQUIREMENTS_HINT } from "@/lib/authData";
 import { getCsrfHeader } from "@/lib/csrf";
 import type { ToastType } from "@/components/shared/useToast";
+import OAuthButtons from "@/components/auth/OAuthButtons";
 
 // How long to wait after the user stops typing before checking the
 // email — avoids firing a request on every keystroke.
@@ -242,6 +243,10 @@ export default function RegisterForm({ showToast }: RegisterFormProps) {
       <button type="submit" className="authSubmitButton" disabled={isSubmitting}>
         {isSubmitting ? <Loader2 size={18} className="authSpinner" /> : "Create account"}
       </button>
+
+      {/* Google / Facebook sign-up (task-56c). OAuth creates a buyer account
+          on first use, so the same buttons belong on this tab. */}
+      <OAuthButtons />
     </form>
   );
 }

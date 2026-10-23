@@ -362,3 +362,79 @@
   color: rgba(255, 255, 255, 0.8);
   white-space: nowrap;
 }
+
+/* ------------------------------------------------------------
+ * OAUTH BUTTONS (task-56c)
+ * "or" divider and the Google / Facebook buttons at the bottom of
+ * both tabs. Same translucent-on-photo look as the rest of the card,
+ * so colours are hardcoded white/rgba like the rules above.
+ * ------------------------------------------------------------ */
+.authOAuthSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/*
+ * .authOAuthDivider
+ * A thin rule on each side of the word "or". The two lines come from
+ * ::before and ::after so no extra elements are needed.
+ */
+.authOAuthDivider {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.authOAuthDivider::before,
+.authOAuthDivider::after {
+  content: "";
+  flex: 1 1 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.authOAuthButtons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/*
+ * .authOAuthButton
+ * Outlined, glass-style button (not the white filled submit style) so the
+ * password sign-in stays the primary action. 44px minimum tap target.
+ */
+.authOAuthButton {
+  width: 100%;
+  min-height: 44px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: 0 0.85rem;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: var(--radius, 8px);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast, 0.15s ease), border-color var(--transition-fast, 0.15s ease);
+}
+
+.authOAuthButton:hover,
+.authOAuthButton:focus-visible,
+.authOAuthButton:active {
+  background: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.authOAuthButton:disabled {
+  opacity: 0.7;
+  cursor: default;
+}

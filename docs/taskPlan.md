@@ -1,7 +1,7 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-56c | file: docs/tasks/task-56c-ui-oauth-buttons.md | needs: task-56b
-**OPEN FINDINGS:** 38 — see docs/openFindings.md
+**NEXT UP:** task-56d | file: docs/tasks/task-56d-ui-oauth-recovery-setup.md | needs: task-56b
+**OPEN FINDINGS:** 41 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
 
@@ -310,7 +310,7 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
 - [ ] task-56 — OAuth login (Google + Facebook, buyers only, block on matching password account) — split into task-56a..56d (approved 2026-10-24)
       - [~] task-56a — lib/oauthAccountPolicy.ts: decide what an OAuth sign-in may do + error messages (built 2026-10-24; 10 of 10 cases pass, files type-check in isolation, project-wide tsc to run locally). Needs none.
       - [~] task-56b — OAuth start + callback routes and PKCE cookie helper (built 2026-10-24; helper tested offline 13 of 13, files type-check clean; Supabase dashboard setup and a live sign-in still to do). Needs task-56a.
-      - [ ] task-56c — "Continue with Google / Facebook" buttons on login + register. Needs task-56b.
+      - [~] task-56c — "Continue with Google / Facebook" buttons on login + register + ?oauthError toast (built 2026-10-24; no new tsc errors, error set identical to the 51 Prisma-type errors of a sandbox without `prisma generate`; new files lint clean; browser check at 375/768/1280 still to do). Needs task-56b.
       - [ ] task-56d — recovery setup for OAuth buyers (email already verified by provider; needs approval). Needs task-56b.
       Task files: docs/tasks/task-56a-*.md through task-56d-*.md
 - [ ] task-57 — Buyer 2FA
