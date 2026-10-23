@@ -36,6 +36,7 @@ import {
   KeyRound,
   ShieldAlert,
   UserRound,
+  Undo2,
   ArrowRight,
 } from "lucide-react";
 import { getAdminQuickStats, getRecentOrders, getRecentProducts, getAdminDashboardAlerts } from "@/lib/adminDashboardStats";
@@ -50,6 +51,7 @@ const QUICK_ACTIONS = [
   { href: "/admin/products/create", label: "Add New Product", description: "Create a new catalog listing", icon: PlusCircle, live: true },
   { href: "/admin/products", label: "Manage Orders", description: "Product management is live; order management is planned", icon: ListOrdered, live: true },
   { href: "/admin/support", label: "Support Tickets", description: "Reply to open buyer tickets", icon: Ticket, live: true },
+  { href: "/admin/refund-requests", label: "Refund Requests", description: "Approve or deny buyer refund requests", icon: Undo2, live: true },
   { href: "/admin/vault", label: "Security Vault", description: "Session slug and emergency backup credentials", icon: KeyRound, live: true },
   { href: "/admin/security-logs", label: "Security Logs", description: "Your own login attempts and security events", icon: ShieldAlert, live: true },
   { href: "/admin/profile", label: "My Profile", description: "Name, avatar, password, and notification preferences", icon: UserRound, live: true },

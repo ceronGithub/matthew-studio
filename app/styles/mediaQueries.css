@@ -364,3 +364,29 @@
     justify-content: space-between;
   }
 }
+
+/* adminRefundRequests.css — /admin/refund-requests queue (task-55e).
+   On a phone the toolbar, the card header and the Approve / Deny buttons
+   stack (adminRefundRequests.css's base rules); from tablet width the
+   toolbar and card header sit on one line, and the buttons sit side by
+   side at the right of the review panel. */
+@media (min-width: 768px) {
+  .refundQueueToolbar,
+  .refundQueueCardHeader {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .refundQueueAlert {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .refundQueueActions {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+  }
+}

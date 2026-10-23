@@ -1,0 +1,559 @@
+/**
+ * FILE: app/styles/adminRefundRequests.css
+ * PURPOSE:
+ * Styles for app/admin/refund-requests/page.tsx,
+ * components/admin/RefundRequestsList.tsx and
+ * components/admin/RefundRequestCard.tsx (task-55e). References the
+ * design tokens in app/styles/globals.css — never hardcoded colors or
+ * spacing. Mobile-first: everything below is the 375px layout, and the
+ * tablet-and-up changes live in app/styles/mediaQueries.css. A card list
+ * (not a table) because each pending request carries its own note box
+ * and two buttons. The .confirmationModal* block at the bottom is the
+ * same per-page copy the other admin pages carry, because the shared
+ * ConfirmationModal component ships no styles of its own.
+ */
+
+.refundQueuePage {
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.refundQueueHeader {
+  margin-bottom: var(--space-xl);
+}
+
+.refundQueueEyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.refundQueueTitle {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-top: var(--space-xs);
+}
+
+.refundQueueSubtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+  max-width: 70ch;
+}
+
+/* Status filter tabs + sort hint */
+.refundQueueToolbar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.refundQueueTabs {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-sm);
+}
+
+.refundQueueTab {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+.refundQueueTab:hover,
+.refundQueueTab:focus-visible,
+.refundQueueTab:active {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+.refundQueueTab--active {
+  background-color: var(--color-surface-active);
+  border-color: var(--color-accent);
+  color: var(--color-text-primary);
+}
+
+.refundQueueSortHint {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+/* Persistent banner for failures where the outcome may be unsure */
+.refundQueueAlert {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-lg);
+  border: 1px solid var(--color-error);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.refundQueueAlertDismiss {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.refundQueueAlertDismiss:hover,
+.refundQueueAlertDismiss:focus-visible,
+.refundQueueAlertDismiss:active {
+  background-color: var(--color-surface-hover);
+}
+
+/* Card list */
+.refundQueueList {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-lg);
+}
+
+.refundQueueCard {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+.refundQueueCard:hover {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.refundQueueCardHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--space-xs);
+}
+
+.refundQueueCardTitleRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-sm);
+}
+
+.refundQueueOrderLink {
+  font-family: var(--font-mono, monospace);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+.refundQueueOrderLink:hover,
+.refundQueueOrderLink:focus-visible {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+/* Request status badge — warning/success/error tokens carry the meaning, not decoration */
+.refundQueueStatusBadge {
+  padding: 0.15rem var(--space-sm);
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.refundQueueStatusBadge--pending {
+  color: var(--color-warning);
+}
+.refundQueueStatusBadge--approved {
+  color: var(--color-success);
+}
+.refundQueueStatusBadge--denied {
+  color: var(--color-error);
+}
+
+.refundQueueDate {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+/* Buyer / totals / reason — wraps into as many columns as fit */
+.refundQueueDetails {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-md);
+}
+
+.refundQueueDetail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--space-xs);
+}
+
+.refundQueueDetail dt {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.refundQueueDetail dd {
+  font-size: 0.95rem;
+  color: var(--color-text-primary);
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.refundQueueAmount {
+  font-weight: 600;
+}
+
+.refundQueueBuyerNote {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  border-left: 2px solid var(--color-border-hover);
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.refundQueueNoteLabel {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* Review panel on a pending request */
+.refundQueueReviewPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-sm);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.refundQueueWarning {
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-warning);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  line-height: 1.65;
+  color: var(--color-text-primary);
+}
+
+.refundQueueReviewLabel {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* 1rem font so iOS never zooms the page on focus (Rule 29.6) */
+.refundQueueNoteInput {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  line-height: 1.5;
+  resize: vertical;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+.refundQueueNoteInput:hover {
+  border-color: var(--color-border-hover);
+}
+
+.refundQueueCharacterCount {
+  align-self: flex-end;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.refundQueueActions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-sm);
+}
+
+.refundQueueApproveButton,
+.refundQueueDenyButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-lg);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.refundQueueApproveButton {
+  border: 1px solid var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+.refundQueueApproveButton:hover:not(:disabled),
+.refundQueueApproveButton:focus-visible:not(:disabled),
+.refundQueueApproveButton:active:not(:disabled) {
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+.refundQueueDenyButton {
+  border: 1px solid var(--color-error);
+  background-color: transparent;
+  color: var(--color-error);
+}
+.refundQueueDenyButton:hover:not(:disabled),
+.refundQueueDenyButton:focus-visible:not(:disabled),
+.refundQueueDenyButton:active:not(:disabled) {
+  background-color: var(--color-error);
+  color: var(--color-text-primary);
+}
+
+.refundQueueApproveButton:disabled,
+.refundQueueDenyButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Decided request */
+.refundQueueDecision {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.refundQueueDecisionLine {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+/* Loading skeleton */
+.refundQueueCard--skeleton:hover {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+.refundQueueSkeletonLine {
+  height: 1rem;
+  border-radius: 4px;
+}
+.refundQueueSkeletonLine--short {
+  width: 40%;
+}
+
+/* Empty / error state */
+.refundQueueEmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.refundQueueRetryButton {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.refundQueueRetryButton:hover,
+.refundQueueRetryButton:focus-visible,
+.refundQueueRetryButton:active {
+  background-color: var(--color-surface-hover);
+}
+
+/* Footer: total count + pagination */
+.refundQueueFooter {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.refundQueueTotalCount {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.refundQueuePagination {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.refundQueuePageButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.refundQueuePageButton:hover:not(:disabled),
+.refundQueuePageButton:focus-visible:not(:disabled),
+.refundQueuePageButton:active:not(:disabled) {
+  background-color: var(--color-surface-hover);
+}
+.refundQueuePageButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.refundQueuePageLabel {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+/* ConfirmationModal styles — same per-page copy as adminOrderDetail.css */
+.confirmationModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  z-index: var(--z-modal-backdrop);
+}
+
+.confirmationModalDialog {
+  width: 100%;
+  max-width: 420px;
+  padding: var(--space-lg) var(--space-xl);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-bg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  z-index: var(--z-modal);
+  transition: transform var(--transition-slow), opacity var(--transition-slow);
+}
+
+.confirmationModalTitle {
+  font-size: 1.1rem;
+  color: var(--color-text-primary);
+}
+
+.confirmationModalDescription {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+}
+
+.confirmationModalActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.confirmationModalCancelButton {
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+
+.confirmationModalCancelButton:hover,
+.confirmationModalCancelButton:focus-visible,
+.confirmationModalCancelButton:active {
+  background-color: var(--color-surface-hover);
+}
+
+.confirmationModalConfirmButton {
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-error);
+  background-color: var(--color-error);
+  color: var(--color-text-primary);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+
+.confirmationModalConfirmButton:hover,
+.confirmationModalConfirmButton:focus-visible,
+.confirmationModalConfirmButton:active {
+  background-color: #dc2626;
+}
+
+.confirmationModalCancelButton:disabled,
+.confirmationModalConfirmButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

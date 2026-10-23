@@ -73,6 +73,18 @@ Files changed:
 - app/api/admin/orders/route.ts, components/admin/AdminOrdersList.tsx — "Refunded" is a filter value. components/admin/AdminOrderDetail.tsx — refund button off only when Refunded.
 Debug points: approve says "no PayMongo payment on file" -> Order.paymongoPaymentId is empty (webhook never saved it); approve says PayMongo couldn't process -> check PAYMONGO_SECRET_KEY and the payment in the PayMongo dashboard, request stays pending; "accepted but we couldn't save" -> the refund id in the message is the only link, reconcile by hand and do not approve again; 403 on PATCH -> csrf_token cookie/header or manage-orders permission.
 
+[2026-10-24] New page: admin refund requests queue (task-55e). Admin or super-admin; the data routes it calls also need the manage-orders permission.
+Files added:
+- app/admin/refund-requests/page.tsx — Server Component shell (title, subtitle) that renders RefundRequestsList.
+- components/admin/RefundRequestsList.tsx — Pending / Approved / Denied / All tabs, loading skeleton, empty and error states, pagination, the per-request note drafts, the confirmation modal, toasts, and a persistent banner for server errors.
+- components/admin/RefundRequestCard.tsx — one request: buyer, order total, refund amount, reason, buyer note. A pending request has a note box plus Approve and Deny; a decided one shows the admin's note and the decision date.
+- lib/hooks/useRefundRequests.ts — GET /api/admin/refund-requests by status and page; PATCH /api/admin/refund-requests/[requestId] with the CSRF header; reloads the list after a success or a 409.
+- app/styles/adminRefundRequests.css — page, tab, card, review panel and modal styles.
+Files changed:
+- app/styles/mediaQueries.css — tablet-and-up rules for the queue. app/admin/dashboard/page.tsx — "Refund Requests" quick action.
+Process: 1. Admin opens /admin/refund-requests (or the dashboard quick action). 2. useRefundRequests loads the Pending tab from the GET route. 3. The admin types a note on a card (required to deny) and clicks Approve or Deny. 4. A confirmation modal names the order and amount. 5. Confirm sends the PATCH; on success the list reloads, the card leaves the Pending tab, and a toast shows. 6. A 500, 502 or lost connection also shows a banner that stays until dismissed, because the refund may have reached PayMongo.
+Debug points: list shows the permission message -> the admin lacks manage-orders; Approve is disabled -> the order has no paymongoPaymentId or is already Refunded (shown on the card); "already been decided" -> another admin got there first, the list refreshes; PATCH 403 -> csrf_token cookie/header; banner with a refund id -> PayMongo accepted but the save failed, reconcile by hand and do not approve again.
+
 CHANGE LOG
 
 [2026-09-20] task-118 split into 4 micro-tasks (118a-d) per Rule 49
@@ -355,3 +367,5 @@ unchanged, still task-49.
 
 
 [2026-10-24] Built task-55d: admin refund queue and decision API. New GET /api/admin/refund-requests and PATCH /api/admin/refund-requests/[requestId] (CSRF, manage-orders; deny needs a note; approve asks PayMongo first and only on success sets the request approved and Order.status "Refunded", then notifies the buyer and writes audit + security log). Added createPaymongoRefund to services/paymongo.ts, "Refunded" to lib/orderStatus.ts and the admin order filters, adminRefundMessages to lib/errorMessages.ts, and changed the manual refund action to only record an outside refund. tsc error count unchanged (24 before and after); live checks listed in docs/openFindings.md.
+
+[2026-10-24] Built task-55e: admin refund requests queue at /admin/refund-requests. New page, components/admin/RefundRequestsList.tsx and RefundRequestCard.tsx, lib/hooks/useRefundRequests.ts and app/styles/adminRefundRequests.css. Status tabs, oldest-first Pending list, pagination, loading/empty/error states, a note box per pending request (Rule 18.1 characters stripped, 500 cap), and Approve / Deny through the shared ConfirmationModal naming the order and amount, with action-specific toasts and a persistent banner for server errors. Added a Refund Requests quick action to the admin dashboard and tablet rules to mediaQueries.css. tsc shows no errors in the new or changed files (this sandbox cannot generate the Prisma client, so the full count was not comparable); not yet run in a browser. Live checks are in docs/openFindings.md. NEXT UP is task-56, which has no task file yet.
