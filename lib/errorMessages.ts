@@ -210,6 +210,27 @@ export const oauthMessages = {
   /** The provider gave no email, or one it has not verified. */
   noEmail: "We couldn't get a verified email address from that account. Use another sign-in method or register with your email.",
 
+  /** Too many OAuth attempts from one network in a short time. */
+  rateLimited: "Too many sign-in attempts. Please wait a few minutes and try again.",
+
+  /** The sign-in looked unusual (for example an impossible location jump) and was stopped. */
+  unusualActivity: "This sign-in was blocked due to unusual activity. Please try again or contact support.",
+
   /** Anything unexpected during the OAuth sign-in. */
   generic: "We couldn't sign you in with that account. Please try again.",
 };
+
+/**
+ * getOAuthErrorMessage
+ * Turns the ?oauthError=<code> value from the login URL into a message.
+ * Anything missing or unrecognised gets the generic message, so a made-up
+ * code in the URL can never show arbitrary text.
+ */
+export function getOAuthErrorMessage(code: string | null | undefined): string {
+  if (code === "password_account") return oauthMessages.passwordAccount;
+  if (code === "staff_account") return oauthMessages.staffAccount;
+  if (code === "no_email") return oauthMessages.noEmail;
+  if (code === "rate_limited") return oauthMessages.rateLimited;
+  if (code === "unusual_activity") return oauthMessages.unusualActivity;
+  return oauthMessages.generic;
+}

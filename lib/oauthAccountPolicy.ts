@@ -74,3 +74,28 @@ export function decideOAuthOutcome(input: OAuthPolicyInput): OAuthOutcome {
 export function isBlockedOutcome(outcome: OAuthOutcome): boolean {
   return outcome.startsWith("block_");
 }
+
+/**
+ * Short codes the callback puts in /auth/login?oauthError=<code>. The login
+ * page (task-56c) turns each one into a message with getOAuthErrorMessage()
+ * from lib/errorMessages.ts, so the two sides can never drift apart.
+ */
+export type OAuthErrorCode =
+  | "password_account"
+  | "staff_account"
+  | "no_email"
+  | "rate_limited"
+  | "unusual_activity"
+  | "generic";
+
+/**
+ * getOAuthErrorCode
+ * Maps a blocked outcome to the code shown on the login page. Allowed
+ * outcomes have no error, so they return "generic" only as a safe fallback.
+ */
+export function getOAuthErrorCode(outcome: OAuthOutcome): OAuthErrorCode {
+  if (outcome === "block_password_account") return "password_account";
+  if (outcome === "block_staff_account") return "staff_account";
+  if (outcome === "block_no_email") return "no_email";
+  return "generic";
+}
