@@ -139,3 +139,58 @@ export const refundMessages = {
   /** Request saved. */
   submitted: "Refund request submitted. We'll review it within 2-3 business days.",
 };
+
+/**
+ * adminRefundMessages
+ * task-55d — copy for the admin refund queue and approve/deny routes.
+ * Every message says what happened and what the admin can do next (Rule 34.1).
+ */
+export const adminRefundMessages = {
+  /** No admin session on the request. */
+  sessionExpired: "Your session has expired. Please log in again.",
+
+  /** The admin lacks the manage-orders permission. */
+  noPermission: "You don't have permission to manage refund requests.",
+
+  /** The request id does not exist. */
+  notFound: "We couldn't find that refund request. It may have been removed.",
+
+  /** The decision value was not approve or deny. */
+  invalidDecision: "Choose approve or deny and try again.",
+
+  /** Deny was sent without a note. */
+  denyNoteRequired: "Add a note explaining why this refund is denied. The buyer will see it.",
+
+  /** Note longer than allowed. */
+  noteTooLong: "That note is too long. Keep it under 500 characters.",
+
+  /** The request was already approved or denied. */
+  alreadyDecided: "This refund request has already been decided. Refresh the queue to see its latest state.",
+
+  /** The order was already refunded another way (manual refund action), so approving would pay twice. */
+  orderAlreadyRefunded: "This order is already marked as refunded, so approving would refund it twice. Deny this request with a note instead.",
+
+  /** Manual "Issue refund" clicked on an order that is already Refunded. */
+  manualAlreadyRefunded: "This order has already been refunded.",
+
+  /** Manual "Issue refund" clicked while the buyer's refund request is still waiting. */
+  manualHasPendingRequest: "This order has a pending refund request. Approve or deny it from the refund requests queue instead.",
+
+  /** The order has no PayMongo payment id, so PayMongo cannot be asked to refund. */
+  noPaymentOnFile: "This order has no PayMongo payment on file, so it can't be refunded automatically. Refund it from the PayMongo dashboard instead.",
+
+  /** PayMongo refused or failed. Nothing was changed. */
+  paymongoFailed: "PayMongo couldn't process this refund, so nothing was changed. Try again in a moment, or check the PayMongo dashboard.",
+
+  /** PayMongo accepted the refund but saving it here failed. */
+  savedAtPaymongoOnly: "PayMongo accepted the refund, but we couldn't save it here. Do not approve it again. Refund id:",
+
+  /** Approved and the buyer was told. */
+  approved: "Refund approved and sent to PayMongo. The buyer has been notified.",
+
+  /** Denied and the buyer was told. */
+  denied: "Refund denied. The buyer has been notified.",
+
+  /** Anything unexpected. */
+  generic: "We couldn't complete this action. Please try again.",
+};

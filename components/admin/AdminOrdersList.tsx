@@ -29,6 +29,8 @@ import ToastStack from "@/components/shared/ToastStack";
 import ConfirmationModal from "@/components/shared/ConfirmationModal";
 
 const STATUS_OPTIONS = ["pending", "Confirmed", "Shipped", "Delivered", "Cancelled"];
+// The filter also offers "Refunded", but admins can't bulk-set it — only an approved refund does.
+const FILTER_STATUS_OPTIONS = [...STATUS_OPTIONS, "Refunded"];
 
 function formatOrderDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
@@ -100,7 +102,7 @@ export default function AdminOrdersList() {
             aria-label="Filter by status"
           >
             <option value="">All statuses</option>
-            {STATUS_OPTIONS.map((status) => (
+            {FILTER_STATUS_OPTIONS.map((status) => (
               <option key={status} value={status}>
                 {status}
               </option>

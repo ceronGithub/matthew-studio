@@ -156,7 +156,7 @@ export function useAdminOrderDetail(orderId: string) {
 
   /**
    * refund
-   * Calls task-77's refund action. Flips status to "Cancelled" and
+   * Calls task-77's refund action. Flips status to "Refunded" and
    * records the reason — merges the result the same way updateStatus does.
    */
   const refund = useCallback(

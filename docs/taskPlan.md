@@ -1,7 +1,7 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-55d | file: docs/tasks/task-55d-api-admin-refund-decision.md | needs: task-55a | setup: npx prisma db push && npx prisma generate
-**OPEN FINDINGS:** 21 — see docs/openFindings.md
+**NEXT UP:** task-55e | file: docs/tasks/task-55e-ui-admin-refund-queue.md | needs: task-55d | setup: npx prisma db push && npx prisma generate
+**OPEN FINDINGS:** 25 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
 
@@ -304,7 +304,7 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
       - [~] task-55a — RefundRequest model + Order status "Refunded" (schema edited; db push + generate still to run). Needs none.
       - [~] task-55b — POST /api/buyer/orders/[orderId]/refund-request (window per /refund-policy; built, rules checked with a throwaway script, no tsc errors in the new files, live check still to do). Needs task-55a.
       - [~] task-55c — "Request Refund" button + form on the buyer order page (built, no tsc errors in the new files, browser check still to do). Needs task-55b.
-      - [ ] task-55d — admin refund queue API + approve/deny + PayMongo refund call + "Refunded" status. Needs task-55a.
+      - [~] task-55d — admin refund queue API + approve/deny + PayMongo refund call + "Refunded" status (built; tsc error count unchanged at 24, same files as before; live check still to do). Needs task-55a.
       - [ ] task-55e — admin refund requests queue page. Needs task-55d.
       Task files: docs/tasks/task-55a-*.md through task-55e-*.md
 - [ ] task-56 — OAuth login

@@ -18,7 +18,7 @@
  * so they know to retry.
  */
 
-export type BuyerOrderStatusKey = "pending" | "confirmed" | "shipped" | "delivered" | "cancelled" | "failed";
+export type BuyerOrderStatusKey = "pending" | "confirmed" | "shipped" | "delivered" | "cancelled" | "refunded" | "failed";
 
 interface StatusDisplay {
   label: string;
@@ -31,19 +31,20 @@ const STATUS_DISPLAY: Record<BuyerOrderStatusKey, StatusDisplay> = {
   shipped: { label: "Shipped", colorVar: "--color-accent" },
   delivered: { label: "Delivered", colorVar: "--color-success" },
   cancelled: { label: "Cancelled", colorVar: "--color-error" },
+  refunded: { label: "Refunded", colorVar: "--color-warning" },
   failed: { label: "Payment Failed", colorVar: "--color-error" },
 };
 
 /**
  * resolveOrderStatusKey
- * Normalizes a raw Order.status string into one of the 6 display
+ * Normalizes a raw Order.status string into one of the 7 display
  * buckets above.
  */
 export function resolveOrderStatusKey(rawStatus: string): BuyerOrderStatusKey {
   const normalized = rawStatus.toLowerCase();
   if (normalized === "paid") return "confirmed";
   if (normalized === "failed") return "failed";
-  if (normalized === "pending" || normalized === "confirmed" || normalized === "shipped" || normalized === "delivered" || normalized === "cancelled") {
+  if (normalized === "pending" || normalized === "confirmed" || normalized === "shipped" || normalized === "delivered" || normalized === "cancelled" || normalized === "refunded") {
     return normalized as BuyerOrderStatusKey;
   }
   return "pending";

@@ -62,6 +62,17 @@ Files added:
 Debug points: list empty or error -> check GET /api/superadmin/coupons and the superAdmin session; create says "already exists" -> duplicate code (409); switch does nothing -> check the csrf_token cookie and PATCH response.
 
 
+[2026-10-24] New API: admin refund queue and decision (task-55d). Admin or super-admin with the manage-orders permission.
+Files added:
+- app/api/admin/refund-requests/route.ts — GET. Queue of RefundRequest rows (?status=pending|approved|denied|all, ?page=), pending oldest first, with order summary and buyer email.
+- app/api/admin/refund-requests/[requestId]/route.ts — PATCH {decision: "approve"|"deny", note}. CSRF + session + permission. Deny needs a note. Approve calls PayMongo first; only on success it saves in one transaction (request approved + paymongoRefundId + pendingOrderId cleared, Order.status "Refunded" + refundedAt + refundReason + statusHistory). Then buyer notification, audit entry, security log.
+Files changed:
+- services/paymongo.ts — added createPaymongoRefund (POST /v1/refunds, secret key, amount in centavos, reason "others").
+- lib/orderStatus.ts — "refunded" status key and badge. lib/errorMessages.ts — adminRefundMessages.
+- app/api/admin/orders/[orderId]/actions/route.ts — "refund" action now only records an outside refund, sets "Refunded", refused if already Refunded or a request is pending.
+- app/api/admin/orders/route.ts, components/admin/AdminOrdersList.tsx — "Refunded" is a filter value. components/admin/AdminOrderDetail.tsx — refund button off only when Refunded.
+Debug points: approve says "no PayMongo payment on file" -> Order.paymongoPaymentId is empty (webhook never saved it); approve says PayMongo couldn't process -> check PAYMONGO_SECRET_KEY and the payment in the PayMongo dashboard, request stays pending; "accepted but we couldn't save" -> the refund id in the message is the only link, reconcile by hand and do not approve again; 403 on PATCH -> csrf_token cookie/header or manage-orders permission.
+
 CHANGE LOG
 
 [2026-09-20] task-118 split into 4 micro-tasks (118a-d) per Rule 49
@@ -342,3 +353,5 @@ unchanged, still task-49.
 
 [2026-10-24] Built task-55c: Request Refund on /buyer/orders/[orderId]. New components/buyer/RefundRequestForm.tsx (modal with a required reason dropdown, optional note with a live 500-character counter, inline errors, disabled submit while sending) and lib/hooks/useRefundRequest.ts (validates with the shared refundRequestSchema, strips Rule 18.1 characters from the note as it is typed, POSTs to the task-55b route with the CSRF header). OrderTrackingDetail.tsx shows a Request Refund button only when the order API says refund.canRequest, and a "Refund requested" label when a request is waiting; success fires the toast from the spec and flips the label without reloading; a 409 also flips it. app/api/buyer/orders/[orderId]/route.ts now returns refund { canRequest, hasPending } worked out with lib/refundEligibility.ts plus a pending-request lookup, so the button and the POST route share one set of rules. useBuyerOrderDetail.ts gains the refund type and markRefundPending; app/styles/buyerOrderDetail.css gains the refund styles. tsc shows no errors in the new or changed code (the 47 existing errors are unchanged); not yet run in a browser or against the database. NEXT UP is task-55d.
 
+
+[2026-10-24] Built task-55d: admin refund queue and decision API. New GET /api/admin/refund-requests and PATCH /api/admin/refund-requests/[requestId] (CSRF, manage-orders; deny needs a note; approve asks PayMongo first and only on success sets the request approved and Order.status "Refunded", then notifies the buyer and writes audit + security log). Added createPaymongoRefund to services/paymongo.ts, "Refunded" to lib/orderStatus.ts and the admin order filters, adminRefundMessages to lib/errorMessages.ts, and changed the manual refund action to only record an outside refund. tsc error count unchanged (24 before and after); live checks listed in docs/openFindings.md.

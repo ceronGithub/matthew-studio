@@ -14,9 +14,12 @@
  * Actions:
  *   - "update_status" — moves Order.status, appends a statusHistory
  *     entry, notifies the buyer (if registered).
- *   - "refund"        — sets refundReason/refundedAt, flips status to
- *     "Cancelled" (per spec's badge legend: "Cancelled — refunded or
- *     cancelled"), notifies the buyer.
+ *   - "refund"        — task-55d: RECORDS a refund that was made outside
+ *     the app (e.g. straight from the PayMongo dashboard). It does NOT
+ *     call PayMongo. Sets refundReason/refundedAt, flips status to
+ *     "Refunded", notifies the buyer. Refused when the order is already
+ *     Refunded or has a pending buyer refund request — those go through
+ *     /api/admin/refund-requests so PayMongo is actually asked to pay.
  *   - "add_note"      — appends an internalNotes entry. Never shown to
  *     the buyer, never triggers a notification.
  *
@@ -31,6 +34,7 @@ import { prisma } from "@/services/prisma";
 import { getSessionAdmin } from "@/lib/getSessionAdmin";
 import { logSecurityEvent } from "@/lib/securityLog";
 import { createNotification } from "@/lib/notifications";
+import { adminRefundMessages } from "@/lib/errorMessages";
 
 const VALID_STATUSES = ["pending", "Confirmed", "Shipped", "Delivered", "Cancelled"];
 
@@ -119,10 +123,29 @@ async function handleRefund(
     );
   }
 
+  // Never record a second refund, and never let this shortcut jump ahead of
+  // a buyer's pending request (that one must go through the queue + PayMongo).
+  if (order.status === "Refunded" || order.refundedAt) {
+    return NextResponse.json(
+      { success: false, data: null, message: adminRefundMessages.manualAlreadyRefunded },
+      { status: 409 }
+    );
+  }
+  const pendingRefundRequest = await prisma.refundRequest.findFirst({
+    where: { orderId, status: "pending" },
+    select: { id: true },
+  });
+  if (pendingRefundRequest) {
+    return NextResponse.json(
+      { success: false, data: null, message: adminRefundMessages.manualHasPendingRequest },
+      { status: 409 }
+    );
+  }
+
   const refundedAt = new Date();
   const existingHistory = (order.statusHistory as StatusHistoryEntry[] | null) ?? [];
   const entry: StatusHistoryEntry = {
-    status: "Cancelled",
+    status: "Refunded",
     adminId,
     note: `Refunded: ${refundReason}`,
     createdAt: refundedAt.toISOString(),
@@ -131,7 +154,7 @@ async function handleRefund(
   await prisma.order.update({
     where: { id: orderId },
     data: {
-      status: "Cancelled",
+      status: "Refunded",
       refundReason,
       refundedAt,
       statusHistory: [...existingHistory, entry],
@@ -150,7 +173,7 @@ async function handleRefund(
 
   return NextResponse.json({
     success: true,
-    data: { status: "Cancelled", refundReason, refundedAt },
+    data: { status: "Refunded", refundReason, refundedAt },
     message: "Refund recorded and the buyer has been notified.",
   });
 }

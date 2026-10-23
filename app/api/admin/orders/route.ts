@@ -31,7 +31,8 @@ import { getSessionAdmin } from "@/lib/getSessionAdmin";
 import { supabaseAdminClient } from "@/lib/supabase/serverClient";
 
 const PAGE_SIZE = 25;
-const VALID_STATUSES = ["pending", "Confirmed", "Shipped", "Delivered", "Cancelled"];
+// Filter values. "Refunded" is filterable here but is never set by hand — only the refund routes set it.
+const VALID_STATUSES = ["pending", "Confirmed", "Shipped", "Delivered", "Cancelled", "Refunded"];
 
 interface OrderWhere {
   deletedAt: null;

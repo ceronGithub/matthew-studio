@@ -507,3 +507,68 @@ export async function detachPaymongoPaymentMethod(paymentMethodId: string): Prom
     throw new Error(`PayMongo payment method detach failed (${response.status}): ${errorBody}`);
   }
 }
+
+export interface PaymongoRefundResult {
+  refundId: string;
+  /** PayMongo's own refund status: pending | processing | succeeded | failed. */
+  status: string;
+}
+
+/**
+ * createPaymongoRefund
+ * task-55d — sends a refund for one payment to PayMongo (POST /v1/refunds).
+ * Lives here, not in lib/paymongoClient.ts, because a refund needs the
+ * SECRET key and that file is browser-only (publishable key). The amount
+ * is turned into centavos here so callers always pass pesos. PayMongo's
+ * docs list the reason as one of duplicate | fraudulent | others, so the
+ * buyer's own reason travels in `notes` and `reason` is always "others".
+ * Throws an Error with a readable message on any failure, including a
+ * refund PayMongo reports as "failed", so the caller can leave the
+ * request pending.
+ */
+export async function createPaymongoRefund(
+  paymentId: string,
+  amountInPesos: number,
+  notes: string
+): Promise<PaymongoRefundResult> {
+  const secretKey = process.env.PAYMONGO_SECRET_KEY;
+  if (!secretKey) {
+    throw new Error("PAYMONGO_SECRET_KEY is not configured.");
+  }
+
+  const response = await fetch(`${PAYMONGO_API_BASE}/refunds`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: paymongoAuthHeader(secretKey),
+    },
+    body: JSON.stringify({
+      data: {
+        attributes: {
+          amount: Math.round(amountInPesos * 100),
+          payment_id: paymentId,
+          reason: "others",
+          notes,
+        },
+      },
+    }),
+  });
+
+  const payload = await response.json().catch(() => null);
+
+  if (!response.ok) {
+    const detail: string | undefined = payload?.errors?.[0]?.detail;
+    throw new Error(detail ?? `PayMongo refund failed (${response.status}).`);
+  }
+
+  const refundId: string | undefined = payload?.data?.id;
+  const status: string = payload?.data?.attributes?.status ?? "pending";
+  if (!refundId) {
+    throw new Error("PayMongo did not return a refund id.");
+  }
+  if (status === "failed") {
+    throw new Error("PayMongo could not process this refund.");
+  }
+
+  return { refundId, status };
+}

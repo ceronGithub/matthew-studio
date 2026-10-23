@@ -353,7 +353,7 @@ export default function AdminOrderDetail({ orderId }: { orderId: string }) {
             type="button"
             className="adminOrderDetailButton adminOrderDetailButton--destructive"
             onClick={() => setIsRefundModalOpen(true)}
-            disabled={isRefunding || !refundReason.trim() || order.order.status === "Cancelled"}
+            disabled={isRefunding || !refundReason.trim() || order.order.status === "Refunded"}
           >
             Refund
           </button>
@@ -442,7 +442,7 @@ export default function AdminOrderDetail({ orderId }: { orderId: string }) {
       <ConfirmationModal
         isOpen={isRefundModalOpen}
         title="Issue refund?"
-        description={`Refund order #${order.order.id.slice(-8).toUpperCase()} and mark it Cancelled? This cannot be undone.`}
+        description={`Refund order #${order.order.id.slice(-8).toUpperCase()} and mark it Refunded? This only records a refund you already made outside the app. This cannot be undone.`}
         confirmLabel="Refund"
         onConfirm={handleRefundConfirm}
         onCancel={() => setIsRefundModalOpen(false)}
