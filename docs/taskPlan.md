@@ -1,7 +1,7 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
 **NEXT UP:** task-56 | file: none yet, scope and split it first (Rule 49 Step 4) | needs: none
-**OPEN FINDINGS:** 29 — see docs/openFindings.md
+**OPEN FINDINGS:** 30 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
 
