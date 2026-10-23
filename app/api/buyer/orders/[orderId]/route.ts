@@ -30,7 +30,11 @@
  * 5. Resolve each item's category/icon from lib/productsData.ts (same
  *    pattern as the orders list route) since the real catalog lives
  *    there, not the empty Prisma Product table.
- * 6. Return the standard response shape (Rule 28) — raw PayMongo
+ * 6. task-55c: work out whether the buyer can request a refund (same
+ *    rules as the refund-request route, from lib/refundEligibility.ts) and
+ *    whether a request is already waiting, so the page can show the right
+ *    button without guessing.
+ * 7. Return the standard response shape (Rule 28) — raw PayMongo
  *    transaction IDs are never included (spec Section 3.2).
  */
 export const dynamic = "force-dynamic";
@@ -39,6 +43,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/services/prisma";
 import { getSessionUserId } from "@/lib/getSessionUserId";
 import { getProductById } from "@/lib/productsData";
+import { getRefundEligibility } from "@/lib/refundEligibility";
 
 // Full production pipeline for tshirts-category orders, in order (admin spec Section 3.3.3)
 const TSHIRT_STAGES = [
@@ -163,6 +168,21 @@ export async function GET(request: Request, { params }: { params: Promise<{ orde
       ? buildTshirtTimeline(order.productionStage, history, order.createdAt)
       : buildDigitalTimeline(order);
 
+    const refundEligibility = getRefundEligibility({
+      status: order.status,
+      paidAt: order.paidAt,
+      paymongoPaymentId: order.paymongoPaymentId,
+      refundedAt: order.refundedAt,
+      updatedAt: order.updatedAt,
+      statusHistory: order.statusHistory,
+      hasApparelItem: hasTshirtItem,
+    });
+    // Checked even when the window has closed: a request already waiting must still show as waiting.
+    const pendingRefundRequest = await prisma.refundRequest.findFirst({
+      where: { orderId: order.id, status: "pending" },
+      select: { id: true },
+    });
+
     return NextResponse.json({
       success: true,
       data: {
@@ -191,6 +211,10 @@ export async function GET(request: Request, { params }: { params: Promise<{ orde
           : null,
         canCancel: order.status.toLowerCase() === "pending" && (order.productionStage === null || order.productionStage === "design_review"),
         canReorder: ["delivered", "cancelled"].includes(order.status.toLowerCase()),
+        refund: {
+          canRequest: refundEligibility.eligible && !pendingRefundRequest,
+          hasPending: Boolean(pendingRefundRequest),
+        },
       },
       message: "Order detail retrieved.",
     });

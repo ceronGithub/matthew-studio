@@ -372,3 +372,175 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* ---------- Refund request (task-55c) ---------- */
+
+/* Shown instead of the Request Refund button once a request is waiting for review. */
+.orderDetailRefundPending {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  font-size: 0.85rem;
+  color: var(--color-warning);
+}
+
+/* Modal shell — same backdrop/dialog shape as the shared ConfirmationModal above. */
+.refundFormBackdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  z-index: var(--z-modal-backdrop);
+  overflow-y: auto;
+}
+
+.refundFormDialog {
+  width: 100%;
+  max-width: 480px;
+  padding: var(--space-lg) var(--space-xl);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-bg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  z-index: var(--z-modal);
+  transition: transform var(--transition-slow), opacity var(--transition-slow);
+  max-height: 90dvh;
+  overflow-y: auto;
+}
+
+.refundFormTitle {
+  font-size: 1.2rem;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+.refundFormIntro {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+}
+
+.refundForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.refundFormLegend {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.refundFormField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.refundFormField select,
+.refundFormField textarea {
+  width: 100%;
+  font-size: 1rem; /* never below 16px — prevents iOS auto-zoom (Rule 29.6) */
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface-active);
+  color: var(--color-text-primary);
+  font-family: inherit;
+}
+.refundFormField select {
+  min-height: 44px;
+}
+.refundFormField textarea {
+  resize: vertical;
+}
+.refundFormField select:focus-visible,
+.refundFormField textarea:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+.refundFormCounter {
+  align-self: flex-end;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.refundFormError,
+.refundFormSubmitError {
+  font-size: 0.8rem;
+  color: var(--color-error);
+}
+
+.refundFormActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}
+
+.refundFormCancelButton {
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast);
+}
+.refundFormCancelButton:hover:not(:disabled),
+.refundFormCancelButton:focus-visible:not(:disabled),
+.refundFormCancelButton:active:not(:disabled) {
+  background-color: var(--color-surface-hover);
+}
+
+.refundFormSubmitButton {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: 8px;
+  border: 1px solid var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  font-weight: 600;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.refundFormSubmitButton:hover:not(:disabled),
+.refundFormSubmitButton:focus-visible:not(:disabled),
+.refundFormSubmitButton:active:not(:disabled) {
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+.refundFormCancelButton:disabled,
+.refundFormSubmitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.refundFormSpin {
+  animation: refundFormSpin 0.8s linear infinite;
+}
+@keyframes refundFormSpin {
+  to { transform: rotate(360deg); }
+}
+

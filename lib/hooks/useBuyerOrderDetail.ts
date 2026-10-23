@@ -51,6 +51,8 @@ export interface OrderDetail {
   shipping: { address: unknown; courier: string | null; trackingNumber: string | null } | null;
   canCancel: boolean;
   canReorder: boolean;
+  // task-55c: worked out by the API from lib/refundEligibility.ts, so the button never disagrees with it.
+  refund: { canRequest: boolean; hasPending: boolean };
 }
 
 interface FetchState {
@@ -120,6 +122,20 @@ export function useBuyerOrderDetail(orderId: string) {
   }, [orderId]);
 
   /**
+   * markRefundPending
+   * After a refund request is accepted (or the API says one is already
+   * waiting), flips the local order so the button turns into "Refund
+   * requested" without reloading the whole page.
+   */
+  const markRefundPending = useCallback(() => {
+    setState((current) =>
+      current.order
+        ? { ...current, order: { ...current.order, refund: { canRequest: false, hasPending: true } } }
+        : current
+    );
+  }, []);
+
+  /**
    * reorder
    * Adds every line item from this order to the cart (one POST per
    * item, same variant/quantity as originally purchased), then
@@ -152,5 +168,5 @@ export function useBuyerOrderDetail(orderId: string) {
     }
   }, [state.order, router]);
 
-  return { ...state, isCancelling, isReordering, refetch: fetchOrder, cancelOrder, reorder };
+  return { ...state, isCancelling, isReordering, refetch: fetchOrder, cancelOrder, reorder, markRefundPending };
 }

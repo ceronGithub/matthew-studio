@@ -14,6 +14,8 @@
  *
  * Actions: Cancel Order (behind ConfirmationModal per Rule 34.4, only
  * shown while canCancel is true), Reorder (only on Delivered/Cancelled),
+ * Request Refund (task-55c — only while the API says refund.canRequest;
+ * shows "Refund requested" once a request is waiting),
  * Contact Support (links into the buyer's own Support Tickets system
  * at /buyer/support with the order id in the query string — Section
  * 4.5's Task 10; previously linked to the public /support contact
@@ -24,13 +26,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { PackageSearch, CheckCircle2, Circle, LifeBuoy, RotateCcw, XCircle } from "lucide-react";
+import { PackageSearch, CheckCircle2, Circle, LifeBuoy, RotateCcw, Undo2, XCircle } from "lucide-react";
 import { useBuyerOrderDetail } from "@/lib/hooks/useBuyerOrderDetail";
 import { getOrderStatusDisplay } from "@/lib/orderStatus";
 import { CATEGORY_ICONS } from "@/lib/categoryIcons";
 import { useToast } from "@/components/shared/useToast";
 import ToastStack from "@/components/shared/ToastStack";
 import ConfirmationModal from "@/components/shared/ConfirmationModal";
+import RefundRequestForm from "@/components/buyer/RefundRequestForm";
 
 function formatDateTime(iso: string | null): string {
   if (!iso) return "";
@@ -42,15 +45,31 @@ function formatPeso(amount: number): string {
 }
 
 export default function OrderTrackingDetail({ orderId }: { orderId: string }) {
-  const { order, isLoading, notFound, error, isCancelling, isReordering, cancelOrder, reorder } =
+  const { order, isLoading, notFound, error, isCancelling, isReordering, cancelOrder, reorder, markRefundPending } =
     useBuyerOrderDetail(orderId);
   const { toasts, showToast, dismissToast } = useToast();
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [isRefundFormOpen, setIsRefundFormOpen] = useState(false);
 
   async function handleCancelConfirm() {
     const result = await cancelOrder();
     setIsCancelModalOpen(false);
     showToast(result.success ? "✓ Order cancelled." : `✕ ${result.message}`, result.success ? "success" : "error");
+  }
+
+  function handleRefundSubmitted(message: string) {
+    setIsRefundFormOpen(false);
+    markRefundPending();
+    showToast(`✓ ${message}`, "success");
+  }
+
+  // A 409 means a request is already waiting — close the form and show the waiting state.
+  function handleRefundFailed(message: string, httpStatus: number) {
+    showToast(`✕ ${message}`, "error");
+    if (httpStatus === 409) {
+      setIsRefundFormOpen(false);
+      markRefundPending();
+    }
   }
 
   async function handleReorder() {
@@ -191,6 +210,20 @@ export default function OrderTrackingDetail({ orderId }: { orderId: string }) {
             <XCircle size={16} /> Cancel Order
           </button>
         )}
+        {order.refund.canRequest && (
+          <button
+            type="button"
+            className="orderDetailActionButton orderDetailActionButton--secondary"
+            onClick={() => setIsRefundFormOpen(true)}
+          >
+            <Undo2 size={16} /> Request Refund
+          </button>
+        )}
+        {order.refund.hasPending && (
+          <span className="orderDetailRefundPending">
+            <Undo2 size={16} /> Refund requested
+          </span>
+        )}
         {order.canReorder && (
           <button
             type="button"
@@ -202,6 +235,16 @@ export default function OrderTrackingDetail({ orderId }: { orderId: string }) {
           </button>
         )}
       </section>
+
+      {isRefundFormOpen && (
+        <RefundRequestForm
+          orderId={order.orderId}
+          orderShortId={order.shortId}
+          onClose={() => setIsRefundFormOpen(false)}
+          onSubmitted={handleRefundSubmitted}
+          onFailed={handleRefundFailed}
+        />
+      )}
 
       <ConfirmationModal
         isOpen={isCancelModalOpen}
