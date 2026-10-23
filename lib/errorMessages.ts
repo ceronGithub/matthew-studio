@@ -194,3 +194,22 @@ export const adminRefundMessages = {
   /** Anything unexpected. */
   generic: "We couldn't complete this action. Please try again.",
 };
+
+/**
+ * OAuth login (task-56a). Shown on /auth/login after a blocked Google or
+ * Facebook sign-in. Keys match the "block_*" outcomes in lib/oauthAccountPolicy.ts
+ * without the prefix, so the callback and the login page stay in step.
+ */
+export const oauthMessages = {
+  /** The email already belongs to a password account. We never link silently. */
+  passwordAccount: "This email already has an account with a password. Log in with your email and password instead.",
+
+  /** The email belongs to a staff account, which never uses OAuth. */
+  staffAccount: "This account can't sign in with Google or Facebook. Log in with your email and password instead.",
+
+  /** The provider gave no email, or one it has not verified. */
+  noEmail: "We couldn't get a verified email address from that account. Use another sign-in method or register with your email.",
+
+  /** Anything unexpected during the OAuth sign-in. */
+  generic: "We couldn't sign you in with that account. Please try again.",
+};

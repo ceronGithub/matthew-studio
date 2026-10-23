@@ -373,3 +373,5 @@ unchanged, still task-49.
 [2026-10-24] Checked task-55d at code level: createPaymongoRefund tested with a mocked fetch (6 of 6 cases as expected) and the rest of the task file's done-when list read through; no code changed. Live checks in docs/openFindings.md are still to do, so task-55d stays in progress.
 
 [2026-10-24] Scoped task-56 (OAuth login: Google and Facebook, buyers only, a matching password account is blocked with a message) into task-56a to 56d: policy helper, callback route, login/register buttons, recovery setup for OAuth buyers. Added the four task files, updated the plan pointer to task-56a and logged three open findings; no code changed.
+
+[2026-10-24] Built task-56a: new lib/oauthAccountPolicy.ts decides what a Google or Facebook sign-in may do (new buyer, returning OAuth buyer, or blocked for a password account, a staff account, or a missing or unverified email), and lib/errorMessages.ts gained an oauthMessages group with one plain-language message per block. Checked with a throwaway script (10 of 10) and an isolated type-check; the plan pointer now reads task-56b.

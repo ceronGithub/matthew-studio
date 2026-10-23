@@ -1,7 +1,7 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-56a | file: docs/tasks/task-56a-lib-oauth-account-policy.md | needs: none
-**OPEN FINDINGS:** 33 — see docs/openFindings.md
+**NEXT UP:** task-56b | file: docs/tasks/task-56b-api-oauth-callback.md | needs: task-56a
+**OPEN FINDINGS:** 34 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
 
@@ -308,7 +308,7 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
       - [~] task-55e — admin refund requests queue page (built 2026-10-24; no tsc errors in the new files, browser check still to do). Needs task-55d.
       Task files: docs/tasks/task-55a-*.md through task-55e-*.md
 - [ ] task-56 — OAuth login (Google + Facebook, buyers only, block on matching password account) — split into task-56a..56d (approved 2026-10-24)
-      - [ ] task-56a — lib/oauthAccountPolicy.ts: decide what an OAuth sign-in may do + error messages. Needs none.
+      - [~] task-56a — lib/oauthAccountPolicy.ts: decide what an OAuth sign-in may do + error messages (built 2026-10-24; 10 of 10 cases pass, files type-check in isolation, project-wide tsc to run locally). Needs none.
       - [ ] task-56b — GET /api/auth/oauth/callback (session, forced buyer role, block rules, logging). Needs task-56a.
       - [ ] task-56c — "Continue with Google / Facebook" buttons on login + register. Needs task-56b.
       - [ ] task-56d — recovery setup for OAuth buyers (email already verified by provider; needs approval). Needs task-56b.

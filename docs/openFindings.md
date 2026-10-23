@@ -130,3 +130,4 @@ only consulted when investigating a specific flagged item.
 - [2026-10-24] task-56: additional_platform_gaps_specification.md §4.3 and its checklist (line 237) still say Google only and "prompt to link". Decided: Google + Facebook, and block with a "log in with your password first" message. Update the spec text.
 - [2026-10-24] task-56: a buyer who signs up with OAuth has no password, so /auth/forgot-password has nothing to reset for them. Decide what that flow should say or do for OAuth-only accounts.
 - [2026-10-24] task-56b: unverified — whether Supabase auto-links an OAuth identity to an existing account with the same email in this project. Check before building the block step.
+- [2026-10-24] task-56a: project-wide `npx tsc --noEmit` was not run (no installed dependencies in the sandbox); the two changed files pass in isolation. Run it locally, then flip task-56a to [DONE].
