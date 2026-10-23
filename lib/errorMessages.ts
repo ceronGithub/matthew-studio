@@ -106,3 +106,36 @@ export const couponMessages = {
 
 /** Every reason applyCoupon can reject a code for — matches the keys above. */
 export type CouponRejectReason = keyof typeof couponMessages;
+
+/**
+ * Refund requests (task-55b). Every sentence says what happened and what the
+ * buyer can do next. Window and status wording follows the /refund-policy page.
+ */
+export const refundMessages = {
+  /** Order is not Delivered or Cancelled yet. */
+  notEligibleStatus: "Refunds can only be requested for delivered or cancelled orders. Check back once your order arrives.",
+
+  /** The order was never paid, so there is nothing to give back. */
+  notPaid: "We can't find a completed payment for this order, so there is nothing to refund.",
+
+  /** The order already went through a refund. */
+  alreadyRefunded: "This order has already been refunded.",
+
+  /** Digital-only order, more than 7 days after purchase. */
+  windowClosedDigital: "The 7-day refund window for digital products has closed. You can still contact us from the support page.",
+
+  /** Order with apparel, more than 14 days after delivery. */
+  windowClosedApparel: "The 14-day refund window for apparel orders has closed. You can still contact us from the support page.",
+
+  /** A request for this order is already waiting for review. */
+  alreadyPending: "You already have a refund request for this order. We'll review it within 2-3 business days.",
+
+  /** The reason dropdown was left empty or tampered with. */
+  invalidReason: "Choose a reason for your refund request and try again.",
+
+  /** The note is longer than the allowed length. */
+  noteTooLong: "Your note is too long. Keep it under 500 characters.",
+
+  /** Request saved. */
+  submitted: "Refund request submitted. We'll review it within 2-3 business days.",
+};
