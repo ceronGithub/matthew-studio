@@ -1,7 +1,7 @@
 # MASTER TASK PLAN — matthew-studio (shop branch)
 
-**NEXT UP:** task-55 | file: none yet (create from additional_platform_gaps_specification.md §4.2; unspecced, needs approval) | needs: none
-**OPEN FINDINGS:** 17 — see docs/openFindings.md
+**NEXT UP:** task-55b | file: docs/tasks/task-55b-api-buyer-refund-request.md | needs: task-55a | setup: npx prisma db push && npx prisma generate
+**OPEN FINDINGS:** 18 — see docs/openFindings.md
 
 Legend: [ ] not started · [~] in progress · [DONE] complete
 
@@ -300,7 +300,13 @@ docs/taskPlan.archive.md (never read during a next-task lookup).
       - [~] task-54g — /superAdmin/coupons page (spec approved 2026-10-03; built, no tsc errors in the new files, browser check still to do). Needs task-54f.
       - [~] task-54h — Edit a coupon's usage limit / expiry from the page (scope approved 2026-10-24; built, no tsc errors in the new files, browser check still to do). Needs task-54g.
       Task files: docs/tasks/task-54a-*.md through task-54h-*.md
-- [ ] task-55 — Refund processing (needs Order.status — already available)
+- [ ] task-55 — Refund request & processing — split into task-55a..55e (approved 2026-10-24)
+      - [~] task-55a — RefundRequest model + Order status "Refunded" (schema edited; db push + generate still to run). Needs none.
+      - [ ] task-55b — POST /api/buyer/orders/[orderId]/refund-request (window per /refund-policy). Needs task-55a.
+      - [ ] task-55c — "Request Refund" button + form on the buyer order page. Needs task-55b.
+      - [ ] task-55d — admin refund queue API + approve/deny + PayMongo refund call + "Refunded" status. Needs task-55a.
+      - [ ] task-55e — admin refund requests queue page. Needs task-55d.
+      Task files: docs/tasks/task-55a-*.md through task-55e-*.md
 - [ ] task-56 — OAuth login
 - [ ] task-57 — Buyer 2FA
 - [ ] task-58 — Transactional emails

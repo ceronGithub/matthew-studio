@@ -283,7 +283,7 @@ model Order {
   userId            String? // null if guest checkout, claimable later
   guestEmail        String?
   cartToken         String? // guest cart_token this Order was created from — lets the webhook/self-heal endpoint clear the correct guest cart without ever trusting a client-submitted value
-  status            String    @default("pending") // pending | PAID | FAILED | Confirmed | Shipped | Delivered | Cancelled — FAILED means PayMongo reported the checkout session as failed/expired; the Order stays in place (never deleted) so the buyer can retry via /api/orders/[orderId]/retry-payment instead of re-adding their whole cart
+  status            String    @default("pending") // pending | PAID | FAILED | Confirmed | Shipped | Delivered | Cancelled | Refunded — Refunded is set only when an admin approves a RefundRequest and PayMongo accepts the refund (task-55d); FAILED means PayMongo reported the checkout session as failed/expired; the Order stays in place (never deleted) so the buyer can retry via /api/orders/[orderId]/retry-payment instead of re-adding their whole cart
   subtotal          Float // pre-discount amount; total = subtotal - discountAmount + shippingFee
   shippingFee       Float     @default(0)
   couponCode        String? // task-54a: code applied at checkout (normalized upper-case), null if none — set server-side only by POST /api/checkout (task-54d)
@@ -306,10 +306,47 @@ model Order {
   updatedAt         DateTime  @updatedAt
   deletedAt         DateTime? // Rule 6 soft delete — excluded from normal reads by default
 
-  items OrderItem[]
+  items          OrderItem[]
+  refundRequests RefundRequest[] // task-55a: buyer refund requests for this order, newest decides
 
   @@index([userId])
   @@index([guestEmail])
+  @@index([status])
+}
+
+/// RefundRequest
+/// additional_platform_gaps_specification.md Section 4.2. One row per
+/// refund request a buyer submits for one of their orders. Created by
+/// the buyer API (task-55b), decided by an admin (task-55d). Rows are
+/// never deleted — a denied request stays as history. `refundAmount`
+/// is copied from Order.total server-side when the request is made
+/// and is never client-submitted (Rule 6). `pendingOrderId` is the
+/// database-level backup to the app-level "one open request per
+/// order" check: it holds the orderId while the request is pending
+/// and is set back to null the moment it is approved or denied, so
+/// the @unique blocks two simultaneous pending requests for the same
+/// order but allows any number of decided ones (Postgres lets a
+/// unique column hold many nulls).
+model RefundRequest {
+  id                String    @id @default(cuid())
+  orderId           String
+  userId            String // the buyer who asked — refunds are requested from /buyer, so never a guest
+  reason            String // one value from the buyer form's reason dropdown (list defined in task-55b)
+  note              String? // optional free text from the buyer
+  refundAmount      Float // Order.total at request time, set server-side
+  status            String    @default("pending") // pending | approved | denied
+  pendingOrderId    String?   @unique // = orderId while status is pending, null once decided
+  reviewerNote      String? // note an admin leaves when approving or denying
+  reviewedByAdminId String?
+  reviewedAt        DateTime?
+  paymongoRefundId  String? // set only after PayMongo accepts the refund (task-55d)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@index([orderId])
+  @@index([userId])
   @@index([status])
 }
 
